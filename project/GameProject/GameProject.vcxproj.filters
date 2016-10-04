@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{ef15a2e8-3b61-419b-a7e5-323be5e47488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{498f9e92-67e3-44c2-bcb4-c8a10a9e1508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{0ded4b67-4ee8-4be3-8662-f7811d0aa5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{df4fe985-802d-45f1-a124-4e7ef9048a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\Components">
+      <UniqueIdentifier>{ebeae347-baab-4db2-a13e-e35165ad279b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Components">
+      <UniqueIdentifier>{e5dd61d1-d41f-4712-b4c0-fbaee3b10e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Settings">
+      <UniqueIdentifier>{bda4a3f8-dd65-49d6-b95f-e440301e920a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Settings">
+      <UniqueIdentifier>{5bdac77a-483a-4be1-8433-5ec2b13936c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Window">
+      <UniqueIdentifier>{41528084-4281-461a-ae77-00970d5f8703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Window">
+      <UniqueIdentifier>{1f97b3c8-9bd0-4050-9f03-00a90b2e5d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loader">
+      <UniqueIdentifier>{dd4dab2f-890b-45a9-8caf-86f2263b65bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Loader">
+      <UniqueIdentifier>{ef9719ce-f599-4277-9b86-acb5dd1482dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Loading">
+      <UniqueIdentifier>{575b5131-277f-4452-a928-a380275b81ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Loading">
+      <UniqueIdentifier>{627cb62f-d652-4236-a987-f6c77a05109f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Assets">
+      <UniqueIdentifier>{3187fac3-48e4-40fd-9f76-3ee8d2db2f2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Assets">
+      <UniqueIdentifier>{72c9461c-daa8-4e80-88e4-66d387ee868a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GUI">
+      <UniqueIdentifier>{79db8514-61a6-439d-bd98-95f1ef9b2c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GUI">
+      <UniqueIdentifier>{38b944de-f8cb-4c86-b1a0-4acc0539c25a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Core.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\CameraInput.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Console.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Instance.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\RenderComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Chunk.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\BaseComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Settings\Settings.cpp">
+      <Filter>Source Files\Core\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Settings\DisplaySettings.cpp">
+      <Filter>Source Files\Core\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Window\Window.cpp">
+      <Filter>Source Files\Core\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader\LibraryLoader.cpp">
+      <Filter>Source Files\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Loading\LoadingScreen.cpp">
+      <Filter>Source Files\Core\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\Gui.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\Input.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Core.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\CameraInput.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Console.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Instance.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\RenderComponent.hpp">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Chunk.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\BaseComponent.hpp">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\IBaseComponent.hpp">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Settings\DisplaySettings.hpp">
+      <Filter>Header Files\Core\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Settings\Settings.hpp">
+      <Filter>Header Files\Core\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Window\Window.hpp">
+      <Filter>Header Files\Core\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader\LibraryLoader.hpp">
+      <Filter>Header Files\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\LoadingScreen.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\Loader.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\LoaderDescriptor.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\Gui.hpp">
+      <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
