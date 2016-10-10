@@ -126,6 +126,10 @@ void Texture::setTextureData(int _width, int _height, int _components, void * _d
 	size_t size = width*height*components;
 
 	if ( textureData ) {
+		if ( update )
+			return;
+		else
+			update = true;
 		return;
 		//MemoryManager::getMemoryManager()->deallocate(textureData);
 		//textureData = nullptr;

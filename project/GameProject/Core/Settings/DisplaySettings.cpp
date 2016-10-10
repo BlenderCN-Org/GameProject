@@ -15,9 +15,14 @@ void DisplaySettings::setWindow(GLFWwindow * wnd)
 	window = wnd;
 }
 
+void DisplaySettings::setRenderEngine(IRenderEngine * re)
+{
+	renderEngine = re;
+}
+
 void DisplaySettings::apply()
 {
-	if ( window )
+	if ( window && renderEngine )
 	{
 		//glfwSetWindowSize(window, screenRes.width, screenRes.height);
 		glfwSwapInterval((int)vsync);

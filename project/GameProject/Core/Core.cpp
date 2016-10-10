@@ -2,6 +2,8 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
+#include <thread>
+
 char* vs =
 "#version 410\n"
 "\n"
@@ -39,6 +41,24 @@ char* fs =
 "	red = vec4(1.0, 0.0, 0, 1);\n"
 "}\n";
 
+void thread(ITexture* tex, bool* kill )
+{
+	while ( !kill )
+	{
+		unsigned char t[16 * 16];
+
+		for ( size_t i = 0; i < 16; i++ )
+		{
+			for ( size_t j = 0; j < 16; j++ )
+			{
+				t[(i * 16) + j] = (unsigned char)(((float)(i*j) / (16.0f*16.0f)) * 256.0f);
+			}
+		}
+
+		tex->setTextureData(16, 16, 1, t);
+	}
+}
+
 void Core::init()
 {
 	hadReset = false;
@@ -56,6 +76,8 @@ void Core::init()
 	renderEngine = rProc();
 	renderEngine->init();
 	renderEngine->updateViewPort(1280, 720);
+
+	disp.setRenderEngine(renderEngine);
 
 	input = Input::getInput();
 	console = new Console();
@@ -123,13 +145,30 @@ void Core::init()
 	}
 
 	texture->setTextureData(16, 16, 1, t);
+	
+	killThread = false;
+
+	streamingThread = new std::thread(thread, texture, &killThread);
 
 	game = new Game();
 	game->init();
+
+	mousePosText = renderEngine->createText();
+	mousePosText->init();
+	mousePosText->setFont(font);
+
 }
 
 void Core::release()
 {
+	disp.setWindow(nullptr);
+	disp.setRenderEngine(nullptr);
+
+	mousePosText->release();
+
+	killThread = true;
+	streamingThread->join();
+	delete streamingThread;
 	delete game;
 	planeMesh->unmap();
 	delete console;
@@ -269,10 +308,19 @@ void Core::render()
 		text->render(console->getText(), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		// render console
 	}
-
+	
 	text->setText((char*)str.c_str(), str.length(), 25.0f, 600.0f, 1.0f);
 	text->render(str, 25.0f, 600.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 	
+	int x, y;
+	int mb, sc;
+	input->getState(x, y, mb, sc);
+
+	str = "Mouse pos (" + std::to_string(x) + "," + std::to_string(y) + ")";
+
+	mousePosText->setText((char*)str.c_str(), str.length(), 25.0f, 1000.0f, 1.0f);
+	mousePosText->render(str, 25.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.43f, 0.0f));
+
 	fbo->resolveToScreen();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;

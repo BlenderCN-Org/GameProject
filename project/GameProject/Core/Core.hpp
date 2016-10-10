@@ -14,6 +14,10 @@
 
 #include "../Loader/LibraryLoader.hpp"
 
+#include <thread>
+
+#include "../Game/GUI/Gui.hpp"
+
 class Core
 {
 	
@@ -69,6 +73,13 @@ private:
 	DisplaySettings disp;
 
 	Lib renderEngineLib;
+
+	std::thread* streamingThread;
+	bool killThread;
+
+	// gui stuff
+
+	IText* mousePosText;
 
 };
 

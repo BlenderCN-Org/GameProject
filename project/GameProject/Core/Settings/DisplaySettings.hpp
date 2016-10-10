@@ -4,6 +4,8 @@
 #include <Config\Config.hpp>
 #include <GLFW\glfw3.h>
 
+#include <RenderEngine\IRenderEngine.hpp>
+
 struct Resolution
 {
 	int width;
@@ -44,6 +46,7 @@ public:
 	DisplaySettings();
 
 	void setWindow(GLFWwindow* wnd);
+	void setRenderEngine(IRenderEngine* re);
 
 	void apply();
 	
@@ -72,6 +75,8 @@ private:
 	FramerateLock fpsLock;
 	
 	GLFWwindow* window;
+
+	IRenderEngine* renderEngine;
 
 };
 

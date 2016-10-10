@@ -147,6 +147,8 @@ void Input::reset()
 	yDelta = 0.0;
 	scrollX = 0.0;
 	scrollY = 0.0;
+
+	sizeChange = false;
 }
 
 void Input::getWindowSize(int & w, int & h) {

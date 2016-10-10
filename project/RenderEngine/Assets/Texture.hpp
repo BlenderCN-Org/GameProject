@@ -6,6 +6,16 @@
 #include <GL\glew.h>
 #include <GL\GL.h>
 
+#include <mutex>
+
+struct UpdateInfo
+{
+	void* textureData;
+	int w, h;
+	int component;
+	int layer;
+};
+
 class Texture : public ITexture{
 
 public:
@@ -33,6 +43,8 @@ private:
 	bool compressChange;
 
 	void* textureData;
+	UpdateInfo* updateInfo;
+
 
 };
 

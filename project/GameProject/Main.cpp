@@ -19,6 +19,7 @@
 
 int PrintModules()
 {
+	
 	HANDLE snapshot;
 
 	snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
@@ -53,7 +54,6 @@ int PrintModules()
 
 int main(int argc, char* argv[])
 {
-
 	glfwInit();
 	float dt = 0.0f;
 	float timePass = 0.0f;
