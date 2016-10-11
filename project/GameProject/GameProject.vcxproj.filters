@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Game\GUI">
       <UniqueIdentifier>{38b944de-f8cb-4c86-b1a0-4acc0539c25a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\GUI\Editor">
+      <UniqueIdentifier>{7374d29b-4441-40af-ae2e-b5128b6ec28b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game\GUI\Editor">
+      <UniqueIdentifier>{95d006bc-552c-46db-a41f-0fcd8707bae0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -119,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="Game\GUI\Gui.cpp">
       <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\Editor\TextArea.cpp">
+      <Filter>Source Files\Game\GUI\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="Game\GUI\Gui.hpp">
       <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\Editor\TextArea.hpp">
+      <Filter>Header Files\Game\GUI\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

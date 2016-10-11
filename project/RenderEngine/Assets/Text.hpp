@@ -22,7 +22,7 @@ public:
 
 	virtual void setFont(IFont* fnt);
 
-	virtual void render(std::string &text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	virtual void render(glm::vec3 color);
 
 private:
 

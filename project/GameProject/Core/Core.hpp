@@ -18,6 +18,8 @@
 
 #include "../Game/GUI/Gui.hpp"
 
+#include "../Game/GUI/Editor/TextArea.hpp"
+
 class Core
 {
 	
@@ -80,6 +82,8 @@ private:
 	// gui stuff
 
 	IText* mousePosText;
+
+	TextArea* textArea;
 
 };
 

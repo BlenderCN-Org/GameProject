@@ -7,7 +7,7 @@ class AnimatedMesh : public IAnimatedMesh{
 
 public:
 
-	virtual void init();
+	virtual void init(MeshPrimitiveType ptype);
 	virtual void release();
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout);

@@ -74,13 +74,19 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 		{
 			if (yAdv)
 			{
-				y -= yAdv;
-				oldYAdv = yAdv;
+				y -= yAdv + 5;
+				oldYAdv = yAdv + 5;
 			} else {
 				y -= oldYAdv;
 			}
 			yAdv = 0;
 			x = dx;
+			memset(&verts[i*sizePerChar], 0, sizeof(GLfloat) * sizePerChar);
+			continue;
+		}
+		else if ( text[i] == '\t' )
+		{
+			x += (ch.size.x * scale * 2.0f);
 			memset(&verts[i*sizePerChar], 0, sizeof(GLfloat) * sizePerChar);
 			continue;
 		}
@@ -124,10 +130,8 @@ void Text::setFont(IFont * fnt) {
 	font = fnt;
 }
 
-void Text::render(std::string &text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color) {
+void Text::render(glm::vec3 color) {
 	
-	if (text.length() == 0)
-		return;
 	Font* f = (Font*)font;
 
 	glUseProgram(textShader);

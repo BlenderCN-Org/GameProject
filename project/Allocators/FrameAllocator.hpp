@@ -58,19 +58,21 @@ public:
 		}
 		while (oldHeap) {
 			//printf("Delete old pool heap %d (de-tor)\n", (int)oldHeap);
-
-			if (allocator){
-				allocator->deallocate(oldHeap->heap);
-				HeapStruct* hs = oldHeap->next;
-				oldHeap = oldHeap->next;
-				allocator->deallocate(hs);
-			} else {
-				free(oldHeap->heap);
-				HeapStruct* hs = oldHeap->next;
-				oldHeap = oldHeap->next;
-				free(hs);
+			if ( oldHeap ) {
+				if ( allocator ) {
+					allocator->deallocate(oldHeap->heap);
+					HeapStruct* hs = oldHeap;
+					oldHeap = oldHeap->next;
+					allocator->deallocate(hs);
+				} else {
+					free(oldHeap->heap);
+					HeapStruct* hs = oldHeap;
+					oldHeap = oldHeap->next;
+					free(hs);
+				}
 			}
 		}
+		usedSize = 0;
 		oldHeap = nullptr;
 
 		heapSpace = nullptr;
@@ -157,7 +159,7 @@ public:
 			else
 			{
 				free(oldHeap->heap);
-				HeapStruct* hs = oldHeap->next;
+				HeapStruct* hs = oldHeap;
 				oldHeap = oldHeap->next;
 				free(hs);
 			}

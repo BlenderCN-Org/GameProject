@@ -1,6 +1,6 @@
 #include "AnimatedMesh.hpp"
 
-void AnimatedMesh::init() {}
+void AnimatedMesh::init(MeshPrimitiveType ptype) {}
 
 void AnimatedMesh::release() {}
 

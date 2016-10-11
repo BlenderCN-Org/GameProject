@@ -15,7 +15,8 @@ struct Vertex5 {
 	float u, v;
 };
 
-void Mesh::init() {
+void Mesh::init(MeshPrimitiveType ptype) {
+	primitiveType = ptype;
 	usesIndexBuffer = false;
 	isMapped = false;
 	mapPtr = nullptr;

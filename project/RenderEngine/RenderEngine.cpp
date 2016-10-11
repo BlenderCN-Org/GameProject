@@ -149,6 +149,17 @@ void RenderEngine::renderDebugFrame()
 
 }
 
+void RenderEngine::setDepthTest(bool enable)
+{
+	if ( enable ) {
+		glEnable(GL_DEPTH_TEST);
+	}
+	else
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+
 bool RenderEngine::getGraphicsReset() const
 {
 	GLenum status = glGetGraphicsResetStatus();

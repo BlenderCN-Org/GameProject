@@ -10,6 +10,7 @@ public:
 
 	virtual float* getViewMatrix() = 0;
 	virtual float* getPerspectiveMatrix() = 0;
+	virtual float* getOrthoMatrix() = 0;
 
 };
 

@@ -20,3 +20,8 @@ float * Camera::getPerspectiveMatrix()
 {
 	return &perspective[0][0];
 }
+
+float * Camera::getOrthoMatrix()
+{
+	return &orthoMatrix[0][0];
+}

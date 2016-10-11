@@ -14,10 +14,12 @@ public:
 
 	virtual float* getViewMatrix();
 	virtual float* getPerspectiveMatrix();
+	virtual float* getOrthoMatrix();
 
 //private:
 	glm::mat4 viewMatrix;
 	glm::mat4 perspective;
+	glm::mat4 orthoMatrix;
 
 };
 

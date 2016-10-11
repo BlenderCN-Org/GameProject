@@ -101,13 +101,14 @@ void Core::init()
 	camInput.init((glm::mat4*)camera->getViewMatrix());
 
 	*(glm::mat4*)(camera->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(1280), float(720), 0.0001f, 100.0f);
+	*(glm::mat4*)(camera->getOrthoMatrix()) = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
 
 	input->attachConsole(console);
 
 	planeMesh = renderEngine->createMesh();
 	triangleMesh = renderEngine->createMesh();
-	planeMesh->init();
-	triangleMesh->init();
+	planeMesh->init(MeshPrimitiveType::TRIANGLE);
+	triangleMesh->init(MeshPrimitiveType::TRIANGLE);
 
 	float f[] = { 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 	1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
@@ -157,10 +158,17 @@ void Core::init()
 	mousePosText->init();
 	mousePosText->setFont(font);
 
+	textArea = new TextArea(renderEngine);
+	
+	//textArea->setPos(1920/2, 1080/2);
+	//textArea->setSize(100, 100);
+
 }
 
 void Core::release()
 {
+	delete textArea;
+
 	disp.setWindow(nullptr);
 	disp.setRenderEngine(nullptr);
 
@@ -297,29 +305,39 @@ void Core::render()
 
 	float percent = (float(used) / float(max)) * 100.0f;
 	std::string str = "Memory: " + std::to_string(used) + "/" + std::to_string(max) + "(" + std::to_string(percent) + "%)\n\n\nSome more text\nUsing renderbuffers: " + std::to_string(fbo->isUsingRenderBuffer());
-	str += "\n FPS: " +std::to_string(fps);
-	str += "\n c: " + std::to_string(c);
+	str += "\nFPS: " +std::to_string(fps);
+	str += "\nc: " + std::to_string(c);
 	//text->render(std::string("a"), 25.0f, 100.0f, 45.0f, glm::vec3(0.5, 0.8f, 0.2f));
 
 	if (input->consoleIsActive())
 	{
 		text->setText((char*)console->getText().c_str(), console->getText().length(), 25.0f, 25.0f, 1.0f);
 
-		text->render(console->getText(), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		text->render(glm::vec3(0.5, 0.8f, 0.2f));
 		// render console
 	}
 	
 	text->setText((char*)str.c_str(), str.length(), 25.0f, 600.0f, 1.0f);
-	text->render(str, 25.0f, 600.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	text->render(glm::vec3(0.5, 0.8f, 0.2f));
 	
-	int x, y;
-	int mb, sc;
-	input->getState(x, y, mb, sc);
+	//str = "Mouse pos (" + std::to_string(x) + "," + std::to_string(y) + ")\n";
+	str = std::string(fs);
 
-	str = "Mouse pos (" + std::to_string(x) + "," + std::to_string(y) + ")";
+	mousePosText->setText((char*)str.c_str(), str.length(), 25, 1000.0f, 1.0f);
+	mousePosText->render(glm::vec3(0.8, 0.43f, 0.0f));
 
-	mousePosText->setText((char*)str.c_str(), str.length(), 25.0f, 1000.0f, 1.0f);
-	mousePosText->render(str, 25.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.43f, 0.0f));
+	renderEngine->setDepthTest(true);
+	texture->bind();
+
+	shader->useShader();
+	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
+	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
+
+	textArea->render();
+	textArea->renderHelpLines();
+
+	//renderEngine->setDepthTest(true);
 
 	fbo->resolveToScreen();
 	hadReset = renderEngine->getGraphicsReset();
@@ -331,6 +349,8 @@ void Core::render()
 		c = 0;
 	}
 	c++;
+
+	
 }
 
 DisplaySettings * Core::getDisplaySettings()

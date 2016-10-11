@@ -4,6 +4,15 @@
 /*
 The layout specify what components are in the dataset
 */
+
+enum class MeshPrimitiveType
+{
+	POINT,
+	LINE,
+	TRIANGLE,
+	QUAD,
+};
+
 enum MeshDataLayout {
 	VERT,
 	VERT_UV,
@@ -16,7 +25,7 @@ class IMesh {
 
 public:
 
-	virtual void init() = 0;
+	virtual void init(MeshPrimitiveType ptype) = 0;
 	virtual void release() = 0;
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout) = 0;

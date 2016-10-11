@@ -11,7 +11,7 @@ class Mesh : public IMesh
 
 public:
 
-	virtual void init();
+	virtual void init(MeshPrimitiveType p);
 	virtual void release();
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout);
@@ -24,7 +24,7 @@ public:
 	virtual void flush();
 
 private:
-
+	MeshPrimitiveType primitiveType;
 	MeshDataLayout dataLayout;
 
 	bool usesIndexBuffer;

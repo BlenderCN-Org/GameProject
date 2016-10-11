@@ -26,6 +26,8 @@ public:
 	virtual void release();
 	virtual void renderDebugFrame();
 
+	virtual void setDepthTest(bool enable);
+
 	virtual bool getGraphicsReset() const;
 
 	virtual void updateViewPort(int width, int height);

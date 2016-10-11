@@ -105,6 +105,9 @@ void Input::setupCallbacks(GLFWwindow * wnd)
 	glfwSetScrollCallback(window, scrollCallback);
 	glfwSetCharCallback(window, characterCallback);
 	glfwSetWindowSizeCallback(window, sizeCallback);
+
+	glfwGetWindowSize(wnd, &winW, &winH);
+
 }
 
 bool Input::isKeyBindPressed(KeyBind & keyBind)

@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 	core->getDisplaySettings()->apply();
 
 	window->showWindow();
-	window->swapInterval(1);
+	window->swapInterval(-1);
 	
 	while ( !window->shouldClose())
 	{
