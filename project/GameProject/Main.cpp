@@ -79,9 +79,8 @@ int main(int argc, char* argv[])
 	
 	while ( !window->shouldClose())
 	{
-		
-		glfwPollEvents();
 		core->update(dt);
+		glfwPollEvents();
 		if ( core->hadGraphicsReset() )
 		{
 			while ( core->hadGraphicsReset() );

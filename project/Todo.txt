@@ -1,0 +1,17 @@
+Make font scale on resolution
+Support for unicode characters (font map)
+Remove text shader from textClass
+Change TextArea to use mask texture, instead of stencil buffer (performance)
+TextArea scrollable text, (horz & vert)
+Gui focus control
+
+Other Gui types
+	Buttons
+	CheckBox
+	Lists
+	ComboBox
+	Tree
+	ColorChooser
+	ModelPreview
+	Simple TextField
+	Label

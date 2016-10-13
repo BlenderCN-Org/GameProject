@@ -25,6 +25,7 @@ public:
 
 private:
 
+	IRenderEngine* renderEngine;
 	void update();
 
 	void* mapped;
@@ -46,6 +47,8 @@ private:
 		float x, y, z, u, v;
 
 	};
+
+	std::string tempString;
 
 };
 

@@ -122,10 +122,10 @@ bool FrameBuffer::setupFrameBuffer()
 
 	created = success;
 
-	glEnable(GL_STENCIL_TEST);
+	//glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 	glClearStencil(0x00);
-	glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+	glStencilOp(GL_KEEP, GL_INCR, GL_INCR);
 	glStencilMask(0xFF);
 
 	return success;

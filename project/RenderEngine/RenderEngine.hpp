@@ -28,7 +28,13 @@ public:
 
 	virtual void setDepthTest(bool enable);
 
+	virtual void clearStencil();
+
 	virtual void setStencilTest(bool enable);
+	virtual void stencilMask(unsigned int mask);
+	virtual void stencilClear(int mask);
+	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass);
+	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask);
 
 	virtual bool getGraphicsReset() const;
 

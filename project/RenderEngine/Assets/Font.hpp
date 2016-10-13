@@ -25,6 +25,8 @@ public:
 	virtual void setFontSize(int size);
 	virtual void setFont(char* font);
 	
+	int getFontSize() const;
+
 	struct Character {
 		GLuint     charID;  // ID handle of the glyph texture
 		glm::ivec2 size;       // Size of glyph
@@ -48,6 +50,7 @@ private:
 	FT_Library fontLib;
 	FT_Face face;
 
+	int fontSize;
 
 };
 

@@ -58,7 +58,7 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 	//GLfloat xpos;
 	//GLfloat ypos;
 	//GLfloat h;
-	//GLfloat	w;
+	//GLfloat w;
 
 	//GLfloat xpos = x + ch.Bearing.x * scale;
 	//GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -70,14 +70,17 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 	{
 		Font::Character ch = f->characters[text[i]];
 
+		if ( i == 0 )
+			y += f->getFontSize();
+
 		if (text[i] == '\n')
 		{
 			if (yAdv)
 			{
-				y -= yAdv + 5;
-				oldYAdv = yAdv + 5;
+				y += f->getFontSize();
+				oldYAdv = f->getFontSize();
 			} else {
-				y -= oldYAdv;
+				y += oldYAdv;
 			}
 			yAdv = 0;
 			x = dx;
@@ -90,9 +93,14 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 			memset(&verts[i*sizePerChar], 0, sizeof(GLfloat) * sizePerChar);
 			continue;
 		}
+		else if ( text[i] == '\0' )
+		{
+			memset(&verts[i*sizePerChar], 0, sizeof(GLfloat) * sizePerChar);
+			continue;
+		}
 
 		GLfloat xpos = x + ch.bearing.x * scale;
-		GLfloat ypos = y - ((ch.size.y - ch.bearing.y) * scale);
+		GLfloat ypos = y + ((ch.size.y - ch.bearing.y) * scale);
 
 		GLfloat w = ch.size.x * scale;
 		GLfloat h = ch.size.y * scale;
@@ -107,13 +115,13 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 		float texY2 = (float)(ch.texturePos.y + ch.size.y) / (float)f->texHeight;
 
 		GLfloat vertices[6][4] = {
-			{ xpos,     ypos + h,   texX1, texY1 },
+			{ xpos,     ypos - h,   texX1, texY1 },
 			{ xpos,     ypos,       texX1, texY2 },
 			{ xpos + w, ypos,       texX2, texY2 },
 
-			{ xpos,     ypos + h,   texX1, texY1 },
+			{ xpos,     ypos - h,   texX1, texY1 },
 			{ xpos + w, ypos,       texX2, texY2 },
-			{ xpos + w, ypos + h,   texX2, texY1 }
+			{ xpos + w, ypos - h,   texX2, texY1 }
 		};
 
 		memcpy(&verts[i * sizePerChar], vertices, sizeof(vertices));
@@ -136,7 +144,7 @@ void Text::render(glm::vec3 color) {
 
 	glUseProgram(textShader);
 
-	glm::mat4 proj = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f);
+	glm::mat4 proj = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
 
 	glUniformMatrix4fv(projection, 1, GL_FALSE, &proj[0][0]);
 	glUniform3f(colorUni, color.x, color.y, color.z);

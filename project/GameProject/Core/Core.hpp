@@ -44,6 +44,7 @@ private:
 	int fps;
 
 	Console* console;
+	TextArea* consoleTextArea;
 	Game* game;
 
 	IRenderEngine* renderEngine;
@@ -85,6 +86,7 @@ private:
 
 	TextArea* textArea;
 
+	float areaSizeX;
 };
 
 #endif

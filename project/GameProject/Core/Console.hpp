@@ -45,12 +45,16 @@ public:
 
 	std::string getText();
 
+	std::string getHistory();
+
 	DisplaySettings* dispSettings;
 
 	bool reset;
 
 private:
 	
+	void addToHistory(std::string h);
+
 	typedef struct {
 		std::string name;
 		std::string description;
@@ -65,7 +69,9 @@ private:
 	} console_item_t;
 
 	bool parseCommandLine();
-
+	
+	std::string line;
+	std::vector<std::string> historyBuffer;
 	std::vector<std::string> m_commandBuffer;
 	size_t maxCommands;
 

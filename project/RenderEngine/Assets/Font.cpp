@@ -16,6 +16,7 @@ Font::Font(FT_Library &_fontLib) {
 void Font::init(char * font, int size) {
 	
 	FT_New_Face(fontLib, font, 0, &face);
+	fontSize = size;
 	FT_Set_Pixel_Sizes(face, 0, size);
 
 	glGenTextures(1, &fontTexture);
@@ -32,6 +33,7 @@ void Font::release() {
 }
 
 void Font::setFontSize(int size) {
+	fontSize = size;
 	FT_Set_Pixel_Sizes(face, 0, size);
 	genFontTexture();
 }
@@ -41,6 +43,11 @@ void Font::setFont(char * font) {
 		FT_Done_Face(face);
 	FT_New_Face(fontLib, font, 0, &face);
 	genFontTexture();
+}
+
+int Font::getFontSize() const
+{
+	return fontSize;
 }
 
 // comparison, not case sensitive.

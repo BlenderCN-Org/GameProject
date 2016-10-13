@@ -159,6 +159,14 @@ void Input::getWindowSize(int & w, int & h) {
 	h = winH;
 }
 
+void Input::getMousePos(int & x, int & y)
+{
+	double xx, yy;
+	glfwGetCursorPos(window, &xx, &yy);
+	x = (int)xx;
+	y = (int)yy;
+}
+
 void Input::getState(int &mx, int &my, int &mb, int &sc) {
 	mx = xPos;
 	my = yPos;

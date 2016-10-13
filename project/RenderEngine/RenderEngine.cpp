@@ -159,6 +159,11 @@ void RenderEngine::setDepthTest(bool enable)
 	}
 }
 
+void RenderEngine::clearStencil()
+{
+	glClear(GL_STENCIL_BUFFER_BIT);
+}
+
 void RenderEngine::setStencilTest(bool enable)
 {
 	GLenum cap = GL_STENCIL_TEST;
@@ -168,6 +173,26 @@ void RenderEngine::setStencilTest(bool enable)
 	} else {
 		glDisable(cap);
 	}
+}
+
+void RenderEngine::stencilMask(unsigned int mask)
+{
+	glStencilMask(mask);
+}
+
+void RenderEngine::stencilClear(int mask)
+{
+	glClearStencil(mask);
+}
+
+void RenderEngine::stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass)
+{
+	glStencilOp(fail, zfail, zpass);
+}
+
+void RenderEngine::stencilFunc(unsigned int func, int ref, unsigned int mask)
+{
+	glStencilFunc(func, ref, mask);
 }
 
 bool RenderEngine::getGraphicsReset() const

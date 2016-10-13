@@ -77,6 +77,8 @@ Console::Console() {
 	addItem("fullscreenMode", "Sets fullscreen mode FULLSCREEN(0), WINDOWED_FULLSCREEN(1), WINDOWED(2), WINDOWED_BORDERLESS(3)", &changeFullscreenMode, console_item_type_t::CTYPE_FUNCTION);
 	addItem("setResolution", "Sets screen resolution", &setRes, console_item_type_t::CTYPE_FUNCTION);
 	addItem("reset", "Resets opengl", &reset_fun, console_item_type_t::CTYPE_FUNCTION);
+
+	line = "";
 }
 
 Console::~Console() {
@@ -112,6 +114,17 @@ void Console::backSpace() {
 
 void Console::print(std::string text) {
 	printf("%s", text.c_str());
+	
+	for ( size_t i = 0; i < text.size(); i++ )
+	{
+		line.push_back(text[i]);
+		if ( text[i] == '\n' )
+		{
+			addToHistory(line);
+			line = "";
+		}
+	}
+
 }
 
 void Console::execute() {
@@ -169,6 +182,23 @@ void Console::setVisible(bool v) {
 
 std::string Console::getText() {
 	return m_commandLine;
+}
+
+std::string Console::getHistory()
+{
+	std::string str = "";
+	for ( size_t i = 0; i < historyBuffer.size(); i++ )
+	{
+		str += historyBuffer[i];
+	}
+	return str;
+}
+
+void Console::addToHistory(std::string h)
+{
+	if ( historyBuffer.size() > 25 )
+		historyBuffer.erase(historyBuffer.begin());
+	historyBuffer.push_back(h);
 }
 
 bool Console::parseCommandLine() {

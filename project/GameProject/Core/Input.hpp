@@ -89,6 +89,8 @@ public:
 
 	bool sizeChange;
 
+	void getMousePos(int &x, int &y);
+
 	void getState(int &mx, int &my, int &mb, int &sc);
 
 	void print();

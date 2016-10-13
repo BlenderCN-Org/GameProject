@@ -142,10 +142,12 @@ int ShelfPack::Node::getWidth() {
 	if (below)
 		wb = below->getWidth();
 
-	if (ws > wb)
+	if ( ws > wb )
 		return ws;
-	else if (wb > ws)
+	else if ( wb > ws )
 		return wb;
+	else if ( ws == wb && ws != 0 )
+		return ws;
 	else
 		return x + width;
 }

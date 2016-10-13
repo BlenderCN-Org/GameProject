@@ -174,13 +174,20 @@ void Core::init()
 
 	textArea = new TextArea(renderEngine);
 	
-	//textArea->setPos(1920/2, 1080/2);
-	//textArea->setSize(100, 100);
+	textArea->setPos(1920/2, 1080/2);
+	textArea->setSize(200, 300);
+	areaSizeX = 200.0f;
+	textArea->addText("Some long text that will appear outside of textArea");
 
+	consoleTextArea = new TextArea(renderEngine);
+
+	consoleTextArea->setPos(0.0f, 1080.0f /2.0f);
+	consoleTextArea->setSize(1920.0f, 1080.0f / 2.0f);
 }
 
 void Core::release()
 {
+	delete consoleTextArea;
 	delete textArea;
 
 	disp.setWindow(nullptr);
@@ -262,16 +269,20 @@ void Core::update(float dt)
 	kb2.mouse = false;
 	if ( input->isKeyBindPressed(kb) && !input->consoleIsActive() )
 	{
-		float* data = (float*)map;
-		data[0] += 1.0f;
-		planeMesh->flush();
+		//float* data = (float*)map;
+		//data[0] += 1.0f;
+		//planeMesh->flush();
+		areaSizeX += 1.0f;
+		textArea->setSize(areaSizeX, 300);
 	}
 
 	if ( input->isKeyBindPressed(kb2) && !input->consoleIsActive() )
 	{
-		float* data = (float*)map;
-		data[0] -= 1.0f;
-		planeMesh->flush();
+		//float* data = (float*)map;
+		//data[0] -= 1.0f;
+		//planeMesh->flush();
+		areaSizeX -= 1.0f;
+		textArea->setSize(areaSizeX,300);
 	}
 
 	if (input->sizeChange)
@@ -290,6 +301,7 @@ void Core::update(float dt)
 		}
 		//console->print("Resize\n");
 	}
+
 	//input->print();
 	input->reset();
 }
@@ -298,7 +310,11 @@ void Core::render()
 {
 	fbo->bind();
 	renderEngine->setDepthTest(true);
+	renderEngine->setStencilTest(true);
+	renderEngine->stencilMask(0xFF);
 	renderEngine->renderDebugFrame();
+	renderEngine->stencilOp(GL_INCR, GL_INCR, GL_INCR);
+	renderEngine->stencilFunc(GL_ALWAYS, 1, 0xFF);
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
 	//obj->render();
@@ -324,21 +340,34 @@ void Core::render()
 	str += "\nc: " + std::to_string(c);
 	//text->render(std::string("a"), 25.0f, 100.0f, 45.0f, glm::vec3(0.5, 0.8f, 0.2f));
 
+	shader->useShader();
+	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
+	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
+
 	if (input->consoleIsActive())
 	{
-		text->setText((char*)console->getText().c_str(), console->getText().length(), 25.0f, 25.0f, 1.0f);
+		text->setText((char*)console->getText().c_str(), console->getText().length(), 25.0f, 1000.0f, 1.0f);
+
+		consoleTextArea->clearText();
+		consoleTextArea->addText(console->getHistory().c_str());
+		consoleTextArea->render();
+
+		renderEngine->stencilMask(0xFF);
+		renderEngine->stencilOp(GL_INCR, GL_INCR, GL_INCR);
+		renderEngine->stencilFunc(GL_ALWAYS, 1, 0xFF);
 
 		text->render(glm::vec3(0.5, 0.8f, 0.2f));
 		// render console
 	}
-	
-	text->setText((char*)str.c_str(), str.length(), 25.0f, 600.0f, 1.0f);
+
+	text->setText((char*)str.c_str(), str.length(), 25.0f, 25.0f, 1.0f);
 	text->render(glm::vec3(0.5, 0.8f, 0.2f));
 	
 	//str = "Mouse pos (" + std::to_string(x) + "," + std::to_string(y) + ")\n";
 	str = std::string(fs);
 
-	mousePosText->setText((char*)str.c_str(), str.length(), 25, 1000.0f, 1.0f);
+	mousePosText->setText((char*)str.c_str(), str.length(), 500.0, 25.0f, 1.0f);
 	mousePosText->render(glm::vec3(0.8, 0.43f, 0.0f));
 
 	texture->bind();
