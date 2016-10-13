@@ -84,3 +84,4 @@ $RECYCLE.BIN/
 *.tlog
 *.enc
 project/GameProject.VC.VC.opendb
+*.exp
