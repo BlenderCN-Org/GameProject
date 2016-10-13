@@ -64,7 +64,11 @@ void Core::init()
 	hadReset = false;
 	if ( renderEngineLib.loadLibrary("RenderEngine.dll") )
 		printf("Loaded\n");
-
+	else
+	{
+		printf("Failed to load\n");
+		throw;
+	}
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
 	disp.setResolution(1280, 720);

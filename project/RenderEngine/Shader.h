@@ -13,7 +13,7 @@ inline std::string readShader(const char *filePath)
 	std::ifstream fileStream(filePath, std::ios::in);
 
 	if (!fileStream.is_open()) {
-		printf("Could not open file %s", filePath);
+		printf("Could not open file %s\n", filePath);
 		return "";
 	}
 
