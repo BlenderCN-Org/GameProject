@@ -13,10 +13,10 @@ public:
 
 	FrameBuffer() : created(false) {};
 
-	virtual void init();
+	virtual bool init(FrameBufferCreateInfo *createInfo);
 	virtual void release();
 
-	virtual bool setupFrameBuffer(int width, int height, int nrColorAttachments, bool useDepth, bool multisample, bool useRenderBuffer);
+	
 
 	virtual void resize(int width, int height);
 	virtual void setWindowSize(int windowWidth, int windowHeight);
@@ -29,8 +29,10 @@ public:
 
 private:
 	
-	GLuint createDepthTexture(int width, int height);
-	GLuint createDepthRenderBuffer(int width, int height);
+	bool setupFrameBuffer();
+
+	GLuint createDepthTexture(int width, int height, bool stencil);
+	GLuint createDepthRenderBuffer(int width, int height, bool stencil);
 
 	GLuint createColorTexture(int width, int height, int format, int attachment);
 	GLuint createColorRenderBuffer(int width, int height, int format, int attachment);
@@ -42,9 +44,11 @@ private:
 	int windowHeight;
 
 	bool created;
-
+	
+	bool stencil;
 	bool depth;
 	bool multiSample;
+	char multiSampleCount;
 	bool usingRenderBuffers;
 
 	GLuint framebuffer;
@@ -53,7 +57,6 @@ private:
 
 	GLuint* colorAttachments;
 	GLuint depthAttachment;
-
 
 };
 

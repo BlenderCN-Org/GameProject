@@ -144,19 +144,29 @@ void RenderEngine::renderDebugFrame()
 	c.s = 1.0f;
 	clearColor = HSV2RGB(c);
 	glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 
 }
 
 void RenderEngine::setDepthTest(bool enable)
 {
+	GLenum cap = GL_DEPTH_TEST;
 	if ( enable ) {
-		glEnable(GL_DEPTH_TEST);
+		glEnable(cap);
+	} else {
+		glDisable(cap);
 	}
-	else
-	{
-		glDisable(GL_DEPTH_TEST);
+}
+
+void RenderEngine::setStencilTest(bool enable)
+{
+	GLenum cap = GL_STENCIL_TEST;
+
+	if ( enable ) {
+		glEnable(cap);
+	} else {
+		glDisable(cap);
 	}
 }
 

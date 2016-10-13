@@ -28,6 +28,8 @@ public:
 
 	virtual void setDepthTest(bool enable);
 
+	virtual void setStencilTest(bool enable);
+
 	virtual bool getGraphicsReset() const;
 
 	virtual void updateViewPort(int width, int height);

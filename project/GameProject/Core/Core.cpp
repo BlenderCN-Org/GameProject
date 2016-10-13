@@ -128,9 +128,19 @@ void Core::init()
 
 	fbo = renderEngine->createFrameBuffer();
 
-	fbo->init();
+	FrameBufferCreateInfo fboCreate = {};
 
-	fbo->setupFrameBuffer(1280, 720, 1, true, false, true);
+	fboCreate.width = 1280;
+	fboCreate.height = 720;
+	fboCreate.nrColorBuffers = 2;
+	fboCreate.useDepth = true;
+	fboCreate.useRenderbuffer = true;
+	fboCreate.useMultisample = false;
+	fboCreate.useStencil = true;
+	fboCreate.mutlisample = 0;
+
+	fbo->init(&fboCreate);
+
 
 	texture = renderEngine->createTexture();
 	texture->init(1, false);
@@ -283,6 +293,7 @@ void Core::update(float dt)
 void Core::render()
 {
 	fbo->bind();
+	renderEngine->setDepthTest(true);
 	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
@@ -326,7 +337,6 @@ void Core::render()
 	mousePosText->setText((char*)str.c_str(), str.length(), 25, 1000.0f, 1.0f);
 	mousePosText->render(glm::vec3(0.8, 0.43f, 0.0f));
 
-	renderEngine->setDepthTest(true);
 	texture->bind();
 
 	shader->useShader();

@@ -27,6 +27,8 @@ public:
 	virtual void renderDebugFrame() = 0;
 
 	virtual void setDepthTest(bool enable) = 0;
+	
+	virtual void setStencilTest(bool enable) = 0;
 
 	virtual bool getGraphicsReset() const = 0;
 

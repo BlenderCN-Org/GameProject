@@ -16,7 +16,7 @@ TextArea::TextArea(IRenderEngine* re)
 
 	vert v[] = { vert{pos.x + size.x, pos.y + size.y, 0.0f, 1.0f, 1.0f},
 		vert{ pos.x + size.x, pos.y, 0.0f, 1.0f, 0.0f },
-		vert{ pos.x, pos.y +size.y, 0.0f, 0.0f, 1.0f },
+		vert{ pos.x, pos.y + size.y, 0.0f, 0.0f, 1.0f },
 		vert{ pos.x, pos.y, 0.0f, 0.0f, 0.0f }, };
 
 	areaQuad->setMeshData(v, sizeof(v), MeshDataLayout::VERT_UV);
