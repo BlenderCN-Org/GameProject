@@ -28,11 +28,11 @@ public:
 
 //private:
 
-	WindowResizeCallback_t* resizeCallback;
-	WindowMouseMoveCallback_t* mouseMoveCallback;
-	WindowMouseButtonCallback_t* mouseButtonCallback;
-	WindowScrollCallback_t* scrollCallback;
-	WindowKeyCallback_t* keyCallback;
+	WindowResizeCallback_t* resizeCallback = 0;
+	WindowMouseMoveCallback_t* mouseMoveCallback = 0;
+	WindowMouseButtonCallback_t* mouseButtonCallback = 0;
+	WindowScrollCallback_t* scrollCallback = 0;
+	WindowKeyCallback_t* keyCallback = 0;
 
 protected:
 	HWND windowHandle;
@@ -48,6 +48,8 @@ public:
 	void deinit();
 
 	virtual void setVsync(bool vSync);
+
+	void makeCurrent();
 
 private:
 

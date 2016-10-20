@@ -1,6 +1,10 @@
 #ifndef RENDERENGINE_HPP
 #define RENDERENGINE_HPP
 
+#include "Window\Window.hpp"
+
+#undef RGB
+
 #include "IRenderEngine.hpp"
 #include "DataTypes\Colors.hpp"
 #include "ShaderState.hpp"
@@ -83,6 +87,9 @@ private:
 	//FrameAllocator frameAlloc;
 
 	FT_Library fontLibrary;
+
+
+	GLWindow glWindow;
 
 };
 

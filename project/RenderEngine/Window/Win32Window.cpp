@@ -26,7 +26,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch ( msg ) {
 		case WM_SIZE:
 		{
-			if ( wnd->resizeCallback )
+			if ( wnd && wnd->resizeCallback )
 				printf("callback stuff");
 			printf("Resize\n");
 		}
@@ -35,7 +35,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			break;
 	}
 
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+	return DefWindowProcA(hWnd, msg, wParam, lParam);
 }
 
 void setPixelFormatOGL(HDC windowDC) {
@@ -67,10 +67,12 @@ void setPixelFormatOGL(HDC windowDC) {
 		// todo create tempContext and init ogl extensions
 		HWND window = setupWindow();
 		HDC dc = GetDC(window);
+		selectedPixelFormat = ChoosePixelFormat(dc, &pfd);
 		SetPixelFormat(dc, selectedPixelFormat, &pfd);
 		HGLRC rc = wglCreateContext(dc);
 		wglMakeCurrent(dc, rc);
 
+		//glewInit();
 		wglewInit();
 
 		wglMakeCurrent(0, 0);
@@ -80,11 +82,25 @@ void setPixelFormatOGL(HDC windowDC) {
 
 		openglInitialized = true;
 	}
+	// todo fix attribute stuff
+	int intAttributes[] = {
+		WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+		WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+		WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+		WGL_COLOR_BITS_ARB, 24,
+		WGL_ALPHA_BITS_ARB, 8,
+		WGL_DEPTH_BITS_ARB, 24,
+		WGL_STENCIL_BITS_ARB, 8,
+		WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+		//WGL_SWAP_METHOD_ARB, WGL_SWAP_UNDEFINED_ARB,
+		0
 
-	int intAttributes[] = { 0 };
+	};
 	float floatAttributes[] = { 0 };
 
-	if ( wglChoosePixelFormatARB ) {
+	selectedPixelFormat = 0;
+
+	if ( wglChoosePixelFormatARB) {
 		wglChoosePixelFormatARB(windowDC, intAttributes, floatAttributes, 1, &selectedPixelFormat, &foundPixelFormats);
 	} else {
 		selectedPixelFormat = ChoosePixelFormat(windowDC, &pfd);
@@ -101,7 +117,7 @@ int registerWindowClass() {
 		return windowClassInitialized;
 	WNDCLASSA wc{};
 
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = GetModuleHandle(NULL);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -136,7 +152,13 @@ HGLRC createOpenGLContext(HDC windowDC) {
 
 	HGLRC renderingContext = 0;
 	if ( wglCreateContextAttribsARB ) {
-		int contextAttributes[] = { 0 };
+		int contextAttributes[] = {
+			WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+			WGL_CONTEXT_MINOR_VERSION_ARB, 5,
+			WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
+			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+			0
+		};
 
 		renderingContext = wglCreateContextAttribsARB(windowDC, NULL, contextAttributes);
 	} else {
@@ -160,7 +182,7 @@ void BaseWindow::setWindowSize(int x, int y) {
 
 void BaseWindow::showWindow(bool visible) {
 	this->visible = visible;
-	ShowWindow(windowHandle, visible ? SWP_SHOWWINDOW : SWP_HIDEWINDOW);
+	ShowWindow(windowHandle, visible ? SW_SHOW : SW_HIDE);
 }
 
 void BaseWindow::setWindowBorderless(bool borderless) {
@@ -181,9 +203,14 @@ void GLWindow::init() {
 	deviceContext = GetDC(windowHandle);
 	openglRenderContext = createOpenGLContext(deviceContext);
 
-	wglMakeCurrent(deviceContext, openglRenderContext);
+	if ( !openglRenderContext )
+		printf("something went wrong");
+	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) 		{
+		printf("making current failed\n");
+	}
 
-	wglSwapIntervalEXT(1);
+	if( wglSwapIntervalEXT )
+		wglSwapIntervalEXT(1);
 }
 
 void GLWindow::deinit() {
@@ -193,10 +220,21 @@ void GLWindow::deinit() {
 	ReleaseDC(windowHandle, deviceContext);
 	DestroyWindow(windowHandle);
 
+	openglInitialized = false;
+	windowClassInitialized = false;
+	UnregisterClassA(windowClassName, GetModuleHandle(NULL));
 }
 
 void GLWindow::setVsync(bool vSync) {
 	wglSwapIntervalEXT(vSync ? 1 : 0);
+}
+
+void GLWindow::makeCurrent() {
+	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
+		printf("making current failed\n");
+	}
+
+	SwapBuffers(deviceContext);
 }
 
 #endif
