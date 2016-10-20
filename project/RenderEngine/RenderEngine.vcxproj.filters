@@ -132,6 +132,9 @@
     <ClInclude Include="Window\Window.hpp">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Win32Window.hpp">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -184,6 +187,12 @@
     </ClCompile>
     <ClCompile Include="Assets\ShaderObject.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Win32Window.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

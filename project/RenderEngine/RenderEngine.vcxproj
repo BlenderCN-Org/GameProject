@@ -199,6 +199,7 @@
     <ClInclude Include="Utils\FrameAllocator_static.hpp" />
     <ClInclude Include="Utils\MemoryManager.hpp" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
+    <ClInclude Include="Win32Window.hpp" />
     <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +220,8 @@
     <ClCompile Include="Utils\FrameAllocator_static.cpp" />
     <ClCompile Include="Utils\MemoryManager.cpp" />
     <ClCompile Include="Utils\ShelfPack.cpp" />
+    <ClCompile Include="Window\Win32Window.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,39 +5,32 @@
 Input* Input::singleton = nullptr;
 KeyBind KeyBindings[KEYBINDS_NAME::KEYBINDS_LENGTH];
 
-void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{	
-	if (!singleton->consoleActive && action == GLFW_REPEAT)
+void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if ( !singleton->consoleActive && action == GLFW_REPEAT )
 		return;
 
-	singleton->keyMap[InputEvent{scancode, false}] = (action == GLFW_PRESS);
+	singleton->keyMap[InputEvent{ scancode, false }] = (action == GLFW_PRESS);
 	singleton->modkey = mods;
-	if (singleton->consoleActive)
-	{
-		if ( (scancode == 28 || scancode == 284) && action == GLFW_PRESS)
-		{
+	if ( singleton->consoleActive ) {
+		if ( (scancode == 28 || scancode == 284) && action == GLFW_PRESS ) {
 			singleton->console->print("\n>");
 			singleton->console->execute();
-		}
-		else if (scancode == 14 && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		{
+		} else if ( scancode == 14 && (action == GLFW_PRESS || action == GLFW_REPEAT) ) {
 			singleton->console->backSpace();
 		}
 	}
 	printf("Scancode %d with modkey %d\n", scancode, mods);
 }
 
-void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (!singleton->consoleActive && action == GLFW_REPEAT)
+void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	if ( !singleton->consoleActive && action == GLFW_REPEAT )
 		return;
 
-	singleton->keyMap[InputEvent{ button, true}] = (action == 1);
+	singleton->keyMap[InputEvent{ button, true }] = (action == 1);
 	//printf("MouseButton %d with modkey %d\n", button, mods);
 }
 
-void Input::cursorPosCallback(GLFWwindow * window, double x, double y)
-{
+void Input::cursorPosCallback(GLFWwindow * window, double x, double y) {
 	singleton->xDelta = float(x) - float(singleton->xPos);
 	singleton->yDelta = float(y) - float(singleton->yPos);
 
@@ -49,8 +42,7 @@ void Input::cursorPosCallback(GLFWwindow * window, double x, double y)
 
 }
 
-void Input::scrollCallback(GLFWwindow * window, double xoffset, double yoffset)
-{
+void Input::scrollCallback(GLFWwindow * window, double xoffset, double yoffset) {
 	singleton->scrollX = float(xoffset);
 	singleton->scrollY = float(yoffset);
 
@@ -58,8 +50,7 @@ void Input::scrollCallback(GLFWwindow * window, double xoffset, double yoffset)
 }
 
 void Input::characterCallback(GLFWwindow * window, unsigned int codepoint) {
-	if (singleton->consoleActive && singleton->console)
-	{
+	if ( singleton->consoleActive && singleton->console ) {
 		//printf("%c", codepoint);
 		singleton->console->keyPress(codepoint);
 	}
@@ -74,17 +65,14 @@ void Input::sizeCallback(GLFWwindow * window, int w, int h) {
 	//glViewport(0, 0, w, h);
 }
 
-Input* Input::getInput()
-{
-	if (singleton == nullptr)
+Input* Input::getInput() {
+	if ( singleton == nullptr )
 		singleton = new Input();
 	return singleton;
 }
 
-void Input::release()
-{
-	if (singleton != nullptr)
-	{
+void Input::release() {
+	if ( singleton != nullptr ) {
 		singleton->saveKeyBinds();
 		singleton->keyConf.write("Config/keybinds.ini");
 		delete singleton;
@@ -96,8 +84,7 @@ void Input::attachConsole(Console * con) {
 	console = con;
 }
 
-void Input::setupCallbacks(GLFWwindow * wnd)
-{
+void Input::setupCallbacks(GLFWwindow * wnd) {
 	window = wnd;
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
@@ -110,8 +97,7 @@ void Input::setupCallbacks(GLFWwindow * wnd)
 
 }
 
-bool Input::isKeyBindPressed(KeyBind & keyBind)
-{
+bool Input::isKeyBindPressed(KeyBind & keyBind) {
 	bool pressed = keyMap[InputEvent{ keyBind.code, keyBind.mouse }];
 
 	pressed &= (keyBind.mod == modkey);
@@ -119,21 +105,20 @@ bool Input::isKeyBindPressed(KeyBind & keyBind)
 	return pressed;
 }
 
-void Input::getCursorDelta(float & x, float & y)
-{
+void Input::getCursorDelta(float & x, float & y) {
 	x = xDelta;
 	y = yDelta;
 }
 
 bool Input::consoleKeyWasPressed() {
-	bool pressed = keyMap[InputEvent{ 41, false}];
+	bool pressed = keyMap[InputEvent{ 41, false }];
 	keyMap[InputEvent{ 41, false }] = false;
 	return pressed;
 }
 
 void Input::toggleConsole() {
 	//printf("Console toggle\n");
-	if (consoleActive) {
+	if ( consoleActive ) {
 		console->backSpace();
 	}
 
@@ -144,8 +129,7 @@ bool Input::consoleIsActive() {
 	return consoleActive;
 }
 
-void Input::reset()
-{
+void Input::reset() {
 	xDelta = 0.0f;
 	yDelta = 0.0;
 	scrollX = 0.0;
@@ -159,8 +143,7 @@ void Input::getWindowSize(int & w, int & h) {
 	h = winH;
 }
 
-void Input::getMousePos(int & x, int & y)
-{
+void Input::getMousePos(int & x, int & y) {
 	double xx, yy;
 	glfwGetCursorPos(window, &xx, &yy);
 	x = (int)xx;
@@ -171,28 +154,26 @@ void Input::getState(int &mx, int &my, int &mb, int &sc) {
 	mx = xPos;
 	my = yPos;
 
-	if (keyMap[InputEvent{ 0, true }] == true)
+	if ( keyMap[InputEvent{ 0, true }] == true )
 		mb += 1;
-	if (keyMap[InputEvent{ 1, true }] == true)
+	if ( keyMap[InputEvent{ 1, true }] == true )
 		mb += 2;
-	if (keyMap[InputEvent{ 2, true }] == true)
+	if ( keyMap[InputEvent{ 2, true }] == true )
 		mb += 4;
-	if (keyMap[InputEvent{ 3, true }] == true)
+	if ( keyMap[InputEvent{ 3, true }] == true )
 		mb += 8;
-	if (keyMap[InputEvent{ 4, true }] == true)
+	if ( keyMap[InputEvent{ 4, true }] == true )
 		mb += 16;
 	sc = (int)scrollY;
 }
 
-void Input::print()
-{
+void Input::print() {
 	// show content:
 	for ( std::map<InputEvent, bool>::iterator it = keyMap.begin(); it != keyMap.end(); ++it )
 		std::cout << it->first.code << " " << it->first.mouse << " => " << it->second << '\n';
 }
 
-Input::Input()
-{
+Input::Input() {
 	consoleActive = false;
 	window = nullptr;
 	keyMap.clear();
@@ -215,8 +196,7 @@ Input::Input()
 
 }
 
-void Input::loadkeyBinds()
-{
+void Input::loadkeyBinds() {
 	//std::string bindingData = keyConf.getString("", KeyBindsStrings[KEYBIND_FORWARD], "17:0:0");
 	//KeyBindings[KEYBINDS_NAME::KEYBIND_FORWARD] = KeyBind::create(bindingData);
 	//
@@ -230,18 +210,15 @@ void Input::loadkeyBinds()
 	//KeyBindings[KEYBINDS_NAME::KEYBIND_RIGHT] = KeyBind::create(bindingData);
 
 	std::string bindingData = "";
-	for (size_t i = 0; i < KEYBINDS_NAME::KEYBINDS_LENGTH; i++)
-	{
+	for ( size_t i = 0; i < KEYBINDS_NAME::KEYBINDS_LENGTH; i++ ) {
 		bindingData = keyConf.getString("", KeyBindsStrings[i], KeyBindsDefault[i]);
 		KeyBindings[i] = KeyBind::create(bindingData);
 	}
 
 }
 
-void Input::saveKeyBinds()
-{
-	for (size_t i = 0; i < KEYBINDS_NAME::KEYBINDS_LENGTH; i++)
-	{
+void Input::saveKeyBinds() {
+	for ( size_t i = 0; i < KEYBINDS_NAME::KEYBINDS_LENGTH; i++ ) {
 		keyConf.addString("", KeyBindsStrings[i], KeyBindings[i].toString());
 	}
 	//keyConf.addString("", KeyBindsStrings[KEYBIND_FORWARD], KeyBindings[KEYBINDS_NAME::KEYBIND_FORWARD].toString());

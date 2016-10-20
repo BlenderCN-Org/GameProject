@@ -7,30 +7,52 @@
 #include <Windows.h>
 #endif
 
-class GLWindow : IWindow
+class BaseWindow : public IWindow
+{
+
+public:
+	virtual void setWindowPos(int x, int y);
+	virtual void setWindowSize(int x, int y);;
+
+	virtual void showWindow(bool visible);
+	virtual void setWindowBorderless(bool borderless);
+	virtual void setWindowedTrueFullscreen(bool trueFullscreen);
+
+	virtual void setWindowResizeCallback(WindowResizeCallback_t callback);
+	virtual void setWindowMouseMoveCallback(WindowMouseMoveCallback_t callback);
+	virtual void setWindowMouseButtonCallback(WindowMouseButtonCallback_t callback);
+	virtual void setWindowScrollCallback(WindowScrollCallback_t callback);
+	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback);
+
+	//virtual void setVsync(bool vSync);
+
+//private:
+
+	WindowResizeCallback_t* resizeCallback;
+	WindowMouseMoveCallback_t* mouseMoveCallback;
+	WindowMouseButtonCallback_t* mouseButtonCallback;
+	WindowScrollCallback_t* scrollCallback;
+	WindowKeyCallback_t* keyCallback;
+
+protected:
+	HWND windowHandle;
+	bool visible;
+
+};
+
+class GLWindow : public BaseWindow
 {
 public:
 
 	void init();
 	void deinit();
 
-	virtual void setWindowPos(int x, int y);
-	virtual void setWindowSize(int x, int y);;
-
-	virtual void showWindow(bool visible);
-	virtual void setWindowBorderless(bool borderless);
-
-	virtual void setWindowResizeCallback();
-	virtual void setWindowMouseMoveCallback();
-	virtual void setWindowMouseButtonCallback();
-	virtual void setWindowScrollCallback();
-	virtual void setWindowKeyboardCallback();
+	virtual void setVsync(bool vSync);
 
 private:
 
 #ifdef _WIN32
 
-	HWND windowHandle;
 	HGLRC openglRenderContext;
 	HDC deviceContext;
 
