@@ -34,6 +34,12 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{1f458b17-9b6c-423a-b319-584c6b817441}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{080cb3b0-151f-44a4-bac1-dd55890036d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{88cafc09-a194-4bfc-8e03-9e7b51ba1dbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderEngine.hpp">
@@ -119,6 +125,12 @@
     </ClInclude>
     <ClInclude Include="IMaterial.hpp">
       <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="IWindow.hpp">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Window.hpp">
+      <Filter>Header Files\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

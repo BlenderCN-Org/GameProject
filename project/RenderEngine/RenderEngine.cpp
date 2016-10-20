@@ -92,6 +92,12 @@ void RenderEngine::init()
 	else
 		printf("glDebugMessageCallback not available\n");
 #endif
+
+	info.vendor = (const char*)glGetString(GL_VENDOR);
+	info.renderer = (const char*)glGetString(GL_RENDERER);
+	info.version = (const char*)glGetString(GL_VERSION);
+	info.shadingLanguageVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEPTH_TEST);

@@ -87,6 +87,7 @@ private:
 	TextArea* textArea;
 
 	float areaSizeX;
+
 };
 
 #endif

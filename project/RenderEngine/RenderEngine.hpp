@@ -16,6 +16,14 @@
 
 #include <vld.h>
 
+struct GLinfo
+{
+	const char* vendor;
+	const char* renderer;
+	const char* version;
+	const char* shadingLanguageVersion;
+};
+
 class RenderEngine : public IRenderEngine
 {
 public:
@@ -65,6 +73,8 @@ private:
 
 	int counter = 0;
 	
+	GLinfo info;
+
 	RGB clearColor;
 	ShaderState shaderState;
 	Camera cam;

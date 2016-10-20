@@ -192,12 +192,14 @@
     <ClInclude Include="IShaderObject.hpp" />
     <ClInclude Include="IText.hpp" />
     <ClInclude Include="ITexture.hpp" />
+    <ClInclude Include="IWindow.hpp" />
     <ClInclude Include="RenderEngine.hpp" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderState.hpp" />
     <ClInclude Include="Utils\FrameAllocator_static.hpp" />
     <ClInclude Include="Utils\MemoryManager.hpp" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
+    <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\AnimatedMesh.cpp" />
