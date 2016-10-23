@@ -199,7 +199,7 @@
     <ClInclude Include="Utils\FrameAllocator_static.hpp" />
     <ClInclude Include="Utils\MemoryManager.hpp" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
-    <ClInclude Include="Win32Window.hpp" />
+    <ClInclude Include="Window\WindowSystem.hpp" />
     <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>

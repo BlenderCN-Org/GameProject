@@ -75,10 +75,17 @@ void Core::init()
 	disp.setVsyncMode(VSyncMode::VSYNC_ON);
 	disp.setFramerateLock(FramerateLock::FRAME_LOCK_NONE);
 	disp.setFullscreenMode(FullscreenMode::WINDOWED);
-
+	
 	//renderEngine = CreateRenderEngine();
+
+	RenderEngineCreateInfo reci;
+	reci.stype = SType::sRenderEngineCreateInfo;
+	reci.createRenderWindow = false;
+	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
+	reci.pNext = nullptr;
+
 	renderEngine = rProc();
-	renderEngine->init();
+	renderEngine->init(reci);
 	renderEngine->updateViewPort(1280, 720);
 
 	disp.setRenderEngine(renderEngine);

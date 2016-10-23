@@ -191,5 +191,8 @@
     <ClInclude Include="Game\GUI\Editor\TextArea.hpp">
       <Filter>Header Files\Game\GUI\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Assets\BaseAsset.hpp">
+      <Filter>Header Files\Core\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

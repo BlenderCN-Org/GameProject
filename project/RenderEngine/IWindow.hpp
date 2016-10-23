@@ -29,6 +29,8 @@ public:
 
 	virtual void setVsync(bool vSync) = 0;
 
+	virtual void swapBuffers() = 0;
+
 };
 
 #endif

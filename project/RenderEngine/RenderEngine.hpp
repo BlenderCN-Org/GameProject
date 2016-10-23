@@ -2,6 +2,7 @@
 #define RENDERENGINE_HPP
 
 #include "Window\Window.hpp"
+#include "Window\WindowSystem.hpp"
 
 #undef RGB
 
@@ -34,7 +35,7 @@ public:
 
 	RenderEngine() {};
 
-	virtual void init();
+	virtual void init(RenderEngineCreateInfo &createInfo);
 	virtual void release();
 	virtual void renderDebugFrame();
 
@@ -90,6 +91,8 @@ private:
 
 
 	GLWindow glWindow;
+
+	RenderEngineCreateInfo reci;
 
 };
 

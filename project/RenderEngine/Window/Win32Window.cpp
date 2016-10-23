@@ -11,8 +11,11 @@
 #include <iostream>
 #include <cstdint>
 
+#include <tchar.h>
+#include "WindowSystem.hpp"
+
 // globals
-const char* windowClassName = "WindowClass";
+const wchar_t* windowClassName = _T("WindowClass");
 bool windowClassInitialized = false;
 bool openglInitialized = false;
 
@@ -35,7 +38,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			break;
 	}
 
-	return DefWindowProcA(hWnd, msg, wParam, lParam);
+	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 void setPixelFormatOGL(HDC windowDC) {
@@ -100,7 +103,7 @@ void setPixelFormatOGL(HDC windowDC) {
 
 	selectedPixelFormat = 0;
 
-	if ( wglChoosePixelFormatARB) {
+	if ( wglChoosePixelFormatARB ) {
 		wglChoosePixelFormatARB(windowDC, intAttributes, floatAttributes, 1, &selectedPixelFormat, &foundPixelFormats);
 	} else {
 		selectedPixelFormat = ChoosePixelFormat(windowDC, &pfd);
@@ -115,7 +118,7 @@ void setPixelFormatOGL(HDC windowDC) {
 int registerWindowClass() {
 	if ( windowClassInitialized )
 		return windowClassInitialized;
-	WNDCLASSA wc{};
+	WNDCLASS wc{};
 
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WindowProc;
@@ -124,23 +127,22 @@ int registerWindowClass() {
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszClassName = windowClassName;
 
-	return RegisterClassA(&wc);
+	return RegisterClass(&wc);
 }
 
 HWND setupWindow() {
 	HWND windowHandle = NULL;
-	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
 	if ( windowClassInitialized ) {
-		windowHandle = CreateWindowExA(0,
-									   windowClassName,
-									   "Window",
-									   WS_OVERLAPPEDWINDOW,
-									   CW_USEDEFAULT, CW_USEDEFAULT,
-									   CW_USEDEFAULT, CW_USEDEFAULT,
-									   NULL,
-									   NULL,
-									   GetModuleHandle(NULL),
-									   NULL);
+		windowHandle = CreateWindowEx(0,
+									  windowClassName,
+									  _T("Window"),
+									  WS_OVERLAPPEDWINDOW,
+									  CW_USEDEFAULT, CW_USEDEFAULT,
+									  CW_USEDEFAULT, CW_USEDEFAULT,
+									  NULL,
+									  NULL,
+									  GetModuleHandle(NULL),
+									  NULL);
 	}
 
 	return windowHandle;
@@ -200,17 +202,22 @@ void BaseWindow::setWindowedTrueFullscreen(bool trueFullscreen) {
 
 void GLWindow::init() {
 	windowHandle = setupWindow();
-	deviceContext = GetDC(windowHandle);
-	openglRenderContext = createOpenGLContext(deviceContext);
 
-	if ( !openglRenderContext )
-		printf("something went wrong");
-	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) 		{
-		printf("making current failed\n");
+	if ( windowHandle ) {
+		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
+
+		deviceContext = GetDC(windowHandle);
+		openglRenderContext = createOpenGLContext(deviceContext);
+
+		if ( !openglRenderContext )
+			printf("something went wrong");
+		if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
+			printf("making current failed\n");
+		}
+
+		if ( wglSwapIntervalEXT )
+			wglSwapIntervalEXT(1);
 	}
-
-	if( wglSwapIntervalEXT )
-		wglSwapIntervalEXT(1);
 }
 
 void GLWindow::deinit() {
@@ -219,10 +226,6 @@ void GLWindow::deinit() {
 
 	ReleaseDC(windowHandle, deviceContext);
 	DestroyWindow(windowHandle);
-
-	openglInitialized = false;
-	windowClassInitialized = false;
-	UnregisterClassA(windowClassName, GetModuleHandle(NULL));
 }
 
 void GLWindow::setVsync(bool vSync) {
@@ -233,8 +236,20 @@ void GLWindow::makeCurrent() {
 	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
 		printf("making current failed\n");
 	}
+}
 
+void GLWindow::swapBuffers() {
 	SwapBuffers(deviceContext);
 }
 
 #endif
+
+void initWindowSystem() {
+	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
+}
+
+void deinitWindowSystem() {
+	openglInitialized = false;
+	windowClassInitialized = false;
+	UnregisterClass(windowClassName, GetModuleHandle(NULL));
+}

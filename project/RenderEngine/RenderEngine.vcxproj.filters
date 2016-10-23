@@ -132,7 +132,7 @@
     <ClInclude Include="Window\Window.hpp">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Win32Window.hpp">
+    <ClInclude Include="Window\WindowSystem.hpp">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
   </ItemGroup>

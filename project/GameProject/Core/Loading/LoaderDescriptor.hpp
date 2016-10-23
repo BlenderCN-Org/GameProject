@@ -11,7 +11,6 @@ private:
 	char* assetName;
 	bool requiredForLoadComplete;
 
-
 };
 
 #endif

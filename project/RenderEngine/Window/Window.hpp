@@ -51,6 +51,8 @@ public:
 
 	void makeCurrent();
 
+	virtual void swapBuffers();
+
 private:
 
 #ifdef _WIN32

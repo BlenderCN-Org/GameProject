@@ -76,10 +76,15 @@ extern "C"
 }
 #endif
 
-void RenderEngine::init() {
-	glWindow.init();
+void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
+	reci = createInfo;
+	if ( reci.createRenderWindow ) {
+		throw "Not yet finished!";
+		initWindowSystem();
+		glWindow.init();
 
-	glWindow.showWindow(true);
+		glWindow.showWindow(true);
+	}
 	glewInit();
 
 #ifdef _DEBUG
@@ -123,7 +128,10 @@ void RenderEngine::init() {
 
 void RenderEngine::release() {
 	FT_Done_FreeType(fontLibrary);
-	glWindow.deinit();
+	if ( reci.createRenderWindow ) {
+		glWindow.deinit();
+		deinitWindowSystem();
+	}
 	delete this;
 	// static class so this is possible
 	FrameAllocator_static::release();
@@ -133,7 +141,6 @@ void RenderEngine::release() {
 void RenderEngine::renderDebugFrame() {
 	
 	//MSG msg;
-	glWindow.makeCurrent();
 	//while ( PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE) ) {
 	//	TranslateMessage(&msg);
 	//	DispatchMessage(&msg);

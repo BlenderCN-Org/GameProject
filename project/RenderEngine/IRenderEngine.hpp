@@ -17,12 +17,40 @@
 #include "IFont.hpp"
 #include "IText.hpp"
 
+enum class RenderEngineType
+{
+	eRenderNone = -1,
+	eRenderOpenGL = 0,
+};
+
+enum class SType
+{
+	sOpenGLWindowCreateInfo = 0,
+	sRenderEngineCreateInfo = 1,
+};
+
+struct OpenGLWindowCreateInfo
+{
+	SType stype;
+	int majorVersion;
+	int minorVersion;
+
+};
+
+struct RenderEngineCreateInfo
+{
+	SType stype;
+	bool createRenderWindow;
+	RenderEngineType renderEngineType;
+	void* pNext;
+};
+
 class IRenderEngine
 {
 
 public:
 
-	virtual void init() = 0;
+	virtual void init(RenderEngineCreateInfo &createInfo) = 0;
 	virtual void release() = 0;
 	virtual void renderDebugFrame() = 0;
 
