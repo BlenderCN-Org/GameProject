@@ -77,7 +77,7 @@ void Text::setText(char * text, size_t length, GLfloat x, GLfloat y, GLfloat sca
 		{
 			if (yAdv)
 			{
-				y += f->getFontSize();
+				y += (f->getFontSize() * 2);
 				oldYAdv = (float)f->getFontSize();
 			} else {
 				y += oldYAdv;

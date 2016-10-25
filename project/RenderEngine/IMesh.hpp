@@ -10,6 +10,7 @@ enum class MeshPrimitiveType
 	POINT,
 	LINE,
 	TRIANGLE,
+	TRIANGLE_STRIP,
 	QUAD,
 };
 

@@ -106,6 +106,9 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	clearColor = RGB(0, 0, 0);
 
 	objectPool = PoolAllocator<RenderObject>(10);

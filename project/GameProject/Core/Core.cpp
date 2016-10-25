@@ -4,6 +4,8 @@
 
 #include <thread>
 
+#include "Loading\OBJLoader.hpp"
+
 char* vs =
 "#version 410\n"
 "\n"
@@ -20,6 +22,29 @@ char* vs =
 "	fragUv = vertexUv;\n"
 "	gl_Position = viewProjMatrix * vec4((vec4(vertexPos, 1.0f) * worldMat).xyz, 1.0f);\n"
 "}\n";
+
+char* gs =
+"#version 410\n"
+"layout(triangles) in;\n"
+"layout(triangle_strip, max_vertices = 3) out;\n"
+"\n"
+"layout(location = 0) in vec2 fragUv[];\n"
+"\n"
+"layout(location = 0) out vec2 UV;\n"
+"\n"
+"void main() {\n"
+"UV = fragUv[0];\n"
+"gl_Position = gl_in[0].gl_Position;\n"
+"EmitVertex();\n"
+"UV = fragUv[1];\n"
+"gl_Position = gl_in[1].gl_Position;\n"
+"EmitVertex();\n"
+"UV = fragUv[2];\n"
+"gl_Position = gl_in[2].gl_Position;\n"
+"EmitVertex();\n"
+"EndPrimitive();\n"
+"}\n";
+
 
 char* fs =
 "#version 410\n"
@@ -101,9 +126,10 @@ void Core::init()
 	shader->init();
 
 	shader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
+	shader->setShaderCode(ShaderStages::GEOMETRY_STAGE, gs);
 	shader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs);
 
-	shader->buildShader();
+	assert(shader->buildShader());
 
 	vpLoc = shader->getShaderUniform("viewProjMatrix");
 	mdlLoc = shader->getShaderUniform("worldMat");
@@ -126,9 +152,14 @@ void Core::init()
 	-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 	-1.0f, -1.0f, 0.0f, 0.0f, 0.0f };
 
-	planeMesh->setMeshData(f, sizeof(f), VERT_UV);
+	unsigned int size = 0;
+	void* data = ObjLoader::load("UnitCube.obj", size);
+
+	planeMesh->setMeshData(data, size, VERT_UV);
 	map = planeMesh->map(mapSize);
 	triangleMesh->setMeshData(f, sizeof(f) - sizeof(float) * 5, VERT_UV);
+
+	delete []data;
 
 	text = renderEngine->createText();
 	font = renderEngine->createFont();
@@ -377,15 +408,15 @@ void Core::render()
 	mousePosText->setText((char*)str.c_str(), str.length(), 500.0, 25.0f, 1.0f);
 	mousePosText->render(glm::vec3(0.8, 0.43f, 0.0f));
 
-	texture->bind();
+	//texture->bind();
+	//
+	//shader->useShader();
+	//shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
+	//shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	//shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
 
-	shader->useShader();
-	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
-	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
-
-	textArea->render();
-	textArea->renderHelpLines();
+	//textArea->render();
+	//textArea->renderHelpLines();
 
 	//renderEngine->setDepthTest(true);
 

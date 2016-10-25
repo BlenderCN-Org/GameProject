@@ -7,7 +7,7 @@ TextArea::TextArea(IRenderEngine* re)
 	textFont = re->createFont();
 	textObject = re->createText();
 
-	areaQuad->init(MeshPrimitiveType::QUAD);
+	areaQuad->init(MeshPrimitiveType::TRIANGLE_STRIP);
 	textFont->init("C:/Windows/Fonts/Arial.ttf", 12);
 	textObject->init();
 	textObject->setFont(textFont);

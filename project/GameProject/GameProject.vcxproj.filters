@@ -129,6 +129,9 @@
     <ClCompile Include="Game\GUI\Editor\TextArea.cpp">
       <Filter>Source Files\Game\GUI\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Loading\OBJLoader.cpp">
+      <Filter>Source Files\Core\Loading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input.hpp">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="Core\Assets\BaseAsset.hpp">
       <Filter>Header Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\OBJLoader.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

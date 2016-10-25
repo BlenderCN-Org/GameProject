@@ -77,7 +77,10 @@ void Mesh::render() {
 
 		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
 	} else {
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexCount);
+		if(primitiveType == MeshPrimitiveType::TRIANGLE )
+			glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+		else if(primitiveType == MeshPrimitiveType::TRIANGLE_STRIP )
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexCount);
 	}
 }
 

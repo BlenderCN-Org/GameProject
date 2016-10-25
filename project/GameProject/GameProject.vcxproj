@@ -182,6 +182,7 @@
     <ClCompile Include="Core\Input.cpp" />
     <ClCompile Include="Core\Instance.cpp" />
     <ClCompile Include="Core\Loading\LoadingScreen.cpp" />
+    <ClCompile Include="Core\Loading\OBJLoader.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
     <ClCompile Include="Core\Window\Window.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Core\Loading\Loader.hpp" />
     <ClInclude Include="Core\Loading\LoaderDescriptor.hpp" />
     <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
+    <ClInclude Include="Core\Loading\OBJLoader.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
     <ClInclude Include="Core\Window\Window.hpp" />

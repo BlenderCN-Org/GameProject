@@ -16,3 +16,17 @@ Other Gui types
 	Simple TextField
 	Label
 	ProgressBar
+
+Loader implementation (threadable)
+	textures
+	models
+	animations
+	etc.
+
+Scripting
+	lexer and parser
+	codegen? (bytecode)
+	scripting in console
+	various batch jobs
+		like world interaction
+		background jobs
