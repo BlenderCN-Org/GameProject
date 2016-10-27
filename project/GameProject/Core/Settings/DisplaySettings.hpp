@@ -2,7 +2,6 @@
 #define DISPLAYSETTINGS_HPP
 
 #include <Config\Config.hpp>
-#include <GLFW\glfw3.h>
 
 #include <RenderEngine\IRenderEngine.hpp>
 
@@ -45,7 +44,7 @@ public:
 
 	DisplaySettings();
 
-	void setWindow(GLFWwindow* wnd);
+	void setWindow(IWindow* wnd);
 	void setRenderEngine(IRenderEngine* re);
 
 	void apply();
@@ -73,10 +72,10 @@ private:
 	FullscreenMode fullscreenMode;
 	VSyncMode vsync;
 	FramerateLock fpsLock;
-	
-	GLFWwindow* window;
 
 	IRenderEngine* renderEngine;
+
+	IWindow* window;
 
 };
 

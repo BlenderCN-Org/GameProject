@@ -1,14 +1,10 @@
 #include "DisplaySettings.hpp"
 #include <sstream>
 
-#define GLFW_EXPOSE_NATIVE_WIN32
-
-#include <GLFW\glfw3native.h>
-
 
 DisplaySettings::DisplaySettings() : window(nullptr) {}
 
-void DisplaySettings::setWindow(GLFWwindow * wnd) {
+void DisplaySettings::setWindow(IWindow * wnd) {
 	window = wnd;
 }
 
@@ -18,83 +14,33 @@ void DisplaySettings::setRenderEngine(IRenderEngine * re) {
 
 void DisplaySettings::apply() {
 	if ( window && renderEngine ) {
-		//glfwSetWindowSize(window, screenRes.width, screenRes.height);
-		glfwSwapInterval((int)vsync);
-
-		const GLFWvidmode* vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-		int xPos = vidMode->width / 2;
-		int yPos = vidMode->height / 2;
 
 		switch ( fullscreenMode ) {
 			case FullscreenMode::FULLSCREEN:
 			{
-				glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), xPos, yPos, screenRes.width, screenRes.height, vidMode->refreshRate);
-				glfwPollEvents();
+				window->setWindowBorderless(true);
 				break;
 			}
 			case FullscreenMode::WINDOWED_FULLSCREEN:
 			{
-				xPos -= vidMode->width / 2;
-				yPos -= vidMode->height / 2;
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, vidMode->width, vidMode->height, vidMode->refreshRate);
-				glfwPollEvents();
-
-				HWND hwnd = glfwGetWin32Window(window);
-				LONG_PTR style = GetWindowLongPtr(hwnd, GWL_STYLE);
-
-				if ( style & WS_VISIBLE )
-					style = WS_VISIBLE;
-				SetWindowLongPtr(hwnd, GWL_STYLE, style | WS_POPUP);
-
-				//SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
-				const GLFWvidmode* vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, vidMode->width, vidMode->height, vidMode->refreshRate);
-
+				window->setWindowBorderless(true);
 				break;
 			}
 			case FullscreenMode::WINDOWED:
 			{
-				xPos -= screenRes.width / 2;
-				yPos -= screenRes.height / 2;
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, screenRes.width, screenRes.height, vidMode->refreshRate);
-				glfwPollEvents();
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, screenRes.width, screenRes.height, vidMode->refreshRate);
-
-				HWND hwnd = glfwGetWin32Window(window);
-				LONG_PTR style = GetWindowLongPtr(hwnd, GWL_STYLE);
-
-				if ( style & WS_VISIBLE )
-					style = WS_VISIBLE;
-				SetWindowLongPtr(hwnd, GWL_STYLE, style | WS_OVERLAPPEDWINDOW);
+				window->setWindowBorderless(false);
 				break;
 			}
 			case FullscreenMode::WINDOWED_BORDERLESS:
 			{
-				//glfwGetWindowSize(window, &screenRes.width, &screenRes.height);
-
-				xPos -= screenRes.width / 2;
-				yPos -= screenRes.height / 2;
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, screenRes.width - 1, screenRes.height, vidMode->refreshRate);
-				glfwPollEvents();
-
-				HWND hwnd = glfwGetWin32Window(window);
-				LONG_PTR style = GetWindowLongPtr(hwnd, GWL_STYLE);
-
-				if ( style & WS_VISIBLE )
-					style = WS_VISIBLE;
-				SetWindowLongPtr(hwnd, GWL_STYLE, style | WS_POPUP);
-				//SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
-				glfwSetWindowMonitor(window, NULL, xPos, yPos, screenRes.width, screenRes.height, vidMode->refreshRate);
-
-
+				window->setWindowBorderless(true);
 				break;
 			}
 			default:
 				break;
+
 		}
+		window->setWindowSize(screenRes.width, screenRes.height);
 	}
 
 }

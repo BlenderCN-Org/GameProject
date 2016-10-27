@@ -1,7 +1,6 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <GLFW\glfw3.h>
 #include <Config\Config.hpp>
 
 #include "Console.hpp"

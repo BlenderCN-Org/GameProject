@@ -6,6 +6,8 @@
 
 #include "Loading\OBJLoader.hpp"
 
+#include <GL\GL.h>
+
 char* vs =
 "#version 410\n"
 "\n"
@@ -86,6 +88,7 @@ void thread(ITexture* tex, bool* kill )
 
 void Core::init()
 {
+	running = true;
 	hadReset = false;
 	if ( renderEngineLib.loadLibrary("RenderEngine.dll") )
 		printf("Loaded\n");
@@ -113,14 +116,16 @@ void Core::init()
 	renderEngine->init(reci);
 	renderEngine->updateViewPort(1280, 720);
 
-	IWindow* wnd = renderEngine->getMainWindow();
+	window = renderEngine->getMainWindow();
 
 	disp.setRenderEngine(renderEngine);
+	disp.setWindow(window);
+	disp.apply();
 
 	input = Input::getInput();
 	console = new Console();
 
-	input->setupCallbacks(wnd);
+	input->setupCallbacks(window);
 
 	console->dispSettings = &disp;
 
@@ -263,6 +268,10 @@ void Core::release()
 	delete this;
 }
 
+bool Core::isRunning() {
+	return running;
+}
+
 bool Core::hadGraphicsReset() const
 {
 	if ( console->reset )
@@ -280,8 +289,10 @@ void Core::setFPS(int _fps)
 
 void Core::update(float dt)
 {
-	renderEngine->getMainWindow()->pollMessages();
+	window->pollMessages();
 	camInput.update(dt);
+
+	running = window->isVisible();
 
 	game->update(dt);
 
@@ -437,7 +448,7 @@ void Core::render()
 	c++;
 
 	
-	renderEngine->getMainWindow()->swapBuffers();
+	window->swapBuffers();
 }
 
 DisplaySettings * Core::getDisplaySettings()

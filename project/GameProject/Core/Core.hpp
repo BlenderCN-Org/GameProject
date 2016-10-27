@@ -28,6 +28,7 @@ public:
 	void init();
 	void release();
 
+	bool isRunning();
 	bool hadGraphicsReset() const;
 
 	void setFPS(int fps);
@@ -39,12 +40,13 @@ public:
 
 private:
 
+	// core variables
 	bool hadReset;
 
 	int fps;
 
+	IWindow* window;
 	Console* console;
-	TextArea* consoleTextArea;
 	Game* game;
 
 	IRenderEngine* renderEngine;
@@ -56,12 +58,22 @@ private:
 	int vpLoc;
 	int mdlLoc;
 	int texLoc;
+	
+	ICamera* camera;
+
+	DisplaySettings disp;
+
+	Lib renderEngineLib;
+
+	bool running;
+
+	// temp variables
+	TextArea* consoleTextArea;
 
 	IMesh* planeMesh;
 	IMesh* triangleMesh;
-	ICamera* camera;
 	IFrameBuffer* fbo;
-	
+
 	ITexture* texture;
 
 	bool toggle = true;
@@ -72,10 +84,6 @@ private:
 
 	IText* text;
 	IFont* font;
-
-	DisplaySettings disp;
-
-	Lib renderEngineLib;
 
 	std::thread* streamingThread;
 	bool killThread;

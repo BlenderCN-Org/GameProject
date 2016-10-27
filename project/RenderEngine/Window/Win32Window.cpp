@@ -435,6 +435,14 @@ void BaseWindow::setWindowSize(int x, int y) {
 	SetWindowPos(windowHandle, NULL, 0, 0, x, y, SWP_NOZORDER | SWP_NOMOVE);
 }
 
+bool BaseWindow::isVisible() {
+	LONG_PTR style = GetWindowLongPtr(windowHandle, GWL_STYLE);
+
+	if ( style & WS_VISIBLE )
+		return true;
+	return false;
+}
+
 void BaseWindow::showWindow(bool visible) {
 	this->visible = visible;
 	ShowWindow(windowHandle, visible ? SW_SHOW : SW_HIDE);

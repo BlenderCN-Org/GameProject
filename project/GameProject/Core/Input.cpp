@@ -6,39 +6,39 @@ Input* Input::singleton = nullptr;
 KeyBind KeyBindings[KEYBINDS_NAME::KEYBINDS_LENGTH];
 
 void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
-	if ( !singleton->consoleActive && action == GLFW_REPEAT )
+	if ( !singleton->consoleActive && action == 2 )
 		return;
 
-	singleton->keyMap[InputEvent{ scancode, false }] = (action == GLFW_PRESS);
+	singleton->keyMap[InputEvent{ scancode, false }] = (action == ACTION_BUTTON_DOWN);
 	singleton->modkey = mods;
-	if ( singleton->consoleActive ) {
-		if ( (scancode == 28 || scancode == 284) && action == GLFW_PRESS ) {
+	if ( singleton->consoleActive )
+		if ( (scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN ) {
 			singleton->console->print("\n>");
 			singleton->console->execute();
-		} else if ( scancode == 14 && (action == GLFW_PRESS || action == GLFW_REPEAT) ) {			singleton->console->backSpace();
+		} else if ( scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2) ) {
+			singleton->console->backSpace();
 		}
-	}
-	printf("Scancode %d with modkey %d\n", scancode, mods);
+		//printf("Scancode %d with modkey %d\n", scancode, mods);
 }
 
 void Input::mouseButtonCallback(IWindow* window, int button, int action, int mods) {
-	if ( !singleton->consoleActive && action == GLFW_REPEAT )
+	if ( !singleton->consoleActive && action == 2 )
 		return;
 
 	singleton->keyMap[InputEvent{ button, true }] = (action == 1);
-	printf("MouseButton %d with modkey %d\n", button, mods);
+	//printf("MouseButton %d with modkey %d\n", button, mods);
 }
 
 void Input::cursorPosCallback(IWindow * window, int x, int y) {
-	
+
 	singleton->xDelta = float(x) - float(singleton->oldX);
 	singleton->yDelta = float(y) - float(singleton->oldY);
 
 	singleton->xPos = int(x);
 	singleton->yPos = int(y);
 
-	printf("Pos (%d,%d)\n", int(x), int(y));
-	printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
+	//printf("Pos (%d,%d)\n", int(x), int(y));
+	//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
 
 }
 
@@ -61,7 +61,7 @@ void Input::sizeCallback(IWindow * window, int w, int h) {
 	singleton->winW = w;
 	singleton->winH = h;
 	singleton->sizeChange = true;
-	printf("%d,%d\n", w, h);
+	//printf("%d,%d\n", w, h);
 	//glViewport(0, 0, w, h);
 }
 
@@ -71,7 +71,7 @@ void Input::mouseDeltaCallback(IWindow * window, float dx, float dy) {
 	//singleton->xDelta = dx * 4.4f;
 	//singleton->yDelta = dy * 4.4f;
 
-	printf("Delta (%f,%f)\n", dx, dy);
+	//printf("Delta (%f,%f)\n", dx, dy);
 }
 
 Input* Input::getInput() {
@@ -95,12 +95,6 @@ void Input::attachConsole(Console * con) {
 
 void Input::setupCallbacks(IWindow * wnd) {
 	window = wnd;
-	//glfwSetKeyCallback(window, keyCallback);
-	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	//glfwSetCursorPosCallback(window, cursorPosCallback);
-	//glfwSetScrollCallback(window, scrollCallback);
-	//glfwSetCharCallback(window, characterCallback);
-	//glfwSetWindowSizeCallback(window, sizeCallback);
 
 	//glfwGetWindowSize(wnd, &winW, &winH);
 

@@ -12,7 +12,9 @@ class BaseWindow : public IWindow
 
 public:
 	virtual void setWindowPos(int x, int y);
-	virtual void setWindowSize(int x, int y);;
+	virtual void setWindowSize(int x, int y);
+
+	virtual bool isVisible();
 
 	virtual void showWindow(bool visible);
 	virtual void setWindowBorderless(bool borderless);

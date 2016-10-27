@@ -27,6 +27,8 @@ public:
 	virtual void setWindowPos(int x, int y) = 0;
 	virtual void setWindowSize(int x, int y) = 0;
 
+	virtual bool isVisible() = 0;
+
 	virtual void showWindow(bool visible) = 0;
 	virtual void setWindowBorderless(bool borderless) = 0;
 	virtual void setWindowedTrueFullscreen(bool trueFullscreen) = 0;
