@@ -5,6 +5,8 @@ Change TextArea to use mask texture, instead of stencil buffer (performance)
 TextArea scrollable text, (horz & vert)
 Gui focus control
 
+Rework custom allocators
+
 Other Gui types
 	Buttons
 	CheckBox
@@ -30,3 +32,21 @@ Scripting
 	various batch jobs
 		like world interaction
 		background jobs
+
+Custom model format
+	bool vertexColors
+	bool vertexNormals
+	bool vertexUV
+	bool vertexTangen
+	list<vertexDataTypes>
+	list<Materials>
+	
+Custom texture format
+	int channels
+	int layers
+	int width[layers]
+	int height[layers]
+	void* channes*layers*[width*height]
+
+GameData format
+	??

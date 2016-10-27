@@ -41,6 +41,13 @@ void Mesh::release() {
 
 void Mesh::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 
+	if ( primitiveType == MeshPrimitiveType::TRIANGLE )
+		meshPrimitive = GL_TRIANGLES;
+	else if ( primitiveType == MeshPrimitiveType::TRIANGLE_STRIP )
+		meshPrimitive = GL_TRIANGLE_STRIP;
+	else if ( primitiveType == MeshPrimitiveType::QUAD )
+		meshPrimitive = GL_QUADS;
+
 	dataLayout = layout;
 	if (layout = VERT_UV)
 	{
@@ -77,10 +84,7 @@ void Mesh::render() {
 
 		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
 	} else {
-		if(primitiveType == MeshPrimitiveType::TRIANGLE )
-			glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-		else if(primitiveType == MeshPrimitiveType::TRIANGLE_STRIP )
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexCount);
+			glDrawArrays(meshPrimitive, 0, vertexCount);
 	}
 }
 

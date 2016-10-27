@@ -36,6 +36,8 @@ private:
 	GLsizei vertexCount;
 	size_t triangleCount;
 
+
+	GLenum meshPrimitive;
 	// mapping stuff
 
 	bool isMapped;

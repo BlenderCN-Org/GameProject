@@ -132,6 +132,9 @@
     <ClCompile Include="Core\Loading\OBJLoader.cpp">
       <Filter>Source Files\Core\Loading</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Loading\ModelLoader.cpp">
+      <Filter>Source Files\Core\Loading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input.hpp">
@@ -198,6 +201,12 @@
       <Filter>Header Files\Core\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Core\Loading\OBJLoader.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\ModelLoader.hpp">
+      <Filter>Header Files\Core\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Loading\AssetStructures.hpp">
       <Filter>Header Files\Core\Loading</Filter>
     </ClInclude>
   </ItemGroup>

@@ -135,7 +135,7 @@ void* ObjLoader::load(const char* fileName, unsigned int &dataSize) {
 
 	}
 
-	uint64_t size = vertex_ret.size();
+	size_t size = vertex_ret.size();
 
 	Vert_t* v = new Vert_t[size];
 	dataSize = sizeof(Vert_t) * (unsigned int)size;
