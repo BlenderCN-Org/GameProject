@@ -14,15 +14,48 @@
 #include <tchar.h>
 #include "WindowSystem.hpp"
 
+#include <strsafe.h>
+
+#define RI_MOUSE_HWHEEL 0x0800
+
 // globals
 const wchar_t* windowClassName = _T("WindowClass");
 bool windowClassInitialized = false;
 bool openglInitialized = false;
 
+HHOOK g_hKeyboardHook;
+BOOL g_bWindowActive;
+
+
 // global pre-defines
 HWND setupWindow();
 
 // global function definitions
+
+LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+	if ( nCode < 0 || nCode != HC_ACTION )  // do not process message 
+		return CallNextHookEx(g_hKeyboardHook, nCode, wParam, lParam);
+
+	bool bEatKeystroke = false;
+	KBDLLHOOKSTRUCT* p = (KBDLLHOOKSTRUCT*)lParam;
+	switch ( wParam ) {
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+		{
+			bEatKeystroke = (g_bWindowActive && ((p->vkCode == VK_LWIN) || (p->vkCode == VK_RWIN)));
+			break;
+		}
+	}
+
+	printf("Callback\n");
+
+	if ( bEatKeystroke )
+		return 1;
+	else
+		return CallNextHookEx(g_hKeyboardHook, nCode, wParam, lParam);
+}
+
+
 LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
@@ -32,6 +65,254 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if ( wnd && wnd->resizeCallback )
 				printf("callback stuff");
 			printf("Resize\n");
+		}
+		break;
+		case WM_MOVE:
+			break;
+		case WM_CLOSE:
+			break;
+
+		case WM_ACTIVATEAPP:
+			// g_bWindowActive is used to control if the Windows key is filtered by the keyboard hook or not.
+			if ( wParam == TRUE )
+				g_bWindowActive = true;
+			else
+				g_bWindowActive = false;
+			break;
+
+		case WM_CHAR:
+		case WM_SYSCHAR:
+		case WM_UNICHAR:
+		{
+			const bool plain = (msg != WM_SYSCHAR);
+
+			if ( msg == WM_UNICHAR && wParam == UNICODE_NOCHAR ) {
+				// WM_UNICHAR is not sent by Windows, but is sent by some
+				// third-party input method engine
+				// Returning TRUE here announces support for this message
+				return TRUE;
+			}
+			if ( wnd->characterCallback )
+				wnd->characterCallback(wnd, (unsigned int)wParam);
+			return 0;
+		}
+		break;
+		case WM_INPUT:
+		{
+			if ( wnd ) {
+				UINT dwSize;
+
+				GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
+								sizeof(RAWINPUTHEADER));
+				LPBYTE lpb = new BYTE[dwSize];
+				if ( lpb == NULL ) {
+					return 0;
+				}
+
+				if ( GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize,
+									 sizeof(RAWINPUTHEADER)) != dwSize ) {
+					//OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+					std::cerr << "GetRawInputData does not return correct size !\n";
+				}
+
+				RAWINPUT* raw = (RAWINPUT*)lpb;
+
+				if ( raw->header.dwType == RIM_TYPEKEYBOARD ) {
+					//TCHAR szTempOutput[100];
+					//HRESULT hResult = StringCchPrintf(szTempOutput, 100, TEXT(" Kbd: make=%04x Flags:%04x Reserved:%04x ExtraInformation:%08x, msg=%04x VK=%04x \n"),
+					//								  raw->data.keyboard.MakeCode,
+					//								  raw->data.keyboard.Flags,
+					//								  raw->data.keyboard.Reserved,
+					//								  raw->data.keyboard.ExtraInformation,
+					//								  raw->data.keyboard.Message,
+					//								  raw->data.keyboard.VKey);
+					//if ( FAILED(hResult) ) {
+					//	// TODO: write error handler
+					//}
+					//OutputDebugString(szTempOutput);
+					//std::wcout << szTempOutput;
+
+					//keyboardMsg->keyEvent = true;
+					//if ( raw->data.keyboard.Flags == RI_KEY_BREAK ) {
+					//	keyboardMsg->keyDown = false;
+					//} else if ( raw->data.keyboard.Flags == RI_KEY_MAKE ) {
+					//	keyboardMsg->keyDown = true;
+					//}
+					//keyboardMsg->scanCode = raw->data.keyboard.MakeCode;
+					//std::cout << "Char " << MapVirtualKeyEx(raw->data.keyboard.VKey, MAPVK_VK_TO_CHAR, GetKeyboardLayout(0)) << std::endl;
+					//std::cout << "VKey " << raw->data.keyboard.VKey << std::endl;
+					//std::cout << "Make code " << raw->data.keyboard.MakeCode << std::endl;
+					//std::cout << "Scan code " << MapVirtualKeyEx(raw->data.keyboard.VKey, MAPVK_VK_TO_VSC, GetKeyboardLayout(0)) << std::endl;
+
+					if ( raw->data.keyboard.Flags == RI_KEY_MAKE ) {
+						if ( raw->data.keyboard.VKey == VK_SHIFT ) {
+							wnd->modkeys |= MODKEY_SHIFT;
+						} else if ( raw->data.keyboard.VKey == VK_CONTROL ) {
+							wnd->modkeys |= MODKEY_CTRL;
+						} else if ( raw->data.keyboard.VKey == VK_MENU ) {
+							wnd->modkeys |= MODKEY_ALT;
+						} else if ( raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN ) {
+							wnd->modkeys |= MODKEY_SUPER;
+						}
+					} else {
+						if ( raw->data.keyboard.VKey == VK_SHIFT ) {
+							wnd->modkeys &= ~MODKEY_SHIFT;
+						} else if ( raw->data.keyboard.VKey == VK_CONTROL ) {
+							wnd->modkeys &= ~MODKEY_CTRL;
+						} else if ( raw->data.keyboard.VKey == VK_MENU ) {
+							wnd->modkeys &= ~MODKEY_ALT;
+						} else if ( raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN ) {
+							wnd->modkeys &= ~MODKEY_SUPER;
+						}
+					}
+
+					if ( wnd->keyCallback ) {
+
+						int action = raw->data.keyboard.Flags == RI_KEY_BREAK ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
+
+						int mods = wnd->modkeys;
+
+						wnd->keyCallback(wnd, raw->data.keyboard.MakeCode, action, mods);
+						printf("keyCallback\n");
+					}
+
+					printf("key event\n");
+
+				} else if ( raw->header.dwType == RIM_TYPEMOUSE ) {
+					//TCHAR szTempOutput[200];
+					//HRESULT hResult = StringCchPrintf(szTempOutput, 200, TEXT("Mouse: usFlags=%04x ulButtons=%04x usButtonFlags=%04x usButtonData=%04x ulRawButtons=%04x lLastX=%04x lLastY=%04x ulExtraInformation=%04x\r\n"),
+					//								  raw->data.mouse.usFlags,
+					//								  raw->data.mouse.ulButtons,
+					//								  raw->data.mouse.usButtonFlags,
+					//								  raw->data.mouse.usButtonData,
+					//								  raw->data.mouse.ulRawButtons,
+					//								  raw->data.mouse.lLastX,
+					//								  raw->data.mouse.lLastY,
+					//								  raw->data.mouse.ulExtraInformation);
+
+					//mouseMsg->mouseDX = (float)raw->data.mouse.lLastX / 2;
+					//mouseMsg->mouseDY = (float)raw->data.mouse.lLastY / 2;
+					//
+					//mouseMsg->mouseBtnDown = false;
+					//mouseMsg->mouseBtn = -1;
+
+					//unsigned short btn = raw->data.mouse.usButtonFlags;
+
+					//if ( FAILED(hResult) ) {
+					//	// TODO: write error handler
+					//}
+					//OutputDebugString(szTempOutput);
+					//std::wcout << szTempOutput;
+
+
+
+					if ( wnd->mouseButtonCallback ) {
+
+						int button = -1;
+						int action = 0;
+						int mods = wnd->modkeys;
+						switch ( raw->data.mouse.usButtonFlags ) {
+							case(RI_MOUSE_BUTTON_1_DOWN): {
+								button = 0;
+								action = ACTION_BUTTON_DOWN;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_1_UP): {
+								button = 0;
+								action = ACTION_BUTTON_UP;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_2_DOWN): {
+								button = 1;
+								action = ACTION_BUTTON_DOWN;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_2_UP): {
+								button = 1;
+								action = ACTION_BUTTON_UP;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_3_DOWN): {
+								button = 2;
+								action = ACTION_BUTTON_DOWN;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_3_UP): {
+								button = 2;
+								action = ACTION_BUTTON_UP;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_4_DOWN): {
+								button = 3;
+								action = ACTION_BUTTON_DOWN;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_4_UP): {
+								button = 3;
+								action = ACTION_BUTTON_UP;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_5_DOWN): {
+								button = 4;
+								action = ACTION_BUTTON_DOWN;
+								break;
+							}
+							case(RI_MOUSE_BUTTON_5_UP): {
+								button = 4;
+								action = ACTION_BUTTON_UP;
+								break;
+							}
+							default:
+								break;
+						}
+						wnd->mouseButtonCallback(wnd, button, action, mods);
+						//printf("mouse button callback\n");
+
+						//std::cout << button;
+					}
+
+					if ( wnd->mouseMoveCallback ) {
+						POINT pt;
+						GetCursorPos(&pt);
+						ScreenToClient(hWnd, &pt);
+						//wnd->mouseMoveCallback(wnd, pt.x, pt.y);
+						//printf("move callback\n");
+					}
+
+					if ( wnd->scrollCallback ) {
+
+						short scrollX = 0;
+						short scrollY = 0;
+
+						if ( RI_MOUSE_WHEEL == raw->data.mouse.usButtonFlags ) {
+							scrollX = (short)raw->data.mouse.usButtonData;
+						}
+						if ( RI_MOUSE_HWHEEL == raw->data.mouse.usButtonFlags ) {
+							scrollY = (short)raw->data.mouse.usButtonData;
+						}
+
+						wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
+					}
+
+					if ( wnd->lockCursor ) {
+						RECT rec;
+						GetWindowRect(hWnd, &rec);
+
+						int posX = (rec.right - rec.left) / 2;
+						posX += rec.left;
+
+						int posY = (rec.bottom - rec.top) / 2;
+						posY += rec.top;
+
+						SetCursorPos(posX, posY);
+					}
+
+					//printf("\nmouse event\n");
+
+				}
+				delete[] lpb;
+				return 1;
+			}
 		}
 		break;
 		default:
@@ -242,14 +523,38 @@ void GLWindow::swapBuffers() {
 	SwapBuffers(deviceContext);
 }
 
-#endif
-
 void initWindowSystem() {
+
 	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
+
+	RAWINPUTDEVICE rid[2];
+
+	rid[0].usUsagePage = 0x01;
+	rid[0].usUsage = 0x02;
+	rid[0].dwFlags = 0;   // adds HID mouse and also ignores legacy mouse messages
+	rid[0].hwndTarget = 0;
+
+	rid[1].usUsagePage = 0x01;
+	rid[1].usUsage = 0x06;
+	rid[1].dwFlags = 0;   // adds HID keyboard and also ignores legacy keyboard messages
+	rid[1].hwndTarget = 0;
+
+	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
+
+	if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
+		//registration failed. Call GetLastError for the cause of the error
+		std::cerr << "register RID failed\n";
+		std::cerr << GetLastError() << std::endl;
+	}
+	
 }
 
 void deinitWindowSystem() {
 	openglInitialized = false;
 	windowClassInitialized = false;
 	UnregisterClass(windowClassName, GetModuleHandle(NULL));
+
+	//UnhookWindowsHookEx(g_hKeyboardHook);
 }
+
+#endif

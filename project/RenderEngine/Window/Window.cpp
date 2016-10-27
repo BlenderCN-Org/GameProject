@@ -21,3 +21,7 @@ void BaseWindow::setWindowScrollCallback(WindowScrollCallback_t callback) {
 void BaseWindow::setWindowKeyboardCallback(WindowKeyCallback_t callback) {
 	keyCallback = callback;
 }
+
+void BaseWindow::setWindowCharacterCallback(WindowCharacterCallback_t callback) {
+	characterCallback = callback;
+}

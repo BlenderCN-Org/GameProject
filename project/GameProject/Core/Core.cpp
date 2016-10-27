@@ -105,7 +105,7 @@ void Core::init()
 
 	RenderEngineCreateInfo reci;
 	reci.stype = SType::sRenderEngineCreateInfo;
-	reci.createRenderWindow = false;
+	reci.createRenderWindow = true;
 	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
 	reci.pNext = nullptr;
 

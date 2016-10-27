@@ -23,6 +23,7 @@ public:
 	virtual void setWindowMouseButtonCallback(WindowMouseButtonCallback_t callback);
 	virtual void setWindowScrollCallback(WindowScrollCallback_t callback);
 	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback);
+	virtual void setWindowCharacterCallback(WindowCharacterCallback_t callback);
 
 	//virtual void setVsync(bool vSync);
 
@@ -33,6 +34,10 @@ public:
 	WindowMouseButtonCallback_t* mouseButtonCallback = 0;
 	WindowScrollCallback_t* scrollCallback = 0;
 	WindowKeyCallback_t* keyCallback = 0;
+	WindowCharacterCallback_t* characterCallback = 0;
+
+	bool lockCursor = false;
+	int modkeys = 0;
 
 protected:
 	HWND windowHandle;

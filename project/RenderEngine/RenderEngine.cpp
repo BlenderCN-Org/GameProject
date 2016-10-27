@@ -79,7 +79,7 @@ extern "C"
 void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 	reci = createInfo;
 	if ( reci.createRenderWindow ) {
-		throw "Not yet finished!";
+		//throw "Not yet finished!";
 		initWindowSystem();
 		glWindow.init();
 
@@ -143,12 +143,14 @@ void RenderEngine::release() {
 
 void RenderEngine::renderDebugFrame() {
 	
-	//MSG msg;
-	//while ( PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE) ) {
-	//	TranslateMessage(&msg);
-	//	DispatchMessage(&msg);
-	//}
+	MSG msg;
+	while ( PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE) ) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 	
+	glWindow.swapBuffers();
+
 	FrameAllocator* frameAllocator = FrameAllocator_static::getFrameAllocator();
 
 	frameAllocator->reset();
