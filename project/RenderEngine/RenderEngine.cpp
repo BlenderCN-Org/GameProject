@@ -142,14 +142,6 @@ void RenderEngine::release() {
 }
 
 void RenderEngine::renderDebugFrame() {
-	
-	MSG msg;
-	while ( PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE) ) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-	
-	glWindow.swapBuffers();
 
 	FrameAllocator* frameAllocator = FrameAllocator_static::getFrameAllocator();
 
@@ -263,6 +255,10 @@ IText * RenderEngine::createText() {
 
 IFont * RenderEngine::createFont() {
 	return new Font(fontLibrary);
+}
+
+IWindow * RenderEngine::getMainWindow() {
+	return &glWindow;
 }
 
 bool RenderEngine::isRenderObjectIsInFrustum(IRenderObject * renderObject) {

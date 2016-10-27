@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 	Core* core = new Core();
 		
 	Input* input = Input::getInput();
-	input->setupCallbacks(window->wnd);
+	//input->setupCallbacks(window->wnd);
 
 	window->makeCurrent();
 	
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 			window = new Window();
 			core = new Core();
 
-			input->setupCallbacks(window->wnd);
+			//input->setupCallbacks(window->wnd);
 
 			window->makeCurrent();
 

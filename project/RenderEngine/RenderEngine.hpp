@@ -69,6 +69,8 @@ public:
 
 	virtual IFont* createFont();
 
+	virtual IWindow* getMainWindow();
+
 	virtual bool isRenderObjectIsInFrustum(IRenderObject* renderObject);
 	
 	virtual size_t getMemoryUsage() const;
@@ -88,7 +90,6 @@ private:
 	//FrameAllocator frameAlloc;
 
 	FT_Library fontLibrary;
-
 
 	GLWindow glWindow;
 

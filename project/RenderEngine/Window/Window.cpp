@@ -29,3 +29,7 @@ void BaseWindow::setWindowKeyboardCallback(WindowKeyCallback_t callback) {
 void BaseWindow::setWindowCharacterCallback(WindowCharacterCallback_t callback) {
 	characterCallback = callback;
 }
+
+void BaseWindow::setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback) {
+	mouseDeltaCallback = callback;
+}

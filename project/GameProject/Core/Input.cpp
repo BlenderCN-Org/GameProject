@@ -5,7 +5,7 @@
 Input* Input::singleton = nullptr;
 KeyBind KeyBindings[KEYBINDS_NAME::KEYBINDS_LENGTH];
 
-void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 	if ( !singleton->consoleActive && action == GLFW_REPEAT )
 		return;
 
@@ -15,54 +15,63 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		if ( (scancode == 28 || scancode == 284) && action == GLFW_PRESS ) {
 			singleton->console->print("\n>");
 			singleton->console->execute();
-		} else if ( scancode == 14 && (action == GLFW_PRESS || action == GLFW_REPEAT) ) {
-			singleton->console->backSpace();
+		} else if ( scancode == 14 && (action == GLFW_PRESS || action == GLFW_REPEAT) ) {			singleton->console->backSpace();
 		}
 	}
 	printf("Scancode %d with modkey %d\n", scancode, mods);
 }
 
-void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void Input::mouseButtonCallback(IWindow* window, int button, int action, int mods) {
 	if ( !singleton->consoleActive && action == GLFW_REPEAT )
 		return;
 
 	singleton->keyMap[InputEvent{ button, true }] = (action == 1);
-	//printf("MouseButton %d with modkey %d\n", button, mods);
+	printf("MouseButton %d with modkey %d\n", button, mods);
 }
 
-void Input::cursorPosCallback(GLFWwindow * window, double x, double y) {
-	singleton->xDelta = float(x) - float(singleton->xPos);
-	singleton->yDelta = float(y) - float(singleton->yPos);
+void Input::cursorPosCallback(IWindow * window, int x, int y) {
+	
+	singleton->xDelta = float(x) - float(singleton->oldX);
+	singleton->yDelta = float(y) - float(singleton->oldY);
 
 	singleton->xPos = int(x);
 	singleton->yPos = int(y);
 
-	//printf("Pos (%d,%d)\n", int(x), int(y));
-	//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
+	printf("Pos (%d,%d)\n", int(x), int(y));
+	printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
 
 }
 
-void Input::scrollCallback(GLFWwindow * window, double xoffset, double yoffset) {
+void Input::scrollCallback(IWindow * window, int xoffset, int yoffset) {
 	singleton->scrollX = float(xoffset);
 	singleton->scrollY = float(yoffset);
 
 	//printf("Scroll (%f,%f)\n", float(xoffset), float(yoffset));
 }
 
-void Input::characterCallback(GLFWwindow * window, unsigned int codepoint) {
+void Input::characterCallback(IWindow * window, unsigned int codepoint) {
 	if ( singleton->consoleActive && singleton->console ) {
-		//printf("%c", codepoint);
+		printf("%c", codepoint);
 		singleton->console->keyPress(codepoint);
 	}
 }
 
-void Input::sizeCallback(GLFWwindow * window, int w, int h) {
+void Input::sizeCallback(IWindow * window, int w, int h) {
 
 	singleton->winW = w;
 	singleton->winH = h;
 	singleton->sizeChange = true;
 	printf("%d,%d\n", w, h);
 	//glViewport(0, 0, w, h);
+}
+
+// todo decide if this is good or bad
+void Input::mouseDeltaCallback(IWindow * window, float dx, float dy) {
+
+	//singleton->xDelta = dx * 4.4f;
+	//singleton->yDelta = dy * 4.4f;
+
+	printf("Delta (%f,%f)\n", dx, dy);
 }
 
 Input* Input::getInput() {
@@ -84,16 +93,25 @@ void Input::attachConsole(Console * con) {
 	console = con;
 }
 
-void Input::setupCallbacks(GLFWwindow * wnd) {
+void Input::setupCallbacks(IWindow * wnd) {
 	window = wnd;
-	glfwSetKeyCallback(window, keyCallback);
-	glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	glfwSetCursorPosCallback(window, cursorPosCallback);
-	glfwSetScrollCallback(window, scrollCallback);
-	glfwSetCharCallback(window, characterCallback);
-	glfwSetWindowSizeCallback(window, sizeCallback);
+	//glfwSetKeyCallback(window, keyCallback);
+	//glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	//glfwSetCursorPosCallback(window, cursorPosCallback);
+	//glfwSetScrollCallback(window, scrollCallback);
+	//glfwSetCharCallback(window, characterCallback);
+	//glfwSetWindowSizeCallback(window, sizeCallback);
 
-	glfwGetWindowSize(wnd, &winW, &winH);
+	//glfwGetWindowSize(wnd, &winW, &winH);
+
+	window->setWindowKeyboardCallback(keyCallback);
+	window->setWindowMouseButtonCallback(mouseButtonCallback);
+	window->setWindowMouseMoveCallback(cursorPosCallback);
+	window->setWindowScrollCallback(scrollCallback);
+	window->setWindowCharacterCallback(characterCallback);
+	window->setWindowResizeCallback(sizeCallback);
+
+	//window->setWindowMouseDeltaCallback(mouseDeltaCallback);
 
 }
 
@@ -136,6 +154,8 @@ void Input::reset() {
 	scrollY = 0.0;
 
 	sizeChange = false;
+	oldX = xPos;
+	oldY = yPos;
 }
 
 void Input::getWindowSize(int & w, int & h) {
@@ -144,8 +164,9 @@ void Input::getWindowSize(int & w, int & h) {
 }
 
 void Input::getMousePos(int & x, int & y) {
-	double xx, yy;
-	glfwGetCursorPos(window, &xx, &yy);
+	double xx = 0, yy = 0;
+	//glfwGetCursorPos(window, &xx, &yy);
+
 	x = (int)xx;
 	y = (int)yy;
 }

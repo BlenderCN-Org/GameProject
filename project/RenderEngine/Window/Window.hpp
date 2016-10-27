@@ -18,6 +18,8 @@ public:
 	virtual void setWindowBorderless(bool borderless);
 	virtual void setWindowedTrueFullscreen(bool trueFullscreen);
 
+	virtual void pollMessages() = 0;
+
 	virtual void lockCursor(bool cursorLock);
 
 	virtual void setWindowResizeCallback(WindowResizeCallback_t callback);
@@ -27,6 +29,7 @@ public:
 	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback);
 	virtual void setWindowCharacterCallback(WindowCharacterCallback_t callback);
 
+	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback);
 	//virtual void setVsync(bool vSync);
 
 //private:
@@ -37,6 +40,8 @@ public:
 	WindowScrollCallback_t* scrollCallback = 0;
 	WindowKeyCallback_t* keyCallback = 0;
 	WindowCharacterCallback_t* characterCallback = 0;
+
+	WindowMouseDeltaCallback_t* mouseDeltaCallback = 0;
 
 	bool cursorLock = false;
 	int modkeys = 0;
@@ -56,6 +61,7 @@ public:
 
 	virtual void setVsync(bool vSync);
 
+	virtual void pollMessages();
 	void makeCurrent();
 
 	virtual void swapBuffers();

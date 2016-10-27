@@ -113,10 +113,14 @@ void Core::init()
 	renderEngine->init(reci);
 	renderEngine->updateViewPort(1280, 720);
 
+	IWindow* wnd = renderEngine->getMainWindow();
+
 	disp.setRenderEngine(renderEngine);
 
 	input = Input::getInput();
 	console = new Console();
+
+	input->setupCallbacks(wnd);
 
 	console->dispSettings = &disp;
 
@@ -276,6 +280,7 @@ void Core::setFPS(int _fps)
 
 void Core::update(float dt)
 {
+	renderEngine->getMainWindow()->pollMessages();
 	camInput.update(dt);
 
 	game->update(dt);
@@ -432,6 +437,7 @@ void Core::render()
 	c++;
 
 	
+	renderEngine->getMainWindow()->swapBuffers();
 }
 
 DisplaySettings * Core::getDisplaySettings()

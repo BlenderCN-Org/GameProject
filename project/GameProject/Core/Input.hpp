@@ -74,7 +74,7 @@ public:
 	static void release();
 
 	void attachConsole(Console* con);
-	void setupCallbacks(GLFWwindow* wnd); //Must call this when window is created to make GLFW callback functions work!
+	void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
 
 	bool isKeyBindPressed(KeyBind &keyBind);
 	void getCursorDelta(float &x, float &y);
@@ -107,13 +107,16 @@ private:
 	void loadkeyBinds();
 	void saveKeyBinds();
 
-	GLFWwindow* window;
+	IWindow* window;
 	
 	std::map<InputEvent, bool> keyMap;
 	int modkey;
 
 	int xPos;
 	int yPos;
+
+	int oldY;
+	int oldX;
 
 	float xDelta;
 	float yDelta;
@@ -124,13 +127,14 @@ private:
 	int winW;
 	int winH;
 
-	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-	static void cursorPosCallback(GLFWwindow* window, double x, double y);
-	static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-	static void characterCallback(GLFWwindow* window, unsigned int codepoint);
-	static void sizeCallback(GLFWwindow* window, int w, int h);
+	static void keyCallback(IWindow* window, int scancode, int action, int mods);
+	static void mouseButtonCallback(IWindow* window, int button, int action, int mods);
+	static void cursorPosCallback(IWindow* window, int x, int y);
+	static void scrollCallback(IWindow* window, int xoffset, int yoffset);
+	static void characterCallback(IWindow* window, unsigned int codepoint);
+	static void sizeCallback(IWindow* window, int w, int h);
 
+	static void mouseDeltaCallback(IWindow* window, float dx, float dy);
 };
 
 enum KEYBINDS_NAME

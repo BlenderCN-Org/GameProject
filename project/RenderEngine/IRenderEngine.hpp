@@ -17,6 +17,8 @@
 #include "IFont.hpp"
 #include "IText.hpp"
 
+#include "IWindow.hpp"
+
 enum class RenderEngineType
 {
 	eRenderNone = -1,
@@ -83,6 +85,8 @@ public:
 	virtual IText* createText() = 0;
 
 	virtual IFont* createFont() = 0;
+
+	virtual IWindow* getMainWindow() = 0;
 
 	virtual bool isRenderObjectIsInFrustum(IRenderObject* renderObject) = 0;
 

@@ -76,7 +76,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			int xPos = (int)(short)LOWORD(lParam);   // horizontal position 
 			int yPos = (int)(short)HIWORD(lParam);   // vertical position
 		}
-			break;
+		break;
 		case WM_CLOSE:
 			break;
 
@@ -100,8 +100,12 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				// Returning TRUE here announces support for this message
 				return TRUE;
 			}
+			unsigned int codepoint = (unsigned int)wParam;
+			if ( codepoint < 32 || (codepoint > 126 && codepoint < 160) )
+				return 0;
+			
 			if ( wnd->characterCallback )
-				wnd->characterCallback(wnd, (unsigned int)wParam);
+					wnd->characterCallback(wnd, codepoint);
 			return 0;
 		}
 		break;
@@ -181,10 +185,10 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 						int mods = wnd->modkeys;
 
 						wnd->keyCallback(wnd, raw->data.keyboard.MakeCode, action, mods);
-						printf("keyCallback\n");
+						//printf("keyCallback\n");
 					}
 
-					printf("key event\n");
+					//printf("key event\n");
 
 				} else if ( raw->header.dwType == RIM_TYPEMOUSE ) {
 					//TCHAR szTempOutput[200];
@@ -273,18 +277,33 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 							default:
 								break;
 						}
-						wnd->mouseButtonCallback(wnd, button, action, mods);
+						if ( button != -1 )
+							wnd->mouseButtonCallback(wnd, button, action, mods);
 						//printf("mouse button callback\n");
 
 						//std::cout << button;
 					}
 
 					if ( wnd->mouseMoveCallback ) {
+
+						//float mouseDX = (float)raw->data.mouse.lLastX;
+						//float mouseDY = (float)raw->data.mouse.lLastY;
+						//
+						//wnd->mouseMoveCallback(wnd, (int)mouseDX, (int)mouseDY);
+
 						POINT pt;
 						GetCursorPos(&pt);
 						ScreenToClient(hWnd, &pt);
 						wnd->mouseMoveCallback(wnd, pt.x, pt.y);
 						//printf("move callback\n");
+					}
+
+					if ( wnd->mouseDeltaCallback ) {
+						float mouseDX = (float)raw->data.mouse.lLastX;
+						float mouseDY = (float)raw->data.mouse.lLastY;
+
+						wnd->mouseDeltaCallback(wnd, mouseDX, mouseDY);
+						//printf("delta callback\n");
 					}
 
 					if ( wnd->scrollCallback ) {
@@ -319,6 +338,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				}
 				delete[] lpb;
+				DefWindowProc(hWnd, msg, wParam, lParam);
 				return 1;
 			}
 		}
@@ -523,6 +543,14 @@ void GLWindow::setVsync(bool vSync) {
 	wglSwapIntervalEXT(vSync ? 1 : 0);
 }
 
+void GLWindow::pollMessages() {
+	MSG msg;
+	while ( PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE) ) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+
 void GLWindow::makeCurrent() {
 	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
 		printf("making current failed\n");
@@ -556,7 +584,7 @@ void initWindowSystem() {
 		std::cerr << "register RID failed\n";
 		std::cerr << GetLastError() << std::endl;
 	}
-	
+
 }
 
 void deinitWindowSystem() {
