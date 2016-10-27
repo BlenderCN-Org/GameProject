@@ -62,12 +62,20 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch ( msg ) {
 		case WM_SIZE:
 		{
-			if ( wnd && wnd->resizeCallback )
+			if ( wnd && wnd->resizeCallback ) {
+				int width = LOWORD(lParam);
+				int height = HIWORD(lParam);
+				wnd->resizeCallback(wnd, width, height);
 				printf("callback stuff");
+			}
 			printf("Resize\n");
 		}
 		break;
 		case WM_MOVE:
+		{
+			int xPos = (int)(short)LOWORD(lParam);   // horizontal position 
+			int yPos = (int)(short)HIWORD(lParam);   // vertical position
+		}
 			break;
 		case WM_CLOSE:
 			break;
