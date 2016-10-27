@@ -18,6 +18,8 @@ public:
 	virtual void setWindowBorderless(bool borderless);
 	virtual void setWindowedTrueFullscreen(bool trueFullscreen);
 
+	virtual void lockCursor(bool cursorLock);
+
 	virtual void setWindowResizeCallback(WindowResizeCallback_t callback);
 	virtual void setWindowMouseMoveCallback(WindowMouseMoveCallback_t callback);
 	virtual void setWindowMouseButtonCallback(WindowMouseButtonCallback_t callback);
@@ -36,7 +38,7 @@ public:
 	WindowKeyCallback_t* keyCallback = 0;
 	WindowCharacterCallback_t* characterCallback = 0;
 
-	bool lockCursor = false;
+	bool cursorLock = false;
 	int modkeys = 0;
 
 protected:

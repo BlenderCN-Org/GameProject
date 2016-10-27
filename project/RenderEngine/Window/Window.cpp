@@ -2,6 +2,10 @@
 
 // BaseWindow
 
+void BaseWindow::lockCursor(bool _cursorLock) {
+	cursorLock = _cursorLock;
+}
+
 void BaseWindow::setWindowResizeCallback(WindowResizeCallback_t callback) {
 	resizeCallback = callback;
 }

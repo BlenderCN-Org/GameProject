@@ -283,7 +283,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 						POINT pt;
 						GetCursorPos(&pt);
 						ScreenToClient(hWnd, &pt);
-						//wnd->mouseMoveCallback(wnd, pt.x, pt.y);
+						wnd->mouseMoveCallback(wnd, pt.x, pt.y);
 						//printf("move callback\n");
 					}
 
@@ -302,7 +302,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 						wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
 					}
 
-					if ( wnd->lockCursor ) {
+					if ( wnd->cursorLock ) {
 						RECT rec;
 						GetWindowRect(hWnd, &rec);
 
@@ -507,6 +507,8 @@ void GLWindow::init() {
 		if ( wglSwapIntervalEXT )
 			wglSwapIntervalEXT(1);
 	}
+
+	//cursorLock = true;
 }
 
 void GLWindow::deinit() {
