@@ -103,9 +103,9 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			unsigned int codepoint = (unsigned int)wParam;
 			if ( codepoint < 32 || (codepoint > 126 && codepoint < 160) )
 				return 0;
-			
+
 			if ( wnd->characterCallback )
-					wnd->characterCallback(wnd, codepoint);
+				wnd->characterCallback(wnd, codepoint);
 			return 0;
 		}
 		break;
@@ -130,31 +130,6 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				RAWINPUT* raw = (RAWINPUT*)lpb;
 
 				if ( raw->header.dwType == RIM_TYPEKEYBOARD ) {
-					//TCHAR szTempOutput[100];
-					//HRESULT hResult = StringCchPrintf(szTempOutput, 100, TEXT(" Kbd: make=%04x Flags:%04x Reserved:%04x ExtraInformation:%08x, msg=%04x VK=%04x \n"),
-					//								  raw->data.keyboard.MakeCode,
-					//								  raw->data.keyboard.Flags,
-					//								  raw->data.keyboard.Reserved,
-					//								  raw->data.keyboard.ExtraInformation,
-					//								  raw->data.keyboard.Message,
-					//								  raw->data.keyboard.VKey);
-					//if ( FAILED(hResult) ) {
-					//	// TODO: write error handler
-					//}
-					//OutputDebugString(szTempOutput);
-					//std::wcout << szTempOutput;
-
-					//keyboardMsg->keyEvent = true;
-					//if ( raw->data.keyboard.Flags == RI_KEY_BREAK ) {
-					//	keyboardMsg->keyDown = false;
-					//} else if ( raw->data.keyboard.Flags == RI_KEY_MAKE ) {
-					//	keyboardMsg->keyDown = true;
-					//}
-					//keyboardMsg->scanCode = raw->data.keyboard.MakeCode;
-					//std::cout << "Char " << MapVirtualKeyEx(raw->data.keyboard.VKey, MAPVK_VK_TO_CHAR, GetKeyboardLayout(0)) << std::endl;
-					//std::cout << "VKey " << raw->data.keyboard.VKey << std::endl;
-					//std::cout << "Make code " << raw->data.keyboard.MakeCode << std::endl;
-					//std::cout << "Scan code " << MapVirtualKeyEx(raw->data.keyboard.VKey, MAPVK_VK_TO_VSC, GetKeyboardLayout(0)) << std::endl;
 
 					if ( raw->data.keyboard.Flags == RI_KEY_MAKE ) {
 						if ( raw->data.keyboard.VKey == VK_SHIFT ) {
@@ -191,32 +166,6 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					//printf("key event\n");
 
 				} else if ( raw->header.dwType == RIM_TYPEMOUSE ) {
-					//TCHAR szTempOutput[200];
-					//HRESULT hResult = StringCchPrintf(szTempOutput, 200, TEXT("Mouse: usFlags=%04x ulButtons=%04x usButtonFlags=%04x usButtonData=%04x ulRawButtons=%04x lLastX=%04x lLastY=%04x ulExtraInformation=%04x\r\n"),
-					//								  raw->data.mouse.usFlags,
-					//								  raw->data.mouse.ulButtons,
-					//								  raw->data.mouse.usButtonFlags,
-					//								  raw->data.mouse.usButtonData,
-					//								  raw->data.mouse.ulRawButtons,
-					//								  raw->data.mouse.lLastX,
-					//								  raw->data.mouse.lLastY,
-					//								  raw->data.mouse.ulExtraInformation);
-
-					//mouseMsg->mouseDX = (float)raw->data.mouse.lLastX / 2;
-					//mouseMsg->mouseDY = (float)raw->data.mouse.lLastY / 2;
-					//
-					//mouseMsg->mouseBtnDown = false;
-					//mouseMsg->mouseBtn = -1;
-
-					//unsigned short btn = raw->data.mouse.usButtonFlags;
-
-					//if ( FAILED(hResult) ) {
-					//	// TODO: write error handler
-					//}
-					//OutputDebugString(szTempOutput);
-					//std::wcout << szTempOutput;
-
-
 
 					if ( wnd->mouseButtonCallback ) {
 
@@ -285,12 +234,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					}
 
 					if ( wnd->mouseMoveCallback ) {
-
-						//float mouseDX = (float)raw->data.mouse.lLastX;
-						//float mouseDY = (float)raw->data.mouse.lLastY;
-						//
-						//wnd->mouseMoveCallback(wnd, (int)mouseDX, (int)mouseDY);
-
+						
 						POINT pt;
 						GetCursorPos(&pt);
 						ScreenToClient(hWnd, &pt);
