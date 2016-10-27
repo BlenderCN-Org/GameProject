@@ -5,6 +5,8 @@ Change TextArea to use mask texture, instead of stencil buffer (performance)
 TextArea scrollable text, (horz & vert)
 Gui focus control
 
+Fix fullscreen and borderless mode
+
 Rework custom allocators
 
 Other Gui types
