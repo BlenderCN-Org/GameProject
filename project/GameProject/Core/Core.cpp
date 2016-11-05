@@ -90,7 +90,7 @@ void Core::init()
 {
 	running = true;
 	hadReset = false;
-	if ( renderEngineLib.loadLibrary("RenderEngine.dll") )
+	if ( renderEngineLib.loadLibrary("RenderEngine.dll\0") )
 		printf("Loaded\n");
 	else
 	{

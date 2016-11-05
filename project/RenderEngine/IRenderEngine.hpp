@@ -39,11 +39,21 @@ struct OpenGLWindowCreateInfo
 
 };
 
+typedef void* (*PFN_EngineAllocator(size_t));
+typedef void (*PFN_EngineDeallocator(void*));
+
+struct AllocatorInfo
+{
+	PFN_EngineAllocator pfnEngineAlloc;
+	PFN_EngineDeallocator pfnEngineDealloc;
+};
+
 struct RenderEngineCreateInfo
 {
 	SType stype;
 	bool createRenderWindow;
 	RenderEngineType renderEngineType;
+	//AllocatorInfo globalAllocators;
 	void* pNext;
 };
 
