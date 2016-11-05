@@ -6,7 +6,7 @@
 #include <time.h>
 #include <string>
 
-#include <vld.h>
+//#include <vld.h>
 
 #undef APIENTRY
 

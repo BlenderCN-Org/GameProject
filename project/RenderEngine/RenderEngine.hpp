@@ -19,7 +19,7 @@
 #include FT_FREETYPE_H
 
 
-#include <vld.h>
+//#include <vld.h>
 
 struct GLinfo
 {
