@@ -15,6 +15,14 @@
 #include <stdio.h>
 #include <TlHelp32.h>
 
+#define _CRTDBG_MAP_ALLOC
+
+#ifdef _DEBUG  
+#ifndef DBG_NEW  
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )  
+#define new DBG_NEW  
+#endif  
+#endif  // _DEBUG  
 
 int PrintModules()
 {
@@ -76,16 +84,12 @@ LONG WINAPI TopLevelExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo) {
 
 int main(int argc, char* argv[])
 {
-	set_terminate(term_func);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+	set_terminate(term_func);
+	
 	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
 	SetUnhandledExceptionFilter(TopLevelExceptionHandler);
-
-	Lib l;
-
-	l.loadLibrary("RenderEngine.dll");
-
-	printf("Loaded successfully..\n");
 
 	float dt = 0.0f;
 	float timePass = 0.0f;

@@ -1,0 +1,69 @@
+
+
+File structure <data file>
+|---- Header
+|		|--tag
+|		|--version
+|		|--flags
+|		|--fileSize
+|
+|---- GeneralHeader
+|		|--tag
+|		|--version
+|		|--flags
+|		|--dataSize
+|
+|---- data <prevHeader.dataSize> (group example)
+|		|--nrEntries
+|		|--list<size=nrEntries>
+|		|		|--GeneralListHeader
+|		|		|		|--tag
+|		|		|		|--version
+|		|		|		|--flags
+|		|		|		|--dataSize
+|		|		|
+|		|		|--item< ofType< GeneralListHeader.tag > > <size=GeneralListHeader.dataSize>
+|		|		|		|--data
+|		|		|
+|		|		|--reapeat for nrEntries
+|
+|---- GeneralHeader
+|		|--tag
+|		|--version
+|		|--flags
+|		|--dataSize
+|
+|---- data <prevHeader.dataSize> (of type <tag>)
+|
+|---- repeat <Header> - <data> untill end of file
+
+
+Other nodes
+|---- Text
+|		|-- Header	<tag = 'STR '
+|		|-- stringData
+|
+|---- Reference
+|		|-- Header	<tag = 'REF '>
+|		|-- Header	<tag = referenceTag>
+|		|-- offsetFromFileStart
+|
+
+
+Custom model format
+	bool vertexColors
+	bool vertexNormals
+	bool vertexUV
+	bool vertexTangen
+	list<vertexDataTypes>
+	list<Materials>
+	
+Custom texture format
+	int channels
+	int layers
+	int width[layers]
+	int height[layers]
+	void* channes*layers*[width*height]
+
+GameData format
+	??

@@ -68,24 +68,6 @@ char* fs =
 "	red = vec4(1.0, 0.0, 0, 1);\n"
 "}\n";
 
-void thread(ITexture* tex, bool* kill )
-{
-	while ( !kill )
-	{
-		unsigned char t[16 * 16];
-
-		for ( size_t i = 0; i < 16; i++ )
-		{
-			for ( size_t j = 0; j < 16; j++ )
-			{
-				t[(i * 16) + j] = (unsigned char)(((float)(i*j) / (16.0f*16.0f)) * 256.0f);
-			}
-		}
-
-		tex->setTextureData(16, 16, 1, t);
-	}
-}
-
 void Core::init()
 {
 	running = true;
@@ -152,9 +134,7 @@ void Core::init()
 	input->attachConsole(console);
 
 	planeMesh = renderEngine->createMesh();
-	triangleMesh = renderEngine->createMesh();
 	planeMesh->init(MeshPrimitiveType::TRIANGLE);
-	triangleMesh->init(MeshPrimitiveType::TRIANGLE);
 
 	float f[] = { 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 	1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
@@ -162,20 +142,12 @@ void Core::init()
 	-1.0f, -1.0f, 0.0f, 0.0f, 0.0f };
 
 	unsigned int size = 0;
-	void* data = ObjLoader::load("UnitCube.obj", size);
+	void* data = ObjLoader::load("UnitCube.mesh", size);
 
-	planeMesh->setMeshData(data, size, VERT_UV);
-	map = planeMesh->map(mapSize);
-	triangleMesh->setMeshData(f, sizeof(f) - sizeof(float) * 5, VERT_UV);
+	planeMesh->setMeshData(f, sizeof(f), VERT_UV);
 
 	delete []data;
 
-	text = renderEngine->createText();
-	font = renderEngine->createFont();
-
-	font->init("C:/Windows/Fonts/Arial.ttf", 24);
-	text->init();
-	text->setFont(font);
 
 	fbo = renderEngine->createFrameBuffer();
 
@@ -195,58 +167,50 @@ void Core::init()
 
 	texture = renderEngine->createTexture();
 	texture->init(1, false);
-	toggle = true;
-	unsigned char t[16 * 16];
-
+	unsigned char te[16 * 16];
+	
 	for ( size_t i = 0; i < 16; i++ )
 	{
 		for ( size_t j = 0; j < 16; j++ )
 		{
-			t[(i*16) + j] = (unsigned char) (((float)(i*j)/(16.0f*16.0f)) * 256.0f);
+			te[(i*16) + j] = (unsigned char) (((float)(i*j)/(16.0f*16.0f)) * 256.0f);
 		}
 	}
-
-	texture->setTextureData(16, 16, 1, t);
 	
-	killThread = false;
-
-	streamingThread = new std::thread(thread, texture, &killThread);
+	texture->setTextureData(16, 16, 1, te);
 
 	game = new Game();
 	game->init();
 
-	mousePosText = renderEngine->createText();
-	mousePosText->init();
-	mousePosText->setFont(font);
+	startWorkerThreads();
 
-	textArea = new TextArea(renderEngine);
-	
-	textArea->setPos(1920/2, 1080/2);
-	textArea->setSize(200, 300);
-	areaSizeX = 200.0f;
-	textArea->addText("Some long text that will appear outside of textArea");
+	ma = new ModelAsset();
+	ma->init();
 
-	consoleTextArea = new TextArea(renderEngine);
+	Task t;
 
-	consoleTextArea->setPos(0.0f, 1080.0f /2.0f);
-	consoleTextArea->setSize(1920.0f, 1080.0f / 2.0f);
+	li.type = LoadType::eLoadType_file;
+	li.fileName = "Unitcube.mesh";
+
+	ls.asset = ma;
+	ls.howToLoad = li;
+
+	t.type = TaskType::eTaskType_loadAsset;
+	t.data = &ls;
+
+	thrdMgr.queueTask(t);
 }
 
 void Core::release()
 {
-	delete consoleTextArea;
-	delete textArea;
+	ma->release();
+
+	stopWorkerThreads();
 
 	disp.setWindow(nullptr);
 	disp.setRenderEngine(nullptr);
 
-	mousePosText->release();
-
-	killThread = true;
-	streamingThread->join();
-	delete streamingThread;
 	delete game;
-	planeMesh->unmap();
 	delete console;
 
 	fbo->release();
@@ -255,11 +219,7 @@ void Core::release()
 	camera->release();
 	
 	planeMesh->release();
-	triangleMesh->release();
-	
-	font->release();
-	text->release();
-	
+
 	texture->release();
 
 	renderEngine->release();
@@ -280,6 +240,14 @@ bool Core::hadGraphicsReset() const
 		return true;
 	}
 	return renderEngine->getGraphicsReset();
+}
+
+void Core::startWorkerThreads() {
+	thrdMgr.startThreads(8);
+}
+
+void Core::stopWorkerThreads() {
+	thrdMgr.stopThreads();
 }
 
 void Core::setFPS(int _fps)
@@ -311,33 +279,6 @@ void Core::update(float dt)
 	shader->useShader();
 	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, &vp);
 	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-		
-	KeyBind kb;
-	kb.code = 2;
-	kb.mod = 0;
-	kb.mouse = false;
-
-	KeyBind kb2;
-	kb2.code = 3;
-	kb2.mod = 0;
-	kb2.mouse = false;
-	if ( input->isKeyBindPressed(kb) && !input->consoleIsActive() )
-	{
-		//float* data = (float*)map;
-		//data[0] += 1.0f;
-		//planeMesh->flush();
-		areaSizeX += 1.0f;
-		textArea->setSize(areaSizeX, 300);
-	}
-
-	if ( input->isKeyBindPressed(kb2) && !input->consoleIsActive() )
-	{
-		//float* data = (float*)map;
-		//data[0] -= 1.0f;
-		//planeMesh->flush();
-		areaSizeX -= 1.0f;
-		textArea->setSize(areaSizeX,300);
-	}
 
 	if (input->sizeChange)
 	{
@@ -356,6 +297,10 @@ void Core::update(float dt)
 		//console->print("Resize\n");
 	}
 
+	if ( ma->getAssetState() == AssetState::eAssetState_loaded ) 		{
+		planeMesh->setMeshData(ma->getDataPtr(), ma->getDataSize(), MeshDataLayout::VERT_UV);
+	}
+
 	//input->print();
 	input->reset();
 }
@@ -371,83 +316,22 @@ void Core::render()
 	renderEngine->stencilFunc(GL_ALWAYS, 1, 0xFF);
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
-	//obj->render();
 
 	planeMesh->bind();
 
-	texture->setCompressed(toggle);
 	texture->bind();
 	
 	int id = 0;
 	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
-
+	
 	planeMesh->render();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
 
-	size_t used = renderEngine->getMemoryUsage();
-	size_t max = renderEngine->getMaxMemory();
-
-	float percent = (float(used) / float(max)) * 100.0f;
-	std::string str = "Memory: " + std::to_string(used) + "/" + std::to_string(max) + "(" + std::to_string(percent) + "%)\n\n\nSome more text\nUsing renderbuffers: " + std::to_string(fbo->isUsingRenderBuffer());
-	str += "\nFPS: " +std::to_string(fps);
-	str += "\nc: " + std::to_string(c);
-	//text->render(std::string("a"), 25.0f, 100.0f, 45.0f, glm::vec3(0.5, 0.8f, 0.2f));
-
-	shader->useShader();
-	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
-	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
-
-	if (input->consoleIsActive())
-	{
-		text->setText((char*)console->getText().c_str(), console->getText().length(), 25.0f, 1000.0f, 1.0f);
-
-		consoleTextArea->clearText();
-		consoleTextArea->addText(console->getHistory().c_str());
-		consoleTextArea->render();
-
-		renderEngine->stencilMask(0xFF);
-		renderEngine->stencilOp(GL_INCR, GL_INCR, GL_INCR);
-		renderEngine->stencilFunc(GL_ALWAYS, 1, 0xFF);
-
-		text->render(glm::vec3(0.5, 0.8f, 0.2f));
-		// render console
-	}
-
-	text->setText((char*)str.c_str(), str.length(), 25.0f, 25.0f, 1.0f);
-	text->render(glm::vec3(0.5, 0.8f, 0.2f));
-	
-	//str = "Mouse pos (" + std::to_string(x) + "," + std::to_string(y) + ")\n";
-	str = std::string(fs);
-
-	mousePosText->setText((char*)str.c_str(), str.length(), 500.0, 25.0f, 1.0f);
-	mousePosText->render(glm::vec3(0.8, 0.43f, 0.0f));
-
-	//texture->bind();
-	//
-	//shader->useShader();
-	//shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, (float*)camera->getOrthoMatrix());
-	//shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	//shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
-
-	//textArea->render();
-	//textArea->renderHelpLines();
-
-	//renderEngine->setDepthTest(true);
-
 	fbo->resolveToScreen();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
-
-	if ( c > 1000 )
-	{
-		toggle = !toggle;
-		c = 0;
-	}
-	c++;
-
-	
+		
 	window->swapBuffers();
 }
 

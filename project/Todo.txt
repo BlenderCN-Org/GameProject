@@ -9,6 +9,14 @@ Fix fullscreen and borderless mode
 
 Rework custom allocators
 
+Fix crash if mesh data size is equal to zero (Render Engine)
+
+Threading
+	add sync point. stall main thread untill all worker threads are done etc
+	add more assets to task loading.
+	add more tasks, like save to file, actions, other data processing, physics, script execution.
+	
+
 Other Gui types
 	Buttons
 	CheckBox
@@ -35,20 +43,28 @@ Scripting
 		like world interaction
 		background jobs
 
-Custom model format
-	bool vertexColors
-	bool vertexNormals
-	bool vertexUV
-	bool vertexTangen
-	list<vertexDataTypes>
-	list<Materials>
-	
-Custom texture format
-	int channels
-	int layers
-	int width[layers]
-	int height[layers]
-	void* channes*layers*[width*height]
 
-GameData format
-	??
+Asset
+	// allways (base asset)
+	uint32_t dataSize;
+	void* dataPtr;
+
+	uint32_t assetID;
+	enum assetType;
+	enum assetState; (loaded, unloaded, etc)
+
+	// asset specific
+	int32_t width, height;	// texure only
+	int32_t nrKeyFrames;	// animation only
+	int32_t nrBones;		// animation only
+
+
+
+Asset creation
+	mainThread creates asset object.
+	Task is created to move data to asset object.
+		task copies data (from file, memory or network)
+		task notify asset object it is host complete (CPU side)
+		task terminates and worker thread waits for new task
+	mainThread check if asset object is complete when rendering or other parts of code needs it
+		if not complete nothing should happen

@@ -18,7 +18,6 @@ enum class HeaderTags : uint32_t
 	eTagReference = 'REF ', // tag for data reference
 	eTagInfo = 'INFO', // tag for data info
 
-	
 };
 
 static_assert(sizeof(uint32_t) == sizeof(char[4]), "uint32_t is not same size as 4 chars");
@@ -60,13 +59,13 @@ struct Model_v2
 	Vertex_3f* vertices;
 	Vertex_2f* vertexUV;
 
-	Triangle* Triangles;
+	Triangle* triangles;
 };
 
 struct Reference_v1
 {
 	Header referenceHeader; // header for referenced data // presented here to allow quicker searching for specific tags
-	uint32_t Offset; // offset from this reference header to referenced object
+	uint32_t offset; // offset from start of file
 };
 
 #endif

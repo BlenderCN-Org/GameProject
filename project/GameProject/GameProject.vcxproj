@@ -176,6 +176,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\ModelAsset.cpp" />
     <ClCompile Include="Core\CameraInput.cpp" />
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Core\Loading\OBJLoader.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
+    <ClCompile Include="Core\ThreadManager.cpp" />
     <ClCompile Include="Core\Window\Window.cpp" />
     <ClCompile Include="Game\Chunk.cpp" />
     <ClCompile Include="Game\Components\BaseComponent.cpp" />
@@ -198,7 +200,9 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Assets\AssetManager.hpp" />
     <ClInclude Include="Core\Assets\BaseAsset.hpp" />
+    <ClInclude Include="Core\Assets\ModelAsset.hpp" />
     <ClInclude Include="Core\CameraInput.hpp" />
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
@@ -210,8 +214,11 @@
     <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
     <ClInclude Include="Core\Loading\ModelLoader.hpp" />
     <ClInclude Include="Core\Loading\OBJLoader.hpp" />
+    <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
+    <ClInclude Include="Core\Task.hpp" />
+    <ClInclude Include="Core\ThreadManager.hpp" />
     <ClInclude Include="Core\Window\Window.hpp" />
     <ClInclude Include="Game\Chunk.hpp" />
     <ClInclude Include="Game\Components\BaseComponent.hpp" />
@@ -219,9 +226,14 @@
     <ClInclude Include="Game\Components\RenderComponent.hpp" />
     <ClInclude Include="Game\Game.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
+    <ClInclude Include="Game\GameState.hpp" />
     <ClInclude Include="Game\GUI\Editor\TextArea.hpp" />
     <ClInclude Include="Game\GUI\Gui.hpp" />
     <ClInclude Include="Loader\LibraryLoader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\FileStructure.txt" />
+    <Text Include="..\Todo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,6 +4,7 @@
 #include "RenderEngine/IRenderEngine.hpp"
 #include "Input.hpp"
 #include "CameraInput.hpp"
+#include "ThreadManager.hpp"
 
 #include "Instance.hpp"
 #include "../Game/Game.hpp"
@@ -14,11 +15,7 @@
 
 #include "../Loader/LibraryLoader.hpp"
 
-#include <thread>
-
-#include "../Game/GUI/Gui.hpp"
-
-#include "../Game/GUI/Editor/TextArea.hpp"
+#include "Assets\ModelAsset.hpp"
 
 class Core
 {
@@ -30,6 +27,9 @@ public:
 
 	bool isRunning();
 	bool hadGraphicsReset() const;
+	
+	void startWorkerThreads();
+	void stopWorkerThreads();
 
 	void setFPS(int fps);
 	void update(float dt);
@@ -41,8 +41,10 @@ public:
 private:
 
 	// core variables
-	bool hadReset;
+	Lib renderEngineLib;
 
+	bool hadReset;
+	bool running;
 	int fps;
 
 	IWindow* window;
@@ -63,38 +65,15 @@ private:
 
 	DisplaySettings disp;
 
-	Lib renderEngineLib;
+	ThreadManager thrdMgr;
 
-	bool running;
-
-	// temp variables
-	TextArea* consoleTextArea;
+	ModelAsset* ma;
+	AssetLoadStruct ls;
+	LoadInfo li;
 
 	IMesh* planeMesh;
-	IMesh* triangleMesh;
 	IFrameBuffer* fbo;
-
 	ITexture* texture;
-
-	bool toggle = true;
-	int c;
-
-	void* map;
-	size_t mapSize;
-
-	IText* text;
-	IFont* font;
-
-	std::thread* streamingThread;
-	bool killThread;
-
-	// gui stuff
-
-	IText* mousePosText;
-
-	TextArea* textArea;
-
-	float areaSizeX;
 
 };
 

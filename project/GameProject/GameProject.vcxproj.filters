@@ -135,6 +135,12 @@
     <ClCompile Include="Core\Loading\ModelLoader.cpp">
       <Filter>Source Files\Core\Loading</Filter>
     </ClCompile>
+    <ClCompile Include="Core\ThreadManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\ModelAsset.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Input.hpp">
@@ -209,5 +215,31 @@
     <ClInclude Include="Core\Loading\AssetStructures.hpp">
       <Filter>Header Files\Core\Loading</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameState.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ThreadManager.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SafeQueue.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Task.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\AssetManager.hpp">
+      <Filter>Header Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\ModelAsset.hpp">
+      <Filter>Header Files\Core\Assets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Todo.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="..\FileStructure.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
