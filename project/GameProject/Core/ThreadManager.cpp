@@ -1,7 +1,5 @@
 // project includes
 #include "ThreadManager.hpp"
-#include "Loading\OBJLoader.hpp"
-#include "Assets\ModelAsset.hpp"
 
 // std includes
 #include <chrono>
@@ -64,34 +62,5 @@ void ThreadManager::threadProcess(uint32_t threadIndex) {
 				break;
 		}
 	}
-
-}
-
-void ThreadManager::loadAsset(AssetLoadStruct &ls) {
-
-	uint32_t dataSize = 0;
-	void* data = nullptr;
-
-	switch ( ls.howToLoad.type) {
-		case LoadType::eLoadType_file:
-		{
-			data = ObjLoader::load(ls.howToLoad.fileName, dataSize);
-			ModelAsset* ma = (ModelAsset*)ls.asset;
-			ma->setDataPtrAndSize(data, dataSize);
-			delete data;
-			ma->setAssetState(AssetState::eAssetState_loaded);
-		}
-			break;
-		case LoadType::eLoadType_memory:
-			assert(0 && "memory data copy not implemented");
-			break;
-		case LoadType::eLoadType_network:
-			assert(0 && "Network asset loading not implemented");
-			break;
-		default:
-			assert(0 && "Undefined loading type");
-			break;
-	}
-	
 
 }

@@ -4,7 +4,7 @@
 
 #include <thread>
 
-#include "Loading\OBJLoader.hpp"
+#include <AssetLib\AssetLib.hpp>
 
 #include <GL\GL.h>
 
@@ -142,7 +142,7 @@ void Core::init()
 	-1.0f, -1.0f, 0.0f, 0.0f, 0.0f };
 
 	unsigned int size = 0;
-	void* data = ObjLoader::load("UnitCube.mesh", size);
+	void* data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
 
 	planeMesh->setMeshData(f, sizeof(f), VERT_UV);
 
@@ -187,23 +187,38 @@ void Core::init()
 	ma = new ModelAsset();
 	ma->init();
 
+	ta = new TextureAsset();
+	ta->init();
+
 	Task t;
 
-	li.type = LoadType::eLoadType_file;
-	li.fileName = "Unitcube.mesh";
+	mli.type = LoadType::eLoadType_file;
+	mli.fileName = "Unitcube.mesh";
 
-	ls.asset = ma;
-	ls.howToLoad = li;
+	mls.asset = ma;
+	mls.howToLoad = mli;
 
 	t.type = TaskType::eTaskType_loadAsset;
-	t.data = &ls;
+	t.data = &mls;
 
+	thrdMgr.queueTask(t);
+
+	tli.type = LoadType::eLoadType_file;
+	tli.fileName = "texture.bmp";
+	
+	tls.asset = ta;
+	tls.howToLoad = tli;
+	
+	t.type = TaskType::eTaskType_loadAsset;
+	t.data = &tls;
+	
 	thrdMgr.queueTask(t);
 }
 
 void Core::release()
 {
 	ma->release();
+	ta->release();
 
 	stopWorkerThreads();
 
@@ -299,6 +314,13 @@ void Core::update(float dt)
 
 	if ( ma->getAssetState() == AssetState::eAssetState_loaded ) 		{
 		planeMesh->setMeshData(ma->getDataPtr(), ma->getDataSize(), MeshDataLayout::VERT_UV);
+		ma->setAssetState(AssetState::eAssetState_loadedGPU);
+	}
+	if ( ta->getAssetState() == AssetState::eAssetState_loaded ) 		{
+		int w, h;
+		ta->getTextureSize(w, h);
+		texture->setTextureData(w, h, 4, ta->getDataPtr());
+		ta->setAssetState(AssetState::eAssetState_loadedGPU);
 	}
 
 	//input->print();

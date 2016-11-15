@@ -20,37 +20,6 @@ void ModelAsset::release() {
 	delete this;
 }
 
-void ModelAsset::setDataPtrAndSize(void * ptr, uint32_t size) {
-
-	delete dataPtr;
-
-	dataPtr = (void*)new char[size];
-
-	memcpy(dataPtr, ptr, size);
-
-	dataSize = size;
-}
-
-uint32_t ModelAsset::getDataSize() const {
-	return dataSize;
-}
-
-void * ModelAsset::getDataPtr() {
-	return dataPtr;
-}
-
-uint32_t ModelAsset::getAssetID() const {
-	return uint32_t();
-}
-
-AssetType ModelAsset::getAssetType() const {
-	return type;
-}
-
-AssetState ModelAsset::getAssetState() const {
-	return state;
-}
-
 void ModelAsset::setAssetState(AssetState _state) {
 	state = _state;
 }

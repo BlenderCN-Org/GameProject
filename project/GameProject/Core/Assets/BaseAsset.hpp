@@ -10,6 +10,7 @@ enum class AssetState
 {
 	eAssetState_unloaded = 0,
 	eAssetState_loaded = 1,
+	eAssetState_loadedGPU = 2,
 };
 
 enum class AssetType
@@ -28,13 +29,15 @@ public:
 	virtual void init() = 0;
 	virtual void release() = 0;
 
-	virtual uint32_t getDataSize() const = 0;
-	virtual void* getDataPtr() = 0;
+	void setDataPtrAndSize(void* dataPtr, uint32_t size);
 
-	virtual uint32_t getAssetID() const = 0;
-	virtual AssetType getAssetType() const = 0;
+	uint32_t getDataSize() const;
+	void* getDataPtr();
 
-	virtual AssetState getAssetState() const = 0;
+	uint32_t getAssetID() const;
+	AssetType getAssetType() const;
+
+	AssetState getAssetState() const;
 
 protected:
 	

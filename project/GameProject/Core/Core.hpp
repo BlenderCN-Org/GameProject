@@ -16,6 +16,7 @@
 #include "../Loader/LibraryLoader.hpp"
 
 #include "Assets\ModelAsset.hpp"
+#include "Assets\TextureAsset.hpp"
 
 class Core
 {
@@ -67,9 +68,14 @@ private:
 
 	ThreadManager thrdMgr;
 
+	TextureAsset* ta;
 	ModelAsset* ma;
-	AssetLoadStruct ls;
-	LoadInfo li;
+	
+	AssetLoadStruct mls;
+	LoadInfo mli;
+
+	AssetLoadStruct tls;
+	LoadInfo tli;
 
 	IMesh* planeMesh;
 	IFrameBuffer* fbo;

@@ -73,7 +73,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\Win32;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -81,12 +81,13 @@
     <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\x64;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\Win32;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -94,6 +95,7 @@
     <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\x64;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
     <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>config.lib;AssetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
@@ -125,7 +127,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>config.lib;AssetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
@@ -147,7 +149,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>config.lib;AssetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -169,22 +171,24 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>config.lib;AssetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\BaseAsset.cpp" />
     <ClCompile Include="Core\Assets\ModelAsset.cpp" />
+    <ClCompile Include="Core\Assets\TextureAsset.cpp" />
     <ClCompile Include="Core\CameraInput.cpp" />
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\Input.cpp" />
     <ClCompile Include="Core\Instance.cpp" />
+    <ClCompile Include="Core\Loading\Loader.cpp" />
     <ClCompile Include="Core\Loading\LoadingScreen.cpp" />
     <ClCompile Include="Core\Loading\ModelLoader.cpp" />
-    <ClCompile Include="Core\Loading\OBJLoader.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
     <ClCompile Include="Core\ThreadManager.cpp" />
@@ -203,6 +207,7 @@
     <ClInclude Include="Core\Assets\AssetManager.hpp" />
     <ClInclude Include="Core\Assets\BaseAsset.hpp" />
     <ClInclude Include="Core\Assets\ModelAsset.hpp" />
+    <ClInclude Include="Core\Assets\TextureAsset.hpp" />
     <ClInclude Include="Core\CameraInput.hpp" />
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
@@ -213,7 +218,6 @@
     <ClInclude Include="Core\Loading\LoaderDescriptor.hpp" />
     <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
     <ClInclude Include="Core\Loading\ModelLoader.hpp" />
-    <ClInclude Include="Core\Loading\OBJLoader.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
