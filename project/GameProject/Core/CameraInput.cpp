@@ -11,7 +11,7 @@ void CameraInput::init(glm::mat4 * view)
 	start = vec3(-1, 0, 0);
 	dir = start;
 
-	setCam(vec3(0, 0, 25), vec3(0, 0, -1));
+	setCam(vec3(0, 0, 5), vec3(0, 0, -1));
 
 }
 

@@ -18,12 +18,15 @@ namespace AssetLib
 		std::ifstream inFile(fileName);
 
 		std::vector<Vert_t> vertex;
+		std::vector<Vert_t> uv;
 		std::vector<Vert_t> vertex_ret;
 
 		std::string line;
 
 		int count = 0;
+		int uvCount = 0;
 		bool ok = true;
+		bool useuv = false;
 
 		int state = 1;
 
@@ -59,7 +62,22 @@ namespace AssetLib
 				iss >> sub;
 				vertex[count].z = std::stof(sub);
 				count++;
-			} else if ( line[0] == 'f' ) {
+			}
+			if ( line[0] == 'v' && line[1] == 't' ) // vertex pos
+			{
+				useuv = true;
+				uv.push_back(Vert_t());
+
+				std::istringstream iss(line);
+				std::string sub;
+				iss >> sub; // discard 'v'
+				iss >> sub;
+				uv[uvCount].u = std::stof(sub);
+				iss >> sub;
+				uv[uvCount].v = std::stof(sub);
+				uvCount++;
+			}
+			else if ( line[0] == 'f' ) {
 				if ( state == 0 ) {
 					state = 1;
 				}
@@ -86,9 +104,14 @@ namespace AssetLib
 					n = std::stoi(sub) - 1;
 					sub = "";
 				}
-
-				vertex[v].u = 0;
-				vertex[v].v = 0;
+				if ( useuv ) {
+					vertex[v].u = uv[t].u;
+					vertex[v].v = 1.0f - uv[t].v;
+				}
+				else 					{
+					vertex[v].u = 0.0f;
+					vertex[v].v = 0.0f;
+				}
 				vertex_ret.push_back(vertex[v]);
 
 				v = 0;
@@ -110,8 +133,13 @@ namespace AssetLib
 					sub = "";
 				}
 
-				vertex[v].u = 0;
-				vertex[v].v = 1;
+				if ( useuv ) {
+					vertex[v].u = uv[t].u;
+					vertex[v].v = 1.0f - uv[t].v;
+				} else {
+					vertex[v].u = 1.0f;
+					vertex[v].v = 0.0f;
+				}
 				vertex_ret.push_back(vertex[v]);
 
 				v = 0;
@@ -133,8 +161,13 @@ namespace AssetLib
 					sub = "";
 				}
 
-				vertex[v].u = 1;
-				vertex[v].v = 0;
+				if ( useuv ) {
+					vertex[v].u = uv[t].u;
+					vertex[v].v = 1.0f - uv[t].v;
+				} else {
+					vertex[v].u = 0.0f;
+					vertex[v].v = 1.0f;
+				}
 				vertex_ret.push_back(vertex[v]);
 
 			}

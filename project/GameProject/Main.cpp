@@ -104,6 +104,12 @@ int main(int argc, char* argv[])
 	
 	while ( core->isRunning() )
 	{
+		if ( core->hadGraphicsReset() ) 			{
+			core->release();
+			core = new Core();
+			core->init();
+		}
+
 		core->update(dt);
 		
 		core->render();

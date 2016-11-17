@@ -142,11 +142,11 @@ void Core::init()
 	-1.0f, -1.0f, 0.0f, 0.0f, 0.0f };
 
 	unsigned int size = 0;
-	void* data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
+	//void* data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
 
 	planeMesh->setMeshData(f, sizeof(f), VERT_UV);
 
-	delete []data;
+	//delete []data;
 
 
 	fbo = renderEngine->createFrameBuffer();
@@ -166,7 +166,7 @@ void Core::init()
 
 
 	texture = renderEngine->createTexture();
-	texture->init(1, false);
+	texture->init(4, false);
 	unsigned char te[16 * 16];
 	
 	for ( size_t i = 0; i < 16; i++ )
@@ -177,7 +177,7 @@ void Core::init()
 		}
 	}
 	
-	texture->setTextureData(16, 16, 1, te);
+	//texture->setTextureData(16, 16, 1, te);
 
 	game = new Game();
 	game->init();
@@ -193,7 +193,7 @@ void Core::init()
 	Task t;
 
 	mli.type = LoadType::eLoadType_file;
-	mli.fileName = "Unitcube.mesh";
+	mli.fileName = "unitcube.mesh";
 
 	mls.asset = ma;
 	mls.howToLoad = mli;
