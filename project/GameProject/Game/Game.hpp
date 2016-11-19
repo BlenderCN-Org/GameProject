@@ -9,20 +9,17 @@ class Game
 
 public:
 
+	Game();
 	virtual ~Game();
 
 	void init();
 	
-	void setGameState(GameState newState);
-	GameState getGameState() const;
-
 	void update(float dt);
 
 private:
 
-	GameState state;
 	GameObject* player;
-
+	
 };
 
 #endif

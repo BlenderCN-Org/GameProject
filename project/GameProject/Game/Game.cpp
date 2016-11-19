@@ -1,32 +1,18 @@
 #include "Game.hpp"
 
-Game::~Game()
-{
+#include "../Core/Input.hpp"
+
+Game::Game() : player(nullptr) {}
+
+Game::~Game() {
 	delete player;
 }
 
-void Game::init()
-{
-	state = GameState::eGameStage_MainMenu;
+void Game::init() {
 	player = new GameObject();
 }
 
-void Game::setGameState(GameState newState) {
-	state = newState;
-}
 
-GameState Game::getGameState() const {
-	return state;
-}
-
-void Game::update(float dt)
-{
-	if ( state == GameState::eGameState_Undefined ) {
-		assert(0 && "Game state is undefined");
-	}
-
-	// perform game logic update
-	if ( state == GameState::eGameState_PlayMode ) {
-
-	}
+void Game::update(float dt) {
+	
 }

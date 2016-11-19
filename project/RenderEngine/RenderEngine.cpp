@@ -158,7 +158,7 @@ void RenderEngine::renderDebugFrame() {
 	c.v = 0.5f;
 	c.s = 1.0f;
 	clearColor = HSV2RGB(c);
-	glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
+	//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 }

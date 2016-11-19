@@ -68,14 +68,15 @@ char* fs =
 "	red = vec4(1.0, 0.0, 0, 1);\n"
 "}\n";
 
-void Core::init()
-{
+void Core::init() {
+	thrdMgr = nullptr;
+	assetMgr = nullptr;
+
 	running = true;
 	hadReset = false;
 	if ( renderEngineLib.loadLibrary("RenderEngine.dll\0") )
 		printf("Loaded\n");
-	else
-	{
+	else {
 		printf("Failed to load\n");
 		throw;
 	}
@@ -85,7 +86,7 @@ void Core::init()
 	disp.setVsyncMode(VSyncMode::VSYNC_ON);
 	disp.setFramerateLock(FramerateLock::FRAME_LOCK_NONE);
 	disp.setFullscreenMode(FullscreenMode::WINDOWED);
-	
+
 	//renderEngine = CreateRenderEngine();
 
 	RenderEngineCreateInfo reci;
@@ -168,21 +169,25 @@ void Core::init()
 	texture = renderEngine->createTexture();
 	texture->init(4, false);
 	unsigned char te[16 * 16];
-	
-	for ( size_t i = 0; i < 16; i++ )
-	{
-		for ( size_t j = 0; j < 16; j++ )
-		{
-			te[(i*16) + j] = (unsigned char) (((float)(i*j)/(16.0f*16.0f)) * 256.0f);
+
+	for ( size_t i = 0; i < 16; i++ ) {
+		for ( size_t j = 0; j < 16; j++ ) {
+			te[(i * 16) + j] = (unsigned char)(((float)(i*j) / (16.0f*16.0f)) * 256.0f);
 		}
 	}
-	
+
 	//texture->setTextureData(16, 16, 1, te);
 
 	game = new Game();
 	game->init();
 
+	state = GameState::eGameStage_MainMenu;
+	targetState = GameState::eGameStage_MainMenu;
+
 	startWorkerThreads();
+
+	assetMgr = new AssetManager();
+	assetMgr->setThreadManager(thrdMgr);
 
 	ma = new ModelAsset();
 	ma->init();
@@ -201,22 +206,25 @@ void Core::init()
 	t.type = TaskType::eTaskType_loadAsset;
 	t.data = &mls;
 
-	thrdMgr.queueTask(t);
+	thrdMgr->queueTask(t);
 
 	tli.type = LoadType::eLoadType_file;
 	tli.fileName = "texture.bmp";
-	
+
 	tls.asset = ta;
 	tls.howToLoad = tli;
-	
+
 	t.type = TaskType::eTaskType_loadAsset;
 	t.data = &tls;
-	
-	thrdMgr.queueTask(t);
+
+	thrdMgr->queueTask(t);
+
+	mainMenu.initMeshes(renderEngine);
+	mainMenu.setWindowRes(1280, 720);
 }
 
-void Core::release()
-{
+void Core::release() {
+	mainMenu.releaseMeshes();
 	ma->release();
 	ta->release();
 
@@ -225,6 +233,8 @@ void Core::release()
 	disp.setWindow(nullptr);
 	disp.setRenderEngine(nullptr);
 
+	delete assetMgr;
+	delete thrdMgr;
 	delete game;
 	delete console;
 
@@ -232,7 +242,7 @@ void Core::release()
 
 	shader->release();
 	camera->release();
-	
+
 	planeMesh->release();
 
 	texture->release();
@@ -247,10 +257,8 @@ bool Core::isRunning() {
 	return running;
 }
 
-bool Core::hadGraphicsReset() const
-{
-	if ( console->reset )
-	{
+bool Core::hadGraphicsReset() const {
+	if ( console->reset ) {
 		console->reset = false;
 		return true;
 	}
@@ -258,32 +266,69 @@ bool Core::hadGraphicsReset() const
 }
 
 void Core::startWorkerThreads() {
-	thrdMgr.startThreads(8);
+	if ( !thrdMgr )
+		thrdMgr = new ThreadManager();
+	thrdMgr->startThreads(8);
 }
 
 void Core::stopWorkerThreads() {
-	thrdMgr.stopThreads();
+	if ( thrdMgr )
+		thrdMgr->stopThreads();
 }
 
-void Core::setFPS(int _fps)
-{
+void Core::setFPS(int _fps) {
 	fps = _fps;
 }
 
-void Core::update(float dt)
-{
+void Core::update(float dt) {
+	// poll messages and update camera
 	window->pollMessages();
 	camInput.update(dt);
 
+	// window size change event
+	if ( input->sizeChange ) {
+		int w = 0;
+		int h = 0;
+		input->getWindowSize(w, h);
+		mainMenu.setWindowRes(w, h);
+
+		Resolution res = disp.getResolution();
+		renderEngine->updateViewPort(res.width, res.height);
+		fbo->resize(res.width, res.height);
+		fbo->setWindowSize(w, h);
+		if ( w != 0 && h != 0 ) {
+			*(glm::mat4*)(camera->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(res.width), float(res.height), 0.0001f, 100.0f);
+		}
+		//console->print("Resize\n");
+	}
+
 	running = window->isVisible();
 
+	switch ( state ) {
+		case GameState::eGameStage_MainMenu:
+			updateMainMenu(dt);
+			break;
+		case GameState::eGameState_EditorMode:
+			updateEditor(dt);
+			break;
+		case GameState::eGameState_PlayMode:
+			updateGame(dt);
+			break;
+		case GameState::eGameState_loading:
+			break;
+		case GameState::eGameState_Undefined:
+			assert(0 && "Undefined State");
+			break;
+		default:
+			break;
+	}
+	// update gameState
 	game->update(dt);
 
-	if (input->consoleKeyWasPressed())
-	{
+	if ( input->consoleKeyWasPressed() ) {
 		input->toggleConsole();
 		console->setVisible(input->consoleIsActive());
-		
+
 	}
 
 	glm::mat4 vp = *(glm::mat4*)camera->getPerspectiveMatrix() * *(glm::mat4*)camera->getViewMatrix();
@@ -295,40 +340,23 @@ void Core::update(float dt)
 	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, &vp);
 	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
-	if (input->sizeChange)
-	{
-		int w = 0;
-		int h = 0;
-		input->getWindowSize(w, h);
-
-		Resolution res = disp.getResolution();
-		renderEngine->updateViewPort(res.width, res.height);
-		fbo->resize(res.width, res.height);
-		fbo->setWindowSize(w, h);
-		if ( w != 0 && h != 0 )
-		{
-			*(glm::mat4*)(camera->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(res.width), float(res.height), 0.0001f, 100.0f);
-		}
-		//console->print("Resize\n");
-	}
-
-	if ( ma->getAssetState() == AssetState::eAssetState_loaded ) 		{
+	// temp asset transfer
+	if ( ma->getAssetState() == AssetState::eAssetState_loaded ) {
 		planeMesh->setMeshData(ma->getDataPtr(), ma->getDataSize(), MeshDataLayout::VERT_UV);
 		ma->setAssetState(AssetState::eAssetState_loadedGPU);
 	}
-	if ( ta->getAssetState() == AssetState::eAssetState_loaded ) 		{
+	if ( ta->getAssetState() == AssetState::eAssetState_loaded ) {
 		int w, h;
 		ta->getTextureSize(w, h);
 		texture->setTextureData(w, h, 4, ta->getDataPtr());
 		ta->setAssetState(AssetState::eAssetState_loadedGPU);
 	}
 
-	//input->print();
+	// reset input states, clear for next frame
 	input->reset();
 }
 
-void Core::render()
-{
+void Core::render() {
 	fbo->bind();
 	renderEngine->setDepthTest(true);
 	renderEngine->setStencilTest(true);
@@ -342,22 +370,76 @@ void Core::render()
 	planeMesh->bind();
 
 	texture->bind();
-	
+
 	int id = 0;
 	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
-	
+
 	planeMesh->render();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
+	
+	// render GUI
 
+	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
+	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+
+	mainMenu.render();
+
+	// resolve
 	fbo->resolveToScreen();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
-		
+
+	// swap
 	window->swapBuffers();
 }
 
-DisplaySettings * Core::getDisplaySettings()
-{
+DisplaySettings * Core::getDisplaySettings() {
 	return &disp;
+}
+
+void Core::updateMainMenu(float dt) {
+
+	int x = 0;
+	int y = 0;
+	input->getMousePos(x, y);
+	
+	//printf("Mouse pos (%d, %d)\n", x, y);
+
+	if ( mainMenu.isNewGamePressed() ) {
+		enterNewGame();
+	} else if ( mainMenu.isLoadGamePressed() ) {
+		loadGame();
+	} else if ( mainMenu.isContinueGamePressed() ) {
+		
+	} else if ( mainMenu.isEditorPressed() ) {
+		enterEditor();
+	} else if ( mainMenu.isOptionsPressed() ) {
+		
+	} else if ( mainMenu.isQuitPressed() ) {
+		window->showWindow(false);
+	}
+}
+
+void Core::updateEditor(float dt) {
+
+}
+
+void Core::updateGame(float dt) {
+	game->update(dt);
+}
+
+void Core::enterNewGame() {
+	state = GameState::eGameState_loading;
+	targetState = GameState::eGameState_PlayMode;
+}
+
+void Core::loadGame() {
+	state = GameState::eGameState_loading;
+	targetState = GameState::eGameState_PlayMode;
+}
+
+void Core::enterEditor() {
+	state = GameState::eGameState_loading;
+	targetState = GameState::eGameState_EditorMode;
 }

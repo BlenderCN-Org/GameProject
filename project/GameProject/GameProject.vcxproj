@@ -178,6 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\AssetManager.cpp" />
     <ClCompile Include="Core\Assets\BaseAsset.cpp" />
     <ClCompile Include="Core\Assets\ModelAsset.cpp" />
     <ClCompile Include="Core\Assets\TextureAsset.cpp" />
@@ -198,8 +199,10 @@
     <ClCompile Include="Game\Components\RenderComponent.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
-    <ClCompile Include="Game\GUI\Editor\TextArea.cpp" />
-    <ClCompile Include="Game\GUI\Gui.cpp" />
+    <ClCompile Include="GUI\Editor\TextArea.cpp" />
+    <ClCompile Include="GUI\Gui.cpp" />
+    <ClCompile Include="GUI\GuiButton.cpp" />
+    <ClCompile Include="GUI\MainMenu.cpp" />
     <ClCompile Include="Loader\LibraryLoader.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -231,8 +234,11 @@
     <ClInclude Include="Game\Game.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
     <ClInclude Include="Game\GameState.hpp" />
-    <ClInclude Include="Game\GUI\Editor\TextArea.hpp" />
-    <ClInclude Include="Game\GUI\Gui.hpp" />
+    <ClInclude Include="GUI\Editor\TextArea.hpp" />
+    <ClInclude Include="GUI\Gui.hpp" />
+    <ClInclude Include="GUI\GuiButton.hpp" />
+    <ClInclude Include="GUI\GuiStructs.hpp" />
+    <ClInclude Include="GUI\MainMenu.hpp" />
     <ClInclude Include="Loader\LibraryLoader.hpp" />
   </ItemGroup>
   <ItemGroup>

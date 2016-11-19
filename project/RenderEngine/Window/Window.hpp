@@ -11,6 +11,8 @@ class BaseWindow : public IWindow
 {
 
 public:
+	virtual void getCursorPos(int &x, int &y);
+
 	virtual void setWindowPos(int x, int y);
 	virtual void setWindowSize(int x, int y);
 

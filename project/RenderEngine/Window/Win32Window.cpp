@@ -427,12 +427,32 @@ HGLRC createOpenGLContext(HDC windowDC) {
 
 // BaseWindow -> win32 implementation
 
+void BaseWindow::getCursorPos(int & x, int & y) {
+	
+	POINT p;
+	GetCursorPos(&p);
+
+	ScreenToClient(windowHandle, &p);
+
+	x = p.x;
+	y = p.y;
+}
+
 void BaseWindow::setWindowPos(int x, int y) {
 	SetWindowPos(windowHandle, NULL, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
 }
 
 void BaseWindow::setWindowSize(int x, int y) {
-	SetWindowPos(windowHandle, NULL, 0, 0, x, y, SWP_NOZORDER | SWP_NOMOVE);
+
+	RECT r;
+	GetClientRect(windowHandle, &r);
+
+	r.right = x;
+	r.bottom = y;
+
+	AdjustWindowRectEx(&r, (DWORD)GetWindowLongPtr(windowHandle, GWL_STYLE), FALSE, (DWORD)GetWindowLongPtr(windowHandle, GWL_EXSTYLE));
+
+	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, SWP_NOZORDER | SWP_NOMOVE);
 }
 
 bool BaseWindow::isVisible() {

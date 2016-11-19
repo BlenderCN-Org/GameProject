@@ -75,7 +75,7 @@ public:
 	void attachConsole(Console* con);
 	void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
 
-	bool isKeyBindPressed(KeyBind &keyBind);
+	bool isKeyBindPressed(KeyBind &keyBind, bool includeMods = true);
 	void getCursorDelta(float &x, float &y);
 
 	bool consoleKeyWasPressed();

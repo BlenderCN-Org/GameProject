@@ -109,10 +109,11 @@ void Input::setupCallbacks(IWindow * wnd) {
 
 }
 
-bool Input::isKeyBindPressed(KeyBind & keyBind) {
+bool Input::isKeyBindPressed(KeyBind & keyBind, bool includeMods) {
 	bool pressed = keyMap[InputEvent{ keyBind.code, keyBind.mouse }];
 
-	pressed &= (keyBind.mod == modkey);
+	if ( includeMods )
+		pressed &= (keyBind.mod == modkey);
 
 	return pressed;
 }
@@ -158,11 +159,9 @@ void Input::getWindowSize(int & w, int & h) {
 }
 
 void Input::getMousePos(int & x, int & y) {
-	double xx = 0, yy = 0;
-	//glfwGetCursorPos(window, &xx, &yy);
+	
+	window->getCursorPos(x, y);
 
-	x = (int)xx;
-	y = (int)yy;
 }
 
 void Input::getState(int &mx, int &my, int &mb, int &sc) {

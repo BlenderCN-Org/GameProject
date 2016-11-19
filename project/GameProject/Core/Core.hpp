@@ -5,18 +5,19 @@
 #include "Input.hpp"
 #include "CameraInput.hpp"
 #include "ThreadManager.hpp"
+#include "Assets\AssetManager.hpp"
 
 #include "Instance.hpp"
 #include "../Game/Game.hpp"
 
 #include "Settings\DisplaySettings.hpp"
 
-#undef APIENTRY
-
 #include "../Loader/LibraryLoader.hpp"
 
 #include "Assets\ModelAsset.hpp"
 #include "Assets\TextureAsset.hpp"
+
+#include "../GUI/MainMenu.hpp"
 
 class Core
 {
@@ -41,6 +42,16 @@ public:
 
 private:
 
+	void updateMainMenu(float dt);
+	void updateEditor(float dt);
+	void updateGame(float dt);
+
+	void enterNewGame();
+	void loadGame();
+	void enterEditor();
+
+
+
 	// core variables
 	Lib renderEngineLib;
 
@@ -51,6 +62,8 @@ private:
 	IWindow* window;
 	Console* console;
 	Game* game;
+	GameState state;
+	GameState targetState;
 
 	IRenderEngine* renderEngine;
 	Input* input;
@@ -66,8 +79,10 @@ private:
 
 	DisplaySettings disp;
 
-	ThreadManager thrdMgr;
+	ThreadManager* thrdMgr;
+	AssetManager* assetMgr;
 
+	// temp
 	TextureAsset* ta;
 	ModelAsset* ma;
 	
@@ -80,6 +95,10 @@ private:
 	IMesh* planeMesh;
 	IFrameBuffer* fbo;
 	ITexture* texture;
+
+	MainMenu mainMenu;
+
+	// end temp
 
 };
 

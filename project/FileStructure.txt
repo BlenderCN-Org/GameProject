@@ -40,7 +40,7 @@ File structure <data file>
 
 Other nodes
 |---- Text
-|		|-- Header	<tag = 'STR '
+|		|-- Header	<tag = 'STR '>
 |		|-- stringData
 |
 |---- Reference

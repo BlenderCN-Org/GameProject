@@ -61,17 +61,17 @@
     <Filter Include="Source Files\Core\Assets">
       <UniqueIdentifier>{72c9461c-daa8-4e80-88e4-66d387ee868a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game\GUI">
-      <UniqueIdentifier>{79db8514-61a6-439d-bd98-95f1ef9b2c5c}</UniqueIdentifier>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{f5acaa5d-c56e-4120-a939-11a4d3eb9c2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\GUI">
-      <UniqueIdentifier>{38b944de-f8cb-4c86-b1a0-4acc0539c25a}</UniqueIdentifier>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{39587639-c0b5-4e1a-8ad0-940eef50fd67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\GUI\Editor">
-      <UniqueIdentifier>{7374d29b-4441-40af-ae2e-b5128b6ec28b}</UniqueIdentifier>
+    <Filter Include="Header Files\GUI\Editor">
+      <UniqueIdentifier>{182b6c32-c37c-441c-8b33-82a315b5b27c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game\GUI\Editor">
-      <UniqueIdentifier>{95d006bc-552c-46db-a41f-0fcd8707bae0}</UniqueIdentifier>
+    <Filter Include="Source Files\GUI\Editor">
+      <UniqueIdentifier>{ba83d43b-2009-46d9-a364-0594b644d4f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,12 +123,6 @@
     <ClCompile Include="Core\Loading\LoadingScreen.cpp">
       <Filter>Source Files\Core\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GUI\Gui.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GUI\Editor\TextArea.cpp">
-      <Filter>Source Files\Game\GUI\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Loading\ModelLoader.cpp">
       <Filter>Source Files\Core\Loading</Filter>
     </ClCompile>
@@ -146,6 +140,21 @@
     </ClCompile>
     <ClCompile Include="Core\Assets\BaseAsset.cpp">
       <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\AssetManager.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Gui.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Editor\TextArea.cpp">
+      <Filter>Source Files\GUI\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GuiButton.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\MainMenu.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,12 +212,6 @@
     <ClInclude Include="Core\Loading\LoaderDescriptor.hpp">
       <Filter>Header Files\Core\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GUI\Gui.hpp">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GUI\Editor\TextArea.hpp">
-      <Filter>Header Files\Game\GUI\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Assets\BaseAsset.hpp">
       <Filter>Header Files\Core\Assets</Filter>
     </ClInclude>
@@ -238,6 +241,21 @@
     </ClInclude>
     <ClInclude Include="Core\Assets\TextureAsset.hpp">
       <Filter>Header Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Gui.hpp">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Editor\TextArea.hpp">
+      <Filter>Header Files\GUI\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\MainMenu.hpp">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GuiButton.hpp">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GuiStructs.hpp">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

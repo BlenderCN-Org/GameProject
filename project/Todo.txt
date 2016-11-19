@@ -5,14 +5,16 @@ Change TextArea to use mask texture, instead of stencil buffer (performance)
 TextArea scrollable text, (horz & vert)
 Gui focus control
 
-Fix fullscreen and borderless mode
+Fix fullscreen mode
+
+Gui quad instances
 
 Rework custom allocators
 
 Fix crash if mesh data size is equal to zero (Render Engine)
 
 Threading
-	add sync point. stall main thread untill all worker threads are done etc
+	add sync point. stall main thread until all worker threads are done etc
 	add more assets to task loading.
 	add more tasks, like save to file, actions, other data processing, physics, script execution.
 	
