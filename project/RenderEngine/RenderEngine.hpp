@@ -9,7 +9,6 @@
 #include "IRenderEngine.hpp"
 #include "DataTypes\Colors.hpp"
 #include "ShaderState.hpp"
-#include "Assets\RenderObject.hpp"
 #include "Camera.hpp"
 
 #include <Allocators\FrameAllocator.hpp>
@@ -71,8 +70,6 @@ public:
 
 	virtual IWindow* getMainWindow();
 
-	virtual bool isRenderObjectIsInFrustum(IRenderObject* renderObject);
-	
 	virtual size_t getMemoryUsage() const;
 	virtual size_t getMaxMemory() const;
 
@@ -86,7 +83,7 @@ private:
 	ShaderState shaderState;
 	Camera cam;
 
-	PoolAllocator<RenderObject> objectPool;
+	//PoolAllocator<RenderObject> objectPool;
 	//FrameAllocator frameAlloc;
 
 	FT_Library fontLibrary;

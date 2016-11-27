@@ -30,6 +30,10 @@ void BaseWindow::setWindowCharacterCallback(WindowCharacterCallback_t callback) 
 	characterCallback = callback;
 }
 
+void BaseWindow::setWindowFocusCallback(WindowFocus_t callback) {
+	focusCallback = callback;
+}
+
 void BaseWindow::setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback) {
 	mouseDeltaCallback = callback;
 }

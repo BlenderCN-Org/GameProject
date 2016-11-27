@@ -3,6 +3,7 @@
 
 #include "Gui.hpp"
 #include "GuiButton.hpp"
+#include "Text.hpp"
 
 #include "../Core/Input.hpp"
 
@@ -25,7 +26,7 @@ public:
 	bool isOptionsPressed();
 	bool isQuitPressed();
 
-	void render();
+	void render(ICamera* camera);
 
 private:
 
@@ -46,6 +47,10 @@ private:
 	IMesh* editorMesh;
 	IMesh* optionsMesh;
 	IMesh* quitMesh;
+
+	Text* t;
+	IFont* f;
+	IRenderEngine* renderer;
 
 	bool mainMenuVisible;
 

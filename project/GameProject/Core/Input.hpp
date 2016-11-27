@@ -100,6 +100,8 @@ private:
 	Console* console;
 	bool consoleActive;
 
+	bool focus;
+
 	static Input* singleton;
 	Input();
 	
@@ -132,6 +134,8 @@ private:
 	static void scrollCallback(IWindow* window, int xoffset, int yoffset);
 	static void characterCallback(IWindow* window, unsigned int codepoint);
 	static void sizeCallback(IWindow* window, int w, int h);
+
+	static void focusCallback(IWindow* window, bool focus);
 
 	static void mouseDeltaCallback(IWindow* window, float dx, float dy);
 };

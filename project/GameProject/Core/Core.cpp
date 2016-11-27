@@ -8,6 +8,8 @@
 
 #include <GL\GL.h>
 
+#include "Shaders.hpp"
+
 char* vs =
 "#version 410\n"
 "\n"
@@ -79,8 +81,8 @@ char* fs_text =
 "\n"
 "void main() {\n"
 "	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-"	fragmentColor = vec4(1.0, 0.0, 0.0, 1.0) * sampled;\n"
-"	red = vec4(1.0, 0.0, 0, 1);\n"
+"	fragmentColor = vec4(1.0) * sampled;\n"
+"	red = vec4(1.0);\n"
 "}  \n";
 
 void Core::init() {
@@ -129,30 +131,32 @@ void Core::init() {
 
 	camera = renderEngine->createCamera();
 
-	shader = renderEngine->createShaderObject();
-	shader->init();
+	Shaders* shdrs = Shaders::getShaders();
 
-	shader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
-	shader->setShaderCode(ShaderStages::GEOMETRY_STAGE, gs);
-	shader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs);
+	shdrs->defShader.shaderObject = renderEngine->createShaderObject();
+	shdrs->defShader.shaderObject->init();
 
-	assert(shader->buildShader());
+	shdrs->defShader.shaderObject->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
+	shdrs->defShader.shaderObject->setShaderCode(ShaderStages::GEOMETRY_STAGE, gs);
+	shdrs->defShader.shaderObject->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs);
 
-	vpLoc = shader->getShaderUniform("viewProjMatrix");
-	mdlLoc = shader->getShaderUniform("worldMat");
-	texLoc = shader->getShaderUniform("textureIN");
+	assert(shdrs->defShader.shaderObject->buildShader());
 
-	textShader = renderEngine->createShaderObject();
-	textShader->init();
+	shdrs->defShader.vp_location = shdrs->defShader.shaderObject->getShaderUniform("viewProjMatrix");
+	shdrs->defShader.mdl_location = shdrs->defShader.shaderObject->getShaderUniform("worldMat");
+	shdrs->defShader.tex_location = shdrs->defShader.shaderObject->getShaderUniform("textureIN");
 
-	textShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
-	textShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs_text);
+	shdrs->textShader.shaderObject = renderEngine->createShaderObject();
+	shdrs->textShader.shaderObject->init();
 
-	assert(textShader->buildShader());
+	shdrs->textShader.shaderObject->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
+	shdrs->textShader.shaderObject->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs_text);
 
-	vp_textloc = textShader->getShaderUniform("viewProjMatrix");
-	mdl_textloc = textShader->getShaderUniform("worldMat");
-	tex_textloc = textShader->getShaderUniform("text");
+	assert(shdrs->textShader.shaderObject->buildShader());
+
+	shdrs->textShader.vp_location = shdrs->textShader.shaderObject->getShaderUniform("viewProjMatrix");
+	shdrs->textShader.mdl_location = shdrs->textShader.shaderObject->getShaderUniform("worldMat");
+	shdrs->textShader.tex_location = shdrs->textShader.shaderObject->getShaderUniform("text");
 
 	camInput.init((glm::mat4*)camera->getViewMatrix());
 
@@ -256,7 +260,7 @@ void Core::init() {
 	text->init(renderEngine);
 	text->setFont(font);
 
-	text->setText("Asdf", 4, 0, 0, 1.0);
+	text->setText("asdfghjkl", 9, 100, 50, 1.0);
 
 }
 
@@ -280,8 +284,11 @@ void Core::release() {
 
 	fbo->release();
 
-	textShader->release();
-	shader->release();
+	Shaders::getShaders()->defShader.shaderObject->release();
+	Shaders::getShaders()->textShader.shaderObject->release();
+
+	Shaders::release();
+
 	camera->release();
 
 	planeMesh->release();
@@ -377,9 +384,12 @@ void Core::update(float dt) {
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
 
-	shader->useShader();
-	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, &vp);
-	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	Shaders* shdrs = Shaders::getShaders();
+
+	DefaultShader shader = shdrs->defShader;
+	shader.shaderObject->useShader();
+	shader.shaderObject->bindData(shader.vp_location, UniformDataType::UNI_MATRIX4X4, &vp);
+	shader.shaderObject->bindData(shader.mdl_location, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
 	// temp asset transfer
 	if ( ma->getAssetState() == AssetState::eAssetState_loaded ) {
@@ -414,7 +424,7 @@ void Core::render() {
 	texture->bind();
 
 	int id = 0;
-	shader->bindData(texLoc, UniformDataType::UNI_INT, &id);
+	Shaders::getShaders()->defShader.shaderObject->bindData(Shaders::getShaders()->defShader.tex_location, UniformDataType::UNI_INT, &id);
 
 	planeMesh->render();
 	hadReset = renderEngine->getGraphicsReset();
@@ -422,19 +432,19 @@ void Core::render() {
 	
 	// render GUI
 
-	shader->bindData(vpLoc, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
-	shader->bindData(mdlLoc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	Shaders::getShaders()->defShader.shaderObject->bindData(Shaders::getShaders()->defShader.vp_location, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
+	Shaders::getShaders()->defShader.shaderObject->bindData(Shaders::getShaders()->defShader.mdl_location, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
-	mainMenu.render();
+	mainMenu.render(camera);
 
 	renderEngine->setDepthTest(false);
 	renderEngine->setBlending(true);
 
-	textShader->useShader();
-	textShader->bindData(vp_textloc, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
-	textShader->bindData(mdl_textloc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	Shaders::getShaders()->textShader.shaderObject->useShader();
+	Shaders::getShaders()->textShader.shaderObject->bindData(Shaders::getShaders()->textShader.vp_location, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
+	Shaders::getShaders()->textShader.shaderObject->bindData(Shaders::getShaders()->textShader.mdl_location, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
-	text->render(textShader, tex_textloc);
+	text->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
 
 	// resolve
 	fbo->resolveToScreen();

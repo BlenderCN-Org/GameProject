@@ -18,7 +18,7 @@ bool Gui::isPressed(GuiButton & button, Input* input, KeyBind mouseButton) {
 	xx *= scaleX;
 	yy *= scaleY;
 
-	if ( button.isPointInside((int)xx, (int)yy) && input->isKeyBindPressed(mouseButton, false) )
+	if ( button.isPointInside((int)xx, (int)yy) && input->isKeyBindPressed(mouseButton, false))
 		return true;
 	return false;
 }

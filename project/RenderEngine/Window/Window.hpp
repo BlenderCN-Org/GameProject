@@ -33,6 +33,8 @@ public:
 	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback);
 	virtual void setWindowCharacterCallback(WindowCharacterCallback_t callback);
 
+	virtual void setWindowFocusCallback(WindowFocus_t callback);
+
 	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback);
 	//virtual void setVsync(bool vSync);
 
@@ -44,6 +46,8 @@ public:
 	WindowScrollCallback_t* scrollCallback = 0;
 	WindowKeyCallback_t* keyCallback = 0;
 	WindowCharacterCallback_t* characterCallback = 0;
+
+	WindowFocus_t* focusCallback = 0;
 
 	WindowMouseDeltaCallback_t* mouseDeltaCallback = 0;
 

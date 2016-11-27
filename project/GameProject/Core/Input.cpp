@@ -25,6 +25,8 @@ void Input::mouseButtonCallback(IWindow* window, int button, int action, int mod
 	if ( !singleton->consoleActive && action == 2 )
 		return;
 
+	printf("Mouse callback\n");
+
 	singleton->keyMap[InputEvent{ button, true }] = (action == 1);
 	//printf("MouseButton %d with modkey %d\n", button, mods);
 }
@@ -63,6 +65,15 @@ void Input::sizeCallback(IWindow * window, int w, int h) {
 	singleton->sizeChange = true;
 	//printf("%d,%d\n", w, h);
 	//glViewport(0, 0, w, h);
+}
+
+void Input::focusCallback(IWindow * window, bool focus) {
+	singleton->focus = focus;
+	printf("focus %d\n", focus);
+	if ( focus == false ) {
+		singleton->keyMap.clear();
+		printf("Clearing key mappings\n", focus);
+	}
 }
 
 // todo decide if this is good or bad
@@ -104,6 +115,8 @@ void Input::setupCallbacks(IWindow * wnd) {
 	window->setWindowScrollCallback(scrollCallback);
 	window->setWindowCharacterCallback(characterCallback);
 	window->setWindowResizeCallback(sizeCallback);
+
+	window->setWindowFocusCallback(focusCallback);
 
 	//window->setWindowMouseDeltaCallback(mouseDeltaCallback);
 
@@ -159,7 +172,7 @@ void Input::getWindowSize(int & w, int & h) {
 }
 
 void Input::getMousePos(int & x, int & y) {
-	
+
 	window->getCursorPos(x, y);
 
 }

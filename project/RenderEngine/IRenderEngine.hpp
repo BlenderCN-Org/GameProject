@@ -7,7 +7,6 @@
 #define RENDERENGINE_API _declspec(dllimport)
 #endif
 
-#include "IRenderObject.hpp"
 #include "IAnimatedMesh.hpp"
 #include "ICamera.hpp"
 #include "IShaderObject.hpp"
@@ -96,8 +95,6 @@ public:
 	virtual IFont* createFont() = 0;
 
 	virtual IWindow* getMainWindow() = 0;
-
-	virtual bool isRenderObjectIsInFrustum(IRenderObject* renderObject) = 0;
 
 	virtual size_t getMemoryUsage() const = 0;
 	virtual size_t getMaxMemory() const = 0;

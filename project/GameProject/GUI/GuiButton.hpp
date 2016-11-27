@@ -30,6 +30,9 @@ private:
 
 	std::string text;
 
+	bool isInside;
+	bool isPressing;
+
 };
 
 #endif

@@ -77,17 +77,6 @@ private:
 
 	// temp
 
-	IShaderObject* shader;
-	IShaderObject* textShader;
-
-	int vpLoc;
-	int mdlLoc;
-	int texLoc;
-
-	int vp_textloc;
-	int mdl_textloc;
-	int tex_textloc;
-
 	TextureAsset* ta;
 	ModelAsset* ma;
 	

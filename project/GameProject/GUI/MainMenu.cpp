@@ -1,23 +1,26 @@
 #include "MainMenu.hpp"
 
+#include "../Core/Shaders.hpp"
+
 MainMenu::MainMenu() {
 	input = Input::getInput();
 	mouseButton.code = 0;
 	mouseButton.mouse = 1;
 	mouseButton.mod = 0;
 
-	newGame = GuiButton(1800, 200, 100, 75, "New");
-	loadGame = GuiButton(1800, 300, 100, 75, "Load");
-	continueGame = GuiButton(1800, 400, 100, 75, "Continue");
-	editor = GuiButton(1800, 500, 100, 75, "Editor");
-	options = GuiButton(1800, 600, 100, 75, "Options");
-	quit = GuiButton(1800, 700, 100, 75, "Quit");
+	newGame = GuiButton(1800, 550, 100, 30, "New");
+	loadGame = GuiButton(1800, 600, 100, 30, "Load");
+	continueGame = GuiButton(1800, 650, 100, 30, "Continue");
+	editor = GuiButton(1800, 700, 100, 30, "Editor");
+	options = GuiButton(1800, 750, 100, 30, "Options");
+	quit = GuiButton(1800, 800, 100, 30, "Quit");
 
 	mainMenuVisible = true;
 
 }
 
 void MainMenu::initMeshes(IRenderEngine * renderEngine) {
+	renderer = renderEngine;
 	newGameMesh = renderEngine->createMesh();
 	loadGameMesh = renderEngine->createMesh();
 	continueGameMesh = renderEngine->createMesh();
@@ -73,9 +76,23 @@ void MainMenu::initMeshes(IRenderEngine * renderEngine) {
 		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
 		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
 	quitMesh->setMeshData(v6, sizeof(v6), VERT_UV);
+
+	f = renderEngine->createFont();
+	f->init("C:/Windows/Fonts/Arial.ttf", 24);
+
+	t = new Text();
+	t->init(renderEngine);
+	t->setFont(f);
+
+	t->setText("ASDF", 4, 0, 0, 1.0f);
+
 }
 
 void MainMenu::releaseMeshes() {
+
+	t->release();
+	f->release();
+
 	newGameMesh->release();
 	loadGameMesh->release();
 	continueGameMesh->release();
@@ -117,7 +134,7 @@ bool MainMenu::isQuitPressed() {
 	return isPressed(quit, input, mouseButton);
 }
 
-void MainMenu::render() {
+void MainMenu::render(ICamera* camera) {
 	if ( mainMenuVisible ) {
 		newGameMesh->bind();
 		newGameMesh->render();
@@ -131,5 +148,37 @@ void MainMenu::render() {
 		optionsMesh->render();
 		quitMesh->bind();
 		quitMesh->render();
+
+
+		renderer->setDepthTest(false);
+		renderer->setBlending(true);
+		Shaders::getShaders()->textShader.shaderObject->useShader();
+		Shaders::getShaders()->textShader.shaderObject->bindData(Shaders::getShaders()->textShader.vp_location, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
+		Shaders::getShaders()->textShader.shaderObject->bindData(Shaders::getShaders()->textShader.mdl_location, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+
+		Rect r = newGame.getBounds();
+		t->setText("New", 3, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
+		r = loadGame.getBounds();
+		t->setText("Load", 4, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
+		r = continueGame.getBounds();
+		t->setText("Continue", 8, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
+		r = editor.getBounds();
+		t->setText("Editor", 6, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
+		r = options.getBounds();
+		t->setText("Options", 7, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
+		r = quit.getBounds();
+		t->setText("Quit", 4, r.x, r.y, 1.0f);
+		t->render(Shaders::getShaders()->textShader.shaderObject, Shaders::getShaders()->textShader.tex_location);
+
 	}
 }

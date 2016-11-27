@@ -18,6 +18,7 @@ typedef void WindowMouseButtonCallback_t(IWindow* window, int button, int action
 typedef void WindowScrollCallback_t(IWindow* window, int scrollX, int scrollY);
 typedef void WindowKeyCallback_t(IWindow* window, int key, int action, int mods);
 typedef void WindowCharacterCallback_t(IWindow* window, unsigned int codepoint);
+typedef void WindowFocus_t(IWindow* window, bool focus);
 
 class IWindow
 {
@@ -45,6 +46,8 @@ public:
 	virtual void setWindowScrollCallback(WindowScrollCallback_t callback) = 0;
 	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback) = 0;
 	virtual void setWindowCharacterCallback(WindowCharacterCallback_t callback) = 0;
+
+	virtual void setWindowFocusCallback(WindowFocus_t callback) = 0;
 
 	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback) = 0;
 

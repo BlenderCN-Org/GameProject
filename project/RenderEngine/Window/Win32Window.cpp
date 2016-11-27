@@ -60,6 +60,17 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 	switch ( msg ) {
+		break;
+		case WM_SETFOCUS:
+			if ( wnd->focusCallback )
+				wnd->focusCallback(wnd, true);
+			return 1;
+			break;
+		case WM_KILLFOCUS:
+			if ( wnd->focusCallback )
+				wnd->focusCallback(wnd, false);
+			return 1;
+			break;
 		case WM_SIZE:
 		{
 			if ( wnd && wnd->resizeCallback ) {
@@ -234,11 +245,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					}
 
 					if ( wnd->mouseMoveCallback ) {
-						
+
 						POINT pt;
 						GetCursorPos(&pt);
+
 						ScreenToClient(hWnd, &pt);
 						wnd->mouseMoveCallback(wnd, pt.x, pt.y);
+
 						//printf("move callback\n");
 					}
 
@@ -428,7 +441,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 // BaseWindow -> win32 implementation
 
 void BaseWindow::getCursorPos(int & x, int & y) {
-	
+
 	POINT p;
 	GetCursorPos(&p);
 
@@ -484,6 +497,26 @@ void BaseWindow::setWindowedTrueFullscreen(bool trueFullscreen) {
 void GLWindow::init() {
 	windowHandle = setupWindow();
 
+	RAWINPUTDEVICE rid[2];
+
+	rid[0].usUsagePage = 0x01;
+	rid[0].usUsage = 0x02;
+	rid[0].dwFlags = RIDEV_INPUTSINK;   // adds HID mouse and also ignores legacy mouse messages
+	rid[0].hwndTarget = windowHandle;
+
+	rid[1].usUsagePage = 0x01;
+	rid[1].usUsage = 0x06;
+	rid[1].dwFlags = RIDEV_NOHOTKEYS | RIDEV_NOLEGACY;   // adds HID keyboard and also ignores legacy keyboard messages
+	rid[1].hwndTarget = windowHandle;
+
+	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
+
+	if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
+		//registration failed. Call GetLastError for the cause of the error
+		std::cerr << "register RID failed\n";
+		std::cerr << GetLastError() << std::endl;
+	}
+
 	if ( windowHandle ) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
@@ -537,25 +570,25 @@ void initWindowSystem() {
 
 	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
 
-	RAWINPUTDEVICE rid[2];
-
-	rid[0].usUsagePage = 0x01;
-	rid[0].usUsage = 0x02;
-	rid[0].dwFlags = 0;   // adds HID mouse and also ignores legacy mouse messages
-	rid[0].hwndTarget = 0;
-
-	rid[1].usUsagePage = 0x01;
-	rid[1].usUsage = 0x06;
-	rid[1].dwFlags = 0;   // adds HID keyboard and also ignores legacy keyboard messages
-	rid[1].hwndTarget = 0;
-
-	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
-
-	if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
-		//registration failed. Call GetLastError for the cause of the error
-		std::cerr << "register RID failed\n";
-		std::cerr << GetLastError() << std::endl;
-	}
+	//RAWINPUTDEVICE rid[2];
+	//
+	//rid[0].usUsagePage = 0x01;
+	//rid[0].usUsage = 0x02;
+	//rid[0].dwFlags = 0;   // adds HID mouse and also ignores legacy mouse messages
+	//rid[0].hwndTarget = 0;
+	//
+	//rid[1].usUsagePage = 0x01;
+	//rid[1].usUsage = 0x06;
+	//rid[1].dwFlags = RIDEV_NOHOTKEYS | RIDEV_NOLEGACY;   // adds HID keyboard and also ignores legacy keyboard messages
+	//rid[1].hwndTarget = 0;
+	//
+	////g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
+	//
+	//if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
+	//	//registration failed. Call GetLastError for the cause of the error
+	//	std::cerr << "register RID failed\n";
+	//	std::cerr << GetLastError() << std::endl;
+	//}
 
 }
 

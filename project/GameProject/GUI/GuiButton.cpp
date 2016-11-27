@@ -23,15 +23,18 @@ GuiButton::GuiButton(Rect bounds, std::string _text) {
 
 bool GuiButton::isPointInside(int px, int py) {
 	
+	isInside = false;
 	int w = width / 2;
 	int h = height / 2;
 
 	int cx = x + w;
 	int cy = y + h;
 
-	if ( abs(px - cx) < w && abs(py - cy) < w )
-		return true;
-	return false;
+	if ( abs(px - cx) < w && abs(py - cy) < h ) {
+		printf("%s, (%d, %d)\n", text.c_str(), px, py);
+		isInside = true;
+	}
+	return isInside;
 
 }
 

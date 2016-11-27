@@ -1,7 +1,6 @@
 #include "RenderEngine.hpp"
 
 #include <gl\glew.h>
-#include "Assets\RenderObject.hpp"
 #include "Assets\Mesh.hpp"
 #include "Assets\AnimatedMesh.hpp"
 #include "Assets\Font.hpp"
@@ -110,7 +109,7 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 	clearColor = RGB(0, 0, 0);
 
-	objectPool = PoolAllocator<RenderObject>(10);
+	//objectPool = PoolAllocator<RenderObject>(10);
 
 	MemoryManager* mgr = MemoryManager::getMemoryManager();
 
@@ -266,10 +265,6 @@ IFont * RenderEngine::createFont() {
 
 IWindow * RenderEngine::getMainWindow() {
 	return &glWindow;
-}
-
-bool RenderEngine::isRenderObjectIsInFrustum(IRenderObject * renderObject) {
-	return false;
 }
 
 size_t RenderEngine::getMemoryUsage() const {
