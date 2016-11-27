@@ -75,16 +75,10 @@
     <ClInclude Include="IAnimatedMesh.hpp">
       <Filter>Header Files\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Text.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="Assets\Font.hpp">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="IFont.hpp">
-      <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="IText.hpp">
       <Filter>Header Files\Interface</Filter>
     </ClInclude>
     <ClInclude Include="Utils\ShelfPack.hpp">
@@ -159,9 +153,6 @@
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Assets\Font.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Text.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ShelfPack.cpp">

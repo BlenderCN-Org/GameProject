@@ -68,6 +68,21 @@ char* fs =
 "	red = vec4(1.0, 0.0, 0, 1);\n"
 "}\n";
 
+char* fs_text =
+"#version 410 \n"
+"layout(location = 0) in vec2 TexCoords;\n"
+"layout(location = 0) out vec4 fragmentColor;\n"
+"\n"
+"layout(location = 1) out vec4 red;\n"
+"uniform sampler2D text;\n"
+"uniform vec3 textColor;\n"
+"\n"
+"void main() {\n"
+"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
+"	fragmentColor = vec4(1.0, 0.0, 0.0, 1.0) * sampled;\n"
+"	red = vec4(1.0, 0.0, 0, 1);\n"
+"}  \n";
+
 void Core::init() {
 	thrdMgr = nullptr;
 	assetMgr = nullptr;
@@ -126,6 +141,18 @@ void Core::init() {
 	vpLoc = shader->getShaderUniform("viewProjMatrix");
 	mdlLoc = shader->getShaderUniform("worldMat");
 	texLoc = shader->getShaderUniform("textureIN");
+
+	textShader = renderEngine->createShaderObject();
+	textShader->init();
+
+	textShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
+	textShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs_text);
+
+	assert(textShader->buildShader());
+
+	vp_textloc = textShader->getShaderUniform("viewProjMatrix");
+	mdl_textloc = textShader->getShaderUniform("worldMat");
+	tex_textloc = textShader->getShaderUniform("text");
 
 	camInput.init((glm::mat4*)camera->getViewMatrix());
 
@@ -221,9 +248,22 @@ void Core::init() {
 
 	mainMenu.initMeshes(renderEngine);
 	mainMenu.setWindowRes(1280, 720);
+
+	font = renderEngine->createFont();
+	font->init("C:/Windows/Fonts/Arial.ttf", 24);
+	
+	text = new Text();
+	text->init(renderEngine);
+	text->setFont(font);
+
+	text->setText("Asdf", 4, 0, 0, 1.0);
+
 }
 
 void Core::release() {
+	text->release();
+	font->release();
+
 	mainMenu.releaseMeshes();
 	ma->release();
 	ta->release();
@@ -240,6 +280,7 @@ void Core::release() {
 
 	fbo->release();
 
+	textShader->release();
 	shader->release();
 	camera->release();
 
@@ -358,6 +399,7 @@ void Core::update(float dt) {
 
 void Core::render() {
 	fbo->bind();
+	renderEngine->setBlending(false);
 	renderEngine->setDepthTest(true);
 	renderEngine->setStencilTest(true);
 	renderEngine->stencilMask(0xFF);
@@ -385,6 +427,15 @@ void Core::render() {
 
 	mainMenu.render();
 
+	renderEngine->setDepthTest(false);
+	renderEngine->setBlending(true);
+
+	textShader->useShader();
+	textShader->bindData(vp_textloc, UniformDataType::UNI_MATRIX4X4, camera->getOrthoMatrix());
+	textShader->bindData(mdl_textloc, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+
+	text->render(textShader, tex_textloc);
+
 	// resolve
 	fbo->resolveToScreen();
 	hadReset = renderEngine->getGraphicsReset();
@@ -407,15 +458,23 @@ void Core::updateMainMenu(float dt) {
 	//printf("Mouse pos (%d, %d)\n", x, y);
 
 	if ( mainMenu.isNewGamePressed() ) {
+		mainMenu.setVisible(false);
+		text->setText("New Game", 8, 0, 0, 1.0);
 		enterNewGame();
 	} else if ( mainMenu.isLoadGamePressed() ) {
+		mainMenu.setVisible(false);
+		text->setText("Load Game", 9, 0, 0, 1.0);
 		loadGame();
 	} else if ( mainMenu.isContinueGamePressed() ) {
-		
+		text->setText("Continue", 8, 0, 0, 1.0);
+		mainMenu.setVisible(false);
 	} else if ( mainMenu.isEditorPressed() ) {
+		mainMenu.setVisible(false);
+		text->setText("Editor", 6, 0, 0, 1.0);
 		enterEditor();
 	} else if ( mainMenu.isOptionsPressed() ) {
-		
+		text->setText("Options", 7, 0, 0, 1.0);
+		mainMenu.setVisible(false);
 	} else if ( mainMenu.isQuitPressed() ) {
 		window->showWindow(false);
 	}

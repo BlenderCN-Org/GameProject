@@ -194,6 +194,7 @@
     <ClCompile Include="Core\Settings\Settings.cpp" />
     <ClCompile Include="Core\ThreadManager.cpp" />
     <ClCompile Include="Core\Window\Window.cpp" />
+    <ClCompile Include="ExceptionHandling.cpp" />
     <ClCompile Include="Game\Chunk.cpp" />
     <ClCompile Include="Game\Components\BaseComponent.cpp" />
     <ClCompile Include="Game\Components\RenderComponent.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="GUI\Gui.cpp" />
     <ClCompile Include="GUI\GuiButton.cpp" />
     <ClCompile Include="GUI\MainMenu.cpp" />
+    <ClCompile Include="GUI\Text.cpp" />
     <ClCompile Include="Loader\LibraryLoader.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -221,12 +223,14 @@
     <ClInclude Include="Core\Loading\LoaderDescriptor.hpp" />
     <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
     <ClInclude Include="Core\Loading\ModelLoader.hpp" />
+    <ClInclude Include="Core\NoCompile.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
     <ClInclude Include="Core\Task.hpp" />
     <ClInclude Include="Core\ThreadManager.hpp" />
     <ClInclude Include="Core\Window\Window.hpp" />
+    <ClInclude Include="ExceptionHandling.hpp" />
     <ClInclude Include="Game\Chunk.hpp" />
     <ClInclude Include="Game\Components\BaseComponent.hpp" />
     <ClInclude Include="Game\Components\IBaseComponent.hpp" />
@@ -239,6 +243,7 @@
     <ClInclude Include="GUI\GuiButton.hpp" />
     <ClInclude Include="GUI\GuiStructs.hpp" />
     <ClInclude Include="GUI\MainMenu.hpp" />
+    <ClInclude Include="GUI\Text.hpp" />
     <ClInclude Include="Loader\LibraryLoader.hpp" />
   </ItemGroup>
   <ItemGroup>

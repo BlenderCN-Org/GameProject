@@ -178,7 +178,6 @@
     <ClInclude Include="Assets\Material.hpp" />
     <ClInclude Include="Assets\Mesh.hpp" />
     <ClInclude Include="Assets\ShaderObject.hpp" />
-    <ClInclude Include="Assets\Text.hpp" />
     <ClInclude Include="Assets\Texture.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="DataTypes\Colors.hpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="IMesh.hpp" />
     <ClInclude Include="IRenderEngine.hpp" />
     <ClInclude Include="IShaderObject.hpp" />
-    <ClInclude Include="IText.hpp" />
     <ClInclude Include="ITexture.hpp" />
     <ClInclude Include="IWindow.hpp" />
     <ClInclude Include="RenderEngine.hpp" />
@@ -211,7 +209,6 @@
     <ClCompile Include="Assets\Material.cpp" />
     <ClCompile Include="Assets\Mesh.cpp" />
     <ClCompile Include="Assets\ShaderObject.cpp" />
-    <ClCompile Include="Assets\Text.cpp" />
     <ClCompile Include="Assets\Texture.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DataTypes\Colors.cpp" />

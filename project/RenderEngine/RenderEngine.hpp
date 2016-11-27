@@ -49,6 +49,8 @@ public:
 	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass);
 	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask);
 
+	virtual void setBlending(bool enable);
+
 	virtual bool getGraphicsReset() const;
 
 	virtual void updateViewPort(int width, int height);
@@ -64,8 +66,6 @@ public:
 	virtual ITexture* createTexture();
 
 	virtual IFrameBuffer* createFrameBuffer();
-
-	virtual IText* createText();
 
 	virtual IFont* createFont();
 

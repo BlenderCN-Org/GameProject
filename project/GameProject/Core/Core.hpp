@@ -18,6 +18,7 @@
 #include "Assets\TextureAsset.hpp"
 
 #include "../GUI/MainMenu.hpp"
+#include "../GUI/Text.hpp"
 
 class Core
 {
@@ -50,8 +51,6 @@ private:
 	void loadGame();
 	void enterEditor();
 
-
-
 	// core variables
 	Lib renderEngineLib;
 
@@ -69,12 +68,6 @@ private:
 	Input* input;
 	CameraInput camInput;
 
-	IShaderObject* shader;
-
-	int vpLoc;
-	int mdlLoc;
-	int texLoc;
-	
 	ICamera* camera;
 
 	DisplaySettings disp;
@@ -83,6 +76,18 @@ private:
 	AssetManager* assetMgr;
 
 	// temp
+
+	IShaderObject* shader;
+	IShaderObject* textShader;
+
+	int vpLoc;
+	int mdlLoc;
+	int texLoc;
+
+	int vp_textloc;
+	int mdl_textloc;
+	int tex_textloc;
+
 	TextureAsset* ta;
 	ModelAsset* ma;
 	
@@ -97,6 +102,9 @@ private:
 	ITexture* texture;
 
 	MainMenu mainMenu;
+
+	IFont* font;
+	Text* text;
 
 	// end temp
 

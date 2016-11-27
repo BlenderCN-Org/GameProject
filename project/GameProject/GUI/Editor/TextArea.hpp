@@ -6,6 +6,8 @@
 
 #include <RenderEngine\IRenderEngine.hpp>
 
+#include <string>
+
 class TextArea
 {
 public:
@@ -39,7 +41,6 @@ private:
 	glm::vec2 size;
 
 	IMesh* areaQuad;
-	IText* textObject;
 	IFont* textFont;
 
 	struct vert

@@ -1,23 +1,35 @@
-Make font scale on resolution
-Support for unicode characters (font map)
-Remove text shader from textClass
-Change TextArea to use mask texture, instead of stencil buffer (performance)
-TextArea scrollable text, (horz & vert)
-Gui focus control
+Game Project todo:
+	Change TextArea to use mask texture, instead of stencil buffer (performance)
+	TextArea scrollable text, (horz & vert)
+	Gui focus control
+	Gui quad instances
 
-Fix fullscreen mode
+	Rework custom allocators
 
-Gui quad instances
+	Threading
+		add sync point. stall main thread until all worker threads are done etc
+		add more assets to task loading.
+		add more tasks, like save to file, actions, other data processing, physics, script execution.
 
-Rework custom allocators
+	Text
+		formatting
+			per character color
+			numbers
+			strings
+			textures(icons) ?
+		
+RenderEngine todo:
+	Fix fullscreen mode
+	Fix crash if mesh data size is equal to zero (Render Engine)
+	Support for unicode characters (font map)
 
-Fix crash if mesh data size is equal to zero (Render Engine)
+	Make font scale on resolution (not sure if needed)
 
-Threading
-	add sync point. stall main thread until all worker threads are done etc
-	add more assets to task loading.
-	add more tasks, like save to file, actions, other data processing, physics, script execution.
-	
+AssetLib todo:
+	Custom format
+	DataPacking and unpacking
+
+Other Notes:
 
 Other Gui types
 	Buttons

@@ -50,11 +50,26 @@ int Font::getFontSize() const
 	return fontSize;
 }
 
+uint32_t Font::getTextureID() const {
+	return fontTexture;
+}
+
+void Font::bindFontTexture() const {
+	glBindTexture(GL_TEXTURE_2D, fontTexture);
+}
+
+Character Font::getCharacter(unsigned char character) {
+	return characters[character];
+}
+
+void Font::getTextureInfo(int & x, int & y) {
+	x = texWidth;
+	y = texHeight;
+}
+
 // comparison, not case sensitive.
-bool cmp(const Font::Character& first, const Font::Character& second) {
+bool cmp(const Character& first, const Character& second) {
 	
-
-
 	return (first.size.y > second.size.y);
 }
 
@@ -160,12 +175,4 @@ void Font::genFontTexture() {
 	
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, data);
 	
-	/*
-	std::ofstream out;
-	out.open("Test.data", std::ios::binary);
-	
-	out.write(data, w*h);
-	out.close();
-
-	*/
 }

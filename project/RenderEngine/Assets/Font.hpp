@@ -25,16 +25,14 @@ public:
 	virtual void setFontSize(int size);
 	virtual void setFont(char* font);
 	
-	int getFontSize() const;
+	virtual int getFontSize() const;
 
-	struct Character {
-		GLuint     charID;  // ID handle of the glyph texture
-		glm::ivec2 size;       // Size of glyph
-		glm::ivec2 bearing;    // Offset from baseline to left/top of glyph
-		glm::ivec2 texturePos;
-		GLuint     advance;    // Offset to advance to next glyph
-		GLuint     advanceY;    // Offset to advance to next glyph
-	};
+	virtual uint32_t getTextureID() const;
+	virtual void bindFontTexture() const;
+
+	Character getCharacter(unsigned char character);
+	
+	virtual void getTextureInfo(int &x, int &y);
 
 	std::map<GLchar, Character> characters;
 

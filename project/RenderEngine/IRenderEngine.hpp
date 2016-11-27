@@ -15,7 +15,6 @@
 #include "ITexture.hpp"
 
 #include "IFont.hpp"
-#include "IText.hpp"
 
 #include "IWindow.hpp"
 
@@ -76,6 +75,8 @@ public:
 	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass) = 0;
 	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask) = 0;
 
+	virtual void setBlending(bool enable) = 0;
+
 	virtual bool getGraphicsReset() const = 0;
 
 	virtual void updateViewPort(int width, int height) = 0;
@@ -91,8 +92,6 @@ public:
 	virtual ITexture* createTexture() = 0;
 
 	virtual IFrameBuffer* createFrameBuffer() = 0;
-
-	virtual IText* createText() = 0;
 
 	virtual IFont* createFont() = 0;
 

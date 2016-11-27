@@ -43,12 +43,6 @@
     <Filter Include="Source Files\Core\Window">
       <UniqueIdentifier>{1f97b3c8-9bd0-4050-9f03-00a90b2e5d7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loader">
-      <UniqueIdentifier>{dd4dab2f-890b-45a9-8caf-86f2263b65bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Loader">
-      <UniqueIdentifier>{ef9719ce-f599-4277-9b86-acb5dd1482dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core\Loading">
       <UniqueIdentifier>{575b5131-277f-4452-a928-a380275b81ce}</UniqueIdentifier>
     </Filter>
@@ -72,6 +66,12 @@
     </Filter>
     <Filter Include="Source Files\GUI\Editor">
       <UniqueIdentifier>{ba83d43b-2009-46d9-a364-0594b644d4f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibLoader">
+      <UniqueIdentifier>{ef9719ce-f599-4277-9b86-acb5dd1482dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibLoader">
+      <UniqueIdentifier>{dd4dab2f-890b-45a9-8caf-86f2263b65bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +118,7 @@
       <Filter>Source Files\Core\Window</Filter>
     </ClCompile>
     <ClCompile Include="Loader\LibraryLoader.cpp">
-      <Filter>Source Files\Loader</Filter>
+      <Filter>Source Files\LibLoader</Filter>
     </ClCompile>
     <ClCompile Include="Core\Loading\LoadingScreen.cpp">
       <Filter>Source Files\Core\Loading</Filter>
@@ -154,6 +154,12 @@
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\MainMenu.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ExceptionHandling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Text.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -201,7 +207,7 @@
       <Filter>Header Files\Core\Window</Filter>
     </ClInclude>
     <ClInclude Include="Loader\LibraryLoader.hpp">
-      <Filter>Header Files\Loader</Filter>
+      <Filter>Header Files\LibLoader</Filter>
     </ClInclude>
     <ClInclude Include="Core\Loading\LoadingScreen.hpp">
       <Filter>Header Files\Core\Loading</Filter>
@@ -255,6 +261,15 @@
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GuiStructs.hpp">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ExceptionHandling.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\NoCompile.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Text.hpp">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>

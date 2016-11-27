@@ -5,7 +5,6 @@
 #include "Assets\Mesh.hpp"
 #include "Assets\AnimatedMesh.hpp"
 #include "Assets\Font.hpp"
-#include "Assets\Text.hpp"
 #include "Assets\ShaderObject.hpp"
 #include "Assets\FrameBuffer.hpp"
 #include "Assets\Texture.hpp"
@@ -202,6 +201,18 @@ void RenderEngine::stencilFunc(unsigned int func, int ref, unsigned int mask) {
 	glStencilFunc(func, ref, mask);
 }
 
+void RenderEngine::setBlending(bool enable) {
+	GLenum cap = GL_BLEND;
+
+	if ( enable ) {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
+		glEnable(cap);
+	} else {
+		glDisable(cap);
+	}
+}
+
 bool RenderEngine::getGraphicsReset() const {
 	GLenum status = glGetGraphicsResetStatus();
 	if ( status == GL_NO_ERROR )
@@ -247,10 +258,6 @@ ITexture * RenderEngine::createTexture() {
 
 IFrameBuffer * RenderEngine::createFrameBuffer() {
 	return new FrameBuffer();
-}
-
-IText * RenderEngine::createText() {
-	return new Text();
 }
 
 IFont * RenderEngine::createFont() {

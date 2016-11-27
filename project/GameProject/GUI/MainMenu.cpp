@@ -13,6 +13,8 @@ MainMenu::MainMenu() {
 	options = GuiButton(1800, 600, 100, 75, "Options");
 	quit = GuiButton(1800, 700, 100, 75, "Quit");
 
+	mainMenuVisible = true;
+
 }
 
 void MainMenu::initMeshes(IRenderEngine * renderEngine) {
@@ -82,6 +84,14 @@ void MainMenu::releaseMeshes() {
 	quitMesh->release();
 }
 
+void MainMenu::setVisible(bool visible) {
+	mainMenuVisible = visible;
+}
+
+bool MainMenu::isVisible() {
+	return mainMenuVisible;
+}
+
 bool MainMenu::isNewGamePressed() {
 	
 	return isPressed(newGame, input, mouseButton);
@@ -108,16 +118,18 @@ bool MainMenu::isQuitPressed() {
 }
 
 void MainMenu::render() {
-	newGameMesh->bind();
-	newGameMesh->render();
-	loadGameMesh->bind();
-	loadGameMesh->render();
-	continueGameMesh->bind();
-	continueGameMesh->render();
-	editorMesh->bind();
-	editorMesh->render();
-	optionsMesh->bind();
-	optionsMesh->render();
-	quitMesh->bind();
-	quitMesh->render();
+	if ( mainMenuVisible ) {
+		newGameMesh->bind();
+		newGameMesh->render();
+		loadGameMesh->bind();
+		loadGameMesh->render();
+		continueGameMesh->bind();
+		continueGameMesh->render();
+		editorMesh->bind();
+		editorMesh->render();
+		optionsMesh->bind();
+		optionsMesh->render();
+		quitMesh->bind();
+		quitMesh->render();
+	}
 }

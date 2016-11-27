@@ -15,6 +15,9 @@ public:
 	void initMeshes(IRenderEngine* renderEngine);
 	void releaseMeshes();
 
+	void setVisible(bool visible);
+	bool isVisible();
+
 	bool isNewGamePressed();
 	bool isLoadGamePressed();
 	bool isContinueGamePressed();
@@ -43,6 +46,8 @@ private:
 	IMesh* editorMesh;
 	IMesh* optionsMesh;
 	IMesh* quitMesh;
+
+	bool mainMenuVisible;
 
 	struct vert
 	{
