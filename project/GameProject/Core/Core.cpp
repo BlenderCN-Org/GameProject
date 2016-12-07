@@ -1,4 +1,5 @@
 #include "Core.hpp"
+#include "Sys.hpp"
 
 #include <glm\gtc\matrix_transform.hpp>
 
@@ -316,7 +317,7 @@ bool Core::hadGraphicsReset() const {
 void Core::startWorkerThreads() {
 	if ( !thrdMgr )
 		thrdMgr = new ThreadManager();
-	thrdMgr->startThreads(8);
+	thrdMgr->startThreads(getLogicalProcessorCount());
 }
 
 void Core::stopWorkerThreads() {
@@ -329,6 +330,8 @@ void Core::setFPS(int _fps) {
 }
 
 void Core::update(float dt) {
+	// reset input states, clear for next frame
+	input->reset();
 	// poll messages and update camera
 	window->pollMessages();
 	camInput.update(dt);
@@ -403,8 +406,8 @@ void Core::update(float dt) {
 		ta->setAssetState(AssetState::eAssetState_loadedGPU);
 	}
 
-	// reset input states, clear for next frame
-	input->reset();
+	//input->print();
+
 }
 
 void Core::render() {
@@ -460,6 +463,8 @@ DisplaySettings * Core::getDisplaySettings() {
 }
 
 void Core::updateMainMenu(float dt) {
+
+	mainMenu.update();
 
 	int x = 0;
 	int y = 0;

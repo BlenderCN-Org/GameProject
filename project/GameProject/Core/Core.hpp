@@ -2,8 +2,8 @@
 #define CORE_HPP
 
 #include "RenderEngine/IRenderEngine.hpp"
-#include "Input.hpp"
-#include "CameraInput.hpp"
+#include "Input/Input.hpp"
+#include "Input/CameraInput.hpp"
 #include "ThreadManager.hpp"
 #include "Assets\AssetManager.hpp"
 
@@ -17,8 +17,8 @@
 #include "Assets\ModelAsset.hpp"
 #include "Assets\TextureAsset.hpp"
 
-#include "../GUI/MainMenu.hpp"
-#include "../GUI/Text.hpp"
+#include "GUI/MainMenu.hpp"
+#include "GUI/Text.hpp"
 
 class Core
 {

@@ -506,7 +506,7 @@ void GLWindow::init() {
 
 	rid[1].usUsagePage = 0x01;
 	rid[1].usUsage = 0x06;
-	rid[1].dwFlags = RIDEV_NOHOTKEYS | RIDEV_NOLEGACY;   // adds HID keyboard and also ignores legacy keyboard messages
+	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
 	rid[1].hwndTarget = windowHandle;
 
 	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);

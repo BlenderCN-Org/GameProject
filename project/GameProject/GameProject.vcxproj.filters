@@ -55,36 +55,36 @@
     <Filter Include="Source Files\Core\Assets">
       <UniqueIdentifier>{72c9461c-daa8-4e80-88e4-66d387ee868a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\GUI">
-      <UniqueIdentifier>{f5acaa5d-c56e-4120-a939-11a4d3eb9c2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{39587639-c0b5-4e1a-8ad0-940eef50fd67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\Editor">
-      <UniqueIdentifier>{182b6c32-c37c-441c-8b33-82a315b5b27c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI\Editor">
-      <UniqueIdentifier>{ba83d43b-2009-46d9-a364-0594b644d4f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\LibLoader">
       <UniqueIdentifier>{ef9719ce-f599-4277-9b86-acb5dd1482dd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\LibLoader">
       <UniqueIdentifier>{dd4dab2f-890b-45a9-8caf-86f2263b65bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Input">
+      <UniqueIdentifier>{a230e550-1593-4533-95ba-9c2ce2bd561b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\GUI">
+      <UniqueIdentifier>{54c76bfc-f51b-433e-b7c9-6d5e75a8c833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Input">
+      <UniqueIdentifier>{d9fee019-c918-4751-a5a5-faf525243ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\GUI">
+      <UniqueIdentifier>{cd685844-927e-4198-b49a-bb8d271a39fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\GUI\Editor">
+      <UniqueIdentifier>{95c725de-dc50-4730-ba0d-7220c840ecad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\GUI\Editor">
+      <UniqueIdentifier>{e227cd14-f47c-4a04-abc3-dde143ab481a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Input.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Core.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\CameraInput.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Console.cpp">
@@ -144,36 +144,39 @@
     <ClCompile Include="Core\Assets\AssetManager.cpp">
       <Filter>Source Files\Core\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Gui.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Editor\TextArea.cpp">
-      <Filter>Source Files\GUI\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\GuiButton.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\MainMenu.cpp">
-      <Filter>Source Files\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="ExceptionHandling.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Text.cpp">
-      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Core\Shaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Sys.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\Input.cpp">
+      <Filter>Source Files\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\CameraInput.cpp">
+      <Filter>Source Files\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\Gui.cpp">
+      <Filter>Source Files\Core\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\GuiButton.cpp">
+      <Filter>Source Files\Core\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\MainMenu.cpp">
+      <Filter>Source Files\Core\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\Text.cpp">
+      <Filter>Source Files\Core\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\Editor\TextArea.cpp">
+      <Filter>Source Files\Core\GUI\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Input.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Core.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\CameraInput.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Console.hpp">
@@ -251,32 +254,41 @@
     <ClInclude Include="Core\Assets\TextureAsset.hpp">
       <Filter>Header Files\Core\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Gui.hpp">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Editor\TextArea.hpp">
-      <Filter>Header Files\GUI\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\MainMenu.hpp">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GuiButton.hpp">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\GuiStructs.hpp">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="ExceptionHandling.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\NoCompile.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Text.hpp">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Shaders.hpp">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Sys.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input\CameraInput.hpp">
+      <Filter>Header Files\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input\Input.hpp">
+      <Filter>Header Files\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\Gui.hpp">
+      <Filter>Header Files\Core\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\GuiButton.hpp">
+      <Filter>Header Files\Core\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\GuiStructs.hpp">
+      <Filter>Header Files\Core\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\MainMenu.hpp">
+      <Filter>Header Files\Core\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\Text.hpp">
+      <Filter>Header Files\Core\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\Editor\TextArea.hpp">
+      <Filter>Header Files\Core\GUI\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

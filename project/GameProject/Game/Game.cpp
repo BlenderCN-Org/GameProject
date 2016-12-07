@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-#include "../Core/Input.hpp"
+#include "../Core/Input/Input.hpp"
 
 Game::Game() : player(nullptr) {}
 

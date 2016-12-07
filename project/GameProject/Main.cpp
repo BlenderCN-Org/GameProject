@@ -1,6 +1,6 @@
 
 #include "Core\Core.hpp"
-#include "Core\Input.hpp"
+#include "Core\Input\Input.hpp"
 #include "Core\Window\Window.hpp"
 
 #include <time.h>
