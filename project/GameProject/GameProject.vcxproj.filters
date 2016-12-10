@@ -79,6 +79,12 @@
     <Filter Include="Source Files\Core\GUI\Editor">
       <UniqueIdentifier>{e227cd14-f47c-4a04-abc3-dde143ab481a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Script">
+      <UniqueIdentifier>{d7f28e6f-9ce4-4dec-82dc-fcb2e7fd0eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Script">
+      <UniqueIdentifier>{c70c6952-b6f2-4b8a-bf70-37183620a2dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -173,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="Core\GUI\Editor\TextArea.cpp">
       <Filter>Source Files\Core\GUI\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Script\OcParser.cpp">
+      <Filter>Source Files\Core\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,12 +299,24 @@
     <ClInclude Include="Core\GUI\Editor\TextArea.hpp">
       <Filter>Header Files\Core\GUI\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Script\OcOperations.hpp">
+      <Filter>Header Files\Core\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Script\OcParser.hpp">
+      <Filter>Header Files\Core\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Script\OcCodeGen.hpp">
+      <Filter>Header Files\Core\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Todo.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="..\FileStructure.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Script.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

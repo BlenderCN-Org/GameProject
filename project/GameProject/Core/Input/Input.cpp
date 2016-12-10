@@ -135,7 +135,7 @@ bool Input::isKeyBindPressed(KeyBind & keyBind, bool includeMods) {
 	if ( includeMods )
 		pressed &= (keyBind.mod == modkey);
 
-	return pressed;
+	return pressed & focus;
 }
 
 bool Input::releasedThisFrame(KeyBind & keyBind, bool includeMods) {
@@ -144,7 +144,7 @@ bool Input::releasedThisFrame(KeyBind & keyBind, bool includeMods) {
 	if ( includeMods )
 		released &= (keyBind.mod == modkey);
 
-	return released;
+	return released & focus;
 }
 
 void Input::getCursorDelta(float & x, float & y) {
@@ -240,7 +240,7 @@ Input::Input() {
 
 	winH = winW = 0;
 	sizeChange = false;
-
+	focus = true;
 }
 
 void Input::loadkeyBinds() {

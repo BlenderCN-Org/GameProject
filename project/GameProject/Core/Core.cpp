@@ -1,6 +1,8 @@
 #include "Core.hpp"
 #include "Sys.hpp"
 
+#include "Script\OcParser.hpp"
+
 #include <glm\gtc\matrix_transform.hpp>
 
 #include <thread>
@@ -262,6 +264,8 @@ void Core::init() {
 	text->setFont(font);
 
 	text->setText("asdfghjkl", 9, 100, 50, 1.0);
+
+	parseOcFile("Data/Scripts/test.ocs");
 
 }
 

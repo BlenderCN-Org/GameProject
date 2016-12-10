@@ -1,0 +1,107 @@
+
+
+Script source file ext .ocs
+
+Script source parse file ext .ocp
+
+Script binary code file ext .ocb
+
+.ocs -> .ocp -> .ocb
+source -> parse -> binary
+
+execute settings
+	minimum script version : x.xx			// prevent executing .oc scripts older than specified version
+	logging	: bool							// enables .oc script logging
+	debugLogging: bool						// enables .oc script debug logging
+
+general definitions
+
+	version 1.0
+
+	defined types
+		int
+		char
+		bool
+		short
+		ptr (*)
+		singend and unsigned, unsigned prefix ex uint, uchar
+
+	defined functionality
+
+		do-while
+		while
+		for
+
+	defined constants
+		true
+		false
+
+	other keywords
+		nat retType *name*; -> native engine function declare, engine function *name* with retType needs to be registered in ocEnv
+
+	custom class support : no
+	vartype is needed : yes
+	
+	function supported : yes
+	returntype is needed : yes
+
+	Script syntax
+
+		// global/local variable definition
+		(vartype) varname = value;						sets varname of vartype to value
+		(vartype) varname, var2 = value;				sets varname and var2 of vartype to value
+		(vartype) varname, var2 = value, value2;		sets varname to value and var2 to value2, both are of vartype
+
+		// scopes										a scope can only see itself and any level above it, starting from a functional scope
+		{												functions can only see there own scope
+			scope1
+			{
+				scope2
+			}
+		}
+
+		returntype funcname (parameter)
+		{
+			scope
+
+			return (returntype)
+		}
+
+
+	.ocs -> -ocp
+
+	{definetype parameter} is generated per line statement
+
+	vartype varname = 0; -> {vardef vartype varname 0}
+	vartype varname, var2 = value; -> {vardef vartype varname value, vardef vartype var2 value}
+	vartype varname, var2 = value, value2; -> {vardef vartype varname value, vardef vartype var2 value2}
+
+
+
+	.ocb binary format
+							(char)
+	code		params		value		description										example
+	NOP			0			0x00		do nothing										NOP
+	ADD			2			0x01		add value <reg_a> and <reg_b> together			ADD reg_a, reg_b
+	ADD			2			0x02		add value <reg_a> and <const_expr> together		ADD reg_a, 5
+	SUB			2			0x03		subtract value <rag_b> from <reg_a>				SUB reg_a, reg_b
+	SUB			2			0x04		subtract value <const_expr> from <reg_a>		SUB reg_a, 5
+	MUL			2			0x05		multiply <reg_a> with <reg_b>					MUL reg_a, reg_b
+	MUL			2			0x06		multiply <reg_a> with <const_expr>				MUL reg_a, 5
+	DIV			2			0x07		divide <reg_a> with <reg_b>						DIV reg_a, reg_b
+	DIV			2			0x08		divide <reg_a> with <const_expr>				DIV reg_a, 5
+	MOV			2			0x09		copy value <const_expr> to <reg_a>				MOV reg_a, 5
+	MOV			2			0x0A		copy value <reg_b> to <reg_a>					MOV reg_a, reg_b
+	MOV			3			0x0B		copy value <const_addr> to <reg_a>				MOV reg_a, ptr[addr]
+	MOV			3			0x0C		copy value <reg_a> to <const_addr>				MOV ptr[addr], reg_a
+	MOV			3			0x0D		copy value <reg_b addrs> to <reg_a>				MOV reg_a, ptr[reg_b]
+	MOV			3			0x0E		copy value <reg_a> to <reg_b addrs>				MOV ptr[reg_b], reg_a
+	JMP			1			0x0F		jump to location relative						JMP 15
+
+	predefined modules
+		input		input handling
+		tasks		task handling-create new tasks
+		system		system fuctions like timers and sleep etc
+		assets		asset loading and creation
+		gamelogic	game logic access, interaction, etc
+		debug		bebugging functions, and output
