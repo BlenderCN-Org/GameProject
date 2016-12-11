@@ -2,3 +2,16 @@
 // comment
 
 int globalInt = 0; // comment
+
+int myFunction()
+{
+	int i;
+	if(qwist) {
+		i = 234;
+	} else {
+		i = 0;
+	}
+	return i;
+}
+
+asdf myint = 0;

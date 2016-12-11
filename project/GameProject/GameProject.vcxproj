@@ -195,6 +195,8 @@
     <ClCompile Include="Core\Loading\Loader.cpp" />
     <ClCompile Include="Core\Loading\LoadingScreen.cpp" />
     <ClCompile Include="Core\Loading\ModelLoader.cpp" />
+    <ClCompile Include="Core\Script\OcExpressionTree.cpp" />
+    <ClCompile Include="Core\Script\OcLexer.cpp" />
     <ClCompile Include="Core\Script\OcParser.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
@@ -234,8 +236,8 @@
     <ClInclude Include="Core\Loading\ModelLoader.hpp" />
     <ClInclude Include="Core\NoCompile.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
-    <ClInclude Include="Core\Script\OcCodeGen.hpp" />
-    <ClInclude Include="Core\Script\OcOperations.hpp" />
+    <ClInclude Include="Core\Script\OcExpressionTree.hpp" />
+    <ClInclude Include="Core\Script\OcLexer.hpp" />
     <ClInclude Include="Core\Script\OcParser.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />

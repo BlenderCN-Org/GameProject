@@ -1,1 +1,11 @@
-int globalInt = 0; // comment
+{4,int globalInt = 0; }
+{6,int myFunction()}
+{7,{}
+{8, int i;}
+{9, if(qwist) {}
+{10,  i = 234;}
+{11, } else {}
+{12,  i = 0;}
+{13, }}
+{14, return i;}
+{15,}}

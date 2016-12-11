@@ -1,11 +1,18 @@
 
 // project includes
 #include "OcParser.hpp"
+#include "OcLexer.hpp"
+#include "OcExpressionTree.hpp"
 
 // std includes
 #include <fstream>
 
 #include <string>
+
+void performParserTests() {
+
+	testLexerTypes();
+}
 
 void parseOcFile(const char * fileName) {
 
@@ -17,22 +24,24 @@ void parseOcFile(const char * fileName) {
 	std::ofstream outFile(outFileName + ".ocp", std::ios::out);
 
 	std::string line;
-	std::string parseWrite;
+
+	std::vector<std::string> lines;
 
 	while ( !inFile.eof() ) {
-		parseWrite = "";
 		std::getline(inFile, line);
 		
-		// if line contains stuff
-		if ( line.size() > 0 ) {
+		lines.push_back(line);
+	}
 
-			if ( !isLineComment(line.c_str()) ) {
-				parseWrite = line + "\n";
-			}
-		}
+	// lexing and type checking
+	lines = performLexing(lines);
 
-		outFile.write(parseWrite.c_str(), parseWrite.size());
+	// take parse lines and build expression tree
 
+	lines = buildExpressions(lines);
+
+	for ( size_t i = 0; i < lines.size(); i++ ) {
+		outFile.write(lines[i].c_str(), lines[i].size());
 	}
 
 	inFile.close();
@@ -42,21 +51,3 @@ void parseOcFile(const char * fileName) {
 
 void parseOcString(const char * codeString, const char * outFile) {}
 
-bool isLineComment(const char * line) {
-
-	bool isComment = false;
-
-	const char * c = line;
-	while ( *c != '\0' && !isComment) {
-
-		if ( *c == '/' && *(c + 1) == '/' )
-			isComment = true;
-		
-		if ( *c == ';' )
-			break;
-		c++;
-	}
-
-	return isComment;
-
-}

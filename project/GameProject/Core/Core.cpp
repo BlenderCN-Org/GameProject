@@ -265,6 +265,7 @@ void Core::init() {
 
 	text->setText("asdfghjkl", 9, 100, 50, 1.0);
 
+	performParserTests();
 	parseOcFile("Data/Scripts/test.ocs");
 
 }

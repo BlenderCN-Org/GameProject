@@ -23,6 +23,7 @@ general definitions
 		char
 		bool
 		short
+		float
 		ptr (*)
 		singend and unsigned, unsigned prefix ex uint, uchar
 
@@ -67,16 +68,15 @@ general definitions
 			return (returntype)
 		}
 
-
 	.ocs -> -ocp
 
 	{definetype parameter} is generated per line statement
 
-	vartype varname = 0; -> {vardef vartype varname 0}
-	vartype varname, var2 = value; -> {vardef vartype varname value, vardef vartype var2 value}
-	vartype varname, var2 = value, value2; -> {vardef vartype varname value, vardef vartype var2 value2}
+	vartype varname = 0; -> {#lineNr, vardef vartype varname 0}
+	vartype varname, var2 = value; -> {#lineNr, vardef vartype varname value, vardef vartype var2 value}
+	vartype varname, var2 = value, value2; -> {#lineNr, vardef vartype varname value, vardef vartype var2 value2}
 
-
+	// expressionID, expressionType, expression name, constant, value, nrParameters
 
 	.ocb binary format
 							(char)
@@ -97,6 +97,8 @@ general definitions
 	MOV			3			0x0D		copy value <reg_b addrs> to <reg_a>				MOV reg_a, ptr[reg_b]
 	MOV			3			0x0E		copy value <reg_a> to <reg_b addrs>				MOV ptr[reg_b], reg_a
 	JMP			1			0x0F		jump to location relative						JMP 15
+	CALL		1			0x10		call function									CALL fnName
+	RET			0			0x11		return											RET
 
 	predefined modules
 		input		input handling
@@ -104,4 +106,14 @@ general definitions
 		system		system fuctions like timers and sleep etc
 		assets		asset loading and creation
 		gamelogic	game logic access, interaction, etc
-		debug		bebugging functions, and output
+		debug		debugging functions, and output
+
+
+	parsing steps:
+
+		1) perform lexing and typechecking
+		2) create expression tree(s)
+		3) create expression stack
+		4) create ast
+		5) optimization (optional)
+		6) output binary
