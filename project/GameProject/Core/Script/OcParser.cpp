@@ -1,23 +1,21 @@
 
 // project includes
 #include "OcParser.hpp"
-#include "OcLexer.hpp"
-#include "OcExpressionTree.hpp"
+#include "OcParsable.hpp"
 
 // std includes
 #include <fstream>
-
+#include <vector>
 #include <string>
 
 void performParserTests() {
 
-	testLexerTypes();
 }
 
 void parseOcFile(const char * fileName) {
 
 	std::ifstream inFile(fileName, std::ios::in);
-	
+
 	std::string outFileName(fileName);
 	outFileName = outFileName.substr(0, outFileName.find_first_of('.', 0));
 
@@ -29,20 +27,23 @@ void parseOcFile(const char * fileName) {
 
 	while ( !inFile.eof() ) {
 		std::getline(inFile, line);
-		
+
 		lines.push_back(line);
 	}
 
-	// lexing and type checking
-	lines = performLexing(lines);
+	std::vector<Parsable> p = parseLines(lines);
 
-	// take parse lines and build expression tree
+	if ( checkParsableTypes(p) ) {
 
-	lines = buildExpressions(lines);
+		for ( size_t i = 0; i < p.size(); i++ ) {
+			std::string s = std::to_string(p[i].line);
+			outFile.write(s.c_str(), s.size());
+			outFile.write(p[i].code.c_str(), p[i].code.size());
+		}
 
-	for ( size_t i = 0; i < lines.size(); i++ ) {
-		outFile.write(lines[i].c_str(), lines[i].size());
 	}
+
+	
 
 	inFile.close();
 	outFile.close();

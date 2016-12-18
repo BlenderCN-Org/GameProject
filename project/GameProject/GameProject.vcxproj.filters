@@ -183,10 +183,7 @@
     <ClCompile Include="Core\Script\OcParser.cpp">
       <Filter>Source Files\Core\Script</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Script\OcLexer.cpp">
-      <Filter>Source Files\Core\Script</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Script\OcExpressionTree.cpp">
+    <ClCompile Include="Core\Script\OcParsable.cpp">
       <Filter>Source Files\Core\Script</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,10 +305,7 @@
     <ClInclude Include="Core\Script\OcParser.hpp">
       <Filter>Header Files\Core\Script</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Script\OcLexer.hpp">
-      <Filter>Header Files\Core\Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Script\OcExpressionTree.hpp">
+    <ClInclude Include="Core\Script\OcParsable.hpp">
       <Filter>Header Files\Core\Script</Filter>
     </ClInclude>
   </ItemGroup>
