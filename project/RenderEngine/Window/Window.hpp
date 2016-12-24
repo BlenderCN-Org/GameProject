@@ -7,6 +7,8 @@
 #include <Windows.h>
 #endif
 
+#define SUPPORT_VULKAN_WINDOW
+
 class BaseWindow : public IWindow
 {
 
@@ -86,12 +88,26 @@ private:
 };
 
 #ifdef SUPPORT_VULKAN_WINDOW
-class VKWindow : IWindow
-{
 
+class VKWindow : public BaseWindow
+{
 public:
 
+	void init();
+	void deinit();
+
+	virtual void setVsync(bool vSync);
+	virtual void pollMessages();
+
+	virtual void swapBuffers();
+
 private:
+
+#ifdef _WIN32
+
+
+
+#endif
 
 };
 

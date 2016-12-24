@@ -75,6 +75,8 @@ public:
 
 private:
 
+	void printInfo(GLinfo info);
+
 	int counter = 0;
 	
 	GLinfo info;

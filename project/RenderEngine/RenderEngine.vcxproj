@@ -172,13 +172,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Assets\AnimatedMesh.hpp" />
-    <ClInclude Include="Assets\Font.hpp" />
-    <ClInclude Include="Assets\FrameBuffer.hpp" />
-    <ClInclude Include="Assets\Material.hpp" />
-    <ClInclude Include="Assets\Mesh.hpp" />
-    <ClInclude Include="Assets\ShaderObject.hpp" />
-    <ClInclude Include="Assets\Texture.hpp" />
+    <ClInclude Include="Assets\AnimatedMesh_gl.hpp" />
+    <ClInclude Include="Assets\Font_gl.hpp" />
+    <ClInclude Include="Assets\FrameBuffer_gl.hpp" />
+    <ClInclude Include="Assets\Material_gl.hpp" />
+    <ClInclude Include="Assets\Mesh_gl.hpp" />
+    <ClInclude Include="Assets\ShaderObject_gl.hpp" />
+    <ClInclude Include="Assets\Texture_gl.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="DataTypes\Colors.hpp" />
     <ClInclude Include="DataTypes\Image.hpp" />
@@ -203,13 +203,13 @@
     <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Assets\AnimatedMesh.cpp" />
-    <ClCompile Include="Assets\Font.cpp" />
-    <ClCompile Include="Assets\FrameBuffer.cpp" />
-    <ClCompile Include="Assets\Material.cpp" />
-    <ClCompile Include="Assets\Mesh.cpp" />
-    <ClCompile Include="Assets\ShaderObject.cpp" />
-    <ClCompile Include="Assets\Texture.cpp" />
+    <ClCompile Include="Assets\AnimatedMesh_gl.cpp" />
+    <ClCompile Include="Assets\Font_gl.cpp" />
+    <ClCompile Include="Assets\FrameBuffer_gl.cpp" />
+    <ClCompile Include="Assets\Material_gl.cpp" />
+    <ClCompile Include="Assets\Mesh_gl.cpp" />
+    <ClCompile Include="Assets\ShaderObject_gl.cpp" />
+    <ClCompile Include="Assets\Texture_gl.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DataTypes\Colors.cpp" />
     <ClCompile Include="DataTypes\Image.cpp" />
