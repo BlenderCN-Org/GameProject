@@ -331,6 +331,8 @@ void Core::stopWorkerThreads() {
 
 void Core::setFPS(int _fps) {
 	fps = _fps;
+	std::string str = std::to_string(_fps);
+	text->setText((char*)str.c_str(), str.length(), 10, 50, 1.0);
 }
 
 void Core::update(float dt) {

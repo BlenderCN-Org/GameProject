@@ -83,5 +83,8 @@ $RECYCLE.BIN/
 *.idb
 *.tlog
 *.enc
+*.log
+*.pdb
+*.ilk
 project/GameProject.VC.VC.opendb
 *.exp

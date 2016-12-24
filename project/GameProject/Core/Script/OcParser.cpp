@@ -19,21 +19,21 @@ void parseOcFile(const char * fileName) {
 	std::string line;
 	std::string parseWrite;
 
-	while ( !inFile.eof() ) {
-		parseWrite = "";
-		std::getline(inFile, line);
-		
-		// if line contains stuff
-		if ( line.size() > 0 ) {
-
-			if ( !isLineComment(line.c_str()) ) {
-				parseWrite = line + "\n";
-			}
-		}
-
-		outFile.write(parseWrite.c_str(), parseWrite.size());
-
-	}
+	//while ( !inFile.eof() ) {
+	//	parseWrite = "";
+	//	std::getline(inFile, line);
+	//	
+	//	// if line contains stuff
+	//	if ( line.size() > 0 ) {
+	//
+	//		if ( !isLineComment(line.c_str()) ) {
+	//			parseWrite = line + "\n";
+	//		}
+	//	}
+	//
+	//	outFile.write(parseWrite.c_str(), parseWrite.size());
+	//
+	//}
 
 	inFile.close();
 	outFile.close();
