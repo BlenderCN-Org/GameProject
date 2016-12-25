@@ -89,6 +89,7 @@ char* fs_text =
 "}  \n";
 
 void Core::init() {
+	initSys();
 	thrdMgr = nullptr;
 	assetMgr = nullptr;
 
@@ -303,6 +304,8 @@ void Core::release() {
 	renderEngine->release();
 
 	renderEngineLib.unloadLibrary();
+	
+	deinitSys();
 	delete this;
 }
 
@@ -331,8 +334,15 @@ void Core::stopWorkerThreads() {
 
 void Core::setFPS(int _fps) {
 	fps = _fps;
-	std::string str = std::to_string(_fps);
+	pollCpuUsage();
+	std::string str = "Fps: " + std::to_string(fps) + "\nCPU: " + std::to_string(getCoreUsage(-1));
+	for (int i = 0; i < getLogicalProcessorCount(); i++)
+	{
+		str += "%\nCore" + std::to_string(i) + ": " + std::to_string(getCoreUsage(i));
+	}
+	str += "%";
 	text->setText((char*)str.c_str(), str.length(), 10, 50, 1.0);
+
 }
 
 void Core::update(float dt) {

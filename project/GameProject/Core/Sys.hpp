@@ -13,7 +13,12 @@
 *	contains function for accessing os functions
 */
 
+void initSys();
+void deinitSys();
+void pollCpuUsage();
 
 int getLogicalProcessorCount();
+
+int getCoreUsage(int coreIndex);
 
 #endif

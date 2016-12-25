@@ -567,11 +567,21 @@ void GLWindow::swapBuffers() {
 }
 
 void VKWindow::init() {
+	VkApplicationInfo appInfo{};
+	VkInstanceCreateInfo createInfo{};
 
+	appInfo.apiVersion = VK_MAKE_VERSION(1, 32, 0);
+	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+
+	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	createInfo.pApplicationInfo = &appInfo;
+
+	vkCreateInstance(&createInfo, nullptr, &instance);
 }
 
 void VKWindow::deinit() {
 
+	vkDestroyInstance(instance, nullptr);
 }
 
 void VKWindow::setVsync(bool vsync) {

@@ -44,7 +44,7 @@ void Text::setText(char * text, size_t length, float x, float y, float scale) {
 
 		if ( text[i] == '\n' ) {
 			if ( yAdv ) {
-				y += (fSize * 2);
+				y += (fSize);
 				oldYAdv = (float)fSize;
 			} else {
 				y += oldYAdv;

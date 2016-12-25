@@ -8,6 +8,7 @@
 #endif
 
 #define SUPPORT_VULKAN_WINDOW
+#include <vulkan\vulkan.hpp>
 
 class BaseWindow : public IWindow
 {
@@ -104,7 +105,7 @@ public:
 private:
 
 #ifdef _WIN32
-
+	VkInstance instance = VK_NULL_HANDLE;
 
 
 #endif
