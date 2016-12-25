@@ -94,6 +94,7 @@ private:
 	FT_Library fontLibrary;
 
 	GLWindow glWindow;
+	VKWindow vkWindow;
 
 	RenderEngineCreateInfo reci;
 

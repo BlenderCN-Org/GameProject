@@ -2,18 +2,17 @@
 
 // local includes
 #include "Window.hpp"
+#include "WindowSystem.hpp"
 
 // global includes
 #include <GL\glew.h>
 #include <GL\wglew.h>
 #include <GL\GL.h>
 
+// std include
 #include <iostream>
 #include <cstdint>
-
 #include <tchar.h>
-#include "WindowSystem.hpp"
-
 #include <strsafe.h>
 
 #define RI_MOUSE_HWHEEL 0x0800
@@ -570,18 +569,24 @@ void VKWindow::init() {
 	VkApplicationInfo appInfo{};
 	VkInstanceCreateInfo createInfo{};
 
-	appInfo.apiVersion = VK_MAKE_VERSION(1, 32, 0);
+	appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 37);
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	createInfo.pApplicationInfo = &appInfo;
 
-	vkCreateInstance(&createInfo, nullptr, &instance);
+	VkResult r = vkCreateInstance(&createInfo, nullptr, &instance);
+
+	uint32_t count = 0;
+
+	vkEnumeratePhysicalDevices(instance, &count, nullptr);
+
 }
 
 void VKWindow::deinit() {
 
 	vkDestroyInstance(instance, nullptr);
+	instance = VK_NULL_HANDLE;
 }
 
 void VKWindow::setVsync(bool vsync) {
