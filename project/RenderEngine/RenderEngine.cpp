@@ -144,7 +144,10 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 void RenderEngine::release() {
 	FT_Done_FreeType(fontLibrary);
 	if (reci.createRenderWindow) {
-		glWindow.deinit();
+		if(reci.renderEngineType == RenderEngineType::eRenderOpenGL)
+			glWindow.deinit();
+		else if (reci.renderEngineType == RenderEngineType::eRenderVulkan)
+			vkWindow.deinit();
 		deinitWindowSystem();
 	}
 	delete this;
@@ -321,7 +324,12 @@ IFont * RenderEngine::createFont() {
 }
 
 IWindow * RenderEngine::getMainWindow() {
-	return &glWindow;
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return &glWindow;
+	} else if (reci.renderEngineType == RenderEngineType::eRenderVulkan) {
+		return &vkWindow;
+	}
+	return nullptr;
 }
 
 size_t RenderEngine::getMemoryUsage() const {

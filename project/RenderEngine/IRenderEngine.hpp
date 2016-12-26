@@ -38,7 +38,8 @@ struct OpenGLWindowCreateInfo {
 
 struct VulkanWindowCreateInfo {
 	SType stype;
-
+	int presentQueueCount;
+	int commandQueueCount;
 };
 
 typedef void* (*PFN_EngineAllocator(size_t));

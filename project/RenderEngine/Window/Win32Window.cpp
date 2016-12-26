@@ -25,35 +25,13 @@ bool openglInitialized = false;
 HHOOK g_hKeyboardHook;
 BOOL g_bWindowActive;
 
+// vulkan extensions
+const char *vulkanExtensionNames[] = { "VK_KHR_surface", "VK_KHR_win32_surface" };
 
 // global pre-defines
 HWND setupWindow();
 
 // global function definitions
-
-LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	if (nCode < 0 || nCode != HC_ACTION)  // do not process message 
-		return CallNextHookEx(g_hKeyboardHook, nCode, wParam, lParam);
-
-	bool bEatKeystroke = false;
-	KBDLLHOOKSTRUCT* p = (KBDLLHOOKSTRUCT*)lParam;
-	switch (wParam) {
-	case WM_KEYDOWN:
-	case WM_KEYUP:
-	{
-		bEatKeystroke = (g_bWindowActive && ((p->vkCode == VK_LWIN) || (p->vkCode == VK_RWIN)));
-		break;
-	}
-	}
-
-	printf("Callback\n");
-
-	if (bEatKeystroke)
-		return 1;
-	else
-		return CallNextHookEx(g_hKeyboardHook, nCode, wParam, lParam);
-}
-
 
 LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -183,52 +161,62 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					int action = 0;
 					int mods = wnd->modkeys;
 					switch (raw->data.mouse.usButtonFlags) {
-					case(RI_MOUSE_BUTTON_1_DOWN): {
+					case(RI_MOUSE_BUTTON_1_DOWN):
+					{
 						button = 0;
 						action = ACTION_BUTTON_DOWN;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_1_UP): {
+					case(RI_MOUSE_BUTTON_1_UP):
+					{
 						button = 0;
 						action = ACTION_BUTTON_UP;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_2_DOWN): {
+					case(RI_MOUSE_BUTTON_2_DOWN):
+					{
 						button = 1;
 						action = ACTION_BUTTON_DOWN;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_2_UP): {
+					case(RI_MOUSE_BUTTON_2_UP):
+					{
 						button = 1;
 						action = ACTION_BUTTON_UP;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_3_DOWN): {
+					case(RI_MOUSE_BUTTON_3_DOWN):
+					{
 						button = 2;
 						action = ACTION_BUTTON_DOWN;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_3_UP): {
+					case(RI_MOUSE_BUTTON_3_UP):
+					{
 						button = 2;
 						action = ACTION_BUTTON_UP;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_4_DOWN): {
+					case(RI_MOUSE_BUTTON_4_DOWN):
+					{
 						button = 3;
 						action = ACTION_BUTTON_DOWN;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_4_UP): {
+					case(RI_MOUSE_BUTTON_4_UP):
+					{
 						button = 3;
 						action = ACTION_BUTTON_UP;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_5_DOWN): {
+					case(RI_MOUSE_BUTTON_5_DOWN):
+					{
 						button = 4;
 						action = ACTION_BUTTON_DOWN;
 						break;
 					}
-					case(RI_MOUSE_BUTTON_5_UP): {
+					case(RI_MOUSE_BUTTON_5_UP):
+					{
 						button = 4;
 						action = ACTION_BUTTON_UP;
 						break;
@@ -491,6 +479,12 @@ void BaseWindow::setWindowedTrueFullscreen(bool trueFullscreen) {
 	// todo figure out how to make exclusive fullscreen
 }
 
+void BaseWindow::setTitle(const char * title) {
+	std::string t(title);
+	std::wstring str(t.begin(), t.end());
+	SetWindowText(windowHandle, str.c_str());
+}
+
 // GLWindow -> win32 implementation
 
 void GLWindow::init() {
@@ -566,27 +560,221 @@ void GLWindow::swapBuffers() {
 }
 
 void VKWindow::init() {
-	VkApplicationInfo appInfo{};
-	VkInstanceCreateInfo createInfo{};
+	windowHandle = setupWindow();
 
-	appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 37);
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	RAWINPUTDEVICE rid[2];
 
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	createInfo.pApplicationInfo = &appInfo;
+	rid[0].usUsagePage = 0x01;
+	rid[0].usUsage = 0x02;
+	rid[0].dwFlags = RIDEV_INPUTSINK;   // adds HID mouse and also ignores legacy mouse messages
+	rid[0].hwndTarget = windowHandle;
 
-	VkResult r = vkCreateInstance(&createInfo, nullptr, &instance);
+	rid[1].usUsagePage = 0x01;
+	rid[1].usUsage = 0x06;
+	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
+	rid[1].hwndTarget = windowHandle;
 
-	uint32_t count = 0;
+	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
 
-	vkEnumeratePhysicalDevices(instance, &count, nullptr);
+	if (RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE) {
+		//registration failed. Call GetLastError for the cause of the error
+		std::cerr << "register RID failed\n";
+		std::cerr << GetLastError() << std::endl;
+	}
+
+	if (windowHandle) {
+		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
+
+		VkApplicationInfo appInfo{};
+		VkInstanceCreateInfo createInfo{};
+
+		appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 37);
+		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+
+		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		createInfo.pApplicationInfo = &appInfo;
+		createInfo.enabledExtensionCount = 2;
+		createInfo.ppEnabledExtensionNames = vulkanExtensionNames;
+
+
+		VkResult r = vkCreateInstance(&createInfo, nullptr, &instance);
+
+		uint32_t count = 0;
+		r = vkEnumeratePhysicalDevices(instance, &count, nullptr);
+		VkPhysicalDevice* gpus = new VkPhysicalDevice[count];
+		r = vkEnumeratePhysicalDevices(instance, &count, gpus);
+
+		if (count == 1) {
+			// if only one gpu is avaible select it
+			gpu = gpus[0];
+		} else {
+			// else look for the first avaible discrete gpu
+			VkPhysicalDeviceProperties prop{};
+			for (size_t i = 0; i < count; i++) {
+				vkGetPhysicalDeviceProperties(gpus[i], &prop);
+				if (prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+					gpu = gpus[i];
+					break;
+				}
+			}
+		}
+		delete gpus;
+
+		float prio[] = { 1.0f };
+		count = 0;
+
+		vkGetPhysicalDeviceQueueFamilyProperties(gpu, &count, nullptr);
+
+		if (count >= 1) {
+			VkQueueFamilyProperties* props = new VkQueueFamilyProperties[count];
+			vkGetPhysicalDeviceQueueFamilyProperties(gpu, &count, props);
+
+			for (size_t i = 0; i < count; i++) {
+				if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
+					familyIndex = (uint32_t)i;
+					break;
+				}
+			}
+			delete props;
+		}
+
+		VkDeviceQueueCreateInfo queueCreateInfo{};
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfo.queueCount = 1;
+		queueCreateInfo.pQueuePriorities = prio;
+		queueCreateInfo.queueFamilyIndex = familyIndex;
+
+		VkDeviceCreateInfo deviceCreateInfo{};
+		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
+		deviceCreateInfo.queueCreateInfoCount = 1;
+
+		r = vkCreateDevice(gpu, &deviceCreateInfo, nullptr, &device);
+
+		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo{};
+		surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		surfaceCreateInfo.hwnd = windowHandle;
+		surfaceCreateInfo.hinstance = NULL;
+
+		r = vkCreateWin32SurfaceKHR(instance, &surfaceCreateInfo, nullptr, &surface);
+
+		VkExtent2D imgExtent{};
+		imgExtent.width = 1280;
+		imgExtent.height = 720;
+
+
+		VkSwapchainCreateInfoKHR swapchainCreateInfo{};
+		swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		swapchainCreateInfo.surface = surface;
+		swapchainCreateInfo.minImageCount = 2;
+		swapchainCreateInfo.imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
+		swapchainCreateInfo.imageColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
+		swapchainCreateInfo.imageExtent = imgExtent;
+		swapchainCreateInfo.imageArrayLayers = 1;
+		swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+		swapchainCreateInfo.imageSharingMode = VkSharingMode::VK_SHARING_MODE_EXCLUSIVE;
+		swapchainCreateInfo.preTransform = VkSurfaceTransformFlagBitsKHR::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+		swapchainCreateInfo.compositeAlpha = VkCompositeAlphaFlagBitsKHR::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+		swapchainCreateInfo.presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
+		swapchainCreateInfo.clipped = VK_TRUE;
+
+		r = vkCreateSwapchainKHR(device, &swapchainCreateInfo, nullptr, &swapchain);
+
+		swapCount = 0;
+		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, nullptr);
+		swapchainImages = new VkImage[swapCount];
+		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, swapchainImages);
+
+		vkGetDeviceQueue(device, familyIndex, 0, &queue);
+
+		VkCommandPoolCreateInfo commandPoolCreateInfo{};
+		commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		commandPoolCreateInfo.queueFamilyIndex = familyIndex;
+
+		r = vkCreateCommandPool(device, &commandPoolCreateInfo, nullptr, &presentPool);
+
+		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
+		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		commandBufferAllocateInfo.commandBufferCount = swapCount;
+		commandBufferAllocateInfo.commandPool = presentPool;
+
+		presentBuffers = new VkCommandBuffer[swapCount];
+
+		r = vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, presentBuffers);
+
+		VkCommandBufferBeginInfo commandBeginInfo{};
+		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		commandBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+		VkClearColorValue clearColor = { 1.0f, 0.8f, 0.4f, 0.0f };
+
+		VkImageSubresourceRange subresourceRange{};
+		subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		subresourceRange.baseMipLevel = 0;
+		subresourceRange.levelCount = 1;
+		subresourceRange.baseArrayLayer = 0;
+		subresourceRange.layerCount = 1;
+
+
+
+		for (uint32_t i = 0; i < swapCount; ++i) {
+			VkImageMemoryBarrier barrier_from_present_to_clear = {
+				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
+				nullptr,                                    // const void                            *pNext
+				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          srcAccessMask
+				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          dstAccessMask
+				VK_IMAGE_LAYOUT_UNDEFINED,                  // VkImageLayout                          oldLayout
+				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          newLayout
+				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
+				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
+				swapchainImages[i],                         // VkImage                                image
+				subresourceRange                            // VkImageSubresourceRange                subresourceRange
+			};
+
+			VkImageMemoryBarrier barrier_from_clear_to_present = {
+				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
+				nullptr,                                    // const void                            *pNext
+				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          srcAccessMask
+				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          dstAccessMask
+				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          oldLayout
+				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,            // VkImageLayout                          newLayout
+				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
+				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
+				swapchainImages[i],                         // VkImage                                image
+				subresourceRange                            // VkImageSubresourceRange                subresourceRange
+			};
+
+			vkBeginCommandBuffer(presentBuffers[i], &commandBeginInfo);
+			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_present_to_clear);
+
+			vkCmdClearColorImage(presentBuffers[i], swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
+
+			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
+			vkEndCommandBuffer(presentBuffers[i]);
+		}
+
+	}
 
 }
 
 void VKWindow::deinit() {
 
+	vkDeviceWaitIdle(device);
+
+	vkFreeCommandBuffers(device, presentPool, swapCount, presentBuffers);
+	vkDestroyCommandPool(device, presentPool, nullptr);
+
+	delete presentBuffers;
+	delete swapchainImages;
+
+	vkDestroySwapchainKHR(device, swapchain, nullptr);
+	vkDestroySurfaceKHR(instance, surface, nullptr);
+	vkDestroyDevice(device, nullptr);
 	vkDestroyInstance(instance, nullptr);
 	instance = VK_NULL_HANDLE;
+
+	DestroyWindow(windowHandle);
 }
 
 void VKWindow::setVsync(bool vsync) {
@@ -603,6 +791,26 @@ void VKWindow::pollMessages() {
 
 void VKWindow::swapBuffers() {
 
+	VkResult r = VkResult::VK_SUCCESS;
+	uint32_t imageIndex = 0;
+	do {
+		r = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, VK_NULL_HANDLE, VK_NULL_HANDLE, &imageIndex);
+	} while (r != VkResult::VK_SUCCESS);
+
+	VkSubmitInfo submitInfo{};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &presentBuffers[imageIndex];
+
+	vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+
+	VkPresentInfoKHR presentInfo{};
+	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	presentInfo.swapchainCount = 1;
+	presentInfo.pSwapchains = &swapchain;
+	presentInfo.pImageIndices = &imageIndex;
+
+	r = vkQueuePresentKHR(queue, &presentInfo);
 }
 
 void initWindowSystem() {

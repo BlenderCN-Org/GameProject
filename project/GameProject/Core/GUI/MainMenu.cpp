@@ -28,57 +28,60 @@ void MainMenu::initMeshes(IRenderEngine * renderEngine) {
 	optionsMesh = renderEngine->createMesh();
 	quitMesh = renderEngine->createMesh();
 
-	newGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
-	loadGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
-	continueGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
-	editorMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
-	optionsMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
-	quitMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+	if (newGameMesh) {
+		newGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+		loadGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+		continueGameMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+		editorMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+		optionsMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
+		quitMesh->init(MeshPrimitiveType::TRIANGLE_STRIP);
 
-	Rect r = newGame.getBounds();
-	vert v[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	newGameMesh->setMeshData(v, sizeof(v), VERT_UV);
+		Rect r = newGame.getBounds();
+		vert v[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		newGameMesh->setMeshData(v, sizeof(v), VERT_UV);
 
-	r = loadGame.getBounds();
-	vert v2[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	loadGameMesh->setMeshData(v2, sizeof(v2), VERT_UV);
+		r = loadGame.getBounds();
+		vert v2[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		loadGameMesh->setMeshData(v2, sizeof(v2), VERT_UV);
 
-	r = continueGame.getBounds();
-	vert v3[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	continueGameMesh->setMeshData(v3, sizeof(v3), VERT_UV);
+		r = continueGame.getBounds();
+		vert v3[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		continueGameMesh->setMeshData(v3, sizeof(v3), VERT_UV);
 
-	r = editor.getBounds();
-	vert v4[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	editorMesh->setMeshData(v4, sizeof(v4), VERT_UV);
+		r = editor.getBounds();
+		vert v4[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		editorMesh->setMeshData(v4, sizeof(v4), VERT_UV);
 
-	r = options.getBounds();
-	vert v5[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	optionsMesh->setMeshData(v5, sizeof(v5), VERT_UV);
+		r = options.getBounds();
+		vert v5[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		optionsMesh->setMeshData(v5, sizeof(v5), VERT_UV);
 
-	r = quit.getBounds();
-	vert v6[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
-		vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
-		vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
-		vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
-	quitMesh->setMeshData(v6, sizeof(v6), VERT_UV);
-
+		r = quit.getBounds();
+		vert v6[] = { vert{ r.x + r.width, r.y + r.height, 0.0f, 1.0f, 1.0f },
+			vert{ r.x + r.width, r.y, 0.0f, 1.0f, 0.0f },
+			vert{ r.x, r.y + r.height, 0.0f, 0.0f, 1.0f },
+			vert{ r.x, r.y, 0.0f, 0.0f, 0.0f }, };
+		quitMesh->setMeshData(v6, sizeof(v6), VERT_UV);
+	}
 	f = renderEngine->createFont();
-	f->init("C:/Windows/Fonts/Arial.ttf", 24);
+	if (f) {
+		f->init("C:/Windows/Fonts/Arial.ttf", 24);
+	}
 
 	t = new Text();
 	t->init(renderEngine);
@@ -91,14 +94,17 @@ void MainMenu::initMeshes(IRenderEngine * renderEngine) {
 void MainMenu::releaseMeshes() {
 
 	t->release();
-	f->release();
+	if (f)
+		f->release();
 
-	newGameMesh->release();
-	loadGameMesh->release();
-	continueGameMesh->release();
-	editorMesh->release();
-	optionsMesh->release();
-	quitMesh->release();
+	if (newGameMesh) {
+		newGameMesh->release();
+		loadGameMesh->release();
+		continueGameMesh->release();
+		editorMesh->release();
+		optionsMesh->release();
+		quitMesh->release();
+	}
 }
 
 void MainMenu::setVisible(bool visible) {
@@ -123,7 +129,7 @@ void MainMenu::update() {
 }
 
 bool MainMenu::isNewGamePressed() {
-	
+
 	return isPressed(newGame, input, mouseButton);
 }
 
@@ -148,7 +154,7 @@ bool MainMenu::isQuitPressed() {
 }
 
 void MainMenu::render(ICamera* camera) {
-	if ( mainMenuVisible ) {
+	if (mainMenuVisible && newGameMesh) {
 		newGameMesh->bind();
 		newGameMesh->render();
 		loadGameMesh->bind();

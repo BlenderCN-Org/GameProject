@@ -5,6 +5,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
 #define SUPPORT_VULKAN_WINDOW
@@ -40,6 +41,8 @@ public:
 
 	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback);
 	//virtual void setVsync(bool vSync);
+
+	virtual void setTitle(const char* title);
 
 //private:
 
@@ -107,8 +110,20 @@ private:
 #ifdef _WIN32
 	VkInstance instance = VK_NULL_HANDLE;
 	VkPhysicalDevice gpu = VK_NULL_HANDLE;
+	uint32_t familyIndex = 0;
 	VkDevice device = VK_NULL_HANDLE;
 
+
+	VkSurfaceKHR surface = VK_NULL_HANDLE;
+	VkSwapchainKHR swapchain = VK_NULL_HANDLE;
+
+	VkImage* swapchainImages = nullptr;
+	uint32_t swapCount;
+
+	VkQueue queue = VK_NULL_HANDLE;
+
+	VkCommandPool presentPool = VK_NULL_HANDLE;
+	VkCommandBuffer* presentBuffers = nullptr;
 #endif
 
 };
