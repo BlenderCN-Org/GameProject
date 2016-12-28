@@ -3,6 +3,7 @@
 // local includes
 #include "Window.hpp"
 #include "WindowSystem.hpp"
+#include "VulkanWindowHelper.hpp"
 
 // global includes
 #include <GL\glew.h>
@@ -14,6 +15,7 @@
 #include <cstdint>
 #include <tchar.h>
 #include <strsafe.h>
+#include <sstream>
 
 #define RI_MOUSE_HWHEEL 0x0800
 
@@ -26,7 +28,50 @@ HHOOK g_hKeyboardHook;
 BOOL g_bWindowActive;
 
 // vulkan extensions
-const char *vulkanExtensionNames[] = { "VK_KHR_surface", "VK_KHR_win32_surface" };
+std::vector<const char*> vulkanExtensionNames = { "VK_KHR_surface", "VK_KHR_win32_surface", VK_EXT_DEBUG_REPORT_EXTENSION_NAME };
+std::vector<const char*> vulkanInstanceNames = { "VK_LAYER_LUNARG_standard_validation" /*, "VK_LAYER_RENDERDOC_Capture" */ };
+
+std::vector<const char*> deviceExtensionNames = { "VK_KHR_swapchain" };
+
+PFN_vkCreateDebugReportCallbackEXT fvkCreateDebugReportCallbackEXT = nullptr;;
+PFN_vkDestroyDebugReportCallbackEXT fvkDestroyDebugReportCallbackEXT = nullptr;;
+
+// vulkan debug callback
+
+VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
+	VkDebugReportObjectTypeEXT objType,
+	uint64_t sourcObj,
+	size_t location,
+	int32_t msgCode,
+	const char* layerPrefix,
+	const char* msg,
+	void* userData) {
+
+	std::ostringstream stream;
+
+	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_INFORMATION_BIT_EXT) {
+		stream << "INFO: ";
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_WARNING_BIT_EXT) {
+		stream << "WARNING: ";
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
+		stream << "PERF: ";
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
+		stream << "DEBUG: ";
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
+		stream << "ERROR: ";
+	}
+
+	stream << "@[" << layerPrefix << "]: ";
+	stream << msg << std::endl;
+
+	std::cout << stream.str();
+
+	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
+		MessageBoxA(NULL, stream.str().c_str(), "Vulkan Error!", MB_OK);
+	}
+
+	return VK_FALSE;
+}
 
 // global pre-defines
 HWND setupWindow();
@@ -50,10 +95,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_SIZE:
 	{
-		if (wnd && wnd->resizeCallback) {
+		if (wnd) {
 			int width = LOWORD(lParam);
 			int height = HIWORD(lParam);
-			wnd->resizeCallback(wnd, width, height);
+			if (wnd->resizeCallback)
+				wnd->resizeCallback(wnd, width, height);
+
+			wnd->setWindowSize(width, height);
 			printf("callback stuff");
 		}
 		printf("Resize\n");
@@ -591,13 +639,28 @@ void VKWindow::init() {
 		appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 37);
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 
+		VkDebugReportCallbackCreateInfoEXT debugReportCreateInfo{};
+		debugReportCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+		debugReportCreateInfo.flags = VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+		debugReportCreateInfo.pfnCallback = vulkanDebugCallback;
+
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pApplicationInfo = &appInfo;
-		createInfo.enabledExtensionCount = 2;
-		createInfo.ppEnabledExtensionNames = vulkanExtensionNames;
-
+		createInfo.enabledExtensionCount = (uint32_t)vulkanExtensionNames.size();
+		createInfo.ppEnabledExtensionNames = vulkanExtensionNames.data();
+		createInfo.enabledLayerCount = (uint32_t)vulkanInstanceNames.size();
+		createInfo.ppEnabledLayerNames = vulkanInstanceNames.data();
+		createInfo.pNext = &debugReportCreateInfo;
 
 		VkResult r = vkCreateInstance(&createInfo, nullptr, &instance);
+
+		fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
+		fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT");
+
+		if (fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT) {
+
+			fvkCreateDebugReportCallbackEXT(instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
+		}
 
 		uint32_t count = 0;
 		r = vkEnumeratePhysicalDevices(instance, &count, nullptr);
@@ -648,6 +711,8 @@ void VKWindow::init() {
 		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
 		deviceCreateInfo.queueCreateInfoCount = 1;
+		deviceCreateInfo.enabledExtensionCount = (uint32_t)deviceExtensionNames.size();
+		deviceCreateInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
 
 		r = vkCreateDevice(gpu, &deviceCreateInfo, nullptr, &device);
 
@@ -658,27 +723,71 @@ void VKWindow::init() {
 
 		r = vkCreateWin32SurfaceKHR(instance, &surfaceCreateInfo, nullptr, &surface);
 
-		VkExtent2D imgExtent{};
-		imgExtent.width = 1280;
-		imgExtent.height = 720;
+		VkBool32 surfaceSupported = VK_FALSE;
+		vkGetPhysicalDeviceSurfaceSupportKHR(gpu, familyIndex, surface, &surfaceSupported);
 
+		uint32_t surfaceFormatCount = 0;
+		vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &surfaceFormatCount, nullptr);
 
-		VkSwapchainCreateInfoKHR swapchainCreateInfo{};
-		swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		swapchainCreateInfo.surface = surface;
-		swapchainCreateInfo.minImageCount = 2;
-		swapchainCreateInfo.imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
-		swapchainCreateInfo.imageColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-		swapchainCreateInfo.imageExtent = imgExtent;
-		swapchainCreateInfo.imageArrayLayers = 1;
-		swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-		swapchainCreateInfo.imageSharingMode = VkSharingMode::VK_SHARING_MODE_EXCLUSIVE;
-		swapchainCreateInfo.preTransform = VkSurfaceTransformFlagBitsKHR::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-		swapchainCreateInfo.compositeAlpha = VkCompositeAlphaFlagBitsKHR::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-		swapchainCreateInfo.presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
-		swapchainCreateInfo.clipped = VK_TRUE;
+		VkSurfaceFormatKHR* surfaceFormats = new VkSurfaceFormatKHR[surfaceFormatCount];
+		vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &surfaceFormatCount, surfaceFormats);
 
-		r = vkCreateSwapchainKHR(device, &swapchainCreateInfo, nullptr, &swapchain);
+		surfaceFormat = VkFormat::VK_FORMAT_UNDEFINED;
+		colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+
+		if (surfaceFormats[0].format == VkFormat::VK_FORMAT_UNDEFINED) {
+			surfaceFormat = VkFormat::VK_FORMAT_B8G8R8A8_UNORM;
+			colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		} else {
+			surfaceFormat = surfaceFormats[0].format;
+			colorSpace = surfaceFormats[0].colorSpace;
+		}
+
+		delete surfaceFormats;
+
+		VkSurfaceCapabilitiesKHR surfaceCapabilities{};
+
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &surfaceCapabilities);
+
+		if (surfaceCapabilities.currentExtent.width < UINT32_MAX) {
+			surfaceWidth = surfaceCapabilities.currentExtent.width;
+			surfaceHeight = surfaceCapabilities.currentExtent.height;
+		}
+
+		VkPresentModeKHR presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
+		{
+			uint32_t presentModeCount = 0;
+			vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &presentModeCount, nullptr);
+			VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
+			vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &presentModeCount, supportedPresentModes);
+
+			for (size_t i = 0; i < presentModeCount; i++) {
+
+			}
+
+			delete[] supportedPresentModes;
+
+		}
+
+		//VkSwapchainCreateInfoKHR swapchainCreateInfo{};
+		//swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		//swapchainCreateInfo.surface = surface;
+		//swapchainCreateInfo.minImageCount = 2;
+		//swapchainCreateInfo.imageFormat = surfaceFormat;
+		//swapchainCreateInfo.imageColorSpace = colorSpace;
+		//swapchainCreateInfo.imageExtent.width = surfaceWidth;
+		//swapchainCreateInfo.imageExtent.height = surfaceHeight;
+		//swapchainCreateInfo.imageArrayLayers = 1;
+		//swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		//swapchainCreateInfo.imageSharingMode = VkSharingMode::VK_SHARING_MODE_EXCLUSIVE;
+		//swapchainCreateInfo.preTransform = VkSurfaceTransformFlagBitsKHR::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+		//swapchainCreateInfo.compositeAlpha = VkCompositeAlphaFlagBitsKHR::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+		//swapchainCreateInfo.presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
+		//swapchainCreateInfo.clipped = VK_TRUE;
+		//
+		//r = vkCreateSwapchainKHR(device, &swapchainCreateInfo, nullptr, &swapchain);
+
+		swapchain = createSwapchain(device, surface, surfaceFormat, colorSpace, surfaceWidth, surfaceHeight, VK_NULL_HANDLE);
 
 		swapCount = 0;
 		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, nullptr);
@@ -716,7 +825,16 @@ void VKWindow::init() {
 		subresourceRange.baseArrayLayer = 0;
 		subresourceRange.layerCount = 1;
 
+		VkSemaphoreCreateInfo semaphoreCreateInfo{};
+		semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
+		vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &imageAvaible);
+		vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &renderingFinished);
+
+		VkFenceCreateInfo fenceCreateInfo{};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+		vkCreateFence(device, &fenceCreateInfo, nullptr, &waitFence);
 
 		for (uint32_t i = 0; i < swapCount; ++i) {
 			VkImageMemoryBarrier barrier_from_present_to_clear = {
@@ -762,15 +880,22 @@ void VKWindow::deinit() {
 
 	vkDeviceWaitIdle(device);
 
+	vkDestroyFence(device, waitFence, nullptr);
+
+	vkDestroySemaphore(device, renderingFinished, nullptr);
+	vkDestroySemaphore(device, imageAvaible, nullptr);
+
 	vkFreeCommandBuffers(device, presentPool, swapCount, presentBuffers);
 	vkDestroyCommandPool(device, presentPool, nullptr);
 
-	delete presentBuffers;
-	delete swapchainImages;
+	delete[] presentBuffers;
+	delete[] swapchainImages;
 
 	vkDestroySwapchainKHR(device, swapchain, nullptr);
 	vkDestroySurfaceKHR(instance, surface, nullptr);
 	vkDestroyDevice(device, nullptr);
+
+	fvkDestroyDebugReportCallbackEXT(instance, debugReportCallback, nullptr);
 	vkDestroyInstance(instance, nullptr);
 	instance = VK_NULL_HANDLE;
 
@@ -789,53 +914,150 @@ void VKWindow::pollMessages() {
 	}
 }
 
+void VKWindow::setWindowSize(int x, int y) {
+	BaseWindow::setWindowSize(x, y);
+
+	// recreate swapchain
+
+	recreateSwapchain = true;
+
+}
+
 void VKWindow::swapBuffers() {
 
 	VkResult r = VkResult::VK_SUCCESS;
-	uint32_t imageIndex = 0;
-	do {
-		r = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, VK_NULL_HANDLE, VK_NULL_HANDLE, &imageIndex);
-	} while (r != VkResult::VK_SUCCESS);
 
+	r = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, imageAvaible, waitFence, &currentImage);
+	if (r == VkResult::VK_SUBOPTIMAL_KHR) {
+		std::cout << "Suboptimal swapchain\n";
+	}
+
+	vkWaitForFences(device, 1, &waitFence, VK_TRUE, UINT64_MAX);
+	vkResetFences(device, 1, &waitFence);
+
+	VkPipelineStageFlags flags = VkPipelineStageFlagBits::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
+	
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &presentBuffers[imageIndex];
-
+	submitInfo.pCommandBuffers = &presentBuffers[currentImage];
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &imageAvaible;
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = &renderingFinished;
+	submitInfo.pWaitDstStageMask = &flags;
+	
 	vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
 
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = &swapchain;
-	presentInfo.pImageIndices = &imageIndex;
+	presentInfo.pImageIndices = &currentImage;
+	presentInfo.waitSemaphoreCount = 1;
+	presentInfo.pWaitSemaphores = &renderingFinished;
 
 	r = vkQueuePresentKHR(queue, &presentInfo);
+	if (r == VkResult::VK_SUBOPTIMAL_KHR) {
+		std::cout << "Suboptimal swapchain\n";
+	} else if (r == VkResult::VK_ERROR_OUT_OF_DATE_KHR) {
+		std::cout << "Swapchain out of date\n";
+	}
+
+	if (recreateSwapchain) {
+
+		VkSurfaceCapabilitiesKHR surfaceCapabilities{};
+
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &surfaceCapabilities);
+
+		if (surfaceCapabilities.currentExtent.width < UINT32_MAX) {
+			surfaceWidth = surfaceCapabilities.currentExtent.width;
+			surfaceHeight = surfaceCapabilities.currentExtent.height;
+		}
+
+		swapchain = createSwapchain(device, surface, surfaceFormat, colorSpace, surfaceWidth, surfaceHeight, swapchain);
+		recreateSwapchain = false;
+
+		delete[] swapchainImages;
+		swapchainImages = nullptr;
+
+		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, nullptr);
+		swapchainImages = new VkImage[swapCount];
+		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, swapchainImages);
+
+		vkDeviceWaitIdle(device);
+
+		vkFreeCommandBuffers(device, presentPool, swapCount, presentBuffers);
+
+		delete[] presentBuffers;
+		presentBuffers = nullptr;
+
+		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
+		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		commandBufferAllocateInfo.commandBufferCount = swapCount;
+		commandBufferAllocateInfo.commandPool = presentPool;
+
+		presentBuffers = new VkCommandBuffer[swapCount];
+
+		r = vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, presentBuffers);
+
+		VkCommandBufferBeginInfo commandBeginInfo{};
+		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		commandBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+		VkClearColorValue clearColor = { 1.0f, 0.8f, 0.4f, 0.0f };
+
+		VkImageSubresourceRange subresourceRange{};
+		subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		subresourceRange.baseMipLevel = 0;
+		subresourceRange.levelCount = 1;
+		subresourceRange.baseArrayLayer = 0;
+		subresourceRange.layerCount = 1;
+
+		for (uint32_t i = 0; i < swapCount; ++i) {
+			VkImageMemoryBarrier barrier_from_present_to_clear = {
+				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
+				nullptr,                                    // const void                            *pNext
+				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          srcAccessMask
+				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          dstAccessMask
+				VK_IMAGE_LAYOUT_UNDEFINED,                  // VkImageLayout                          oldLayout
+				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          newLayout
+				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
+				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
+				swapchainImages[i],                         // VkImage                                image
+				subresourceRange                            // VkImageSubresourceRange                subresourceRange
+			};
+
+			VkImageMemoryBarrier barrier_from_clear_to_present = {
+				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
+				nullptr,                                    // const void                            *pNext
+				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          srcAccessMask
+				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          dstAccessMask
+				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          oldLayout
+				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,            // VkImageLayout                          newLayout
+				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
+				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
+				swapchainImages[i],                         // VkImage                                image
+				subresourceRange                            // VkImageSubresourceRange                subresourceRange
+			};
+
+			vkBeginCommandBuffer(presentBuffers[i], &commandBeginInfo);
+			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_present_to_clear);
+
+			vkCmdClearColorImage(presentBuffers[i], swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
+
+			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
+			vkEndCommandBuffer(presentBuffers[i]);
+		}
+
+	}
+
 }
 
 void initWindowSystem() {
 
 	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
-
-	//RAWINPUTDEVICE rid[2];
-	//
-	//rid[0].usUsagePage = 0x01;
-	//rid[0].usUsage = 0x02;
-	//rid[0].dwFlags = 0;   // adds HID mouse and also ignores legacy mouse messages
-	//rid[0].hwndTarget = 0;
-	//
-	//rid[1].usUsagePage = 0x01;
-	//rid[1].usUsage = 0x06;
-	//rid[1].dwFlags = RIDEV_NOHOTKEYS | RIDEV_NOLEGACY;   // adds HID keyboard and also ignores legacy keyboard messages
-	//rid[1].hwndTarget = 0;
-	//
-	////g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
-	//
-	//if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
-	//	//registration failed. Call GetLastError for the cause of the error
-	//	std::cerr << "register RID failed\n";
-	//	std::cerr << GetLastError() << std::endl;
-	//}
 
 }
 
@@ -843,8 +1065,6 @@ void deinitWindowSystem() {
 	openglInitialized = false;
 	windowClassInitialized = false;
 	UnregisterClass(windowClassName, GetModuleHandle(NULL));
-
-	//UnhookWindowsHookEx(g_hKeyboardHook);
 }
 
 #endif

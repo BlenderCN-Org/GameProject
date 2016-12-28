@@ -129,6 +129,9 @@
     <ClInclude Include="Assets\Texture_gl.hpp">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Window\VulkanWindowHelper.hpp">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="Assets\Texture_gl.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\VulkanWindowHelper.cpp">
+      <Filter>Source Files\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

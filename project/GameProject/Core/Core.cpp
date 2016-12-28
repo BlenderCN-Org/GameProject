@@ -113,7 +113,7 @@ void Core::init() {
 	RenderEngineCreateInfo reci;
 	reci.stype = SType::sRenderEngineCreateInfo;
 	reci.createRenderWindow = true;
-	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
+	reci.renderEngineType = RenderEngineType::eRenderVulkan;
 	reci.pNext = nullptr;
 
 	renderEngine = rProc();
@@ -376,8 +376,10 @@ void Core::update(float dt) {
 
 		Resolution res = disp.getResolution();
 		renderEngine->updateViewPort(res.width, res.height);
-		fbo->resize(res.width, res.height);
-		fbo->setWindowSize(w, h);
+		if (fbo) {
+			fbo->resize(res.width, res.height);
+			fbo->setWindowSize(w, h);
+		}
 		if (w != 0 && h != 0) {
 			*(glm::mat4*)(camera->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(res.width), float(res.height), 0.0001f, 100.0f);
 		}

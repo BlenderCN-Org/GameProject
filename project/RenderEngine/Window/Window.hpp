@@ -103,6 +103,8 @@ public:
 	virtual void setVsync(bool vSync);
 	virtual void pollMessages();
 
+	virtual void setWindowSize(int x, int y);
+
 	virtual void swapBuffers();
 
 private:
@@ -113,6 +115,11 @@ private:
 	uint32_t familyIndex = 0;
 	VkDevice device = VK_NULL_HANDLE;
 
+	VkFormat surfaceFormat = {};
+	VkColorSpaceKHR colorSpace = {};
+
+	uint32_t surfaceWidth = 1280;
+	uint32_t surfaceHeight = 720;
 
 	VkSurfaceKHR surface = VK_NULL_HANDLE;
 	VkSwapchainKHR swapchain = VK_NULL_HANDLE;
@@ -124,6 +131,18 @@ private:
 
 	VkCommandPool presentPool = VK_NULL_HANDLE;
 	VkCommandBuffer* presentBuffers = nullptr;
+
+	VkSemaphore imageAvaible = VK_NULL_HANDLE;
+	VkSemaphore renderingFinished = VK_NULL_HANDLE;
+
+	uint32_t currentImage = 0;
+
+	VkFence waitFence = VK_NULL_HANDLE;
+
+	VkDebugReportCallbackEXT debugReportCallback = VK_NULL_HANDLE;
+
+	bool recreateSwapchain = false;
+
 #endif
 
 };

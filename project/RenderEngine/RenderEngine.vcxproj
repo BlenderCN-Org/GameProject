@@ -199,6 +199,7 @@
     <ClInclude Include="Utils\FrameAllocator_static.hpp" />
     <ClInclude Include="Utils\MemoryManager.hpp" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
+    <ClInclude Include="Window\VulkanWindowHelper.hpp" />
     <ClInclude Include="Window\WindowSystem.hpp" />
     <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
@@ -219,6 +220,7 @@
     <ClCompile Include="Utils\FrameAllocator_static.cpp" />
     <ClCompile Include="Utils\MemoryManager.cpp" />
     <ClCompile Include="Utils\ShelfPack.cpp" />
+    <ClCompile Include="Window\VulkanWindowHelper.cpp" />
     <ClCompile Include="Window\Win32Window.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
