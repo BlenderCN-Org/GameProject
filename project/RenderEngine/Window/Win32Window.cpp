@@ -28,50 +28,10 @@ HHOOK g_hKeyboardHook;
 BOOL g_bWindowActive;
 
 // vulkan extensions
-std::vector<const char*> vulkanExtensionNames = { "VK_KHR_surface", "VK_KHR_win32_surface", VK_EXT_DEBUG_REPORT_EXTENSION_NAME };
-std::vector<const char*> vulkanInstanceNames = { "VK_LAYER_LUNARG_standard_validation" /*, "VK_LAYER_RENDERDOC_Capture" */ };
-
 std::vector<const char*> deviceExtensionNames = { "VK_KHR_swapchain" };
 
 PFN_vkCreateDebugReportCallbackEXT fvkCreateDebugReportCallbackEXT = nullptr;;
 PFN_vkDestroyDebugReportCallbackEXT fvkDestroyDebugReportCallbackEXT = nullptr;;
-
-// vulkan debug callback
-
-VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
-	VkDebugReportObjectTypeEXT objType,
-	uint64_t sourcObj,
-	size_t location,
-	int32_t msgCode,
-	const char* layerPrefix,
-	const char* msg,
-	void* userData) {
-
-	std::ostringstream stream;
-
-	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_INFORMATION_BIT_EXT) {
-		stream << "INFO: ";
-	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_WARNING_BIT_EXT) {
-		stream << "WARNING: ";
-	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
-		stream << "PERF: ";
-	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
-		stream << "DEBUG: ";
-	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
-		stream << "ERROR: ";
-	}
-
-	stream << "@[" << layerPrefix << "]: ";
-	stream << msg << std::endl;
-
-	std::cout << stream.str();
-
-	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
-		MessageBoxA(NULL, stream.str().c_str(), "Vulkan Error!", MB_OK);
-	}
-
-	return VK_FALSE;
-}
 
 // global pre-defines
 HWND setupWindow();
@@ -633,50 +593,36 @@ void VKWindow::init() {
 	if (windowHandle) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
-		VkApplicationInfo appInfo{};
-		VkInstanceCreateInfo createInfo{};
-
-		appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 37);
-		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-
 		VkDebugReportCallbackCreateInfoEXT debugReportCreateInfo{};
 		debugReportCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
 		debugReportCreateInfo.flags = VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
 		debugReportCreateInfo.pfnCallback = vulkanDebugCallback;
 
-		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-		createInfo.pApplicationInfo = &appInfo;
-		createInfo.enabledExtensionCount = (uint32_t)vulkanExtensionNames.size();
-		createInfo.ppEnabledExtensionNames = vulkanExtensionNames.data();
-		createInfo.enabledLayerCount = (uint32_t)vulkanInstanceNames.size();
-		createInfo.ppEnabledLayerNames = vulkanInstanceNames.data();
-		createInfo.pNext = &debugReportCreateInfo;
+		instanceData.instance = createInstance();
 
-		VkResult r = vkCreateInstance(&createInfo, nullptr, &instance);
-
-		fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
-		fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT");
+		fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkCreateDebugReportCallbackEXT");
+		fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkDestroyDebugReportCallbackEXT");
 
 		if (fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT) {
 
-			fvkCreateDebugReportCallbackEXT(instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
+			fvkCreateDebugReportCallbackEXT(instanceData.instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
 		}
 
 		uint32_t count = 0;
-		r = vkEnumeratePhysicalDevices(instance, &count, nullptr);
+		VkResult r = vkEnumeratePhysicalDevices(instanceData.instance, &count, nullptr);
 		VkPhysicalDevice* gpus = new VkPhysicalDevice[count];
-		r = vkEnumeratePhysicalDevices(instance, &count, gpus);
+		r = vkEnumeratePhysicalDevices(instanceData.instance, &count, gpus);
 
 		if (count == 1) {
 			// if only one gpu is avaible select it
-			gpu = gpus[0];
+			instanceData.gpu = gpus[0];
 		} else {
 			// else look for the first avaible discrete gpu
 			VkPhysicalDeviceProperties prop{};
 			for (size_t i = 0; i < count; i++) {
 				vkGetPhysicalDeviceProperties(gpus[i], &prop);
 				if (prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-					gpu = gpus[i];
+					instanceData.gpu = gpus[i];
 					break;
 				}
 			}
@@ -686,15 +632,15 @@ void VKWindow::init() {
 		float prio[] = { 1.0f };
 		count = 0;
 
-		vkGetPhysicalDeviceQueueFamilyProperties(gpu, &count, nullptr);
+		vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, nullptr);
 
 		if (count >= 1) {
 			VkQueueFamilyProperties* props = new VkQueueFamilyProperties[count];
-			vkGetPhysicalDeviceQueueFamilyProperties(gpu, &count, props);
+			vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, props);
 
 			for (size_t i = 0; i < count; i++) {
 				if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
-					familyIndex = (uint32_t)i;
+					instanceData.queueFamilyIndex = (uint32_t)i;
 					break;
 				}
 			}
@@ -705,7 +651,7 @@ void VKWindow::init() {
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfo.queueCount = 1;
 		queueCreateInfo.pQueuePriorities = prio;
-		queueCreateInfo.queueFamilyIndex = familyIndex;
+		queueCreateInfo.queueFamilyIndex = instanceData.queueFamilyIndex;
 
 		VkDeviceCreateInfo deviceCreateInfo{};
 		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -714,52 +660,45 @@ void VKWindow::init() {
 		deviceCreateInfo.enabledExtensionCount = (uint32_t)deviceExtensionNames.size();
 		deviceCreateInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
 
-		r = vkCreateDevice(gpu, &deviceCreateInfo, nullptr, &device);
+		r = vkCreateDevice(instanceData.gpu, &deviceCreateInfo, nullptr, &instanceData.device);
 
+		/* Should only be inside this function */
 		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo{};
 		surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 		surfaceCreateInfo.hwnd = windowHandle;
 		surfaceCreateInfo.hinstance = NULL;
 
-		r = vkCreateWin32SurfaceKHR(instance, &surfaceCreateInfo, nullptr, &surface);
+		r = vkCreateWin32SurfaceKHR(instanceData.instance, &surfaceCreateInfo, nullptr, &instanceData.surface);
+		/* The reset should be moved to subfunctions in separate file */
 
 		VkBool32 surfaceSupported = VK_FALSE;
-		vkGetPhysicalDeviceSurfaceSupportKHR(gpu, familyIndex, surface, &surfaceSupported);
+		vkGetPhysicalDeviceSurfaceSupportKHR(instanceData.gpu, instanceData.queueFamilyIndex, instanceData.surface, &surfaceSupported);
 
 		uint32_t surfaceFormatCount = 0;
-		vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &surfaceFormatCount, nullptr);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(instanceData.gpu, instanceData.surface, &surfaceFormatCount, nullptr);
 
 		VkSurfaceFormatKHR* surfaceFormats = new VkSurfaceFormatKHR[surfaceFormatCount];
-		vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &surfaceFormatCount, surfaceFormats);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(instanceData.gpu, instanceData.surface, &surfaceFormatCount, surfaceFormats);
 
-		surfaceFormat = VkFormat::VK_FORMAT_UNDEFINED;
-		colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		instanceData.surfaceFormat = VkFormat::VK_FORMAT_UNDEFINED;
+		instanceData.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 
 		if (surfaceFormats[0].format == VkFormat::VK_FORMAT_UNDEFINED) {
-			surfaceFormat = VkFormat::VK_FORMAT_B8G8R8A8_UNORM;
-			colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+			instanceData.surfaceFormat = VkFormat::VK_FORMAT_B8G8R8A8_UNORM;
+			instanceData.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 		} else {
-			surfaceFormat = surfaceFormats[0].format;
-			colorSpace = surfaceFormats[0].colorSpace;
+			instanceData.surfaceFormat = surfaceFormats[0].format;
+			instanceData.colorSpace = surfaceFormats[0].colorSpace;
 		}
 
 		delete surfaceFormats;
 
-		VkSurfaceCapabilitiesKHR surfaceCapabilities{};
-
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &surfaceCapabilities);
-
-		if (surfaceCapabilities.currentExtent.width < UINT32_MAX) {
-			surfaceWidth = surfaceCapabilities.currentExtent.width;
-			surfaceHeight = surfaceCapabilities.currentExtent.height;
-		}
-
 		VkPresentModeKHR presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
 		{
 			uint32_t presentModeCount = 0;
-			vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &presentModeCount, nullptr);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, nullptr);
 			VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
-			vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &presentModeCount, supportedPresentModes);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, supportedPresentModes);
 
 			for (size_t i = 0; i < presentModeCount; i++) {
 
@@ -769,48 +708,30 @@ void VKWindow::init() {
 
 		}
 
-		//VkSwapchainCreateInfoKHR swapchainCreateInfo{};
-		//swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		//swapchainCreateInfo.surface = surface;
-		//swapchainCreateInfo.minImageCount = 2;
-		//swapchainCreateInfo.imageFormat = surfaceFormat;
-		//swapchainCreateInfo.imageColorSpace = colorSpace;
-		//swapchainCreateInfo.imageExtent.width = surfaceWidth;
-		//swapchainCreateInfo.imageExtent.height = surfaceHeight;
-		//swapchainCreateInfo.imageArrayLayers = 1;
-		//swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-		//swapchainCreateInfo.imageSharingMode = VkSharingMode::VK_SHARING_MODE_EXCLUSIVE;
-		//swapchainCreateInfo.preTransform = VkSurfaceTransformFlagBitsKHR::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-		//swapchainCreateInfo.compositeAlpha = VkCompositeAlphaFlagBitsKHR::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-		//swapchainCreateInfo.presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
-		//swapchainCreateInfo.clipped = VK_TRUE;
-		//
-		//r = vkCreateSwapchainKHR(device, &swapchainCreateInfo, nullptr, &swapchain);
+		createSwapchain(instanceData, swapchainData);
 
-		swapchain = createSwapchain(device, surface, surfaceFormat, colorSpace, surfaceWidth, surfaceHeight, VK_NULL_HANDLE);
+		swapchainData.swapchainImageCount = 0;
+		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, nullptr);
+		swapchainData.swapchainImages = new VkImage[swapchainData.swapchainImageCount];
+		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, swapchainData.swapchainImages);
 
-		swapCount = 0;
-		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, nullptr);
-		swapchainImages = new VkImage[swapCount];
-		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, swapchainImages);
-
-		vkGetDeviceQueue(device, familyIndex, 0, &queue);
+		vkGetDeviceQueue(instanceData.device, instanceData.queueFamilyIndex, 0, &queue);
 
 		VkCommandPoolCreateInfo commandPoolCreateInfo{};
 		commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		commandPoolCreateInfo.queueFamilyIndex = familyIndex;
+		commandPoolCreateInfo.queueFamilyIndex = instanceData.queueFamilyIndex;
 
-		r = vkCreateCommandPool(device, &commandPoolCreateInfo, nullptr, &presentPool);
+		r = vkCreateCommandPool(instanceData.device, &commandPoolCreateInfo, nullptr, &presentPool);
 
 		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
 		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		commandBufferAllocateInfo.commandBufferCount = swapCount;
+		commandBufferAllocateInfo.commandBufferCount = swapchainData.swapchainImageCount;
 		commandBufferAllocateInfo.commandPool = presentPool;
 
-		presentBuffers = new VkCommandBuffer[swapCount];
+		presentBuffers = new VkCommandBuffer[swapchainData.swapchainImageCount];
 
-		r = vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, presentBuffers);
+		r = vkAllocateCommandBuffers(instanceData.device, &commandBufferAllocateInfo, presentBuffers);
 
 		VkCommandBufferBeginInfo commandBeginInfo{};
 		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -828,15 +749,15 @@ void VKWindow::init() {
 		VkSemaphoreCreateInfo semaphoreCreateInfo{};
 		semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-		vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &imageAvaible);
-		vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &renderingFinished);
+		vkCreateSemaphore(instanceData.device, &semaphoreCreateInfo, nullptr, &imageAvaible);
+		vkCreateSemaphore(instanceData.device, &semaphoreCreateInfo, nullptr, &renderingFinished);
 
 		VkFenceCreateInfo fenceCreateInfo{};
 		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
-		vkCreateFence(device, &fenceCreateInfo, nullptr, &waitFence);
+		vkCreateFence(instanceData.device, &fenceCreateInfo, nullptr, &waitFence);
 
-		for (uint32_t i = 0; i < swapCount; ++i) {
+		for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
 			VkImageMemoryBarrier barrier_from_present_to_clear = {
 				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
 				nullptr,                                    // const void                            *pNext
@@ -844,9 +765,9 @@ void VKWindow::init() {
 				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          dstAccessMask
 				VK_IMAGE_LAYOUT_UNDEFINED,                  // VkImageLayout                          oldLayout
 				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          newLayout
-				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
-				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
-				swapchainImages[i],                         // VkImage                                image
+				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
+				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
+				swapchainData.swapchainImages[i],           // VkImage                                image
 				subresourceRange                            // VkImageSubresourceRange                subresourceRange
 			};
 
@@ -857,16 +778,16 @@ void VKWindow::init() {
 				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          dstAccessMask
 				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          oldLayout
 				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,            // VkImageLayout                          newLayout
-				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
-				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
-				swapchainImages[i],                         // VkImage                                image
+				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
+				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
+				swapchainData.swapchainImages[i],           // VkImage                                image
 				subresourceRange                            // VkImageSubresourceRange                subresourceRange
 			};
 
 			vkBeginCommandBuffer(presentBuffers[i], &commandBeginInfo);
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_present_to_clear);
 
-			vkCmdClearColorImage(presentBuffers[i], swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
+			vkCmdClearColorImage(presentBuffers[i], swapchainData.swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
 
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
 			vkEndCommandBuffer(presentBuffers[i]);
@@ -878,26 +799,26 @@ void VKWindow::init() {
 
 void VKWindow::deinit() {
 
-	vkDeviceWaitIdle(device);
+	vkDeviceWaitIdle(instanceData.device);
 
-	vkDestroyFence(device, waitFence, nullptr);
+	vkDestroyFence(instanceData.device, waitFence, nullptr);
 
-	vkDestroySemaphore(device, renderingFinished, nullptr);
-	vkDestroySemaphore(device, imageAvaible, nullptr);
+	vkDestroySemaphore(instanceData.device, renderingFinished, nullptr);
+	vkDestroySemaphore(instanceData.device, imageAvaible, nullptr);
 
-	vkFreeCommandBuffers(device, presentPool, swapCount, presentBuffers);
-	vkDestroyCommandPool(device, presentPool, nullptr);
+	vkFreeCommandBuffers(instanceData.device, presentPool, swapchainData.swapchainImageCount, presentBuffers);
+	vkDestroyCommandPool(instanceData.device, presentPool, nullptr);
 
 	delete[] presentBuffers;
-	delete[] swapchainImages;
+	delete[] swapchainData.swapchainImages;
 
-	vkDestroySwapchainKHR(device, swapchain, nullptr);
-	vkDestroySurfaceKHR(instance, surface, nullptr);
-	vkDestroyDevice(device, nullptr);
+	vkDestroySwapchainKHR(instanceData.device, swapchainData.swapchain, nullptr);
+	vkDestroySurfaceKHR(instanceData.instance, instanceData.surface, nullptr);
+	vkDestroyDevice(instanceData.device, nullptr);
 
-	fvkDestroyDebugReportCallbackEXT(instance, debugReportCallback, nullptr);
-	vkDestroyInstance(instance, nullptr);
-	instance = VK_NULL_HANDLE;
+	fvkDestroyDebugReportCallbackEXT(instanceData.instance, debugReportCallback, nullptr);
+	vkDestroyInstance(instanceData.instance, nullptr);
+	instanceData.instance = VK_NULL_HANDLE;
 
 	DestroyWindow(windowHandle);
 }
@@ -927,16 +848,16 @@ void VKWindow::swapBuffers() {
 
 	VkResult r = VkResult::VK_SUCCESS;
 
-	r = vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, imageAvaible, waitFence, &currentImage);
+	r = vkAcquireNextImageKHR(instanceData.device, swapchainData.swapchain, UINT64_MAX, imageAvaible, waitFence, &currentImage);
 	if (r == VkResult::VK_SUBOPTIMAL_KHR) {
 		std::cout << "Suboptimal swapchain\n";
 	}
 
-	vkWaitForFences(device, 1, &waitFence, VK_TRUE, UINT64_MAX);
-	vkResetFences(device, 1, &waitFence);
+	vkWaitForFences(instanceData.device, 1, &waitFence, VK_TRUE, UINT64_MAX);
+	vkResetFences(instanceData.device, 1, &waitFence);
 
 	VkPipelineStageFlags flags = VkPipelineStageFlagBits::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
-	
+
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submitInfo.commandBufferCount = 1;
@@ -946,13 +867,13 @@ void VKWindow::swapBuffers() {
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = &renderingFinished;
 	submitInfo.pWaitDstStageMask = &flags;
-	
+
 	vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
 
 	VkPresentInfoKHR presentInfo{};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = &swapchain;
+	presentInfo.pSwapchains = &swapchainData.swapchain;
 	presentInfo.pImageIndices = &currentImage;
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = &renderingFinished;
@@ -966,28 +887,19 @@ void VKWindow::swapBuffers() {
 
 	if (recreateSwapchain) {
 
-		VkSurfaceCapabilitiesKHR surfaceCapabilities{};
-
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &surfaceCapabilities);
-
-		if (surfaceCapabilities.currentExtent.width < UINT32_MAX) {
-			surfaceWidth = surfaceCapabilities.currentExtent.width;
-			surfaceHeight = surfaceCapabilities.currentExtent.height;
-		}
-
-		swapchain = createSwapchain(device, surface, surfaceFormat, colorSpace, surfaceWidth, surfaceHeight, swapchain);
+		createSwapchain(instanceData, swapchainData);
 		recreateSwapchain = false;
 
-		delete[] swapchainImages;
-		swapchainImages = nullptr;
+		delete[] swapchainData.swapchainImages;
+		swapchainData.swapchainImages = nullptr;
 
-		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, nullptr);
-		swapchainImages = new VkImage[swapCount];
-		r = vkGetSwapchainImagesKHR(device, swapchain, &swapCount, swapchainImages);
+		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, nullptr);
+		swapchainData.swapchainImages = new VkImage[swapchainData.swapchainImageCount];
+		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, swapchainData.swapchainImages);
 
-		vkDeviceWaitIdle(device);
+		vkDeviceWaitIdle(instanceData.device);
 
-		vkFreeCommandBuffers(device, presentPool, swapCount, presentBuffers);
+		vkFreeCommandBuffers(instanceData.device, presentPool, swapchainData.swapchainImageCount, presentBuffers);
 
 		delete[] presentBuffers;
 		presentBuffers = nullptr;
@@ -995,12 +907,12 @@ void VKWindow::swapBuffers() {
 		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
 		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		commandBufferAllocateInfo.commandBufferCount = swapCount;
+		commandBufferAllocateInfo.commandBufferCount = swapchainData.swapchainImageCount;
 		commandBufferAllocateInfo.commandPool = presentPool;
 
-		presentBuffers = new VkCommandBuffer[swapCount];
+		presentBuffers = new VkCommandBuffer[swapchainData.swapchainImageCount];
 
-		r = vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, presentBuffers);
+		r = vkAllocateCommandBuffers(instanceData.device, &commandBufferAllocateInfo, presentBuffers);
 
 		VkCommandBufferBeginInfo commandBeginInfo{};
 		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1015,7 +927,7 @@ void VKWindow::swapBuffers() {
 		subresourceRange.baseArrayLayer = 0;
 		subresourceRange.layerCount = 1;
 
-		for (uint32_t i = 0; i < swapCount; ++i) {
+		for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
 			VkImageMemoryBarrier barrier_from_present_to_clear = {
 				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
 				nullptr,                                    // const void                            *pNext
@@ -1023,9 +935,9 @@ void VKWindow::swapBuffers() {
 				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          dstAccessMask
 				VK_IMAGE_LAYOUT_UNDEFINED,                  // VkImageLayout                          oldLayout
 				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          newLayout
-				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
-				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
-				swapchainImages[i],                         // VkImage                                image
+				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
+				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
+				swapchainData.swapchainImages[i],           // VkImage                                image
 				subresourceRange                            // VkImageSubresourceRange                subresourceRange
 			};
 
@@ -1036,16 +948,16 @@ void VKWindow::swapBuffers() {
 				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          dstAccessMask
 				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          oldLayout
 				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,            // VkImageLayout                          newLayout
-				familyIndex,                                // uint32_t                               srcQueueFamilyIndex
-				familyIndex,                                // uint32_t                               dstQueueFamilyIndex
-				swapchainImages[i],                         // VkImage                                image
+				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
+				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
+				swapchainData.swapchainImages[i],           // VkImage                                image
 				subresourceRange                            // VkImageSubresourceRange                subresourceRange
 			};
 
 			vkBeginCommandBuffer(presentBuffers[i], &commandBeginInfo);
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_present_to_clear);
 
-			vkCmdClearColorImage(presentBuffers[i], swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
+			vkCmdClearColorImage(presentBuffers[i], swapchainData.swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
 
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
 			vkEndCommandBuffer(presentBuffers[i]);

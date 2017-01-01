@@ -113,7 +113,7 @@ void Core::init() {
 	RenderEngineCreateInfo reci;
 	reci.stype = SType::sRenderEngineCreateInfo;
 	reci.createRenderWindow = true;
-	reci.renderEngineType = RenderEngineType::eRenderVulkan;
+	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
 	reci.pNext = nullptr;
 
 	renderEngine = rProc();

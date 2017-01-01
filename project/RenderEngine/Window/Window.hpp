@@ -10,6 +10,7 @@
 
 #define SUPPORT_VULKAN_WINDOW
 #include <vulkan\vulkan.hpp>
+#include "VulkanWindowHelper.hpp"
 
 class BaseWindow : public IWindow
 {
@@ -110,22 +111,9 @@ public:
 private:
 
 #ifdef _WIN32
-	VkInstance instance = VK_NULL_HANDLE;
-	VkPhysicalDevice gpu = VK_NULL_HANDLE;
-	uint32_t familyIndex = 0;
-	VkDevice device = VK_NULL_HANDLE;
+	VulkanInstance instanceData;
 
-	VkFormat surfaceFormat = {};
-	VkColorSpaceKHR colorSpace = {};
-
-	uint32_t surfaceWidth = 1280;
-	uint32_t surfaceHeight = 720;
-
-	VkSurfaceKHR surface = VK_NULL_HANDLE;
-	VkSwapchainKHR swapchain = VK_NULL_HANDLE;
-
-	VkImage* swapchainImages = nullptr;
-	uint32_t swapCount;
+	VulkanSwapchain swapchainData;
 
 	VkQueue queue = VK_NULL_HANDLE;
 

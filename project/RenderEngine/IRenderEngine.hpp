@@ -38,8 +38,12 @@ struct OpenGLWindowCreateInfo {
 
 struct VulkanWindowCreateInfo {
 	SType stype;
-	int presentQueueCount;
-	int commandQueueCount;
+	int presentQueueCount; // number of present queues
+	int commandQueueCount; // number of command queues
+	int transfereQueueCount; // number of transfer queues
+
+	int preferredGPU; // gpu selection -1 to let application decide
+
 };
 
 typedef void* (*PFN_EngineAllocator(size_t));
