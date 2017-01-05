@@ -47,6 +47,8 @@ public:
 
 //private:
 
+	HWND getWindowHandle();
+
 	WindowResizeCallback_t* resizeCallback = 0;
 	WindowMouseMoveCallback_t* mouseMoveCallback = 0;
 	WindowMouseButtonCallback_t* mouseButtonCallback = 0;
@@ -110,7 +112,10 @@ public:
 
 private:
 
-#ifdef _WIN32
+	void vulkanInitialize();
+	void createVkSwapchain();
+	void vulkanCleanup();
+
 	VulkanInstance instanceData;
 
 	VulkanSwapchain swapchainData;
@@ -130,8 +135,6 @@ private:
 	VkDebugReportCallbackEXT debugReportCallback = VK_NULL_HANDLE;
 
 	bool recreateSwapchain = false;
-
-#endif
 
 };
 

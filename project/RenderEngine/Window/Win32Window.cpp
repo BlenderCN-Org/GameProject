@@ -27,16 +27,235 @@ bool openglInitialized = false;
 HHOOK g_hKeyboardHook;
 BOOL g_bWindowActive;
 
-// vulkan extensions
-std::vector<const char*> deviceExtensionNames = { "VK_KHR_swapchain" };
-
-PFN_vkCreateDebugReportCallbackEXT fvkCreateDebugReportCallbackEXT = nullptr;;
-PFN_vkDestroyDebugReportCallbackEXT fvkDestroyDebugReportCallbackEXT = nullptr;;
-
 // global pre-defines
 HWND setupWindow();
 
 // global function definitions
+
+void setupRID(HWND windowHandle) {
+	RAWINPUTDEVICE rid[2];
+
+	rid[0].usUsagePage = 0x01;
+	rid[0].usUsage = 0x02;
+	rid[0].dwFlags = RIDEV_INPUTSINK;   // adds HID mouse and also ignores legacy mouse messages
+	rid[0].hwndTarget = windowHandle;
+
+	rid[1].usUsagePage = 0x01;
+	rid[1].usUsage = 0x06;
+	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
+	rid[1].hwndTarget = windowHandle;
+
+	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
+
+	if (RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE) {
+		//registration failed. Call GetLastError for the cause of the error
+		std::cerr << "register RID failed\n";
+		std::cerr << GetLastError() << std::endl;
+	}
+}
+
+BOOL characterCallback(BaseWindow* wnd, UINT msg, WPARAM wParam) {
+	const bool plain = (msg != WM_SYSCHAR);
+
+	if (msg == WM_UNICHAR && wParam == UNICODE_NOCHAR) {
+		// WM_UNICHAR is not sent by Windows, but is sent by some
+		// third-party input method engine
+		// Returning TRUE here announces support for this message
+		return TRUE;
+	}
+	unsigned int codepoint = (unsigned int)wParam;
+	if (codepoint < 32 || (codepoint > 126 && codepoint < 160))
+		return 0;
+
+	if (wnd->characterCallback)
+		wnd->characterCallback(wnd, codepoint);
+	return 0;
+}
+
+void inputCallback(BaseWindow* wnd, LPARAM lParam) {
+	UINT dwSize;
+
+	GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
+		sizeof(RAWINPUTHEADER));
+	LPBYTE lpb = new BYTE[dwSize];
+	if (lpb == NULL) {
+		return;
+	}
+
+	if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize,
+		sizeof(RAWINPUTHEADER)) != dwSize) {
+		//OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+		std::cerr << "GetRawInputData does not return correct size !\n";
+	}
+
+	RAWINPUT* raw = (RAWINPUT*)lpb;
+
+	if (raw->header.dwType == RIM_TYPEKEYBOARD) {
+
+		if (raw->data.keyboard.Flags == RI_KEY_MAKE) {
+			if (raw->data.keyboard.VKey == VK_SHIFT) {
+				wnd->modkeys |= MODKEY_SHIFT;
+			} else if (raw->data.keyboard.VKey == VK_CONTROL) {
+				wnd->modkeys |= MODKEY_CTRL;
+			} else if (raw->data.keyboard.VKey == VK_MENU) {
+				wnd->modkeys |= MODKEY_ALT;
+			} else if (raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN) {
+				wnd->modkeys |= MODKEY_SUPER;
+			}
+		} else {
+			if (raw->data.keyboard.VKey == VK_SHIFT) {
+				wnd->modkeys &= ~MODKEY_SHIFT;
+			} else if (raw->data.keyboard.VKey == VK_CONTROL) {
+				wnd->modkeys &= ~MODKEY_CTRL;
+			} else if (raw->data.keyboard.VKey == VK_MENU) {
+				wnd->modkeys &= ~MODKEY_ALT;
+			} else if (raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN) {
+				wnd->modkeys &= ~MODKEY_SUPER;
+			}
+		}
+
+		if (wnd->keyCallback) {
+
+			int action = raw->data.keyboard.Flags == RI_KEY_BREAK ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
+
+			int mods = wnd->modkeys;
+
+			wnd->keyCallback(wnd, raw->data.keyboard.MakeCode, action, mods);
+			//printf("keyCallback\n");
+		}
+
+		//printf("key event\n");
+
+	} else if (raw->header.dwType == RIM_TYPEMOUSE) {
+
+		if (wnd->mouseButtonCallback) {
+
+			int button = -1;
+			int action = 0;
+			int mods = wnd->modkeys;
+			switch (raw->data.mouse.usButtonFlags) {
+			case(RI_MOUSE_BUTTON_1_DOWN):
+			{
+				button = 0;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_1_UP):
+			{
+				button = 0;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_2_DOWN):
+			{
+				button = 1;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_2_UP):
+			{
+				button = 1;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_3_DOWN):
+			{
+				button = 2;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_3_UP):
+			{
+				button = 2;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_4_DOWN):
+			{
+				button = 3;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_4_UP):
+			{
+				button = 3;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_5_DOWN):
+			{
+				button = 4;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_5_UP):
+			{
+				button = 4;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			default:
+				break;
+			}
+			if (button != -1)
+				wnd->mouseButtonCallback(wnd, button, action, mods);
+			//printf("mouse button callback\n");
+
+			//std::cout << button;
+		}
+
+		if (wnd->mouseMoveCallback) {
+
+			POINT pt;
+			GetCursorPos(&pt);
+
+			ScreenToClient(wnd->getWindowHandle(), &pt);
+			wnd->mouseMoveCallback(wnd, pt.x, pt.y);
+
+			//printf("move callback\n");
+		}
+
+		if (wnd->mouseDeltaCallback) {
+			float mouseDX = (float)raw->data.mouse.lLastX;
+			float mouseDY = (float)raw->data.mouse.lLastY;
+
+			wnd->mouseDeltaCallback(wnd, mouseDX, mouseDY);
+			//printf("delta callback\n");
+		}
+
+		if (wnd->scrollCallback) {
+
+			short scrollX = 0;
+			short scrollY = 0;
+
+			if (RI_MOUSE_WHEEL == raw->data.mouse.usButtonFlags) {
+				scrollX = (short)raw->data.mouse.usButtonData;
+			}
+			if (RI_MOUSE_HWHEEL == raw->data.mouse.usButtonFlags) {
+				scrollY = (short)raw->data.mouse.usButtonData;
+			}
+
+			wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
+		}
+
+		if (wnd->cursorLock) {
+			RECT rec;
+			GetWindowRect(wnd->getWindowHandle(), &rec);
+
+			int posX = (rec.right - rec.left) / 2;
+			posX += rec.left;
+
+			int posY = (rec.bottom - rec.top) / 2;
+			posY += rec.top;
+
+			SetCursorPos(posX, posY);
+		}
+
+		//printf("\nmouse event\n");
+
+	}
+	delete[] lpb;
+}
 
 LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -67,12 +286,6 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		printf("Resize\n");
 	}
 	break;
-	case WM_MOVE:
-	{
-		int xPos = (int)(short)LOWORD(lParam);   // horizontal position 
-		int yPos = (int)(short)HIWORD(lParam);   // vertical position
-	}
-	break;
 	case WM_CLOSE:
 		break;
 
@@ -88,208 +301,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	case WM_SYSCHAR:
 	case WM_UNICHAR:
 	{
-		const bool plain = (msg != WM_SYSCHAR);
-
-		if (msg == WM_UNICHAR && wParam == UNICODE_NOCHAR) {
-			// WM_UNICHAR is not sent by Windows, but is sent by some
-			// third-party input method engine
-			// Returning TRUE here announces support for this message
-			return TRUE;
-		}
-		unsigned int codepoint = (unsigned int)wParam;
-		if (codepoint < 32 || (codepoint > 126 && codepoint < 160))
-			return 0;
-
-		if (wnd->characterCallback)
-			wnd->characterCallback(wnd, codepoint);
-		return 0;
+		return characterCallback(wnd, msg, wParam);
 	}
 	break;
 	case WM_INPUT:
 	{
 		if (wnd) {
-			UINT dwSize;
-
-			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
-				sizeof(RAWINPUTHEADER));
-			LPBYTE lpb = new BYTE[dwSize];
-			if (lpb == NULL) {
-				return 0;
-			}
-
-			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize,
-				sizeof(RAWINPUTHEADER)) != dwSize) {
-				//OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
-				std::cerr << "GetRawInputData does not return correct size !\n";
-			}
-
-			RAWINPUT* raw = (RAWINPUT*)lpb;
-
-			if (raw->header.dwType == RIM_TYPEKEYBOARD) {
-
-				if (raw->data.keyboard.Flags == RI_KEY_MAKE) {
-					if (raw->data.keyboard.VKey == VK_SHIFT) {
-						wnd->modkeys |= MODKEY_SHIFT;
-					} else if (raw->data.keyboard.VKey == VK_CONTROL) {
-						wnd->modkeys |= MODKEY_CTRL;
-					} else if (raw->data.keyboard.VKey == VK_MENU) {
-						wnd->modkeys |= MODKEY_ALT;
-					} else if (raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN) {
-						wnd->modkeys |= MODKEY_SUPER;
-					}
-				} else {
-					if (raw->data.keyboard.VKey == VK_SHIFT) {
-						wnd->modkeys &= ~MODKEY_SHIFT;
-					} else if (raw->data.keyboard.VKey == VK_CONTROL) {
-						wnd->modkeys &= ~MODKEY_CTRL;
-					} else if (raw->data.keyboard.VKey == VK_MENU) {
-						wnd->modkeys &= ~MODKEY_ALT;
-					} else if (raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN) {
-						wnd->modkeys &= ~MODKEY_SUPER;
-					}
-				}
-
-				if (wnd->keyCallback) {
-
-					int action = raw->data.keyboard.Flags == RI_KEY_BREAK ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
-
-					int mods = wnd->modkeys;
-
-					wnd->keyCallback(wnd, raw->data.keyboard.MakeCode, action, mods);
-					//printf("keyCallback\n");
-				}
-
-				//printf("key event\n");
-
-			} else if (raw->header.dwType == RIM_TYPEMOUSE) {
-
-				if (wnd->mouseButtonCallback) {
-
-					int button = -1;
-					int action = 0;
-					int mods = wnd->modkeys;
-					switch (raw->data.mouse.usButtonFlags) {
-					case(RI_MOUSE_BUTTON_1_DOWN):
-					{
-						button = 0;
-						action = ACTION_BUTTON_DOWN;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_1_UP):
-					{
-						button = 0;
-						action = ACTION_BUTTON_UP;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_2_DOWN):
-					{
-						button = 1;
-						action = ACTION_BUTTON_DOWN;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_2_UP):
-					{
-						button = 1;
-						action = ACTION_BUTTON_UP;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_3_DOWN):
-					{
-						button = 2;
-						action = ACTION_BUTTON_DOWN;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_3_UP):
-					{
-						button = 2;
-						action = ACTION_BUTTON_UP;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_4_DOWN):
-					{
-						button = 3;
-						action = ACTION_BUTTON_DOWN;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_4_UP):
-					{
-						button = 3;
-						action = ACTION_BUTTON_UP;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_5_DOWN):
-					{
-						button = 4;
-						action = ACTION_BUTTON_DOWN;
-						break;
-					}
-					case(RI_MOUSE_BUTTON_5_UP):
-					{
-						button = 4;
-						action = ACTION_BUTTON_UP;
-						break;
-					}
-					default:
-						break;
-					}
-					if (button != -1)
-						wnd->mouseButtonCallback(wnd, button, action, mods);
-					//printf("mouse button callback\n");
-
-					//std::cout << button;
-				}
-
-				if (wnd->mouseMoveCallback) {
-
-					POINT pt;
-					GetCursorPos(&pt);
-
-					ScreenToClient(hWnd, &pt);
-					wnd->mouseMoveCallback(wnd, pt.x, pt.y);
-
-					//printf("move callback\n");
-				}
-
-				if (wnd->mouseDeltaCallback) {
-					float mouseDX = (float)raw->data.mouse.lLastX;
-					float mouseDY = (float)raw->data.mouse.lLastY;
-
-					wnd->mouseDeltaCallback(wnd, mouseDX, mouseDY);
-					//printf("delta callback\n");
-				}
-
-				if (wnd->scrollCallback) {
-
-					short scrollX = 0;
-					short scrollY = 0;
-
-					if (RI_MOUSE_WHEEL == raw->data.mouse.usButtonFlags) {
-						scrollX = (short)raw->data.mouse.usButtonData;
-					}
-					if (RI_MOUSE_HWHEEL == raw->data.mouse.usButtonFlags) {
-						scrollY = (short)raw->data.mouse.usButtonData;
-					}
-
-					wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
-				}
-
-				if (wnd->cursorLock) {
-					RECT rec;
-					GetWindowRect(hWnd, &rec);
-
-					int posX = (rec.right - rec.left) / 2;
-					posX += rec.left;
-
-					int posY = (rec.bottom - rec.top) / 2;
-					posY += rec.top;
-
-					SetCursorPos(posX, posY);
-				}
-
-				//printf("\nmouse event\n");
-
-			}
-			delete[] lpb;
+			inputCallback(wnd, lParam);
 			DefWindowProc(hWnd, msg, wParam, lParam);
 			return 1;
 		}
@@ -493,30 +511,16 @@ void BaseWindow::setTitle(const char * title) {
 	SetWindowText(windowHandle, str.c_str());
 }
 
+HWND BaseWindow::getWindowHandle() {
+	return windowHandle;
+}
+
 // GLWindow -> win32 implementation
 
 void GLWindow::init() {
 	windowHandle = setupWindow();
 
-	RAWINPUTDEVICE rid[2];
-
-	rid[0].usUsagePage = 0x01;
-	rid[0].usUsage = 0x02;
-	rid[0].dwFlags = RIDEV_INPUTSINK;   // adds HID mouse and also ignores legacy mouse messages
-	rid[0].hwndTarget = windowHandle;
-
-	rid[1].usUsagePage = 0x01;
-	rid[1].usUsage = 0x06;
-	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
-	rid[1].hwndTarget = windowHandle;
-
-	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
-
-	if (RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE) {
-		//registration failed. Call GetLastError for the cause of the error
-		std::cerr << "register RID failed\n";
-		std::cerr << GetLastError() << std::endl;
-	}
+	setupRID(windowHandle);
 
 	if (windowHandle) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
@@ -570,97 +574,14 @@ void GLWindow::swapBuffers() {
 void VKWindow::init() {
 	windowHandle = setupWindow();
 
-	RAWINPUTDEVICE rid[2];
-
-	rid[0].usUsagePage = 0x01;
-	rid[0].usUsage = 0x02;
-	rid[0].dwFlags = RIDEV_INPUTSINK;   // adds HID mouse and also ignores legacy mouse messages
-	rid[0].hwndTarget = windowHandle;
-
-	rid[1].usUsagePage = 0x01;
-	rid[1].usUsage = 0x06;
-	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
-	rid[1].hwndTarget = windowHandle;
-
-	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
-
-	if (RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE) {
-		//registration failed. Call GetLastError for the cause of the error
-		std::cerr << "register RID failed\n";
-		std::cerr << GetLastError() << std::endl;
-	}
+	setupRID(windowHandle);
 
 	if (windowHandle) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
-		VkDebugReportCallbackCreateInfoEXT debugReportCreateInfo{};
-		debugReportCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-		debugReportCreateInfo.flags = VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
-		debugReportCreateInfo.pfnCallback = vulkanDebugCallback;
+		vulkanInitialize();
 
-		instanceData.instance = createInstance();
-
-		fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkCreateDebugReportCallbackEXT");
-		fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkDestroyDebugReportCallbackEXT");
-
-		if (fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT) {
-
-			fvkCreateDebugReportCallbackEXT(instanceData.instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
-		}
-
-		uint32_t count = 0;
-		VkResult r = vkEnumeratePhysicalDevices(instanceData.instance, &count, nullptr);
-		VkPhysicalDevice* gpus = new VkPhysicalDevice[count];
-		r = vkEnumeratePhysicalDevices(instanceData.instance, &count, gpus);
-
-		if (count == 1) {
-			// if only one gpu is avaible select it
-			instanceData.gpu = gpus[0];
-		} else {
-			// else look for the first avaible discrete gpu
-			VkPhysicalDeviceProperties prop{};
-			for (size_t i = 0; i < count; i++) {
-				vkGetPhysicalDeviceProperties(gpus[i], &prop);
-				if (prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-					instanceData.gpu = gpus[i];
-					break;
-				}
-			}
-		}
-		delete gpus;
-
-		float prio[] = { 1.0f };
-		count = 0;
-
-		vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, nullptr);
-
-		if (count >= 1) {
-			VkQueueFamilyProperties* props = new VkQueueFamilyProperties[count];
-			vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, props);
-
-			for (size_t i = 0; i < count; i++) {
-				if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
-					instanceData.queueFamilyIndex = (uint32_t)i;
-					break;
-				}
-			}
-			delete props;
-		}
-
-		VkDeviceQueueCreateInfo queueCreateInfo{};
-		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-		queueCreateInfo.queueCount = 1;
-		queueCreateInfo.pQueuePriorities = prio;
-		queueCreateInfo.queueFamilyIndex = instanceData.queueFamilyIndex;
-
-		VkDeviceCreateInfo deviceCreateInfo{};
-		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
-		deviceCreateInfo.queueCreateInfoCount = 1;
-		deviceCreateInfo.enabledExtensionCount = (uint32_t)deviceExtensionNames.size();
-		deviceCreateInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
-
-		r = vkCreateDevice(instanceData.gpu, &deviceCreateInfo, nullptr, &instanceData.device);
+		// create surface (platform specific)
 
 		/* Should only be inside this function */
 		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo{};
@@ -668,8 +589,7 @@ void VKWindow::init() {
 		surfaceCreateInfo.hwnd = windowHandle;
 		surfaceCreateInfo.hinstance = NULL;
 
-		r = vkCreateWin32SurfaceKHR(instanceData.instance, &surfaceCreateInfo, nullptr, &instanceData.surface);
-		/* The reset should be moved to subfunctions in separate file */
+		VkResult r = vkCreateWin32SurfaceKHR(instanceData.instance, &surfaceCreateInfo, nullptr, &instanceData.surface);
 
 		VkBool32 surfaceSupported = VK_FALSE;
 		vkGetPhysicalDeviceSurfaceSupportKHR(instanceData.gpu, instanceData.queueFamilyIndex, instanceData.surface, &surfaceSupported);
@@ -692,133 +612,17 @@ void VKWindow::init() {
 		}
 
 		delete surfaceFormats;
+		/* The reset should be moved to subfunctions in separate file */
 
-		VkPresentModeKHR presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
-		{
-			uint32_t presentModeCount = 0;
-			vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, nullptr);
-			VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
-			vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, supportedPresentModes);
-
-			for (size_t i = 0; i < presentModeCount; i++) {
-
-			}
-
-			delete[] supportedPresentModes;
-
-		}
-
-		createSwapchain(instanceData, swapchainData);
-
-		swapchainData.swapchainImageCount = 0;
-		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, nullptr);
-		swapchainData.swapchainImages = new VkImage[swapchainData.swapchainImageCount];
-		r = vkGetSwapchainImagesKHR(instanceData.device, swapchainData.swapchain, &swapchainData.swapchainImageCount, swapchainData.swapchainImages);
-
-		vkGetDeviceQueue(instanceData.device, instanceData.queueFamilyIndex, 0, &queue);
-
-		VkCommandPoolCreateInfo commandPoolCreateInfo{};
-		commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		commandPoolCreateInfo.queueFamilyIndex = instanceData.queueFamilyIndex;
-
-		r = vkCreateCommandPool(instanceData.device, &commandPoolCreateInfo, nullptr, &presentPool);
-
-		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
-		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		commandBufferAllocateInfo.commandBufferCount = swapchainData.swapchainImageCount;
-		commandBufferAllocateInfo.commandPool = presentPool;
-
-		presentBuffers = new VkCommandBuffer[swapchainData.swapchainImageCount];
-
-		r = vkAllocateCommandBuffers(instanceData.device, &commandBufferAllocateInfo, presentBuffers);
-
-		VkCommandBufferBeginInfo commandBeginInfo{};
-		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		commandBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-		VkClearColorValue clearColor = { 1.0f, 0.8f, 0.4f, 0.0f };
-
-		VkImageSubresourceRange subresourceRange{};
-		subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		subresourceRange.baseMipLevel = 0;
-		subresourceRange.levelCount = 1;
-		subresourceRange.baseArrayLayer = 0;
-		subresourceRange.layerCount = 1;
-
-		VkSemaphoreCreateInfo semaphoreCreateInfo{};
-		semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-		vkCreateSemaphore(instanceData.device, &semaphoreCreateInfo, nullptr, &imageAvaible);
-		vkCreateSemaphore(instanceData.device, &semaphoreCreateInfo, nullptr, &renderingFinished);
-
-		VkFenceCreateInfo fenceCreateInfo{};
-		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-
-		vkCreateFence(instanceData.device, &fenceCreateInfo, nullptr, &waitFence);
-
-		for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
-			VkImageMemoryBarrier barrier_from_present_to_clear = {
-				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
-				nullptr,                                    // const void                            *pNext
-				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          srcAccessMask
-				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          dstAccessMask
-				VK_IMAGE_LAYOUT_UNDEFINED,                  // VkImageLayout                          oldLayout
-				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          newLayout
-				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
-				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
-				swapchainData.swapchainImages[i],           // VkImage                                image
-				subresourceRange                            // VkImageSubresourceRange                subresourceRange
-			};
-
-			VkImageMemoryBarrier barrier_from_clear_to_present = {
-				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
-				nullptr,                                    // const void                            *pNext
-				VK_ACCESS_TRANSFER_WRITE_BIT,               // VkAccessFlags                          srcAccessMask
-				VK_ACCESS_MEMORY_READ_BIT,                  // VkAccessFlags                          dstAccessMask
-				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,       // VkImageLayout                          oldLayout
-				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,            // VkImageLayout                          newLayout
-				instanceData.queueFamilyIndex,              // uint32_t                               srcQueueFamilyIndex
-				instanceData.queueFamilyIndex,              // uint32_t                               dstQueueFamilyIndex
-				swapchainData.swapchainImages[i],           // VkImage                                image
-				subresourceRange                            // VkImageSubresourceRange                subresourceRange
-			};
-
-			vkBeginCommandBuffer(presentBuffers[i], &commandBeginInfo);
-			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_present_to_clear);
-
-			vkCmdClearColorImage(presentBuffers[i], swapchainData.swapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1, &subresourceRange);
-
-			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
-			vkEndCommandBuffer(presentBuffers[i]);
-		}
-
+		// create swapchain
+		createVkSwapchain();
 	}
 
 }
 
 void VKWindow::deinit() {
 
-	vkDeviceWaitIdle(instanceData.device);
-
-	vkDestroyFence(instanceData.device, waitFence, nullptr);
-
-	vkDestroySemaphore(instanceData.device, renderingFinished, nullptr);
-	vkDestroySemaphore(instanceData.device, imageAvaible, nullptr);
-
-	vkFreeCommandBuffers(instanceData.device, presentPool, swapchainData.swapchainImageCount, presentBuffers);
-	vkDestroyCommandPool(instanceData.device, presentPool, nullptr);
-
-	delete[] presentBuffers;
-	delete[] swapchainData.swapchainImages;
-
-	vkDestroySwapchainKHR(instanceData.device, swapchainData.swapchain, nullptr);
-	vkDestroySurfaceKHR(instanceData.instance, instanceData.surface, nullptr);
-	vkDestroyDevice(instanceData.device, nullptr);
-
-	fvkDestroyDebugReportCallbackEXT(instanceData.instance, debugReportCallback, nullptr);
-	vkDestroyInstance(instanceData.instance, nullptr);
-	instanceData.instance = VK_NULL_HANDLE;
+	vulkanCleanup();
 
 	DestroyWindow(windowHandle);
 }
