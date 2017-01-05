@@ -10,6 +10,11 @@ struct Parsable
 	std::string code;
 };
 
+struct NameType
+{
+	bool isFunction;
+	std::string name;
+};
 
 std::vector<Parsable> parseLines(std::vector<std::string> lines);
 

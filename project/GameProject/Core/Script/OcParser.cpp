@@ -38,7 +38,9 @@ void parseOcFile(const char * fileName) {
 		for ( size_t i = 0; i < p.size(); i++ ) {
 			std::string s = std::to_string(p[i].line);
 			outFile.write(s.c_str(), s.size());
+			outFile.write(", ", 2);
 			outFile.write(p[i].code.c_str(), p[i].code.size());
+			outFile.write("\n", 1);
 		}
 
 	}
