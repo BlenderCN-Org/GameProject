@@ -132,6 +132,9 @@
     <ClInclude Include="Window\VulkanWindowHelper.hpp">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Assets\Mesh_vk.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="Window\VKWindow.cpp">
       <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Mesh_vk.cpp">
+      <Filter>Source Files\Assets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

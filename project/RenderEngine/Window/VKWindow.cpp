@@ -81,21 +81,6 @@ void VKWindow::vulkanInitialize() {
 
 void VKWindow::createVkSwapchain() {
 
-	VkPresentModeKHR presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
-	{
-		uint32_t presentModeCount = 0;
-		vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, nullptr);
-		VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
-		vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, supportedPresentModes);
-
-		for (size_t i = 0; i < presentModeCount; i++) {
-
-		}
-
-		delete[] supportedPresentModes;
-
-	}
-
 	createSwapchain(instanceData, swapchainData);
 
 	swapchainData.swapchainImageCount = 0;

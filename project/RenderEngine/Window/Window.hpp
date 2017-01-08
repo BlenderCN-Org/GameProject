@@ -136,6 +136,8 @@ private:
 
 	bool recreateSwapchain = false;
 
+	VkRenderPass renderPass = VK_NULL_HANDLE;
+
 };
 
 #endif

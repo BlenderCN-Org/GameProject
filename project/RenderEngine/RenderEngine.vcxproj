@@ -177,6 +177,7 @@
     <ClInclude Include="Assets\FrameBuffer_gl.hpp" />
     <ClInclude Include="Assets\Material_gl.hpp" />
     <ClInclude Include="Assets\Mesh_gl.hpp" />
+    <ClInclude Include="Assets\Mesh_vk.hpp" />
     <ClInclude Include="Assets\ShaderObject_gl.hpp" />
     <ClInclude Include="Assets\Texture_gl.hpp" />
     <ClInclude Include="Camera.hpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="Assets\FrameBuffer_gl.cpp" />
     <ClCompile Include="Assets\Material_gl.cpp" />
     <ClCompile Include="Assets\Mesh_gl.cpp" />
+    <ClCompile Include="Assets\Mesh_vk.cpp" />
     <ClCompile Include="Assets\ShaderObject_gl.cpp" />
     <ClCompile Include="Assets\Texture_gl.cpp" />
     <ClCompile Include="Camera.cpp" />
