@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Core\Settings">
       <UniqueIdentifier>{5bdac77a-483a-4be1-8433-5ec2b13936c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Core\Window">
-      <UniqueIdentifier>{41528084-4281-461a-ae77-00970d5f8703}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Window">
-      <UniqueIdentifier>{1f97b3c8-9bd0-4050-9f03-00a90b2e5d7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core\Loading">
       <UniqueIdentifier>{575b5131-277f-4452-a928-a380275b81ce}</UniqueIdentifier>
     </Filter>
@@ -85,6 +79,12 @@
     <Filter Include="Source Files\Core\Script">
       <UniqueIdentifier>{c70c6952-b6f2-4b8a-bf70-37183620a2dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\System">
+      <UniqueIdentifier>{43a41162-9495-4492-a88e-be83f5bd1dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\System">
+      <UniqueIdentifier>{91981ae1-26c3-4326-867f-51ac1fe9f68d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -102,9 +102,6 @@
     <ClCompile Include="Game\GameObject.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Instance.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Components\RenderComponent.cpp">
       <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
@@ -119,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="Core\Settings\DisplaySettings.cpp">
       <Filter>Source Files\Core\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Window\Window.cpp">
-      <Filter>Source Files\Core\Window</Filter>
     </ClCompile>
     <ClCompile Include="Loader\LibraryLoader.cpp">
       <Filter>Source Files\LibLoader</Filter>
@@ -156,9 +150,6 @@
     <ClCompile Include="Core\Shaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Sys.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Input\Input.cpp">
       <Filter>Source Files\Core\Input</Filter>
     </ClCompile>
@@ -183,6 +174,9 @@
     <ClCompile Include="Core\Script\OcParser.cpp">
       <Filter>Source Files\Core\Script</Filter>
     </ClCompile>
+    <ClCompile Include="Core\System\Sys.cpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Core.hpp">
@@ -196,9 +190,6 @@
     </ClInclude>
     <ClInclude Include="Game\GameObject.hpp">
       <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Instance.hpp">
-      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Game\Components\RenderComponent.hpp">
       <Filter>Header Files\Game\Components</Filter>
@@ -217,9 +208,6 @@
     </ClInclude>
     <ClInclude Include="Core\Settings\Settings.hpp">
       <Filter>Header Files\Core\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Window\Window.hpp">
-      <Filter>Header Files\Core\Window</Filter>
     </ClInclude>
     <ClInclude Include="Loader\LibraryLoader.hpp">
       <Filter>Header Files\LibLoader</Filter>
@@ -266,13 +254,7 @@
     <ClInclude Include="ExceptionHandling.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\NoCompile.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Shaders.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Sys.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Input\CameraInput.hpp">
@@ -308,6 +290,9 @@
     <ClInclude Include="Core\Script\OcCodeGen.hpp">
       <Filter>Header Files\Core\Script</Filter>
     </ClInclude>
+    <ClInclude Include="Core\System\Sys.hpp">
+      <Filter>Header Files\Core\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Todo.txt">
@@ -317,6 +302,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Script.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="..\States.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

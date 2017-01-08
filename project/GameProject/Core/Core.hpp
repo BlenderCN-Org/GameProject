@@ -7,8 +7,7 @@
 #include "ThreadManager.hpp"
 #include "Assets\AssetManager.hpp"
 
-#include "Instance.hpp"
-#include "../Game/Game.hpp"
+//#include "../Game/Game.hpp"
 
 #include "Settings\DisplaySettings.hpp"
 
@@ -43,14 +42,6 @@ public:
 
 private:
 
-	void updateMainMenu(float dt);
-	void updateEditor(float dt);
-	void updateGame(float dt);
-
-	void enterNewGame();
-	void loadGame();
-	void enterEditor();
-
 	// core variables
 	Lib renderEngineLib;
 
@@ -60,9 +51,9 @@ private:
 
 	IWindow* window;
 	Console* console;
-	Game* game;
-	GameState state;
-	GameState targetState;
+	//Game* game;
+	//GameState state;
+	//GameState targetState;
 
 	IRenderEngine* renderEngine;
 	Input* input;

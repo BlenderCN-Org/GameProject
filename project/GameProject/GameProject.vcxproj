@@ -191,7 +191,6 @@
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\CameraInput.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
-    <ClCompile Include="Core\Instance.cpp" />
     <ClCompile Include="Core\Loading\Loader.cpp" />
     <ClCompile Include="Core\Loading\LoadingScreen.cpp" />
     <ClCompile Include="Core\Loading\ModelLoader.cpp" />
@@ -199,9 +198,8 @@
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
     <ClCompile Include="Core\Shaders.cpp" />
-    <ClCompile Include="Core\Sys.cpp" />
+    <ClCompile Include="Core\System\Sys.cpp" />
     <ClCompile Include="Core\ThreadManager.cpp" />
-    <ClCompile Include="Core\Window\Window.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
     <ClCompile Include="Game\Chunk.cpp" />
     <ClCompile Include="Game\Components\BaseComponent.cpp" />
@@ -226,13 +224,11 @@
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\CameraInput.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
-    <ClInclude Include="Core\Instance.hpp" />
     <ClInclude Include="Core\Loading\AssetStructures.hpp" />
     <ClInclude Include="Core\Loading\Loader.hpp" />
     <ClInclude Include="Core\Loading\LoaderDescriptor.hpp" />
     <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
     <ClInclude Include="Core\Loading\ModelLoader.hpp" />
-    <ClInclude Include="Core\NoCompile.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Script\OcCodeGen.hpp" />
     <ClInclude Include="Core\Script\OcOperations.hpp" />
@@ -240,10 +236,9 @@
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
     <ClInclude Include="Core\Shaders.hpp" />
-    <ClInclude Include="Core\Sys.hpp" />
+    <ClInclude Include="Core\System\Sys.hpp" />
     <ClInclude Include="Core\Task.hpp" />
     <ClInclude Include="Core\ThreadManager.hpp" />
-    <ClInclude Include="Core\Window\Window.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
     <ClInclude Include="Game\Chunk.hpp" />
     <ClInclude Include="Game\Components\BaseComponent.hpp" />
@@ -256,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\FileStructure.txt" />
+    <Text Include="..\States.txt" />
     <Text Include="..\Todo.txt" />
     <Text Include="Script.txt" />
   </ItemGroup>

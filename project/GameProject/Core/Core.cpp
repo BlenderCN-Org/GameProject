@@ -1,5 +1,5 @@
 #include "Core.hpp"
-#include "Sys.hpp"
+#include "System\Sys.hpp"
 
 #include "Script\OcParser.hpp"
 
@@ -186,8 +186,6 @@ void Core::init() {
 
 		planeMesh->setMeshData(f, sizeof(f), VERT_UV);
 	}
-	//delete []data;
-
 
 	fbo = renderEngine->createFrameBuffer();
 
@@ -219,11 +217,11 @@ void Core::init() {
 	}
 	//texture->setTextureData(16, 16, 1, te);
 
-	game = new Game();
-	game->init();
+	//game = new Game();
+	//game->init();
 
-	state = GameState::eGameStage_MainMenu;
-	targetState = GameState::eGameStage_MainMenu;
+	//state = GameState::eGameStage_MainMenu;
+	//targetState = GameState::eGameStage_MainMenu;
 
 	startWorkerThreads();
 
@@ -295,7 +293,7 @@ void Core::release() {
 
 	delete assetMgr;
 	delete thrdMgr;
-	delete game;
+	//delete game;
 	delete console;
 
 	if (fbo)
@@ -319,6 +317,8 @@ void Core::release() {
 	renderEngine->release();
 
 	renderEngineLib.unloadLibrary();
+
+	input->release();
 
 	deinitSys();
 	delete this;
@@ -387,27 +387,6 @@ void Core::update(float dt) {
 	}
 
 	running = window->isVisible();
-
-	switch (state) {
-	case GameState::eGameStage_MainMenu:
-		updateMainMenu(dt);
-		break;
-	case GameState::eGameState_EditorMode:
-		updateEditor(dt);
-		break;
-	case GameState::eGameState_PlayMode:
-		updateGame(dt);
-		break;
-	case GameState::eGameState_loading:
-		break;
-	case GameState::eGameState_Undefined:
-		assert(0 && "Undefined State");
-		break;
-	default:
-		break;
-	}
-	// update gameState
-	game->update(dt);
 
 	if (input->consoleKeyWasPressed()) {
 		input->toggleConsole();
@@ -502,60 +481,4 @@ void Core::render() {
 
 DisplaySettings * Core::getDisplaySettings() {
 	return &disp;
-}
-
-void Core::updateMainMenu(float dt) {
-
-	mainMenu.update();
-
-	int x = 0;
-	int y = 0;
-	input->getMousePos(x, y);
-
-	//printf("Mouse pos (%d, %d)\n", x, y);
-
-	if (mainMenu.isNewGamePressed()) {
-		mainMenu.setVisible(false);
-		text->setText("New Game", 8, 0, 0, 1.0);
-		enterNewGame();
-	} else if (mainMenu.isLoadGamePressed()) {
-		mainMenu.setVisible(false);
-		text->setText("Load Game", 9, 0, 0, 1.0);
-		loadGame();
-	} else if (mainMenu.isContinueGamePressed()) {
-		text->setText("Continue", 8, 0, 0, 1.0);
-		mainMenu.setVisible(false);
-	} else if (mainMenu.isEditorPressed()) {
-		mainMenu.setVisible(false);
-		text->setText("Editor", 6, 0, 0, 1.0);
-		enterEditor();
-	} else if (mainMenu.isOptionsPressed()) {
-		text->setText("Options", 7, 0, 0, 1.0);
-		mainMenu.setVisible(false);
-	} else if (mainMenu.isQuitPressed()) {
-		window->showWindow(false);
-	}
-}
-
-void Core::updateEditor(float dt) {
-
-}
-
-void Core::updateGame(float dt) {
-	game->update(dt);
-}
-
-void Core::enterNewGame() {
-	state = GameState::eGameState_loading;
-	targetState = GameState::eGameState_PlayMode;
-}
-
-void Core::loadGame() {
-	state = GameState::eGameState_loading;
-	targetState = GameState::eGameState_PlayMode;
-}
-
-void Core::enterEditor() {
-	state = GameState::eGameState_loading;
-	targetState = GameState::eGameState_EditorMode;
 }

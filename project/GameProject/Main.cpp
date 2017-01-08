@@ -1,7 +1,4 @@
-
-#include "Core\Core.hpp"
-#include "Core\Input\Input.hpp"
-#include "Core\Window\Window.hpp"
+#include "Game\Game.hpp"
 
 #include <time.h>
 #include <string>
@@ -25,42 +22,23 @@ int main(int argc, char* argv[]) {
 	initExceptionHandlers();
 
 	float dt = 0.0f;
-	float timePass = 0.0f;
-	int fps = 0;
 	unsigned int start = clock();
 
-	Core* core = new Core();
+	Game* g = new Game();
+	g->init();
 
-	Input* input = Input::getInput();
+	while ( g->isRunning() ) {
 
-	core->init();
-
-	while ( core->isRunning() ) {
-		if ( core->hadGraphicsReset() ) {
-			core->release();
-			core = new Core();
-			core->init();
-		}
-
-		core->update(dt);
-
-		core->render();
+		g->update(dt);
+		g->render();
 
 		unsigned int temp = clock();
 		dt = unsigned int(temp - start) / 1000.0f;
-		timePass += float(dt);
 		start = temp;
-		fps++;
-
-		if ( timePass > 1.0f ) {
-			timePass -= 1.0f;
-			core->setFPS(fps);
-			fps = 0;
-		}
+		
 	}
 
-	core->release();
-	input->release();
+	delete g;
 
 	return 0;
 }

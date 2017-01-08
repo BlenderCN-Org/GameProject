@@ -4,6 +4,8 @@
 #include "GameState.hpp"
 #include "Chunk.hpp"
 
+#include "../Core/Core.hpp"
+
 class Game
 {
 
@@ -14,9 +16,20 @@ public:
 
 	void init();
 	
+	bool isRunning() const;
+
 	void update(float dt);
+	void render();
 
 private:
+
+	void tickFPS(float dt);
+
+	Core* core;
+
+	bool running;
+	float timepass;
+	int fps;
 
 	GameObject* player;
 	
