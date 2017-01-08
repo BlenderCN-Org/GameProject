@@ -177,6 +177,9 @@
     <ClCompile Include="Core\System\Sys.cpp">
       <Filter>Source Files\Core\System</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Script\OcParsable.cpp">
+      <Filter>Source Files\Core\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Core.hpp">
@@ -281,13 +284,10 @@
     <ClInclude Include="Core\GUI\Editor\TextArea.hpp">
       <Filter>Header Files\Core\GUI\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Script\OcOperations.hpp">
-      <Filter>Header Files\Core\Script</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Script\OcParser.hpp">
       <Filter>Header Files\Core\Script</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Script\OcCodeGen.hpp">
+    <ClInclude Include="Core\Script\OcParsable.hpp">
       <Filter>Header Files\Core\Script</Filter>
     </ClInclude>
     <ClInclude Include="Core\System\Sys.hpp">
