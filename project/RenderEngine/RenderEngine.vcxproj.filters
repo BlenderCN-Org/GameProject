@@ -60,23 +60,11 @@
     <ClInclude Include="DataTypes\Vertex.hpp">
       <Filter>Header Files\DataTypes</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Mesh.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="IMesh.hpp">
       <Filter>Header Files\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Texture.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Assets\AnimatedMesh.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="IAnimatedMesh.hpp">
       <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Assets\Font.hpp">
-      <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="IFont.hpp">
       <Filter>Header Files\Interface</Filter>
@@ -102,17 +90,8 @@
     <ClInclude Include="ICamera.hpp">
       <Filter>Header Files\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Assets\Material.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Assets\ShaderObject.hpp">
-      <Filter>Header Files\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="IShaderObject.hpp">
       <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Assets\FrameBuffer.hpp">
-      <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="IFrameBuffer.hpp">
       <Filter>Header Files\Interface</Filter>
@@ -129,6 +108,33 @@
     <ClInclude Include="Window\WindowSystem.hpp">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Assets\AnimatedMesh_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Font_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\FrameBuffer_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Material_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Mesh_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\ShaderObject_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Texture_gl.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\VulkanWindowHelper.hpp">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Mesh_vk.hpp">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -142,18 +148,6 @@
     </ClCompile>
     <ClCompile Include="DataTypes\Vertex.cpp">
       <Filter>Source Files\DataTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Mesh.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Texture.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\AnimatedMesh.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Font.cpp">
-      <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ShelfPack.cpp">
       <Filter>Source Files\Utils</Filter>
@@ -170,20 +164,41 @@
     <ClCompile Include="ShaderState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assets\FrameBuffer.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\Material.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets\ShaderObject.cpp">
-      <Filter>Source Files\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="Window\Win32Window.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
     <ClCompile Include="Window\Window.cpp">
       <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\AnimatedMesh_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Font_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\FrameBuffer_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Material_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Mesh_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\ShaderObject_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Texture_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\VulkanWindowHelper.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\VKWindow.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Mesh_vk.cpp">
+      <Filter>Source Files\Assets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

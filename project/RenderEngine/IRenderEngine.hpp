@@ -17,37 +17,44 @@
 
 #include "IWindow.hpp"
 
-enum class RenderEngineType
-{
+enum class RenderEngineType {
 	eRenderNone = -1,
 	eRenderOpenGL = 0,
+	eRenderVulkan = 1,
 };
 
-enum class SType
-{
+enum class SType {
 	sOpenGLWindowCreateInfo = 0,
 	sRenderEngineCreateInfo = 1,
+	sVulkanWindowCreateInfo = 2,
 };
 
-struct OpenGLWindowCreateInfo
-{
+struct OpenGLWindowCreateInfo {
 	SType stype;
 	int majorVersion;
 	int minorVersion;
 
 };
 
-typedef void* (*PFN_EngineAllocator(size_t));
-typedef void (*PFN_EngineDeallocator(void*));
+struct VulkanWindowCreateInfo {
+	SType stype;
+	int presentQueueCount; // number of present queues
+	int commandQueueCount; // number of command queues
+	int transfereQueueCount; // number of transfer queues
 
-struct AllocatorInfo
-{
+	int preferredGPU; // gpu selection -1 to let application decide
+
+};
+
+typedef void* (*PFN_EngineAllocator(size_t));
+typedef void(*PFN_EngineDeallocator(void*));
+
+struct AllocatorInfo {
 	PFN_EngineAllocator pfnEngineAlloc;
 	PFN_EngineDeallocator pfnEngineDealloc;
 };
 
-struct RenderEngineCreateInfo
-{
+struct RenderEngineCreateInfo {
 	SType stype;
 	bool createRenderWindow;
 	RenderEngineType renderEngineType;
@@ -55,8 +62,7 @@ struct RenderEngineCreateInfo
 	void* pNext;
 };
 
-class IRenderEngine
-{
+class IRenderEngine {
 
 public:
 
@@ -65,7 +71,7 @@ public:
 	virtual void renderDebugFrame() = 0;
 
 	virtual void setDepthTest(bool enable) = 0;
-	
+
 	virtual void clearStencil() = 0;
 
 	virtual void setStencilTest(bool enable) = 0;

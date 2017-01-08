@@ -5,7 +5,12 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#define VK_USE_PLATFORM_WIN32_KHR
 #endif
+
+#define SUPPORT_VULKAN_WINDOW
+#include <vulkan\vulkan.hpp>
+#include "VulkanWindowHelper.hpp"
 
 class BaseWindow : public IWindow
 {
@@ -38,7 +43,11 @@ public:
 	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback);
 	//virtual void setVsync(bool vSync);
 
+	virtual void setTitle(const char* title);
+
 //private:
+
+	HWND getWindowHandle();
 
 	WindowResizeCallback_t* resizeCallback = 0;
 	WindowMouseMoveCallback_t* mouseMoveCallback = 0;
@@ -86,12 +95,48 @@ private:
 };
 
 #ifdef SUPPORT_VULKAN_WINDOW
-class VKWindow : IWindow
-{
 
+class VKWindow : public BaseWindow
+{
 public:
 
+	void init();
+	void deinit();
+
+	virtual void setVsync(bool vSync);
+	virtual void pollMessages();
+
+	virtual void setWindowSize(int x, int y);
+
+	virtual void swapBuffers();
+
 private:
+
+	void vulkanInitialize();
+	void createVkSwapchain();
+	void vulkanCleanup();
+
+	VulkanInstance instanceData;
+
+	VulkanSwapchain swapchainData;
+
+	VkQueue queue = VK_NULL_HANDLE;
+
+	VkCommandPool presentPool = VK_NULL_HANDLE;
+	VkCommandBuffer* presentBuffers = nullptr;
+
+	VkSemaphore imageAvaible = VK_NULL_HANDLE;
+	VkSemaphore renderingFinished = VK_NULL_HANDLE;
+
+	uint32_t currentImage = 0;
+
+	VkFence waitFence = VK_NULL_HANDLE;
+
+	VkDebugReportCallbackEXT debugReportCallback = VK_NULL_HANDLE;
+
+	bool recreateSwapchain = false;
+
+	VkRenderPass renderPass = VK_NULL_HANDLE;
 
 };
 

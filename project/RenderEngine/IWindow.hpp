@@ -55,6 +55,8 @@ public:
 
 	virtual void swapBuffers() = 0;
 
+	virtual void setTitle(const char* title) = 0;
+
 };
 
 #endif

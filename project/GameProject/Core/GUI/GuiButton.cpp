@@ -14,10 +14,10 @@ GuiButton::GuiButton(int _x, int _y, int _width, int _height, std::string _text)
 }
 
 GuiButton::GuiButton(Rect bounds, std::string _text) {
-	x = bounds.x;
-	y = bounds.y;
-	width = bounds.width;
-	height = bounds.height;
+	x = (int)bounds.x;
+	y = (int)bounds.y;
+	width = (int)bounds.width;
+	height = (int)bounds.height;
 	text = _text;
 }
 
@@ -51,6 +51,6 @@ GuiButtonState GuiButton::getState() {
 }
 
 Rect GuiButton::getBounds() const {
-	Rect r = { x, y, width, height };
+	Rect r = { (float)x, (float)y, (float)width, (float)height };
 	return r;
 }

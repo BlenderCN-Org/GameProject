@@ -17,19 +17,22 @@
 #include <freetype\ft2build.h>
 #include FT_FREETYPE_H
 
-
 //#include <vld.h>
 
-struct GLinfo
-{
+struct GLinfo {
 	const char* vendor;
 	const char* renderer;
 	const char* version;
 	const char* shadingLanguageVersion;
 };
 
-class RenderEngine : public IRenderEngine
-{
+struct VKinfo {
+	const char* vendor;
+	const char* renderer;
+	const char* version;
+};
+
+class RenderEngine : public IRenderEngine {
 public:
 
 	RenderEngine() {};
@@ -75,8 +78,10 @@ public:
 
 private:
 
+	void printInfo(GLinfo info);
+
 	int counter = 0;
-	
+
 	GLinfo info;
 
 	RGB clearColor;
@@ -89,6 +94,7 @@ private:
 	FT_Library fontLibrary;
 
 	GLWindow glWindow;
+	VKWindow vkWindow;
 
 	RenderEngineCreateInfo reci;
 

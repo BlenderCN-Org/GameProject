@@ -37,3 +37,5 @@ void BaseWindow::setWindowFocusCallback(WindowFocus_t callback) {
 void BaseWindow::setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback) {
 	mouseDeltaCallback = callback;
 }
+
+

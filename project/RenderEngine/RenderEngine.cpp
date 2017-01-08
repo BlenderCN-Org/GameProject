@@ -1,12 +1,12 @@
 #include "RenderEngine.hpp"
 
 #include <gl\glew.h>
-#include "Assets\Mesh.hpp"
-#include "Assets\AnimatedMesh.hpp"
-#include "Assets\Font.hpp"
-#include "Assets\ShaderObject.hpp"
-#include "Assets\FrameBuffer.hpp"
-#include "Assets\Texture.hpp"
+#include "Assets\Mesh_gl.hpp"
+#include "Assets\AnimatedMesh_gl.hpp"
+#include "Assets\Font_gl.hpp"
+#include "Assets\ShaderObject_gl.hpp"
+#include "Assets\FrameBuffer_gl.hpp"
+#include "Assets\Texture_gl.hpp"
 #include "Camera.hpp"
 
 
@@ -19,53 +19,53 @@
 extern "C"
 {
 	void __stdcall openglCallbackFunction(GLenum source,
-										  GLenum type,
-										  GLuint id,
-										  GLenum severity,
-										  GLsizei length,
-										  const GLchar* message,
-										  void* userParam) {
-		if ( severity != GL_DEBUG_SEVERITY_NOTIFICATION ) {
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		void* userParam) {
+		if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
 			printf("---------------------opengl-callback-start------------\n");
 			printf("message: %s\n", message);
 			printf("type: ");
-			switch ( type ) {
-				case GL_DEBUG_TYPE_ERROR:
-					printf("ERROR");
-					break;
-				case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-					printf("DEPRECATED_BEHAVIOR");
-					break;
-				case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-					printf("UNDEFINED_BEHAVIOR");
-					break;
-				case GL_DEBUG_TYPE_PORTABILITY:
-					printf("PORTABILITY");
-					break;
-				case GL_DEBUG_TYPE_PERFORMANCE:
-					printf("PERFORMANCE");
-					break;
-				case GL_DEBUG_TYPE_OTHER:
-					printf("OTHER");
-					break;
+			switch (type) {
+			case GL_DEBUG_TYPE_ERROR:
+				printf("ERROR");
+				break;
+			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+				printf("DEPRECATED_BEHAVIOR");
+				break;
+			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+				printf("UNDEFINED_BEHAVIOR");
+				break;
+			case GL_DEBUG_TYPE_PORTABILITY:
+				printf("PORTABILITY");
+				break;
+			case GL_DEBUG_TYPE_PERFORMANCE:
+				printf("PERFORMANCE");
+				break;
+			case GL_DEBUG_TYPE_OTHER:
+				printf("OTHER");
+				break;
 			}
 			printf("\n");
 
 			printf("id: %d\n", id);
 			printf("severity: ");
-			switch ( severity ) {
-				case GL_DEBUG_SEVERITY_LOW:
-					printf("LOW");
-					break;
-				case GL_DEBUG_SEVERITY_MEDIUM:
-					printf("MEDIUM");
-					break;
-				case GL_DEBUG_SEVERITY_HIGH:
-					printf("HIGH");
-					break;
-				case GL_DEBUG_SEVERITY_NOTIFICATION:
-					printf("NOTIFICATION");
-					break;
+			switch (severity) {
+			case GL_DEBUG_SEVERITY_LOW:
+				printf("LOW");
+				break;
+			case GL_DEBUG_SEVERITY_MEDIUM:
+				printf("MEDIUM");
+				break;
+			case GL_DEBUG_SEVERITY_HIGH:
+				printf("HIGH");
+				break;
+			case GL_DEBUG_SEVERITY_NOTIFICATION:
+				printf("NOTIFICATION");
+				break;
 			}
 			printf("\n");
 			printf("---------------------opengl-callback-end--------------\n");
@@ -76,39 +76,53 @@ extern "C"
 
 void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 	reci = createInfo;
-	if ( reci.createRenderWindow ) {
-		//throw "Not yet finished!";
-		initWindowSystem();
-		glWindow.init();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		if (reci.createRenderWindow) {
+			//throw "Not yet finished!";
+			initWindowSystem();
+			glWindow.init();
 
-		glWindow.showWindow(true);
-	}
-	glewInit();
+			glWindow.showWindow(true);
+		}
+
+		glewInit();
 
 #ifdef _DEBUG
-	if ( glDebugMessageCallback ) {
-		printf("Register OpenGL debug callback\n");
-		glDebugMessageCallback((GLDEBUGPROC)openglCallbackFunction, nullptr);
-		GLuint unusedIds = 0;
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds, true);
-	} else
-		printf("glDebugMessageCallback not available\n");
+		if (glDebugMessageCallback) {
+			printf("Register OpenGL debug callback\n");
+			glDebugMessageCallback((GLDEBUGPROC)openglCallbackFunction, nullptr);
+			GLuint unusedIds = 0;
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds, true);
+		} else
+			printf("glDebugMessageCallback not available\n");
 #endif
 
-	info.vendor = (const char*)glGetString(GL_VENDOR);
-	info.renderer = (const char*)glGetString(GL_RENDERER);
-	info.version = (const char*)glGetString(GL_VERSION);
-	info.shadingLanguageVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+		info.vendor = (const char*)glGetString(GL_VENDOR);
+		info.renderer = (const char*)glGetString(GL_RENDERER);
+		info.version = (const char*)glGetString(GL_VERSION);
+		info.shadingLanguageVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEPTH_TEST);
+		printInfo(info);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEPTH_TEST);
 
-	clearColor = RGB(0, 0, 0);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
+		clearColor = RGB(0, 0, 0);
+	}
+	else if (reci.renderEngineType == RenderEngineType::eRenderVulkan)
+	{
+		if (reci.createRenderWindow) {
+			//throw "Not yet finished!";
+			initWindowSystem();
+			vkWindow.init();
+
+			vkWindow.showWindow(true);
+		}
+	}
 	//objectPool = PoolAllocator<RenderObject>(10);
 
 	MemoryManager* mgr = MemoryManager::getMemoryManager();
@@ -129,8 +143,11 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 void RenderEngine::release() {
 	FT_Done_FreeType(fontLibrary);
-	if ( reci.createRenderWindow ) {
-		glWindow.deinit();
+	if (reci.createRenderWindow) {
+		if(reci.renderEngineType == RenderEngineType::eRenderOpenGL)
+			glWindow.deinit();
+		else if (reci.renderEngineType == RenderEngineType::eRenderVulkan)
+			vkWindow.deinit();
 		deinitWindowSystem();
 	}
 	delete this;
@@ -147,7 +164,7 @@ void RenderEngine::renderDebugFrame() {
 
 	counter += 20;
 
-	if ( counter > 32 * KB ) {
+	if (counter > 32 * KB) {
 		counter = 1;
 	}
 
@@ -156,74 +173,99 @@ void RenderEngine::renderDebugFrame() {
 	c.v = 0.5f;
 	c.s = 1.0f;
 	clearColor = HSV2RGB(c);
-	//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
 
 }
 
 void RenderEngine::setDepthTest(bool enable) {
-	GLenum cap = GL_DEPTH_TEST;
-	if ( enable ) {
-		glEnable(cap);
-	} else {
-		glDisable(cap);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+
+		GLenum cap = GL_DEPTH_TEST;
+		if (enable) {
+			glEnable(cap);
+		} else {
+			glDisable(cap);
+		}
 	}
 }
 
 void RenderEngine::clearStencil() {
-	glClear(GL_STENCIL_BUFFER_BIT);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+
+		glClear(GL_STENCIL_BUFFER_BIT);
+	}
 }
 
 void RenderEngine::setStencilTest(bool enable) {
-	GLenum cap = GL_STENCIL_TEST;
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		GLenum cap = GL_STENCIL_TEST;
 
-	if ( enable ) {
-		glEnable(cap);
-	} else {
-		glDisable(cap);
+		if (enable) {
+			glEnable(cap);
+		} else {
+			glDisable(cap);
+		}
 	}
 }
 
 void RenderEngine::stencilMask(unsigned int mask) {
-	glStencilMask(mask);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glStencilMask(mask);
+	}
 }
 
 void RenderEngine::stencilClear(int mask) {
-	glClearStencil(mask);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glClearStencil(mask);
+	}
 }
 
 void RenderEngine::stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass) {
-	glStencilOp(fail, zfail, zpass);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glStencilOp(fail, zfail, zpass);
+	}
 }
 
 void RenderEngine::stencilFunc(unsigned int func, int ref, unsigned int mask) {
-	glStencilFunc(func, ref, mask);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glStencilFunc(func, ref, mask);
+	}
 }
 
 void RenderEngine::setBlending(bool enable) {
-	GLenum cap = GL_BLEND;
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		GLenum cap = GL_BLEND;
 
-	if ( enable ) {
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBlendEquation(GL_FUNC_ADD);
-		glEnable(cap);
-	} else {
-		glDisable(cap);
+		if (enable) {
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendEquation(GL_FUNC_ADD);
+			glEnable(cap);
+		} else {
+			glDisable(cap);
+		}
 	}
 }
 
 bool RenderEngine::getGraphicsReset() const {
-	GLenum status = glGetGraphicsResetStatus();
-	if ( status == GL_NO_ERROR )
-		return false;
-	while ( glGetGraphicsResetStatus() != GL_NO_ERROR );
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		GLenum status = glGetGraphicsResetStatus();
+		if (status == GL_NO_ERROR)
+			return false;
+		while (glGetGraphicsResetStatus() != GL_NO_ERROR);
 
-	return true;
+		return true;
+	}
+	return false;
 }
 
 void RenderEngine::updateViewPort(int width, int height) {
-	if ( width != 0 && height != 0 ) {
-		glViewport(0, 0, width, height);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		if (width != 0 && height != 0) {
+			glViewport(0, 0, width, height);
+		}
 	}
 }
 
@@ -236,11 +278,17 @@ void RenderEngine::setActiveCamera(ICamera * camera) {
 }
 
 IMesh * RenderEngine::createMesh() {
-	return new Mesh();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new Mesh_gl();
+	}
+	return nullptr;
 }
 
 IAnimatedMesh * RenderEngine::createAnimatedMesh() {
-	return new AnimatedMesh();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new AnimatedMesh_gl();
+	}
+	return nullptr;
 }
 
 //IRenderObject * RenderEngine::createRenderObject() {
@@ -248,23 +296,40 @@ IAnimatedMesh * RenderEngine::createAnimatedMesh() {
 //}
 
 IShaderObject * RenderEngine::createShaderObject() {
-	return new ShaderObject();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new ShaderObject_gl();
+	}
+	return nullptr;
 }
 
 ITexture * RenderEngine::createTexture() {
-	return new Texture();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new Texture_gl();
+	}
+	return nullptr;
 }
 
 IFrameBuffer * RenderEngine::createFrameBuffer() {
-	return new FrameBuffer();
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new FrameBuffer_gl();
+	}
+	return nullptr;
 }
 
 IFont * RenderEngine::createFont() {
-	return new Font(fontLibrary);
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new Font_gl(fontLibrary);
+	}
+	return nullptr;
 }
 
 IWindow * RenderEngine::getMainWindow() {
-	return &glWindow;
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return &glWindow;
+	} else if (reci.renderEngineType == RenderEngineType::eRenderVulkan) {
+		return &vkWindow;
+	}
+	return nullptr;
 }
 
 size_t RenderEngine::getMemoryUsage() const {
@@ -273,6 +338,10 @@ size_t RenderEngine::getMemoryUsage() const {
 
 size_t RenderEngine::getMaxMemory() const {
 	return MemoryManager::getMemoryManager()->getHeapSize();
+}
+
+void RenderEngine::printInfo(GLinfo info) {
+	printf("%s\nGPU: %s\nDriver:%s\nGLSL: %s\n", info.vendor, info.renderer, info.version, info.shadingLanguageVersion);
 }
 
 IRenderEngine* CreateRenderEngine() {
