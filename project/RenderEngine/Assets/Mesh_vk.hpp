@@ -6,7 +6,6 @@
 
 class Mesh_vk : public IMesh
 {
-
 public:
 
 	virtual void init(MeshPrimitiveType p);
@@ -47,7 +46,6 @@ private:
 	bool isMapped;
 	void* mapPtr;
 	size_t mappedSize;
-
 };
 
 #endif

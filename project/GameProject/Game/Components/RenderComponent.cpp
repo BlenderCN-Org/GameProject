@@ -2,18 +2,15 @@
 
 const uint64_t IBaseComponent<RenderComponent>::typeID = (uint64_t)Components::RENDER_COMPONENT;
 
-void RenderComponent::init()
-{
+void RenderComponent::init() {
 	instanceId = 0;
 }
 
-void RenderComponent::setInstanceId(uint64_t _instanceId)
-{
+void RenderComponent::setInstanceId(uint64_t _instanceId) {
 	instanceId = _instanceId;
 }
 
-uint64_t RenderComponent::getInstanceId() const
-{
+uint64_t RenderComponent::getInstanceId() const {
 	return instanceId;
 }
 

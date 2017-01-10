@@ -10,7 +10,6 @@ struct Vertex3f
 	Vertex3f();
 	Vertex3f(float default);
 	Vertex3f(float x, float y, float z);
-
 };
 
 struct Vertex2f

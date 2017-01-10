@@ -15,7 +15,6 @@ public:
 private:
 
 	uint64_t instanceId;
-
 };
 
 #endif

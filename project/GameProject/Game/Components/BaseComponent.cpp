@@ -1,6 +1,5 @@
 #include "BaseComponent.hpp"
 
-void BaseComponent::setAttachedOn(GameObject * owner)
-{
+void BaseComponent::setAttachedOn(GameObject * owner) {
 	attatchedOn = owner;
 }

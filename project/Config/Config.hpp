@@ -26,12 +26,10 @@ public:
 private:
 	std::string name;
 	std::map<std::string, std::string> settingsMap;
-
 };
 
 class Config
 {
-
 public:
 
 	Config();
@@ -56,7 +54,6 @@ public:
 private:
 
 	std::map<std::string, Section> sectionMap;
-
 };
 
 #endif

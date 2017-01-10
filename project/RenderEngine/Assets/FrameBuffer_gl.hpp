@@ -8,15 +8,12 @@
 
 class FrameBuffer_gl : public IFrameBuffer
 {
-
 public:
 
 	FrameBuffer_gl() : created(false) {};
 
 	virtual bool init(FrameBufferCreateInfo *createInfo);
 	virtual void release();
-
-	
 
 	virtual void resize(int width, int height);
 	virtual void setWindowSize(int windowWidth, int windowHeight);
@@ -28,7 +25,7 @@ public:
 	virtual bool isUsingRenderBuffer() const;
 
 private:
-	
+
 	bool setupFrameBuffer();
 
 	GLuint createDepthTexture(int width, int height, bool stencil);
@@ -44,7 +41,7 @@ private:
 	int windowHeight;
 
 	bool created;
-	
+
 	bool stencil;
 	bool depth;
 	bool multiSample;
@@ -52,12 +49,11 @@ private:
 	bool usingRenderBuffers;
 
 	GLuint framebuffer;
-	
+
 	int colorAttachmentCount;
 
 	GLuint* colorAttachments;
 	GLuint depthAttachment;
-
 };
 
 #endif

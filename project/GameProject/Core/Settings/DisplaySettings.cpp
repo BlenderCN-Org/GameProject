@@ -1,7 +1,6 @@
 #include "DisplaySettings.hpp"
 #include <sstream>
 
-
 DisplaySettings::DisplaySettings() : window(nullptr) {}
 
 void DisplaySettings::setWindow(IWindow * wnd) {
@@ -14,7 +13,6 @@ void DisplaySettings::setRenderEngine(IRenderEngine * re) {
 
 void DisplaySettings::apply() {
 	if ( window && renderEngine ) {
-
 		switch ( fullscreenMode ) {
 			case FullscreenMode::FULLSCREEN:
 			{
@@ -38,11 +36,9 @@ void DisplaySettings::apply() {
 			}
 			default:
 				break;
-
 		}
 		window->setWindowSize(screenRes.width, screenRes.height);
 	}
-
 }
 
 void DisplaySettings::setResolution(int width, int height) {

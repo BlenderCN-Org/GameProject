@@ -22,7 +22,6 @@ typedef void WindowFocus_t(IWindow* window, bool focus);
 
 class IWindow
 {
-
 public:
 
 	virtual void getCursorPos(int &x, int &y) = 0;
@@ -56,7 +55,6 @@ public:
 	virtual void swapBuffers() = 0;
 
 	virtual void setTitle(const char* title) = 0;
-
 };
 
 #endif

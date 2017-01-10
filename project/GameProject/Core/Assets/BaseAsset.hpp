@@ -23,7 +23,6 @@ enum class AssetType
 
 class BaseAsset
 {
-
 public:
 
 	virtual void init() = 0;
@@ -40,14 +39,13 @@ public:
 	AssetState getAssetState() const;
 
 protected:
-	
+
 	uint32_t dataSize;
 	void* dataPtr;
 
 	uint32_t assetID;
 	AssetType type;
 	AssetState state;
-
 };
 
 #endif

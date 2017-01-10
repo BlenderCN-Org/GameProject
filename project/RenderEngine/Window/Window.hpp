@@ -14,7 +14,6 @@
 
 class BaseWindow : public IWindow
 {
-
 public:
 	virtual void getCursorPos(int &x, int &y);
 
@@ -45,7 +44,7 @@ public:
 
 	virtual void setTitle(const char* title);
 
-//private:
+	//private:
 
 	HWND getWindowHandle();
 
@@ -66,7 +65,6 @@ public:
 protected:
 	HWND windowHandle;
 	bool visible;
-
 };
 
 class GLWindow : public BaseWindow
@@ -91,7 +89,6 @@ private:
 	HDC deviceContext;
 
 #endif
-
 };
 
 #ifdef SUPPORT_VULKAN_WINDOW
@@ -137,7 +134,6 @@ private:
 	bool recreateSwapchain = false;
 
 	VkRenderPass renderPass = VK_NULL_HANDLE;
-
 };
 
 #endif
@@ -145,11 +141,9 @@ private:
 #if defined(SUPPORT_D3D12_WINDOW) && defined(_WIN32)
 class D3D12Window : IWindow
 {
-
 public:
 
 private:
-
 };
 
 #endif

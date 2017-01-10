@@ -3,14 +3,12 @@
 
 class LoaderDescriptor
 {
-
 public:
 
 private:
 
 	char* assetName;
 	bool requiredForLoadComplete;
-
 };
 
 #endif

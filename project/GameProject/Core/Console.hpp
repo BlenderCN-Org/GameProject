@@ -21,7 +21,6 @@ class Console;
 typedef void(*console_function)(Console*, const std::vector<std::string> &);
 
 class Console {
-
 public:
 
 	Console();
@@ -52,7 +51,7 @@ public:
 	bool reset;
 
 private:
-	
+
 	void addToHistory(std::string h);
 
 	typedef struct {
@@ -65,11 +64,10 @@ private:
 			void *variable_pointer;
 			console_function function;
 		};
-
 	} console_item_t;
 
 	bool parseCommandLine();
-	
+
 	std::string line;
 	std::vector<std::string> historyBuffer;
 	std::vector<std::string> m_commandBuffer;
@@ -80,8 +78,6 @@ private:
 	std::string	m_commandLine;
 
 	console_function defaultCommand;
-
 };
 
 #endif
-

@@ -11,7 +11,6 @@
 
 class AssetManager
 {
-
 public:
 
 	void setThreadManager(ThreadManager* threadManager);

@@ -2,7 +2,6 @@
 #define IMAGE_HPP
 
 class Image {
-
 public:
 
 	void init(int x, int y);
@@ -11,7 +10,6 @@ public:
 private:
 
 	void* pixelData;
-
 };
 
 #endif

@@ -17,12 +17,12 @@ struct InputEvent
 		int l = lhs.code;
 		int r = rhs.code;
 		if ( lhs.mouse )
-			l = -(l+1);
+			l = -(l + 1);
 		if ( rhs.mouse )
-			r = -(r+1);
+			r = -(r + 1);
 		return (l < r);
 	};
-	
+
 	inline friend bool operator> (const InputEvent& lhs, const InputEvent& rhs) { return rhs < lhs; }
 	inline friend bool operator<=(const InputEvent& lhs, const InputEvent& rhs) { return !(lhs > rhs); }
 	inline friend bool operator>=(const InputEvent& lhs, const InputEvent& rhs) { return !(lhs < rhs); }
@@ -37,18 +37,17 @@ struct KeyBind
 	int mod;
 	bool mouse;
 
-	static inline KeyBind create(std::string data)
-	{
+	static inline KeyBind create(std::string data) {
 		std::stringstream ss(data);
 		int code, mod;
 		bool mouse;
 		std::string buff;
 		std::getline(ss, buff, ':');
 		code = std::stoi(buff);
-		
+
 		std::getline(ss, buff, ':');
 		mouse = std::stoi(buff) == 1 ? true : false;
-		
+
 		std::getline(ss, buff, ':');
 		mod = std::stoi(buff);
 		KeyBind kb{ code, mod, mouse };
@@ -56,19 +55,17 @@ struct KeyBind
 		return kb;
 	}
 
-	inline std::string toString()
-	{
+	inline std::string toString() {
 		std::string res = std::to_string(code) + ":" + std::to_string(mouse) + ":" + std::to_string(mod);
 
 		return res;
 	}
-
 };
 
 class Input
 {
 public:
-	
+
 	static Input* getInput();
 	static void release();
 
@@ -106,12 +103,12 @@ private:
 
 	static Input* singleton;
 	Input();
-	
+
 	void loadkeyBinds();
 	void saveKeyBinds();
 
 	IWindow* window;
-	
+
 	std::map<InputEvent, bool> keyMap;
 	std::map<InputEvent, bool> releaseMap;
 	int modkey;
@@ -145,17 +142,16 @@ private:
 
 enum KEYBINDS_NAME
 {
-	KEYBIND_FORWARD		 = 0,
-	KEYBIND_BACKWARD		,
-	KEYBIND_LEFT			,
-	KEYBIND_RIGHT			,
+	KEYBIND_FORWARD = 0,
+	KEYBIND_BACKWARD,
+	KEYBIND_LEFT,
+	KEYBIND_RIGHT,
 
 	KEYBINDS_LENGTH
 };
 
-
 static const char* KeyBindsStrings[] =
-{	"KeyAction_Forward",
+{ "KeyAction_Forward",
 	"KeyAction_Backward",
 	"KeyAction_Left",
 	"KeyAction_Right"

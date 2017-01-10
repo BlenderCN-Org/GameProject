@@ -17,7 +17,6 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
 												   const char* layerPrefix,
 												   const char* msg,
 												   void* userData) {
-
 	std::ostringstream stream;
 
 	if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) {
@@ -91,7 +90,6 @@ VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surf
 		}
 
 		delete[] supportedPresentModes;
-
 	}
 
 	VkSwapchainCreateInfoKHR swapchainCreateInfo{};
@@ -121,7 +119,6 @@ VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surf
 }
 
 void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapchain) {
-
 	VkPresentModeKHR presentMode = VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR;
 	{
 		uint32_t presentModeCount = 0;
@@ -137,7 +134,6 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 		}
 
 		delete[] supportedPresentModes;
-
 	}
 
 	VkSurfaceCapabilitiesKHR surfaceCapabilities{};
@@ -173,5 +169,4 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 	if ( oldSwapchain != VK_NULL_HANDLE ) {
 		vkDestroySwapchainKHR(instanceData.device, oldSwapchain, nullptr);
 	}
-
 }

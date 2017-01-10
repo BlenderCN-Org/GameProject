@@ -5,11 +5,9 @@
 
 class ModelLoader
 {
-
 public:
 
 	static void* load(const char* fileName, unsigned int &dataSize);
-
 };
 
 #endif

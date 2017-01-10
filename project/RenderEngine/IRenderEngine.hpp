@@ -8,7 +8,6 @@
 #endif
 
 #include "IAnimatedMesh.hpp"
-#include "ICamera.hpp"
 #include "IShaderObject.hpp"
 #include "IFrameBuffer.hpp"
 #include "ITexture.hpp"
@@ -33,7 +32,6 @@ struct OpenGLWindowCreateInfo {
 	SType stype;
 	int majorVersion;
 	int minorVersion;
-
 };
 
 struct VulkanWindowCreateInfo {
@@ -43,7 +41,6 @@ struct VulkanWindowCreateInfo {
 	int transfereQueueCount; // number of transfer queues
 
 	int preferredGPU; // gpu selection -1 to let application decide
-
 };
 
 typedef void* (*PFN_EngineAllocator(size_t));
@@ -63,7 +60,6 @@ struct RenderEngineCreateInfo {
 };
 
 class IRenderEngine {
-
 public:
 
 	virtual void init(RenderEngineCreateInfo &createInfo) = 0;
@@ -86,10 +82,6 @@ public:
 
 	virtual void updateViewPort(int width, int height) = 0;
 
-	virtual ICamera* createCamera() = 0;
-	//virtual void setActiveCamera(ICamera * camera) = 0;
-	//virtual void* getViewMatrixPtr() = 0;
-
 	virtual IMesh* createMesh() = 0;
 	virtual IAnimatedMesh* createAnimatedMesh() = 0;
 	//virtual IRenderObject* createRenderObject() = 0;
@@ -104,9 +96,7 @@ public:
 
 	virtual size_t getMemoryUsage() const = 0;
 	virtual size_t getMaxMemory() const = 0;
-
 };
-
 
 extern "C" RENDERENGINE_API IRenderEngine* CreateRenderEngine();
 

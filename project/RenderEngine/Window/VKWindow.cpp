@@ -7,7 +7,6 @@ PFN_vkCreateDebugReportCallbackEXT fvkCreateDebugReportCallbackEXT = nullptr;
 PFN_vkDestroyDebugReportCallbackEXT fvkDestroyDebugReportCallbackEXT = nullptr;
 
 void VKWindow::vulkanInitialize() {
-
 	VkDebugReportCallbackCreateInfoEXT debugReportCreateInfo{};
 	debugReportCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
 	debugReportCreateInfo.flags = VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
@@ -18,8 +17,7 @@ void VKWindow::vulkanInitialize() {
 	fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkCreateDebugReportCallbackEXT");
 	fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkDestroyDebugReportCallbackEXT");
 
-	if (fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT) {
-
+	if ( fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT ) {
 		fvkCreateDebugReportCallbackEXT(instanceData.instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
 	}
 
@@ -28,15 +26,15 @@ void VKWindow::vulkanInitialize() {
 	VkPhysicalDevice* gpus = new VkPhysicalDevice[count];
 	r = vkEnumeratePhysicalDevices(instanceData.instance, &count, gpus);
 
-	if (count == 1) {
+	if ( count == 1 ) {
 		// if only one gpu is avaible select it
 		instanceData.gpu = gpus[0];
 	} else {
 		// else look for the first avaible discrete gpu
 		VkPhysicalDeviceProperties prop{};
-		for (size_t i = 0; i < count; i++) {
+		for ( size_t i = 0; i < count; i++ ) {
 			vkGetPhysicalDeviceProperties(gpus[i], &prop);
-			if (prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+			if ( prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ) {
 				instanceData.gpu = gpus[i];
 				break;
 			}
@@ -49,12 +47,12 @@ void VKWindow::vulkanInitialize() {
 
 	vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, nullptr);
 
-	if (count >= 1) {
+	if ( count >= 1 ) {
 		VkQueueFamilyProperties* props = new VkQueueFamilyProperties[count];
 		vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, props);
 
-		for (size_t i = 0; i < count; i++) {
-			if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
+		for ( size_t i = 0; i < count; i++ ) {
+			if ( props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT ) {
 				instanceData.queueFamilyIndex = (uint32_t)i;
 				break;
 			}
@@ -76,11 +74,9 @@ void VKWindow::vulkanInitialize() {
 	deviceCreateInfo.ppEnabledExtensionNames = deviceExtensionNames.data();
 
 	r = vkCreateDevice(instanceData.gpu, &deviceCreateInfo, nullptr, &instanceData.device);
-
 }
 
 void VKWindow::createVkSwapchain() {
-
 	createSwapchain(instanceData, swapchainData);
 
 	swapchainData.swapchainImageCount = 0;
@@ -130,7 +126,7 @@ void VKWindow::createVkSwapchain() {
 
 	vkCreateFence(instanceData.device, &fenceCreateInfo, nullptr, &waitFence);
 
-	for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
+	for ( uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i ) {
 		VkImageMemoryBarrier barrier_from_present_to_clear = {
 			VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
 			nullptr,                                    // const void                            *pNext
@@ -168,7 +164,6 @@ void VKWindow::createVkSwapchain() {
 }
 
 void VKWindow::vulkanCleanup() {
-
 	vkDeviceWaitIdle(instanceData.device);
 
 	vkDestroyFence(instanceData.device, waitFence, nullptr);

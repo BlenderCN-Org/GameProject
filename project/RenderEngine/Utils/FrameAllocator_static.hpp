@@ -3,8 +3,7 @@
 
 #include <Allocators\FrameAllocator.hpp>
 
-class FrameAllocator_static : public FrameAllocator{
-
+class FrameAllocator_static : public FrameAllocator {
 public:
 
 	static FrameAllocator* getFrameAllocator();
@@ -13,8 +12,6 @@ public:
 private:
 
 	static FrameAllocator* singleton;
-
 };
-
 
 #endif

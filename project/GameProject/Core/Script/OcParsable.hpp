@@ -20,5 +20,4 @@ std::vector<Parsable> parseLines(std::vector<std::string> lines);
 
 bool checkParsableTypes(std::vector<Parsable> par);
 
-
 #endif

@@ -22,12 +22,11 @@ public:
 	virtual void bindData(int location, UniformDataType type, void* data);
 
 private:
-	
+
 	bool shaderCreated;
 	GLuint shaderProgram;
 
 	char* shaderCode[(size_t)ShaderStages::SIZE];
-
 };
 
 #endif

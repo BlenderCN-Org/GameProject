@@ -27,11 +27,9 @@ void Mesh_gl::init(MeshPrimitiveType ptype) {
 
 	vertexCount = 0;
 	triangleCount = 0;
-
 }
 
 void Mesh_gl::release() {
-
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
 	glDeleteVertexArrays(1, &vertexArrayObject);
@@ -40,7 +38,6 @@ void Mesh_gl::release() {
 }
 
 void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
-
 	if ( primitiveType == MeshPrimitiveType::TRIANGLE )
 		meshPrimitive = GL_TRIANGLES;
 	else if ( primitiveType == MeshPrimitiveType::TRIANGLE_STRIP )
@@ -49,8 +46,7 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		meshPrimitive = GL_QUADS;
 
 	dataLayout = layout;
-	if (layout = VERT_UV)
-	{
+	if ( layout = VERT_UV ) {
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -66,10 +62,8 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex5), (void*)(sizeof(GLfloat) * 3));
 
 		vertexCount = (GLsizei)size / sizeof(Vertex5);
-
 	}
 }
-
 
 void Mesh_gl::bind() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -77,23 +71,19 @@ void Mesh_gl::bind() {
 }
 
 void Mesh_gl::render() {
-
-	if (usesIndexBuffer)
-	{
+	if ( usesIndexBuffer ) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
 	} else {
-			glDrawArrays(meshPrimitive, 0, vertexCount);
+		glDrawArrays(meshPrimitive, 0, vertexCount);
 	}
 }
 
-void * Mesh_gl::map(size_t & dataSize)
-{
+void * Mesh_gl::map(size_t & dataSize) {
 	void* dataPtr = nullptr;
 
 	if ( !isMapped ) {
-
 		if ( dataLayout = VERT_UV ) {
 			dataSize = vertexCount * sizeof(Vertex5);
 		}
@@ -108,31 +98,23 @@ void * Mesh_gl::map(size_t & dataSize)
 		isMapped = true;
 		mapPtr = dataPtr;
 		mappedSize = dataSize;
-	}
-	else
-	{
+	} else {
 		dataPtr = mapPtr;
 	}
 
 	return dataPtr;
 }
 
-void Mesh_gl::unmap()
-{
+void Mesh_gl::unmap() {
 	if ( isMapped ) {
 		flush();
 		MemoryManager::getMemoryManager()->deallocate(mapPtr);
 		mapPtr = nullptr;
 		isMapped = false;
 	}
-
 }
 
-void Mesh_gl::flush()
-{
+void Mesh_gl::flush() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mappedSize, mapPtr, GL_STATIC_DRAW);
 }
-
-
-

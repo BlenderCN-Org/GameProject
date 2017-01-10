@@ -6,9 +6,7 @@
 
 #include <assert.h>
 
-
 void ThreadManager::loadAsset(AssetLoadStruct &ls) {
-
 	uint32_t dataSize = 0;
 	void* data = nullptr;
 
@@ -31,7 +29,7 @@ void ThreadManager::loadAsset(AssetLoadStruct &ls) {
 					printf("Loading texture\n");
 					int32_t w = 0, h = 0;
 					data = AssetLib::loadBMP(ls.howToLoad.fileName, w, h);
-					dataSize = w*h*4;
+					dataSize = w*h * 4;
 					TextureAsset* ta = (TextureAsset*)ls.asset;
 					ta->setDataPtrAndSize(data, dataSize);
 					ta->setTextureSize(w, h);

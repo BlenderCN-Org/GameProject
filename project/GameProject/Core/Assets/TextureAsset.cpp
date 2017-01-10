@@ -1,7 +1,6 @@
 // project includes
 #include "TextureAsset.hpp"
 
-
 void TextureAsset::init() {
 	type = AssetType::eAssetType_texture;
 	state = AssetState::eAssetState_unloaded;

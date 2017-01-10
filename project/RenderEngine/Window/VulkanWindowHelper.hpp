@@ -4,13 +4,13 @@
 #include <vulkan\vulkan.h>
 
 VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
-	VkDebugReportObjectTypeEXT objType,
-	uint64_t sourcObj,
-	size_t location,
-	int32_t msgCode,
-	const char* layerPrefix,
-	const char* msg,
-	void* userData);
+												   VkDebugReportObjectTypeEXT objType,
+												   uint64_t sourcObj,
+												   size_t location,
+												   int32_t msgCode,
+												   const char* layerPrefix,
+												   const char* msg,
+												   void* userData);
 
 struct VulkanInstance {
 	VkInstance instance;
@@ -35,6 +35,5 @@ VkInstance createInstance();
 VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surfaceWidth, uint32_t surfaceHeight, VkSwapchainKHR oldSwapchain);
 
 void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain &swapchain);
-
 
 #endif

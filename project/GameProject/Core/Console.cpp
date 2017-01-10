@@ -3,7 +3,6 @@
 #include <sstream>
 
 void defaultConsoleFunction(Console* con, const std::vector<std::string> & arg) {
-	
 	con->print(">");
 
 	con->print(arg[0]);
@@ -11,14 +10,11 @@ void defaultConsoleFunction(Console* con, const std::vector<std::string> & arg) 
 }
 
 void listItemsFunc(Console* con, const std::vector<std::string> & arg) {
-
 	con->listItems();
 }
 
 void changeFullscreenMode(Console* con, const std::vector<std::string> & arg) {
-	
-	if ( arg.size() == 2 )
-	{
+	if ( arg.size() == 2 ) {
 		con->print(">");
 
 		con->print("Changing fullscreen mode");
@@ -26,9 +22,7 @@ void changeFullscreenMode(Console* con, const std::vector<std::string> & arg) {
 
 		con->dispSettings->setFullscreenMode((FullscreenMode)std::atoi(arg[1].c_str()));
 		con->dispSettings->apply();
-	}
-	else
-	{
+	} else {
 		con->print(">");
 
 		con->print(arg[0]);
@@ -39,9 +33,7 @@ void changeFullscreenMode(Console* con, const std::vector<std::string> & arg) {
 }
 
 void setRes(Console* con, const std::vector<std::string> & arg) {
-
-	if ( arg.size() == 3 )
-	{
+	if ( arg.size() == 3 ) {
 		con->print(">");
 
 		con->print("Changing resolution");
@@ -50,8 +42,7 @@ void setRes(Console* con, const std::vector<std::string> & arg) {
 		con->dispSettings->setResolution(std::atoi(arg[1].c_str()), std::atoi(arg[2].c_str()));
 		//con->dispSettings->setFullscreenMode((FullscreenMode)std::atoi(arg[1].c_str()));
 		con->dispSettings->apply();
-	} else
-	{
+	} else {
 		con->print(">");
 
 		con->print(arg[0]);
@@ -66,7 +57,6 @@ void reset_fun(Console* con, const std::vector<std::string> & arg) {
 }
 
 Console::Console() {
-
 	reset = false;
 	setDefaultCommand(defaultConsoleFunction);
 	maxCommands = 20;
@@ -81,8 +71,7 @@ Console::Console() {
 	line = "";
 }
 
-Console::~Console() {
-}
+Console::~Console() {}
 
 void Console::addItem(const std::string & strName, const std::string &description, void * pointer, console_item_type_t type) {
 	console_item_t item;
@@ -90,9 +79,8 @@ void Console::addItem(const std::string & strName, const std::string &descriptio
 	item.description = description;
 	item.type = type;
 	item.variable_pointer = pointer;
-	
-	m_itemsList.push_back(item);
 
+	m_itemsList.push_back(item);
 }
 
 void Console::removeItem(const std::string strName) {}
@@ -105,8 +93,7 @@ void Console::keyPress(char c) {
 
 void Console::backSpace() {
 	//printf("BackSpace\n");
-	if (m_commandLine.size() > 0)
-	{
+	if ( m_commandLine.size() > 0 ) {
 		m_commandLine.pop_back();
 		printf("\r>%s ", m_commandLine.c_str());
 	}
@@ -114,21 +101,18 @@ void Console::backSpace() {
 
 void Console::print(std::string text) {
 	printf("%s", text.c_str());
-	
-	for ( size_t i = 0; i < text.size(); i++ )
-	{
+
+	for ( size_t i = 0; i < text.size(); i++ ) {
 		line.push_back(text[i]);
-		if ( text[i] == '\n' )
-		{
+		if ( text[i] == '\n' ) {
 			addToHistory(line);
 			line = "";
 		}
 	}
-
 }
 
 void Console::execute() {
-	if (m_commandLine.length() > 0) {
+	if ( m_commandLine.length() > 0 ) {
 		parseCommandLine();
 	}
 	m_commandLine = "";
@@ -141,35 +125,33 @@ void Console::setDefaultCommand(console_function func) {
 void Console::listItems() {
 	std::list<console_item_t>::const_iterator iter;
 
-	for (iter = m_itemsList.begin(); iter != m_itemsList.end(); ++iter)
-	{
+	for ( iter = m_itemsList.begin(); iter != m_itemsList.end(); ++iter ) {
 		print(iter->name);
 		print(" ");
-		switch (iter->type)
-		{
-		case CTYPE_UCHAR:
-			print("Type: uchar");
-			break;
-		case CTYPE_CHAR:
-			print("Type: char");
-			break;
-		case CTYPE_UINT:
-			print("Type: uint");
-			break;
-		case CTYPE_INT:
-			print("Type: int");
-			break;
-		case CTYPE_FLOAT:
-			print("Type: float");
-			break;
-		case CTYPE_STRING:
-			print("Type: string");
-			break;
-		case CTYPE_FUNCTION:
-			print("Type: function");
-			break;
-		default:
-			break;
+		switch ( iter->type ) {
+			case CTYPE_UCHAR:
+				print("Type: uchar");
+				break;
+			case CTYPE_CHAR:
+				print("Type: char");
+				break;
+			case CTYPE_UINT:
+				print("Type: uint");
+				break;
+			case CTYPE_INT:
+				print("Type: int");
+				break;
+			case CTYPE_FLOAT:
+				print("Type: float");
+				break;
+			case CTYPE_STRING:
+				print("Type: string");
+				break;
+			case CTYPE_FUNCTION:
+				print("Type: function");
+				break;
+			default:
+				break;
 		}
 		print("\t");
 		print(iter->description);
@@ -177,25 +159,21 @@ void Console::listItems() {
 	}
 }
 
-void Console::setVisible(bool v) {
-}
+void Console::setVisible(bool v) {}
 
 std::string Console::getText() {
 	return m_commandLine;
 }
 
-std::string Console::getHistory()
-{
+std::string Console::getHistory() {
 	std::string str = "";
-	for ( size_t i = 0; i < historyBuffer.size(); i++ )
-	{
+	for ( size_t i = 0; i < historyBuffer.size(); i++ ) {
 		str += historyBuffer[i];
 	}
 	return str;
 }
 
-void Console::addToHistory(std::string h)
-{
+void Console::addToHistory(std::string h) {
 	if ( historyBuffer.size() > 25 )
 		historyBuffer.erase(historyBuffer.begin());
 	historyBuffer.push_back(h);
@@ -215,67 +193,59 @@ bool Console::parseCommandLine() {
 
 	// add to commandline buffer
 	m_commandBuffer.push_back(m_commandLine);
-	if (m_commandBuffer.size() > maxCommands) m_commandBuffer.erase(m_commandBuffer.begin());
+	if ( m_commandBuffer.size() > maxCommands ) m_commandBuffer.erase(m_commandBuffer.begin());
 
 	// tokenize
-	while (index != std::string::npos)
-	{
+	while ( index != std::string::npos ) {
 		// push word
 		std::string::size_type next_space = m_commandLine.find(' ', index);
 		arguments.push_back(m_commandLine.substr(index, next_space));
 
 		// increment index
-		if (next_space != std::string::npos) index = next_space + 1;
+		if ( next_space != std::string::npos ) index = next_space + 1;
 		else break;
 	}
 
 	// execute (look for the command or variable)
-	for (iter = m_itemsList.begin(); iter != m_itemsList.end(); ++iter)
-	{
-		if (iter->name == arguments[0])
-		{
-			switch (iter->type)
-			{
-			case CTYPE_UINT:
-				if (arguments.size() > 2)return false;
-				else if (arguments.size() == 1)
-				{
-					out.str(""); // clear stringstream
-					out << (*iter).name << " = " << *((unsigned int *)(*iter).variable_pointer);
-					print(out.str());
+	for ( iter = m_itemsList.begin(); iter != m_itemsList.end(); ++iter ) {
+		if ( iter->name == arguments[0] ) {
+			switch ( iter->type ) {
+				case CTYPE_UINT:
+					if ( arguments.size() > 2 )return false;
+					else if ( arguments.size() == 1 ) {
+						out.str(""); // clear stringstream
+						out << (*iter).name << " = " << *((unsigned int *)(*iter).variable_pointer);
+						print(out.str());
+						return true;
+					} else if ( arguments.size() == 2 ) {
+						*((unsigned int *)(*iter).variable_pointer) = (unsigned int)atoi(arguments[1].c_str());
+						return true;
+					}
+					break;
+				case CTYPE_INT:
+					if ( arguments.size() > 2 )return false;
+					else if ( arguments.size() == 1 ) {
+						out.str(""); // clear stringstream
+						out << (*iter).name << " = " << *((int *)(*iter).variable_pointer);
+						print(out.str());
+						return true;
+					} else if ( arguments.size() == 2 ) {
+						*((int *)(*iter).variable_pointer) = (int)atoi(arguments[1].c_str());
+						return true;
+					}
+					break;
+				case CTYPE_FUNCTION:
+					(*iter).function(this, arguments);
 					return true;
-				} else if (arguments.size() == 2)
-				{
-					*((unsigned int *)(*iter).variable_pointer) = (unsigned int)atoi(arguments[1].c_str());
-					return true;
-				}
-				break;
-			case CTYPE_INT:
-				if (arguments.size() > 2)return false;
-				else if (arguments.size() == 1)
-				{
-					out.str(""); // clear stringstream
-					out << (*iter).name << " = " << *((int *)(*iter).variable_pointer);
-					print(out.str());
-					return true;
-				} else if (arguments.size() == 2)
-				{
-					*((int *)(*iter).variable_pointer) = (int)atoi(arguments[1].c_str());
-					return true;
-				}
-				break;
-			case CTYPE_FUNCTION:
-				(*iter).function(this, arguments);
-				return true;
-				break;
-			default:
-				defaultCommand(this, arguments);
-				return false;
-				break;
+					break;
+				default:
+					defaultCommand(this, arguments);
+					return false;
+					break;
 			}
 		}
 	}
-	
+
 	defaultCommand(this, arguments);
 
 	return false;

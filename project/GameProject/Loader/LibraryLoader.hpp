@@ -20,7 +20,6 @@ public:
 private:
 
 	LIBRARY lib;
-
 };
 
 #endif

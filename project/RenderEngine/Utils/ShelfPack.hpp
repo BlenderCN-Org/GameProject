@@ -11,7 +11,6 @@ struct PackRect {
 };
 
 class ShelfPack {
-
 public:
 
 	ShelfPack(int x, int y);
@@ -26,7 +25,7 @@ public:
 	PackRect &operator[](int id);
 
 private:
-	
+
 	struct Node {
 		int x;
 		int y;
@@ -43,7 +42,6 @@ private:
 		int getHeight();
 		int getWidth();
 	};
-
 
 	bool addNode(Node* n);
 

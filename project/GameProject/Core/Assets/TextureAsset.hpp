@@ -18,7 +18,6 @@ public:
 
 private:
 	int32_t width, height;
-
 };
 
 #endif

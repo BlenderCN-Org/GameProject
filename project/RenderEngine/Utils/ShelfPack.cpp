@@ -2,7 +2,7 @@
 
 #include "FrameAllocator_static.hpp"
 
-ShelfPack::ShelfPack(int x, int y){
+ShelfPack::ShelfPack(int x, int y) {
 	width = x;
 	height = y;
 	root = nullptr;
@@ -10,11 +10,10 @@ ShelfPack::ShelfPack(int x, int y){
 }
 
 bool ShelfPack::addData(int w, int h, int id) {
-	
 	FrameAllocator* allocator = FrameAllocator_static::getFrameAllocator();
 
 	Node* n = allocator->allocate<Node>(1);
-	
+
 	n->x = n->y = 0;
 	n->height = h;
 	n->width = w;
@@ -23,7 +22,7 @@ bool ShelfPack::addData(int w, int h, int id) {
 
 	bool added = addNode(n);
 
-	if (added) {
+	if ( added ) {
 		counter++;
 		nodes.push_back(n);
 	}
@@ -36,13 +35,13 @@ size_t ShelfPack::length() {
 }
 
 int ShelfPack::getPackedWidth() {
-	if (root)
+	if ( root )
 		return root->getWidth();
 	return 0;
 }
 
 int ShelfPack::getPackedHeight() {
-	if (root)
+	if ( root )
 		return root->getHeight();
 	return 0;
 }
@@ -65,14 +64,10 @@ PackRect & ShelfPack::operator[](int id) {
 }
 
 bool ShelfPack::addNode(Node * n) {
-
 	bool ret = false;
-	if (root)
-	{
+	if ( root ) {
 		ret = root->insert(n, width, height);
-	}
-	else
-	{
+	} else {
 		root = n;
 		ret = true;
 	}
@@ -80,66 +75,56 @@ bool ShelfPack::addNode(Node * n) {
 }
 
 bool ShelfPack::Node::insert(Node * n, int maxX, int maxY) {
-
 	// if we inserted
 	bool inserted = false;
-	
+
 	// space avaible to the side of me
 	int wLeft = maxX - width;
 	// space avaible below me
 	int hLeft = maxY - height;
 
-
-	if (side) {
+	if ( side ) {
 		// I can only tell the node next to me how much I know is left, and how tall I am, this limits the rect space
 		inserted = side->insert(n, wLeft, height);
-	}
-	else
-	{
+	} else {
 		// nothing was left of us, so check if we can place the character next to us, they cannot be larger since the input is sorted largest first but in case a check is done
-		if ((n->width <= wLeft) && (n->height <= height))
-		{
+		if ( (n->width <= wLeft) && (n->height <= height) ) {
 			inserted = true;
 			side = n;
 			side->x = x + width; // offset in x
 			side->y = y; // we are on the same y offset
 		}
-
 	}
 	//could not place node next to us so we try below
-	if (!inserted)
-		if (below) {
+	if ( !inserted )
+		if ( below ) {
 			// the node below us start at the same with that I had, but the height it can place on is what I know is left
 			inserted = below->insert(n, maxX, hLeft);
-		}
-		else
-		{
+		} else {
 			// make sure the height is enough
-			if ((n->width <= wLeft) && (n->height <= hLeft))
-			{
+			if ( (n->width <= wLeft) && (n->height <= hLeft) ) {
 				inserted = true;
 				below = n;
 				below->x = x;
 				below->y = y + height;
 			}
 		}
-	
+
 	return inserted;
 }
 
 int ShelfPack::Node::getHeight() {
-	if (below)
+	if ( below )
 		return below->getHeight();
 	return y + height;
 }
 
 int ShelfPack::Node::getWidth() {
-
 	int ws = 0;
 	int wb = 0;
-	if (side)
+	if ( side )
 		ws = side->getWidth();
-	if (below)
+	if ( below )
 		wb = below->getWidth();
 
 	if ( ws > wb )

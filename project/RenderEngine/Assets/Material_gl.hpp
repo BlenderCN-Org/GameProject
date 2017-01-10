@@ -5,7 +5,6 @@
 
 class Material_gl
 {
-
 public:
 
 	virtual void init(unsigned int nrTextures);
@@ -23,7 +22,6 @@ private:
 	ITexture** textures;
 
 	int* bindLocations;
-	
 };
 
 #endif

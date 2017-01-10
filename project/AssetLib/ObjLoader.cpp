@@ -7,7 +7,6 @@
 
 namespace AssetLib
 {
-
 	struct Vert_t
 	{
 		float x, y, z;
@@ -36,7 +35,6 @@ namespace AssetLib
 		}
 
 		while ( ok ) {
-
 			std::getline(inFile, line);
 			ok = !inFile.eof();
 
@@ -76,8 +74,7 @@ namespace AssetLib
 				iss >> sub;
 				uv[uvCount].v = std::stof(sub);
 				uvCount++;
-			}
-			else if ( line[0] == 'f' ) {
+			} else if ( line[0] == 'f' ) {
 				if ( state == 0 ) {
 					state = 1;
 				}
@@ -107,8 +104,7 @@ namespace AssetLib
 				if ( useuv ) {
 					vertex[v].u = uv[t].u;
 					vertex[v].v = 1.0f - uv[t].v;
-				}
-				else 					{
+				} else {
 					vertex[v].u = 0.0f;
 					vertex[v].v = 0.0f;
 				}
@@ -169,15 +165,12 @@ namespace AssetLib
 					vertex[v].v = 1.0f;
 				}
 				vertex_ret.push_back(vertex[v]);
-
 			}
-
 		}
 
 		size_t size = vertex_ret.size();
 
 		if ( size ) {
-
 			Vert_t* v = new Vert_t[size];
 			dataSize = sizeof(Vert_t) * (unsigned int)size;
 
@@ -188,5 +181,4 @@ namespace AssetLib
 			return nullptr;
 		}
 	}
-
 }

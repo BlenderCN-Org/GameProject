@@ -6,19 +6,16 @@
 #include <assert.h>
 
 void ThreadManager::startThreads(uint32_t nrThreads) {
-
 	threadCount = nrThreads;
 
 	workerThreads = new std::thread[threadCount];
-	
+
 	for ( uint32_t i = 0; i < threadCount; i++ ) {
 		workerThreads[i] = std::thread(&ThreadManager::threadProcess, this, i);
 	}
-
 }
 
 void ThreadManager::stopThreads() {
-
 	Task t;
 	t.type = TaskType::eTaskType_threadTerminate;
 
@@ -41,7 +38,6 @@ Task ThreadManager::getNextTast() {
 }
 
 void ThreadManager::threadProcess(uint32_t threadIndex) {
-
 	bool running = true;
 
 	while ( running ) {
@@ -62,5 +58,4 @@ void ThreadManager::threadProcess(uint32_t threadIndex) {
 				break;
 		}
 	}
-
 }

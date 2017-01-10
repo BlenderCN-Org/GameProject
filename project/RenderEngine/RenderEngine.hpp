@@ -8,8 +8,6 @@
 
 #include "IRenderEngine.hpp"
 #include "DataTypes\Colors.hpp"
-#include "ShaderState.hpp"
-#include "Camera.hpp"
 
 #include <Allocators\FrameAllocator.hpp>
 #include <Allocators\PoolAllocator.hpp>
@@ -57,10 +55,6 @@ public:
 
 	virtual void updateViewPort(int width, int height);
 
-	virtual ICamera* createCamera();
-	virtual void setActiveCamera(ICamera * camera);
-	//virtual void* getViewMatrixPtr();
-
 	virtual IMesh* createMesh();
 	virtual IAnimatedMesh* createAnimatedMesh();
 	//virtual IRenderObject* createRenderObject();
@@ -85,8 +79,6 @@ private:
 	GLinfo info;
 
 	RGB clearColor;
-	ShaderState shaderState;
-	Camera cam;
 
 	//PoolAllocator<RenderObject> objectPool;
 	//FrameAllocator frameAlloc;
@@ -97,7 +89,6 @@ private:
 	VKWindow vkWindow;
 
 	RenderEngineCreateInfo reci;
-
 };
 
 #endif

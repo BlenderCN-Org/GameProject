@@ -17,14 +17,12 @@ enum class HeaderTags : uint32_t
 	eTagScript = 'SCRP', // tag for script file/data
 	eTagReference = 'REF ', // tag for data reference
 	eTagInfo = 'INFO', // tag for data info
-
 };
 
 static_assert(sizeof(uint32_t) == sizeof(char[4]), "uint32_t is not same size as 4 chars");
 
 typedef glm::vec2 Vertex_2f;
 typedef glm::vec3 Vertex_3f;
-
 
 struct Triangle
 {
@@ -44,7 +42,7 @@ struct Model_v1
 {
 	uint32_t vertexCount;
 	uint32_t triangleCount;
-	
+
 	Vertex_3f* vertices;
 	Triangle* triangles;
 };

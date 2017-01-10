@@ -4,10 +4,7 @@
 #include "IMesh.hpp"
 
 class IAnimatedMesh : public IMesh {
-
 public:
-
-
 };
 
 #endif

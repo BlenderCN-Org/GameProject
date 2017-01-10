@@ -2,56 +2,45 @@
 #include <algorithm>
 #include <sstream>
 
-Section::Section()
-{
-}
+Section::Section() {}
 
-Section::Section(std::string _name)
-{
+Section::Section(std::string _name) {
 	name = _name;
 	settingsMap.clear();
 }
 
-void Section::write(std::ofstream & outFile)
-{
-	if (name.size())
+void Section::write(std::ofstream & outFile) {
+	if ( name.size() )
 		outFile << "[" << name << "]" << std::endl;
 
-	for (auto it = settingsMap.begin(); it != settingsMap.end(); it++)
-	{
-		if(it->first.size() )
+	for ( auto it = settingsMap.begin(); it != settingsMap.end(); it++ ) {
+		if ( it->first.size() )
 			outFile << it->first << " =" << it->second << std::endl;
 	}
-
 }
 
-void Section::addString(std::string name, std::string value)
-{
+void Section::addString(std::string name, std::string value) {
 	settingsMap[name] = value;
 }
 
-void Section::addInteger(std::string name, int value)
-{
+void Section::addInteger(std::string name, int value) {
 	std::string v = std::to_string(value);
-	settingsMap[name] =  v;
+	settingsMap[name] = v;
 }
 
-void Section::addBoolean(std::string name, bool value)
-{
+void Section::addBoolean(std::string name, bool value) {
 	std::string v = "";
-	if (value)
+	if ( value )
 		v = "true";
 	else
 		v = "false";
 	settingsMap[name] = v;
 }
 
-int Section::getInteger(std::string name, int def)
-{
-
+int Section::getInteger(std::string name, int def) {
 	int retVal = def;
 
-	if (settingsMap.count(name)) {
+	if ( settingsMap.count(name) ) {
 		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
 
 		retVal = std::stoi(value->second);
@@ -60,11 +49,10 @@ int Section::getInteger(std::string name, int def)
 	return retVal;
 }
 
-std::string Section::getString(std::string name, std::string def)
-{
+std::string Section::getString(std::string name, std::string def) {
 	std::string retVal = def;
 
-	if (settingsMap.count(name)) {
+	if ( settingsMap.count(name) ) {
 		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
 
 		retVal = value->second;
@@ -73,11 +61,10 @@ std::string Section::getString(std::string name, std::string def)
 	return retVal;
 }
 
-bool Section::getBoolean(std::string name, bool def)
-{
+bool Section::getBoolean(std::string name, bool def) {
 	bool retVal = def;
 
-	if (settingsMap.count(name)) {
+	if ( settingsMap.count(name) ) {
 		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
 		std::string vLower = value->second;
 
@@ -85,9 +72,9 @@ bool Section::getBoolean(std::string name, bool def)
 
 		vLower.erase(std::remove(vLower.begin(), vLower.end(), ' '), vLower.end());
 
-		if (vLower == "false") {
+		if ( vLower == "false" ) {
 			retVal = false;
-		} else if (vLower == "true") {
+		} else if ( vLower == "true" ) {
 			retVal = true;
 		}
 	}
@@ -95,24 +82,19 @@ bool Section::getBoolean(std::string name, bool def)
 	return retVal;
 }
 
-std::string Section::getName() const
-{
+std::string Section::getName() const {
 	return name;
 }
 
-
-Config::Config()
-{
+Config::Config() {
 	sectionMap.clear();
 }
 
-Config::Config(std::string file)
-{
+Config::Config(std::string file) {
 	read(file);
 }
 
-void Config::read(std::string file)
-{
+void Config::read(std::string file) {
 	sectionMap.clear();
 
 	std::ifstream inFile(file);
@@ -126,10 +108,10 @@ void Config::read(std::string file)
 
 	std::stringstream ss;
 
-	while (!inFile.eof() && inFile.is_open()) {
+	while ( !inFile.eof() && inFile.is_open() ) {
 		std::getline(inFile, line);
 
-		if (line.size() && line.at(0) == '[' && line.at(line.size() - 1) == ']') {
+		if ( line.size() && line.at(0) == '[' && line.at(line.size() - 1) == ']' ) {
 			line.pop_back();
 			line.erase(0, 1);
 
@@ -150,91 +132,78 @@ void Config::read(std::string file)
 	}
 
 	sectionMap[s.getName()] = s;
-
 }
 
-void Config::write(std::string file)
-{
-
+void Config::write(std::string file) {
 	std::ofstream outFile(file, std::ios::out);
 
-	for (auto it = sectionMap.begin(); it != sectionMap.end(); it++)
-	{
+	for ( auto it = sectionMap.begin(); it != sectionMap.end(); it++ ) {
 		it->second.write(outFile);
 	}
-
 }
 
-void Config::addSection(std::string sectionName, Section section)
-{
+void Config::addSection(std::string sectionName, Section section) {
 	sectionMap[sectionName] = section;
 }
 
-void Config::addString(std::string section, std::string name, std::string value)
-{
-	if (!sectionMap.count(section)) {
+void Config::addString(std::string section, std::string name, std::string value) {
+	if ( !sectionMap.count(section) ) {
 		sectionMap[section] = Section(section);
 	}
 	sectionMap[section].addString(name, value);
 }
 
-void Config::addInteger(std::string section, std::string name, int value)
-{
-	if (!sectionMap.count(section)) {
+void Config::addInteger(std::string section, std::string name, int value) {
+	if ( !sectionMap.count(section) ) {
 		sectionMap[section] = Section(section);
 	}
 	sectionMap[section].addInteger(name, value);
 }
 
-void Config::addBoolean(std::string section, std::string name, bool value)
-{
-	if (!sectionMap.count(section)) {
+void Config::addBoolean(std::string section, std::string name, bool value) {
+	if ( !sectionMap.count(section) ) {
 		sectionMap[section] = Section(section);
 	}
 	sectionMap[section].addBoolean(name, value);
 }
 
-int Config::getInteger(std::string section, std::string name, int def)
-{
+int Config::getInteger(std::string section, std::string name, int def) {
 	int retVal = def;
 
-	if (sectionMap.count(section)) {
+	if ( sectionMap.count(section) ) {
 		retVal = sectionMap[section].getInteger(name, def);
 	}
 
 	return retVal;
 }
 
-std::string Config::getString(std::string section, std::string name, std::string def)
-{
+std::string Config::getString(std::string section, std::string name, std::string def) {
 	std::string retVal = def;
 
-	if (sectionMap.count(section)) {
+	if ( sectionMap.count(section) ) {
 		retVal = sectionMap[section].getString(name, def);
 	}
 
 	return retVal;
 }
 
-bool Config::getBoolean(std::string section, std::string name, bool def)
-{
+bool Config::getBoolean(std::string section, std::string name, bool def) {
 	bool retVal = def;
 
-	if (sectionMap.count(section)) {
+	if ( sectionMap.count(section) ) {
 		retVal = sectionMap[section].getBoolean(name, def);
 	}
 
 	return retVal;
 }
 
-Section Config::getSection(std::string section)
-{
+Section Config::getSection(std::string section) {
 	// TODO: insert return statement here
 	std::map<std::string, Section>::iterator it;
 
 	Section s = Section("");
 
-	if (sectionMap.count(section)) {
+	if ( sectionMap.count(section) ) {
 		it = sectionMap.find(section);
 		s = it->second;
 	}

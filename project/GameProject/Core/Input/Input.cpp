@@ -10,7 +10,7 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 		return;
 
 	singleton->keyMap[InputEvent{ scancode, false }] = (action == ACTION_BUTTON_DOWN);
-	
+
 	singleton->modkey = mods;
 	if ( singleton->consoleActive )
 		if ( (scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN ) {
@@ -21,7 +21,7 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 		}
 		//printf("Scancode %d with modkey %d\n", scancode, mods);
 
-		if(action == ACTION_BUTTON_UP )
+		if ( action == ACTION_BUTTON_UP )
 			singleton->releaseMap[InputEvent{ scancode, false }] = true;
 }
 
@@ -39,7 +39,6 @@ void Input::mouseButtonCallback(IWindow* window, int button, int action, int mod
 }
 
 void Input::cursorPosCallback(IWindow * window, int x, int y) {
-
 	singleton->xDelta = float(x) - float(singleton->oldX);
 	singleton->yDelta = float(y) - float(singleton->oldY);
 
@@ -48,7 +47,6 @@ void Input::cursorPosCallback(IWindow * window, int x, int y) {
 
 	//printf("Pos (%d,%d)\n", int(x), int(y));
 	//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
-
 }
 
 void Input::scrollCallback(IWindow * window, int xoffset, int yoffset) {
@@ -66,7 +64,6 @@ void Input::characterCallback(IWindow * window, unsigned int codepoint) {
 }
 
 void Input::sizeCallback(IWindow * window, int w, int h) {
-
 	singleton->winW = w;
 	singleton->winH = h;
 	singleton->sizeChange = true;
@@ -85,7 +82,6 @@ void Input::focusCallback(IWindow * window, bool focus) {
 
 // todo decide if this is good or bad
 void Input::mouseDeltaCallback(IWindow * window, float dx, float dy) {
-
 	//singleton->xDelta = dx * 4.4f;
 	//singleton->yDelta = dy * 4.4f;
 
@@ -126,7 +122,6 @@ void Input::setupCallbacks(IWindow * wnd) {
 	window->setWindowFocusCallback(focusCallback);
 
 	//window->setWindowMouseDeltaCallback(mouseDeltaCallback);
-
 }
 
 bool Input::isKeyBindPressed(KeyBind & keyBind, bool includeMods) {
@@ -189,9 +184,7 @@ void Input::getWindowSize(int & w, int & h) {
 }
 
 void Input::getMousePos(int & x, int & y) {
-
 	window->getCursorPos(x, y);
-
 }
 
 void Input::getState(int &mx, int &my, int &mb, int &sc) {
@@ -215,7 +208,7 @@ void Input::print() {
 	// show content:
 	//for ( std::map<InputEvent, bool>::iterator it = keyMap.begin(); it != keyMap.end(); ++it )
 	//	std::cout << it->first.code << " " << it->first.mouse << " => " << it->second << '\n';
-	if(!releaseMap.empty() )
+	if ( !releaseMap.empty() )
 		for ( std::map<InputEvent, bool>::iterator it = releaseMap.begin(); it != releaseMap.end(); ++it )
 			std::cout << it->first.code << " " << it->first.mouse << " => " << it->second << '\n';
 }
@@ -261,7 +254,6 @@ void Input::loadkeyBinds() {
 		bindingData = keyConf.getString("", KeyBindsStrings[i], KeyBindsDefault[i]);
 		KeyBindings[i] = KeyBind::create(bindingData);
 	}
-
 }
 
 void Input::saveKeyBinds() {
@@ -273,4 +265,3 @@ void Input::saveKeyBinds() {
 	//keyConf.addString("", KeyBindsStrings[KEYBIND_LEFT], KeyBindings[KEYBINDS_NAME::KEYBIND_LEFT].toString());
 	//keyConf.addString("", KeyBindsStrings[KEYBIND_RIGHT], KeyBindings[KEYBINDS_NAME::KEYBIND_RIGHT].toString());
 }
-

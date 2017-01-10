@@ -4,9 +4,7 @@
 #include <Allocators\Allocator.hpp>
 #include <new>
 
-
-class MemoryManager : public Allocator{
-
+class MemoryManager : public Allocator {
 public:
 
 	static MemoryManager* getMemoryManager();
@@ -28,12 +26,11 @@ public:
 
 		void* ptr = nullptr;
 
-		if (canAllocate(dataSize))
-		{
+		if ( canAllocate(dataSize) ) {
 			void* dataPtr = findNextFreeBlock(dataSize);
 
 			ptr = ((char*)dataPtr + sizeof(Block));
-			
+
 			Block* b = (Block*)((char*)ptr - sizeof(Block));
 
 			b->file = file;
@@ -48,11 +45,10 @@ public:
 	template<typename T>
 	T* allocate(size_t count) {
 		size_t dataSize = (sizeof(T) * count) + sizeof(Block);
-		
+
 		void* ptr = nullptr;
 
-		if (canAllocate(dataSize))
-		{
+		if ( canAllocate(dataSize) ) {
 			void* dataPtr = findNextFreeBlock(dataSize);
 
 			ptr = ((char*)dataPtr + sizeof(Block));
@@ -65,7 +61,7 @@ public:
 #endif
 
 	void deallocate(void* ptr) {
-		if (ptr == nullptr)
+		if ( ptr == nullptr )
 			return;
 
 		Block* b = (Block*)((char*)ptr - sizeof(Block));
@@ -74,9 +70,9 @@ public:
 
 		Block* p = b->prev;
 		Block* n = b->next;
-		
+
 		p->next = n;
-		if(n)
+		if ( n )
 			n->prev = p;
 	}
 
@@ -100,11 +96,10 @@ private:
 	void* heap;
 	size_t heapSize;
 	size_t usedSize;
-
 };
 
 template<typename T>
-T* memAlloc(size_t count) 	{
+T* memAlloc(size_t count) {
 	return MemoryManager::getMemoryManager()->allocate<T>(count);
 }
 

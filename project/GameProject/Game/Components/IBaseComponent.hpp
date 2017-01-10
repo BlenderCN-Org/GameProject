@@ -14,13 +14,10 @@ class IBaseComponent : public BaseComponent
 public:
 
 	static const uint64_t typeID;
-	
-	inline virtual uint64_t getComponentID() const
-	{
+
+	inline virtual uint64_t getComponentID() const {
 		return typeID;
 	};
-
 };
-
 
 #endif

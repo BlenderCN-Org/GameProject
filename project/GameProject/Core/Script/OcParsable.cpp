@@ -4,13 +4,11 @@ std::string cleanupLine(std::string line) {
 	if ( line.size() == 0 ) {
 		return "";
 	} else {
-
 		std::string newLine;
 
 		const char* str = line.c_str();
 
 		while ( *str != '\0' ) {
-
 			if ( *str == '/' && *(str + 1) == '/' ) {
 				break;
 			}
@@ -25,7 +23,6 @@ std::string cleanupLine(std::string line) {
 		}
 
 		return newLine;
-
 	}
 }
 
@@ -40,14 +37,12 @@ std::vector<Parsable> parseLines(std::vector<std::string> lines) {
 	const char* str;
 
 	for ( size_t i = 0; i < length; i++ ) {
-
 		line = cleanupLine(lines[i]);
 
 		if ( line.size() != 0 ) {
 			temp = "";
 			str = line.c_str();
 			while ( *str != '\0' ) {
-
 				if ( *str == ' ' ) {
 					if ( temp.size() > 0 ) {
 						parsed.push_back(Parsable{ (int)i + 1, temp });
@@ -75,7 +70,6 @@ std::vector<Parsable> parseLines(std::vector<std::string> lines) {
 }
 
 bool isType(std::string str) {
-
 	const char* s = str.c_str();
 
 	if ( strcmp(s, "int") == 0 ) {
@@ -106,7 +100,6 @@ bool isType(std::string str) {
 }
 
 bool checkParsableTypes(std::vector<Parsable> par) {
-
 	bool passed = true;
 
 	size_t length = par.size();
@@ -116,24 +109,19 @@ bool checkParsableTypes(std::vector<Parsable> par) {
 	std::vector<NameType> definedNames;
 
 	for ( size_t i = 0; i < length && passed; i++ ) {
-
 		str = par[i].code;
 
 		if ( isType(str) ) {
-			// we have found 
+			// we have found
 			// type name;
 			// type name = value;
 			// type function(...)
 			// for(...) if(..) etc
 
 			printf("Type: %s\n", str.c_str());
-
 		} else {
 			printf("Other: %s\n", str.c_str());
 		}
-
-
-
 	}
 
 	return passed;

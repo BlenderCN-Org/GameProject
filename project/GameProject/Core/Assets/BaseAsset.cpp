@@ -4,7 +4,6 @@
 #include <memory>
 
 void BaseAsset::setDataPtrAndSize(void * ptr, uint32_t size) {
-
 	delete dataPtr;
 
 	dataPtr = (void*)new char[size];

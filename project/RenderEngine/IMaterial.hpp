@@ -5,7 +5,6 @@
 
 class IMaterial
 {
-
 public:
 
 	virtual void init(unsigned int nrTextures) = 0;
@@ -16,7 +15,6 @@ public:
 
 	virtual int getTextureCount() const = 0;
 	virtual int getTextureBindLocation(unsigned int textureIndex) const = 0;
-
 };
 
 #endif

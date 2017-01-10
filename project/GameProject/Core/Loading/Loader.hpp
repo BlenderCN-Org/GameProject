@@ -10,10 +10,7 @@
 
 class Loader
 {
-
 public:
-
-
 
 private:
 
@@ -31,7 +28,6 @@ private:
 	uint64_t itemsLoaded;
 
 	std::vector<LoaderDescriptor> itemsToLoad;
-
 };
 
 #endif

@@ -21,11 +21,10 @@ public:
 		maxSize = 0;
 		usedSize = 0;
 
-		if (maxSize)
+		if ( maxSize )
 			heapSpace = malloc(maxSize);
 
 		//printf("New framePool %d\n", (int)this);
-
 	}
 
 	FrameAllocator(size_t blockSize, Allocator* _allocator = nullptr) {
@@ -35,10 +34,8 @@ public:
 		usedSize = 0;
 		oldHeap = nullptr;
 
-
-		if (maxSize)
-		{
-			if (allocator)
+		if ( maxSize ) {
+			if ( allocator )
 				heapSpace = allocator->allocate(maxSize);
 			else
 				heapSpace = malloc(maxSize);
@@ -49,14 +46,14 @@ public:
 	virtual ~FrameAllocator() {
 		//printf("Delete framePool %d\n", (int)this);
 
-		if (heapSpace) {
+		if ( heapSpace ) {
 			//printf("Delete pool heap %d (de-tor)\n", (int)heapSpace);
-			if (allocator)
+			if ( allocator )
 				allocator->deallocate(heapSpace);
 			else
 				free(heapSpace);
 		}
-		while (oldHeap) {
+		while ( oldHeap ) {
 			//printf("Delete old pool heap %d (de-tor)\n", (int)oldHeap);
 			if ( oldHeap ) {
 				if ( allocator ) {
@@ -78,23 +75,21 @@ public:
 		heapSpace = nullptr;
 	};
 
-	FrameAllocator& operator=(FrameAllocator &newObj)
-	{
+	FrameAllocator& operator=(FrameAllocator &newObj) {
 		//printf("Copy framePool %d to %d\n", (int)&newObj, (int)this);
-		if (this != &newObj)
-		{
+		if ( this != &newObj ) {
 			size_t t = usedSize;
 			usedSize = newObj.usedSize;
 			newObj.usedSize = t;
-	
+
 			t = maxSize;
 			maxSize = newObj.maxSize;
 			newObj.maxSize = t;
-	
+
 			void* tp = heapSpace;
 			heapSpace = newObj.heapSpace;
 			newObj.heapSpace = tp;
-	
+
 			HeapStruct* hs = oldHeap;
 			oldHeap = newObj.oldHeap;
 			newObj.oldHeap = hs;
@@ -103,20 +98,18 @@ public:
 			allocator = newObj.allocator;
 			newObj.allocator = a;
 		}
-	
+
 		return *this;
 	}
 
 	template<typename T>
 	T* allocate(size_t count) {
-		
 		size_t addSize = count * sizeof(T);
 
-		if (usedSize + addSize > maxSize)
-		{
+		if ( usedSize + addSize > maxSize ) {
 			//printf("\nResizing heap!\n");
 			HeapStruct* hs;
-			if (allocator)
+			if ( allocator )
 				hs = (HeapStruct*)allocator->allocate(sizeof(HeapStruct));
 			else
 				hs = (HeapStruct*)malloc(sizeof(HeapStruct));
@@ -125,39 +118,34 @@ public:
 			hs->next = oldHeap;
 			oldHeap = hs;
 			maxSize += (1 * KB) + addSize;
-			if (allocator)
+			if ( allocator )
 				heapSpace = allocator->allocate(maxSize);
 			else
 				heapSpace = malloc(maxSize);
 
 			// if we failed to allocate set our size to 0
-			if (!heapSpace)
+			if ( !heapSpace )
 				maxSize = 0;
 		}
 		void* address = nullptr;
-		if (heapSpace)
-		{
+		if ( heapSpace ) {
 			address = (char*)heapSpace + usedSize;
 			usedSize += count * sizeof(T);
 		}
 
 		return (T*)address;
-
 	}
 
 	inline void reset() {
 		//printf("\r size last frame : %d", usedSize);
 
-		if (oldHeap) {
-			if (allocator)
-			{
+		if ( oldHeap ) {
+			if ( allocator ) {
 				allocator->deallocate(oldHeap->heap);
 				HeapStruct* hs = oldHeap;
 				oldHeap = oldHeap->next;
 				allocator->deallocate(hs);
-			}
-			else
-			{
+			} else {
 				free(oldHeap->heap);
 				HeapStruct* hs = oldHeap;
 				oldHeap = oldHeap->next;
@@ -179,7 +167,6 @@ private:
 	size_t usedSize;
 
 	Allocator* allocator;
-
 };
 
 #endif

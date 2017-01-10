@@ -3,23 +3,20 @@
 #include <glm\gtc\matrix_transform.hpp>
 
 void Text::init(IRenderEngine* re) {
-
 	mesh = re->createMesh();
-	if (mesh)
+	if ( mesh )
 		mesh->init(MeshPrimitiveType::TRIANGLE);
-
 }
 
 void Text::release() {
-	if (mesh)
+	if ( mesh )
 		mesh->release();
 
 	delete this;
 }
 
 void Text::setText(char * text, size_t length, float x, float y, float scale) {
-
-	if (mesh) {
+	if ( mesh ) {
 		const size_t floatsPerVertex = 5; // 5 elements per vertex
 		const size_t nrVertices = 6; // 3 verts per triangle = 6 verts
 
@@ -38,15 +35,14 @@ void Text::setText(char * text, size_t length, float x, float y, float scale) {
 
 		int fSize = font->getFontSize();
 
-		for (size_t i = 0; i < length; i++) {
-
+		for ( size_t i = 0; i < length; i++ ) {
 			Character ch = font->getCharacter(text[i]);
 
-			if (i == 0)
+			if ( i == 0 )
 				y += fSize;
 
-			if (text[i] == '\n') {
-				if (yAdv) {
+			if ( text[i] == '\n' ) {
+				if ( yAdv ) {
 					y += (fSize);
 					oldYAdv = (float)fSize;
 				} else {
@@ -56,11 +52,11 @@ void Text::setText(char * text, size_t length, float x, float y, float scale) {
 				x = dx;
 				memset(&verts[i * nrVerexFloats], 0, bytesPerCharacter);
 				continue;
-			} else if (text[i] == '\t') {
+			} else if ( text[i] == '\t' ) {
 				x += (ch.size.x * scale * 2.0f);
 				memset(&verts[i * nrVerexFloats], 0, bytesPerCharacter);
 				continue;
-			} else if (text[i] == '\0') {
+			} else if ( text[i] == '\0' ) {
 				memset(&verts[i * nrVerexFloats], 0, bytesPerCharacter);
 				continue;
 			}
@@ -101,7 +97,6 @@ void Text::setText(char * text, size_t length, float x, float y, float scale) {
 
 			assert(sizeof(vertices) == bytesPerCharacter);
 			assert(i*nrVerexFloats < nrVerexFloats*length);
-
 		}
 
 		mesh->setMeshData(verts, arraySize * sizeof(float), MeshDataLayout::VERT_UV);
@@ -115,8 +110,7 @@ void Text::setFont(IFont * fnt) {
 }
 
 void Text::render(IShaderObject* shader, uint32_t textureLocation) {
-
-	if (mesh) {
+	if ( mesh ) {
 		uint32_t texture = 0;
 		font->bindFontTexture();
 		shader->bindData(textureLocation, UniformDataType::UNI_INT, &texture);

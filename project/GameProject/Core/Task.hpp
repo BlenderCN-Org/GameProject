@@ -16,19 +16,16 @@ enum class LoadType
 	eLoadType_network = 2,
 };
 
-
 struct LoadInfo
 {
 	LoadType type;
-	
+
 	char* fileName; // loadFromFile
-	
+
 	void* memoryPtr; // loadFrom memory
 	uint32_t memoryDataSize; // loadFrom memory
 
 	uint32_t assetServerID; // loadFrom network
-
-
 };
 
 struct AssetLoadStruct
@@ -42,8 +39,6 @@ struct Task
 	TaskType type;
 
 	void* data; // pointer object that is to be processed
-
 };
-
 
 #endif

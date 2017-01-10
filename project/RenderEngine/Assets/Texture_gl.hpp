@@ -16,8 +16,7 @@ struct UpdateInfo
 	int layer;
 };
 
-class Texture_gl : public ITexture{
-
+class Texture_gl : public ITexture {
 public:
 
 	virtual void init(int internalComponents, bool compressed);
@@ -35,7 +34,7 @@ private:
 	int width;
 	int height;
 	int components;
-	
+
 	int internalComponents;
 	int internalFormat;
 	bool compressTexture;
@@ -44,8 +43,6 @@ private:
 
 	void* textureData;
 	UpdateInfo* updateInfo;
-
-
 };
 
 #endif

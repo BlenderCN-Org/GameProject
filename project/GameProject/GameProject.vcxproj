@@ -184,10 +184,6 @@
     <ClCompile Include="Core\Assets\TextureAsset.cpp" />
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
-    <ClCompile Include="Core\GUI\Editor\TextArea.cpp" />
-    <ClCompile Include="Core\GUI\Gui.cpp" />
-    <ClCompile Include="Core\GUI\GuiButton.cpp" />
-    <ClCompile Include="Core\GUI\MainMenu.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\CameraInput.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
@@ -198,10 +194,10 @@
     <ClCompile Include="Core\Script\OcParser.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
-    <ClCompile Include="Core\Shaders.cpp" />
     <ClCompile Include="Core\System\Sys.cpp" />
     <ClCompile Include="Core\ThreadManager.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
+    <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\Chunk.cpp" />
     <ClCompile Include="Game\Components\BaseComponent.cpp" />
     <ClCompile Include="Game\Components\RenderComponent.cpp" />
@@ -217,11 +213,6 @@
     <ClInclude Include="Core\Assets\TextureAsset.hpp" />
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
-    <ClInclude Include="Core\GUI\Editor\TextArea.hpp" />
-    <ClInclude Include="Core\GUI\Gui.hpp" />
-    <ClInclude Include="Core\GUI\GuiButton.hpp" />
-    <ClInclude Include="Core\GUI\GuiStructs.hpp" />
-    <ClInclude Include="Core\GUI\MainMenu.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\CameraInput.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
@@ -235,11 +226,11 @@
     <ClInclude Include="Core\Script\OcParser.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
-    <ClInclude Include="Core\Shaders.hpp" />
     <ClInclude Include="Core\System\Sys.hpp" />
     <ClInclude Include="Core\Task.hpp" />
     <ClInclude Include="Core\ThreadManager.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
+    <ClInclude Include="Game\Camera.hpp" />
     <ClInclude Include="Game\Chunk.hpp" />
     <ClInclude Include="Game\Components\BaseComponent.hpp" />
     <ClInclude Include="Game\Components\IBaseComponent.hpp" />
@@ -250,6 +241,7 @@
     <ClInclude Include="Loader\LibraryLoader.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\CodeStructure.txt" />
     <Text Include="..\FileStructure.txt" />
     <Text Include="..\States.txt" />
     <Text Include="..\Todo.txt" />

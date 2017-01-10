@@ -6,11 +6,9 @@
 #include <condition_variable>
 #include <queue>
 
-
 template <class T>
 class SafeQueue
 {
-
 public:
 
 	SafeQueue(void)
@@ -36,11 +34,10 @@ public:
 		return val;
 	}
 private:
-	
+
 	std::queue<T> q;
 	mutable std::mutex m;
 	std::condition_variable c;
-
 };
 
 #endif

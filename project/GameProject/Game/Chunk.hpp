@@ -10,14 +10,9 @@ public:
 	virtual void init();
 	virtual void update(float dt);
 
-	
-
 private:
 
 	GameObject* gameObjects;
-
-
-
 };
 
 #endif

@@ -13,7 +13,6 @@ struct Character {
 };
 
 class IFont {
-
 public:
 
 	virtual void init(char* fontName, int size) = 0;
@@ -30,7 +29,6 @@ public:
 	virtual Character getCharacter(unsigned char character) = 0;
 
 	virtual void getTextureInfo(int &x, int &y) = 0;
-
 };
 
 #endif

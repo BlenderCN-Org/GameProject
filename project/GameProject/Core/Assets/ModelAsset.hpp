@@ -8,7 +8,6 @@
 
 class ModelAsset : public BaseAsset
 {
-
 public:
 
 	virtual void init();
@@ -17,7 +16,6 @@ public:
 	void setAssetState(AssetState state);
 
 private:
-
 };
 
 #endif

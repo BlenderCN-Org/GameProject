@@ -11,7 +11,6 @@ using namespace glm;
 
 class CameraInput
 {
-
 public:
 
 	void init(glm::mat4* viewMat);
@@ -39,12 +38,11 @@ private:
 
 	mat3 rotH;
 	mat3 rotV;
-	
+
 	void mousepan(float x, float y);
 	void keypan(float dt);
 
 	void setCam(vec3 _pos, vec3 _dir);
-
 };
 
 #endif

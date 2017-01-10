@@ -11,7 +11,6 @@ struct Resolution
 	int height;
 
 	std::string toString() const;
-
 };
 
 enum class FullscreenMode : unsigned char
@@ -19,7 +18,7 @@ enum class FullscreenMode : unsigned char
 	FULLSCREEN = 0, //	 full-fullscreen
 	WINDOWED_FULLSCREEN = 1, // borderless fullscreen
 	WINDOWED = 2, // windowed
-	WINDOWED_BORDERLESS = 3, // windowed borderless 
+	WINDOWED_BORDERLESS = 3, // windowed borderless
 };
 
 enum class VSyncMode : char
@@ -39,7 +38,6 @@ enum class FramerateLock : short
 
 class DisplaySettings
 {
-
 public:
 
 	DisplaySettings();
@@ -48,7 +46,7 @@ public:
 	void setRenderEngine(IRenderEngine* re);
 
 	void apply();
-	
+
 	void setResolution(int width, int height);
 	void setResolution(Resolution res);
 
@@ -67,7 +65,7 @@ public:
 	Section getSection() const;
 
 private:
-	
+
 	Resolution screenRes;
 	FullscreenMode fullscreenMode;
 	VSyncMode vsync;
@@ -76,7 +74,6 @@ private:
 	IRenderEngine* renderEngine;
 
 	IWindow* window;
-
 };
 
 #endif

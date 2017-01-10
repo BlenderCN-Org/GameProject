@@ -12,7 +12,6 @@ void ModelAsset::init() {
 }
 
 void ModelAsset::release() {
-
 	dataSize = 0;
 	delete dataPtr;
 	dataPtr = nullptr;

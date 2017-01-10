@@ -15,7 +15,6 @@ struct FrameBufferCreateInfo
 
 class IFrameBuffer
 {
-
 public:
 
 	virtual bool init(FrameBufferCreateInfo *createInfo) = 0;
@@ -31,7 +30,6 @@ public:
 	virtual void setWindowSize(int windowWidth, int windowHeight) = 0;
 
 	virtual bool isUsingRenderBuffer() const = 0;
-
 };
 
 #endif

@@ -20,18 +20,16 @@ public:
 
 	void setWidth(int w);
 	void setHeigth(int h);
-	
+
 	void setVsync(bool vsync);
 
 	void setFoV(float fov);
-
 
 private:
 
 	Config conf;
 
 	DisplaySettings dispSettings;
-
 };
 
 #endif

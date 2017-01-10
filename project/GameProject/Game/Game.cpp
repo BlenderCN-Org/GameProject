@@ -14,6 +14,8 @@ void Game::init() {
 	core = new Core();
 	core->init();
 
+	camInput.init(&cam.viewMatrix);
+
 	player = new GameObject();
 }
 
@@ -23,6 +25,7 @@ bool Game::isRunning() const {
 
 void Game::update(float dt) {
 	core->update(dt);
+	camInput.update(dt);
 	tickFPS(dt);
 	running = core->isRunning();
 }

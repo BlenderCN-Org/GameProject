@@ -25,16 +25,13 @@ private:
 	glm::mat4 worldMatrix;
 
 	std::map<uint64_t, BaseComponent*> components;
-
 };
 
 #endif
 
 template<typename T>
-inline BaseComponent* GameObject::getComponent()
-{
-	if ( components.count(IBaseComponent<T>::TypeID) )
-	{
+inline BaseComponent* GameObject::getComponent() {
+	if ( components.count(IBaseComponent<T>::TypeID) ) {
 		return components.find(IBaseComponent<T>::TypeID);
 	}
 	return nullptr;

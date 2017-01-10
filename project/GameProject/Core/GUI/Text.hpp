@@ -5,7 +5,6 @@
 
 class Text
 {
-
 public:
 
 	void init(IRenderEngine* re);
@@ -20,7 +19,6 @@ private:
 
 	IFont* font;
 	IMesh* mesh;
-
 };
 
 #endif

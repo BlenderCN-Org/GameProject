@@ -8,14 +8,13 @@
 
 class Mesh_gl : public IMesh
 {
-
 public:
 
 	virtual void init(MeshPrimitiveType p);
 	virtual void release();
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout);
-	
+
 	virtual void bind();
 	virtual void render();
 
@@ -36,14 +35,12 @@ private:
 	GLsizei vertexCount;
 	size_t triangleCount;
 
-
 	GLenum meshPrimitive;
 	// mapping stuff
 
 	bool isMapped;
 	void* mapPtr;
 	size_t mappedSize;
-
 };
 
 #endif

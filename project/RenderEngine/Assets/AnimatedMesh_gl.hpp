@@ -3,8 +3,7 @@
 
 #include "../IAnimatedMesh.hpp"
 
-class AnimatedMesh_gl : public IAnimatedMesh{
-
+class AnimatedMesh_gl : public IAnimatedMesh {
 public:
 
 	virtual void init(MeshPrimitiveType ptype);
@@ -20,9 +19,6 @@ public:
 	virtual void flush() {};
 
 private:
-
-
-
 };
 
 #endif

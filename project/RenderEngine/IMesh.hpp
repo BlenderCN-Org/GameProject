@@ -23,7 +23,6 @@ enum MeshDataLayout {
 };
 
 class IMesh {
-
 public:
 
 	virtual void init(MeshPrimitiveType ptype) = 0;
@@ -37,8 +36,6 @@ public:
 	virtual void* map(size_t &dataSize) = 0;
 	virtual void unmap() = 0;
 	virtual void flush() = 0;
-
-
 };
 
 #endif

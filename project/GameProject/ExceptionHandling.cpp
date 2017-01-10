@@ -26,5 +26,4 @@ LONG WINAPI TopLevelExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo) {
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-void initExceptionHandlers() {
-}
+void initExceptionHandlers() {}

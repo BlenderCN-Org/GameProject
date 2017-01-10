@@ -48,9 +48,6 @@
     <ClInclude Include="DataTypes\Colors.hpp">
       <Filter>Header Files\DataTypes</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -82,12 +79,6 @@
       <Filter>Header Files\DataTypes</Filter>
     </ClInclude>
     <ClInclude Include="ITexture.hpp">
-      <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderState.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICamera.hpp">
       <Filter>Header Files\Interface</Filter>
     </ClInclude>
     <ClInclude Include="IShaderObject.hpp">
@@ -143,9 +134,6 @@
     <ClCompile Include="DataTypes\Colors.cpp">
       <Filter>Source Files\DataTypes</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DataTypes\Vertex.cpp">
       <Filter>Source Files\DataTypes</Filter>
     </ClCompile>
@@ -160,9 +148,6 @@
     </ClCompile>
     <ClCompile Include="DataTypes\Image.cpp">
       <Filter>Source Files\DataTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderState.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Window\Win32Window.cpp">
       <Filter>Source Files\Window</Filter>

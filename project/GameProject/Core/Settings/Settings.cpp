@@ -1,49 +1,33 @@
 #include "Settings.hpp"
 
-void Settings::loadSettings()
-{
+void Settings::loadSettings() {
 	Section display = dispSettings.getSection();
 
 	conf.addSection("Display", display);
-
 }
 
-void Settings::saveSettings()
-{
-}
+void Settings::saveSettings() {}
 
-int Settings::getWidth() const
-{
+int Settings::getWidth() const {
 	return 0;
 }
 
-int Settings::getHeigth() const
-{
+int Settings::getHeigth() const {
 	return 0;
 }
 
-bool Settings::getVsync() const
-{
+bool Settings::getVsync() const {
 	return false;
 }
 
-float Settings::getFoV() const
-{
+float Settings::getFoV() const {
 	return 0.0f;
 }
 
-void Settings::setWidth(int w)
-{
-}
+void Settings::setWidth(int w) {}
 
-void Settings::setHeigth(int h)
-{
-}
+void Settings::setHeigth(int h) {}
 
-void Settings::setVsync(bool vsync)
-{
-}
+void Settings::setVsync(bool vsync) {}
 
-void Settings::setFoV(float fov)
-{
-}
+void Settings::setFoV(float fov) {}

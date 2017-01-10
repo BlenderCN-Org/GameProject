@@ -12,7 +12,6 @@
 
 class ThreadManager
 {
-
 public:
 
 	void startThreads(uint32_t nrThreads);
@@ -31,7 +30,6 @@ private:
 	void threadProcess(uint32_t threadIndex);
 
 	void loadAsset(AssetLoadStruct &ls);
-
 };
 
 #endif

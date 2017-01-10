@@ -2,7 +2,6 @@
 #define ITEXTURE_HPP
 
 class ITexture {
-
 public:
 
 	virtual void init(int internalComponents, bool compressed) = 0;
@@ -12,7 +11,6 @@ public:
 
 	virtual void setTextureData(int width, int height, int components, void* data) = 0;
 	virtual void bind() = 0;
-
 };
 
 #endif
