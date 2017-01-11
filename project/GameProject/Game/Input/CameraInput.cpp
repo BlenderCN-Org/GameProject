@@ -1,6 +1,8 @@
 #include "CameraInput.hpp"
 #include <glm\gtc\matrix_transform.hpp>
 
+using namespace glm;
+
 void CameraInput::init(glm::mat4 * view) {
 	viewMat = view;
 	input = Input::getInput();

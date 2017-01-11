@@ -185,11 +185,7 @@
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
-    <ClCompile Include="Core\Input\CameraInput.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
-    <ClCompile Include="Core\Loading\Loader.cpp" />
-    <ClCompile Include="Core\Loading\LoadingScreen.cpp" />
-    <ClCompile Include="Core\Loading\ModelLoader.cpp" />
     <ClCompile Include="Core\Script\OcParsable.cpp" />
     <ClCompile Include="Core\Script\OcParser.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
@@ -203,6 +199,7 @@
     <ClCompile Include="Game\Components\RenderComponent.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
+    <ClCompile Include="Game\Input\CameraInput.cpp" />
     <ClCompile Include="Loader\LibraryLoader.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -214,13 +211,7 @@
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
-    <ClInclude Include="Core\Input\CameraInput.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
-    <ClInclude Include="Core\Loading\AssetStructures.hpp" />
-    <ClInclude Include="Core\Loading\Loader.hpp" />
-    <ClInclude Include="Core\Loading\LoaderDescriptor.hpp" />
-    <ClInclude Include="Core\Loading\LoadingScreen.hpp" />
-    <ClInclude Include="Core\Loading\ModelLoader.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Script\OcParsable.hpp" />
     <ClInclude Include="Core\Script\OcParser.hpp" />
@@ -238,6 +229,7 @@
     <ClInclude Include="Game\Game.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
     <ClInclude Include="Game\GameState.hpp" />
+    <ClInclude Include="Game\Input\CameraInput.hpp" />
     <ClInclude Include="Loader\LibraryLoader.hpp" />
   </ItemGroup>
   <ItemGroup>

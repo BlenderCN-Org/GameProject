@@ -2,7 +2,7 @@
 
 #include "../Core/Input/Input.hpp"
 
-Game::Game() : player(nullptr), running(true), core(nullptr), timepass(0.0f), fps(0) {}
+Game::Game() : player(nullptr), running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu) {}
 
 Game::~Game() {
 	delete player;
@@ -28,11 +28,22 @@ void Game::update(float dt) {
 	camInput.update(dt);
 	tickFPS(dt);
 	running = core->isRunning();
+
+	// update gameStuffz
+	if ( gstate == GameState::eGameState_PlayMode ) {
+
+	}
+
+	
 }
 
 void Game::render() {
 	core->render();
 }
+
+void Game::newGame() {}
+
+void Game::loadGame() {}
 
 void Game::tickFPS(float dt) {
 	fps++;

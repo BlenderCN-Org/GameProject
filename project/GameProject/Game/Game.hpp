@@ -6,7 +6,7 @@
 #include "Camera.hpp"
 
 #include "../Core/Core.hpp"
-#include "../Core/Input/CameraInput.hpp"
+#include "Input/CameraInput.hpp"
 
 class Game
 {
@@ -24,6 +24,9 @@ public:
 
 private:
 
+	void newGame();
+	void loadGame();
+
 	void tickFPS(float dt);
 
 	Core* core;
@@ -34,6 +37,7 @@ private:
 	float timepass;
 	int fps;
 
+	GameState gstate;
 	GameObject* player;
 };
 

@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Core\Settings">
       <UniqueIdentifier>{5bdac77a-483a-4be1-8433-5ec2b13936c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Loading">
-      <UniqueIdentifier>{575b5131-277f-4452-a928-a380275b81ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core\Loading">
-      <UniqueIdentifier>{627cb62f-d652-4236-a987-f6c77a05109f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core\Assets">
       <UniqueIdentifier>{3187fac3-48e4-40fd-9f76-3ee8d2db2f2e}</UniqueIdentifier>
     </Filter>
@@ -85,6 +79,12 @@
     <Filter Include="Source Files\Core\System">
       <UniqueIdentifier>{91981ae1-26c3-4326-867f-51ac1fe9f68d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Input">
+      <UniqueIdentifier>{ca17e6bd-bf52-426f-b533-ef2603c0adb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Input">
+      <UniqueIdentifier>{1882d1ef-dc04-4306-a968-63c7c3bff398}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -120,20 +120,11 @@
     <ClCompile Include="Loader\LibraryLoader.cpp">
       <Filter>Source Files\LibLoader</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Loading\LoadingScreen.cpp">
-      <Filter>Source Files\Core\Loading</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Loading\ModelLoader.cpp">
-      <Filter>Source Files\Core\Loading</Filter>
-    </ClCompile>
     <ClCompile Include="Core\ThreadManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Assets\ModelAsset.cpp">
       <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Loading\Loader.cpp">
-      <Filter>Source Files\Core\Loading</Filter>
     </ClCompile>
     <ClCompile Include="Core\Assets\TextureAsset.cpp">
       <Filter>Source Files\Core\Assets</Filter>
@@ -150,9 +141,6 @@
     <ClCompile Include="Core\Input\Input.cpp">
       <Filter>Source Files\Core\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Input\CameraInput.cpp">
-      <Filter>Source Files\Core\Input</Filter>
-    </ClCompile>
     <ClCompile Include="Core\GUI\Text.cpp">
       <Filter>Source Files\Core\GUI</Filter>
     </ClCompile>
@@ -167,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Game\Camera.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Input\CameraInput.cpp">
+      <Filter>Source Files\Game\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,23 +194,8 @@
     <ClInclude Include="Loader\LibraryLoader.hpp">
       <Filter>Header Files\LibLoader</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Loading\LoadingScreen.hpp">
-      <Filter>Header Files\Core\Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Loading\Loader.hpp">
-      <Filter>Header Files\Core\Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Loading\LoaderDescriptor.hpp">
-      <Filter>Header Files\Core\Loading</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Assets\BaseAsset.hpp">
       <Filter>Header Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Loading\ModelLoader.hpp">
-      <Filter>Header Files\Core\Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Loading\AssetStructures.hpp">
-      <Filter>Header Files\Core\Loading</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameState.hpp">
       <Filter>Header Files\Game</Filter>
@@ -245,9 +221,6 @@
     <ClInclude Include="ExceptionHandling.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Input\CameraInput.hpp">
-      <Filter>Header Files\Core\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Input\Input.hpp">
       <Filter>Header Files\Core\Input</Filter>
     </ClInclude>
@@ -265,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Game\Camera.hpp">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Input\CameraInput.hpp">
+      <Filter>Header Files\Game\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

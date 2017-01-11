@@ -13,8 +13,3 @@ void RenderComponent::setInstanceId(uint64_t _instanceId) {
 uint64_t RenderComponent::getInstanceId() const {
 	return instanceId;
 }
-
-//uint64_t RenderComponent::getComponentID() const
-//{
-//	return 0;
-//}

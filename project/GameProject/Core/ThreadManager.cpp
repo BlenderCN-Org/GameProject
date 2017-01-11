@@ -51,8 +51,7 @@ void ThreadManager::threadProcess(uint32_t threadIndex) {
 				queueTask(t);
 				break;
 			case TaskType::eTaskType_loadAsset:
-				AssetLoadStruct ls = *(AssetLoadStruct*)(t.data);
-				loadAsset(ls);
+
 				break;
 			default:
 				break;

@@ -2,12 +2,10 @@
 #define CAMERAINPUT_HPP
 
 #include <glm\glm.hpp>
-#include "Input.hpp"
+#include "../../Core/Input/Input.hpp"
 
 #define toDEGREE 57.2957795f
 #define toRADIAN 0.0174532925f
-
-using namespace glm;
 
 class CameraInput
 {
@@ -22,9 +20,9 @@ private:
 
 	glm::mat4* viewMat;
 
-	vec3 pos;
-	vec3 dir;
-	vec3 start;
+	glm::vec3 pos;
+	glm::vec3 dir;
+	glm::vec3 start;
 
 	float playbackSpeed = 1.0f;
 
@@ -36,13 +34,13 @@ private:
 	float mouseSpeed; //higher val = faster
 	float camSpeed = 10.0f; // higher val = faster
 
-	mat3 rotH;
-	mat3 rotV;
+	glm::mat3 rotH;
+	glm::mat3 rotV;
 
 	void mousepan(float x, float y);
 	void keypan(float dt);
 
-	void setCam(vec3 _pos, vec3 _dir);
+	void setCam(glm::vec3 _pos, glm::vec3 _dir);
 };
 
 #endif
