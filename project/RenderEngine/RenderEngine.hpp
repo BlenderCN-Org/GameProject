@@ -81,7 +81,9 @@ private:
 	FT_Library fontLibrary;
 
 	GLWindow glWindow;
+#if SUPPORT_VULKAN_WINDOW
 	VKWindow vkWindow;
+#endif
 
 	RenderEngineCreateInfo reci;
 };

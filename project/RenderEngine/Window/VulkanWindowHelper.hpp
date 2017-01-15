@@ -1,6 +1,10 @@
 #ifndef VULKANWINDOWHELPER_HPP
 #define VULKANWINDOWHELPER_HPP
 
+#include "../BuildOptions.hpp"
+
+#if SUPPORT_VULKAN_WINDOW
+
 #include <vulkan\vulkan.h>
 
 VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
@@ -35,5 +39,7 @@ VkInstance createInstance();
 VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surfaceWidth, uint32_t surfaceHeight, VkSwapchainKHR oldSwapchain);
 
 void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain &swapchain);
+
+#endif
 
 #endif

@@ -1,5 +1,7 @@
 #include "Window.hpp"
 
+#if SUPPORT_VULKAN_WINDOW
+
 // vulkan extensions
 std::vector<const char*> deviceExtensionNames = { "VK_KHR_swapchain" };
 
@@ -185,3 +187,5 @@ void VKWindow::vulkanCleanup() {
 	vkDestroyInstance(instanceData.instance, nullptr);
 	instanceData.instance = VK_NULL_HANDLE;
 }
+
+#endif

@@ -1,5 +1,7 @@
 #include "VulkanWindowHelper.hpp"
 
+#if SUPPORT_VULKAN_WINDOW
+
 #include <sstream>
 #include <iostream>
 #include <vector>
@@ -170,3 +172,5 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 		vkDestroySwapchainKHR(instanceData.device, oldSwapchain, nullptr);
 	}
 }
+
+#endif

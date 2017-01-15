@@ -111,9 +111,10 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 		if ( reci.createRenderWindow ) {
 			//throw "Not yet finished!";
 			initWindowSystem();
+#if SUPPORT_VULKAN_WINDOW
 			vkWindow.init();
-
 			vkWindow.showWindow(true);
+#endif
 		}
 	}
 
@@ -127,7 +128,9 @@ void RenderEngine::release() {
 		if ( reci.renderEngineType == RenderEngineType::eRenderOpenGL )
 			glWindow.deinit();
 		else if ( reci.renderEngineType == RenderEngineType::eRenderVulkan )
+#if SUPPORT_VULKAN_WINDOW
 			vkWindow.deinit();
+#endif
 		deinitWindowSystem();
 	}
 	delete this;
@@ -288,7 +291,9 @@ IWindow * RenderEngine::getMainWindow() {
 	if ( reci.renderEngineType == RenderEngineType::eRenderOpenGL ) {
 		return &glWindow;
 	} else if ( reci.renderEngineType == RenderEngineType::eRenderVulkan ) {
+#if SUPPORT_VULKAN_WINDOW
 		return &vkWindow;
+#endif
 	}
 	return nullptr;
 }

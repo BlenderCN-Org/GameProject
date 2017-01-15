@@ -180,6 +180,7 @@
     <ClInclude Include="Assets\Mesh_vk.hpp" />
     <ClInclude Include="Assets\ShaderObject_gl.hpp" />
     <ClInclude Include="Assets\Texture_gl.hpp" />
+    <ClInclude Include="BuildOptions.hpp" />
     <ClInclude Include="DataTypes\Colors.hpp" />
     <ClInclude Include="DataTypes\Image.hpp" />
     <ClInclude Include="DataTypes\Vertex.hpp" />

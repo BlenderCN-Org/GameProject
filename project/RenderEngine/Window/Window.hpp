@@ -1,6 +1,8 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include "../BuildOptions.hpp"
+
 #include "../IWindow.hpp"
 
 #ifdef _WIN32
@@ -8,9 +10,10 @@
 #define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
-#define SUPPORT_VULKAN_WINDOW
+#if SUPPORT_VULKAN_WINDOW
 #include <vulkan\vulkan.hpp>
 #include "VulkanWindowHelper.hpp"
+#endif
 
 class BaseWindow : public IWindow
 {
@@ -91,7 +94,7 @@ private:
 #endif
 };
 
-#ifdef SUPPORT_VULKAN_WINDOW
+#if SUPPORT_VULKAN_WINDOW
 
 class VKWindow : public BaseWindow
 {

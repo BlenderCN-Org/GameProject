@@ -120,6 +120,9 @@
     <ClInclude Include="Assets\Mesh_vk.hpp">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="BuildOptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">

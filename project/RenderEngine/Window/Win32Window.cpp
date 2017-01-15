@@ -554,6 +554,8 @@ void GLWindow::swapBuffers() {
 	SwapBuffers(deviceContext);
 }
 
+#if SUPPORT_VULKAN_WINDOW
+
 void VKWindow::init() {
 	windowHandle = setupWindow();
 
@@ -745,6 +747,8 @@ void VKWindow::swapBuffers() {
 		}
 	}
 }
+
+#endif
 
 void initWindowSystem() {
 	windowClassInitialized = registerWindowClass() != 0 ? 1 : 0;
