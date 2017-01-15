@@ -186,6 +186,7 @@
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\Memory\MemoryManager.cpp" />
     <ClCompile Include="Core\Script\OcParsable.cpp" />
     <ClCompile Include="Core\Script\OcParser.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
@@ -212,6 +213,10 @@
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
+    <ClInclude Include="Core\Memory\Heap.hpp" />
+    <ClInclude Include="Core\Memory\MemoryManager.hpp" />
+    <ClInclude Include="Core\Memory\ResourceAllocator.hpp" />
+    <ClInclude Include="Core\Memory\StackAllocator.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Script\OcParsable.hpp" />
     <ClInclude Include="Core\Script\OcParser.hpp" />

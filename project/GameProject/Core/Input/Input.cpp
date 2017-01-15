@@ -19,7 +19,7 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 		} else if ( scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2) ) {
 			singleton->console->backSpace();
 		}
-		//printf("Scancode %d with modkey %d\n", scancode, mods);
+		printf("Scancode %d with modkey %d\n", scancode, mods);
 
 		if ( action == ACTION_BUTTON_UP )
 			singleton->releaseMap[InputEvent{ scancode, false }] = true;

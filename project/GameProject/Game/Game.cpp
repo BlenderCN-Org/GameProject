@@ -34,7 +34,25 @@ void Game::update(float dt) {
 
 	}
 
-	
+	Input* in = Input::getInput();
+
+	KeyBind kb;
+	kb.code = 2;
+	kb.mod = 0;
+	kb.mouse = 0;
+
+	if ( in->releasedThisFrame(kb) ) {
+		std::cout << "1 Pressed\n";
+		saveGame();
+	}
+
+	kb.code = 3;
+
+	if ( in->releasedThisFrame(kb) ) {
+		std::cout << "2 Pressed\n";
+		loadGame();
+	}
+
 }
 
 void Game::render() {
@@ -43,7 +61,19 @@ void Game::render() {
 
 void Game::newGame() {}
 
-void Game::loadGame() {}
+void Game::saveGame() {
+	std::cout << "Saving Game\n";
+
+	core->getMemoryManager()->saveHeap();
+
+}
+
+void Game::loadGame() {
+	std::cout << "Loading Game\n";
+
+	core->getMemoryManager()->loadHeap();
+
+}
 
 void Game::tickFPS(float dt) {
 	fps++;

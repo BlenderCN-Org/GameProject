@@ -85,6 +85,12 @@
     <Filter Include="Source Files\Game\Input">
       <UniqueIdentifier>{1882d1ef-dc04-4306-a968-63c7c3bff398}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\MemoryManager">
+      <UniqueIdentifier>{3f797dad-6b3d-4804-8df8-e5102bd5a28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Memory">
+      <UniqueIdentifier>{2a147f31-1968-4d1d-bbfb-b46f480ff10f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -158,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="Game\Input\CameraInput.cpp">
       <Filter>Source Files\Game\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\MemoryManager.cpp">
+      <Filter>Source Files\Core\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +250,18 @@
     </ClInclude>
     <ClInclude Include="Game\Input\CameraInput.hpp">
       <Filter>Header Files\Game\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\Heap.hpp">
+      <Filter>Header Files\Core\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\MemoryManager.hpp">
+      <Filter>Header Files\Core\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\StackAllocator.hpp">
+      <Filter>Header Files\Core\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\ResourceAllocator.hpp">
+      <Filter>Header Files\Core\MemoryManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

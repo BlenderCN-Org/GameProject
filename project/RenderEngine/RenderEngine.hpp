@@ -57,7 +57,6 @@ public:
 
 	virtual IMesh* createMesh();
 	virtual IAnimatedMesh* createAnimatedMesh();
-	//virtual IRenderObject* createRenderObject();
 	virtual IShaderObject* createShaderObject();
 	virtual ITexture* createTexture();
 
@@ -79,10 +78,6 @@ private:
 	GLinfo info;
 
 	RGB clearColor;
-
-	//PoolAllocator<RenderObject> objectPool;
-	//FrameAllocator frameAlloc;
-
 	FT_Library fontLibrary;
 
 	GLWindow glWindow;

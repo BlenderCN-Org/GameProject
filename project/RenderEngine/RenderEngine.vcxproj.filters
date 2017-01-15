@@ -69,12 +69,6 @@
     <ClInclude Include="Utils\ShelfPack.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\FrameAllocator_static.hpp">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\MemoryManager.hpp">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="DataTypes\Image.hpp">
       <Filter>Header Files\DataTypes</Filter>
     </ClInclude>
@@ -138,12 +132,6 @@
       <Filter>Source Files\DataTypes</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ShelfPack.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\FrameAllocator_static.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\MemoryManager.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="DataTypes\Image.cpp">

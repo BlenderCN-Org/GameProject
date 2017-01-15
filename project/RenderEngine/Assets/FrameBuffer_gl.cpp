@@ -38,7 +38,7 @@ void FrameBuffer_gl::release() {
 			}
 		}
 
-		MemoryManager::getMemoryManager()->deallocate(colorAttachments);
+		delete colorAttachments;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -55,10 +55,10 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 	// for now to not make errors when deleting
 	//useRenderBuffer = false;
 
-	colorAttachments = MemoryManager_alloc(GLuint, colorAttachmentCount);
+	colorAttachments = new GLuint[colorAttachmentCount];
 	bind();
 
-	GLenum* drawBuffers = MemoryManager_alloc(GLenum, colorAttachmentCount);
+	GLenum* drawBuffers = new GLenum[colorAttachmentCount];
 
 	if ( usingRenderBuffers ) {
 		if ( depth )
@@ -78,7 +78,7 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 
 	glDrawBuffers(colorAttachmentCount, drawBuffers);
 
-	MemoryManager::getMemoryManager()->deallocate(drawBuffers);
+	delete drawBuffers;
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
@@ -103,7 +103,7 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 				glDeleteTextures(1, &depthAttachment);
 			}
 		}
-		MemoryManager::getMemoryManager()->deallocate(colorAttachments);
+		delete colorAttachments;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

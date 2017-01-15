@@ -60,7 +60,6 @@ void Texture_gl::release() {
 
 	if ( textureData ) {
 		delete textureData;
-		//MemoryManager::getMemoryManager()->deallocate(textureData);
 		textureData = nullptr;
 	}
 
@@ -123,11 +122,9 @@ void Texture_gl::setTextureData(int _width, int _height, int _components, void *
 		else
 			update = true;
 		return;
-		//MemoryManager::getMemoryManager()->deallocate(textureData);
-		//textureData = nullptr;
 	}
 
-	void* d = new char[size];//MemoryManager_alloc(char, size);
+	void* d = new char[size];
 
 	if ( d ) {
 		memcpy(d, _data, size);
@@ -161,7 +158,6 @@ void Texture_gl::bind() {
 		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, textureData);
-		//MemoryManager::getMemoryManager()->deallocate(textureData);
 		delete textureData;
 		textureData = nullptr;
 		int comp = false;
@@ -245,7 +241,6 @@ void Texture_gl::bind() {
 		glGetnTexImage(target, level, format, GL_UNSIGNED_BYTE, size, textureData);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, textureData);
-		//MemoryManager::getMemoryManager()->deallocate(textureData);
 		delete textureData;
 		textureData = nullptr;
 		int comp = false;

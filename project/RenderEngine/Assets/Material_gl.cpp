@@ -4,8 +4,8 @@
 void Material_gl::init(unsigned int nrTextures) {
 	numberOfTextures = nrTextures;
 
-	textures = MemoryManager_alloc(ITexture*, numberOfTextures);
-	bindLocations = MemoryManager_alloc(int, numberOfTextures);
+	textures = new ITexture*[numberOfTextures];
+	bindLocations = new int[numberOfTextures];
 
 	for ( unsigned int i = 0; i < numberOfTextures; i++ ) {
 		textures[i] = nullptr;
@@ -14,8 +14,8 @@ void Material_gl::init(unsigned int nrTextures) {
 }
 
 void Material_gl::release() {
-	MemoryManager::getMemoryManager()->deallocate(textures);
-	MemoryManager::getMemoryManager()->deallocate(bindLocations);
+	delete textures;
+	delete bindLocations;
 
 	delete this;
 }

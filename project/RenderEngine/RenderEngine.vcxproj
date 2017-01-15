@@ -194,8 +194,6 @@
     <ClInclude Include="IWindow.hpp" />
     <ClInclude Include="RenderEngine.hpp" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Utils\FrameAllocator_static.hpp" />
-    <ClInclude Include="Utils\MemoryManager.hpp" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
     <ClInclude Include="Window\VulkanWindowHelper.hpp" />
     <ClInclude Include="Window\WindowSystem.hpp" />
@@ -214,8 +212,6 @@
     <ClCompile Include="DataTypes\Image.cpp" />
     <ClCompile Include="DataTypes\Vertex.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
-    <ClCompile Include="Utils\FrameAllocator_static.cpp" />
-    <ClCompile Include="Utils\MemoryManager.cpp" />
     <ClCompile Include="Utils\ShelfPack.cpp" />
     <ClCompile Include="Window\VKWindow.cpp" />
     <ClCompile Include="Window\VulkanWindowHelper.cpp" />

@@ -19,6 +19,8 @@ public:
 	template <typename T>
 	BaseComponent* getComponent();
 
+	uint32_t counter;
+
 private:
 
 	uint64_t gameObjectId;

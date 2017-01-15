@@ -9,10 +9,17 @@ ShelfPack::ShelfPack(int x, int y) {
 	counter = 0;
 }
 
-bool ShelfPack::addData(int w, int h, int id) {
-	FrameAllocator* allocator = FrameAllocator_static::getFrameAllocator();
+ShelfPack::~ShelfPack() {
+	size_t l = nodes.size();
+	for ( size_t i = 0; i < l; i++ ) {
+		delete nodes[i];
+	}
 
-	Node* n = allocator->allocate<Node>(1);
+}
+
+bool ShelfPack::addData(int w, int h, int id) {
+	
+	Node* n = new Node;
 
 	n->x = n->y = 0;
 	n->height = h;
@@ -46,21 +53,19 @@ int ShelfPack::getPackedHeight() {
 	return 0;
 }
 
-PackRect & ShelfPack::operator[](int id) {
+PackRect ShelfPack::operator[](int id) {
 	// TODO: insert return statement here
-	FrameAllocator* allocator = FrameAllocator_static::getFrameAllocator();
-
-	PackRect* r = allocator->allocate<PackRect>(1);
+	PackRect r = PackRect();
 
 	Node* n = nodes[id];
 
-	r->h = n->height;
-	r->w = n->width;
-	r->id = n->id;
-	r->x = n->x;
-	r->y = n->y;
+	r.h = n->height;
+	r.w = n->width;
+	r.id = n->id;
+	r.x = n->x;
+	r.y = n->y;
 
-	return *r;
+	return r;
 }
 
 bool ShelfPack::addNode(Node * n) {

@@ -25,6 +25,7 @@ public:
 private:
 
 	void newGame();
+	void saveGame();
 	void loadGame();
 
 	void tickFPS(float dt);

@@ -88,7 +88,7 @@ void * Mesh_gl::map(size_t & dataSize) {
 			dataSize = vertexCount * sizeof(Vertex5);
 		}
 
-		dataPtr = MemoryManager_alloc(char, dataSize);
+		dataPtr = new char[dataSize];
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		void* d = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
@@ -108,7 +108,7 @@ void * Mesh_gl::map(size_t & dataSize) {
 void Mesh_gl::unmap() {
 	if ( isMapped ) {
 		flush();
-		MemoryManager::getMemoryManager()->deallocate(mapPtr);
+		delete mapPtr;
 		mapPtr = nullptr;
 		isMapped = false;
 	}

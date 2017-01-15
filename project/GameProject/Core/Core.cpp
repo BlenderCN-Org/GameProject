@@ -7,6 +7,7 @@
 
 void Core::init() {
 	initSys();
+	mem.init();
 	thrdMgr = nullptr;
 	assetMgr = nullptr;
 
@@ -73,7 +74,7 @@ void Core::release() {
 	renderEngine->release();
 
 	renderEngineLib.unloadLibrary();
-
+	mem.release();
 	input->release();
 
 	deinitSys();
@@ -108,6 +109,7 @@ void Core::setFPS(int _fps) {
 }
 
 void Core::update(float dt) {
+	mem.getFrameAllocator()->reset();
 	// reset input states, clear for next frame
 	input->reset();
 	// poll messages and update camera
@@ -143,4 +145,8 @@ void Core::render() {
 
 DisplaySettings * Core::getDisplaySettings() {
 	return &disp;
+}
+
+MemoryManager* Core::getMemoryManager() {
+	return &mem;
 }

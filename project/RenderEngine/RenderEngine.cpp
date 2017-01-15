@@ -10,9 +10,6 @@
 
 #include "Shader.h"
 
-#include "Utils\MemoryManager.hpp"
-#include "Utils\FrameAllocator_static.hpp"
-
 #ifdef _DEBUG
 extern "C"
 {
@@ -119,18 +116,6 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 			vkWindow.showWindow(true);
 		}
 	}
-	//objectPool = PoolAllocator<RenderObject>(10);
-
-	MemoryManager* mgr = MemoryManager::getMemoryManager();
-
-	//frameAlloc = FrameAllocator(1024, mgr);
-	FrameAllocator* frameAllocator = FrameAllocator_static::getFrameAllocator();
-
-	int* i = frameAllocator->allocate<int>(1);
-	i[0] = 5;
-	i[1] = 10;
-
-	//cam.perspective = glm::perspectiveFov(glm::radians(75.0f), 1280.0f, 720.0f, 0.0001f, 100.0f);
 
 	FT_Init_FreeType(&fontLibrary);
 	counter = 1;
@@ -146,16 +131,9 @@ void RenderEngine::release() {
 		deinitWindowSystem();
 	}
 	delete this;
-	// static class so this is possible
-	FrameAllocator_static::release();
-	MemoryManager::release();
 }
 
 void RenderEngine::renderDebugFrame() {
-	FrameAllocator* frameAllocator = FrameAllocator_static::getFrameAllocator();
-
-	frameAllocator->reset();
-
 	counter += 20;
 
 	if ( counter > 32 * KB ) {
@@ -316,11 +294,11 @@ IWindow * RenderEngine::getMainWindow() {
 }
 
 size_t RenderEngine::getMemoryUsage() const {
-	return MemoryManager::getMemoryManager()->getUsedHeap();
+	return 0;
 }
 
 size_t RenderEngine::getMaxMemory() const {
-	return MemoryManager::getMemoryManager()->getHeapSize();
+	return 0;
 }
 
 void RenderEngine::printInfo(GLinfo info) {

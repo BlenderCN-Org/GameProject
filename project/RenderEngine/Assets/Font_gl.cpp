@@ -70,7 +70,6 @@ bool cmp(const Character& first, const Character& second) {
 }
 
 void Font_gl::genFontTexture() {
-	FrameAllocator* frameAlloc = FrameAllocator_static::getFrameAllocator();
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -87,7 +86,7 @@ void Font_gl::genFontTexture() {
 
 		size_t dataSize = face->glyph->bitmap.width * face->glyph->bitmap.rows;
 
-		imageArray[c] = frameAlloc->allocate<unsigned char>(dataSize);
+		imageArray[c] = new unsigned char[dataSize];
 
 		memcpy_s(imageArray[c], dataSize, face->glyph->bitmap.buffer, dataSize);
 
@@ -161,7 +160,14 @@ void Font_gl::genFontTexture() {
 	texHeight = h;
 	texWidth = w;
 
-	char* data = frameAlloc->allocate<char>(w*h);
+	char* data = new char[w*h];
 
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+
+	for ( GLubyte c = 0; c < 255; c++ ) {
+		delete imageArray[c];
+		imageArray[c] = nullptr;
+	}
+
+	delete data;
 }

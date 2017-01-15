@@ -14,6 +14,7 @@ class ShelfPack {
 public:
 
 	ShelfPack(int x, int y);
+	~ShelfPack();
 
 	bool addData(int w, int h, int id);
 
@@ -22,7 +23,7 @@ public:
 	int getPackedWidth();
 	int getPackedHeight();
 
-	PackRect &operator[](int id);
+	PackRect operator[](int id);
 
 private:
 

@@ -1,14 +1,15 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
-#include "RenderEngine/IRenderEngine.hpp"
-#include "Input/Input.hpp"
+// project includes
+#include "RenderEngine\IRenderEngine.hpp"
+#include "Input\Input.hpp"
 #include "ThreadManager.hpp"
 #include "Assets\AssetManager.hpp"
-
 #include "Settings\DisplaySettings.hpp"
+#include "..\Loader\LibraryLoader.hpp"
 
-#include "../Loader/LibraryLoader.hpp"
+#include "Memory\MemoryManager.hpp"
 
 class Core
 {
@@ -30,10 +31,13 @@ public:
 
 	DisplaySettings* getDisplaySettings();
 
+	MemoryManager* getMemoryManager();
+
 private:
 
 	// core variables
 	Lib renderEngineLib;
+	MemoryManager mem;
 
 	bool hadReset;
 	bool running;
