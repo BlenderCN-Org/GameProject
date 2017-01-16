@@ -1,9 +1,12 @@
 #ifndef MESH_VK_HPP
 #define MESH_VK_HPP
 
-#include "../IMesh.hpp"
-#include <vulkan\vulkan.h>
+#include "../BuildOptions.hpp"
 
+#include "../IMesh.hpp"
+#if SUPPORT_VULKAN_WINDOW
+#include <vulkan\vulkan.h>
+#endif
 class Mesh_vk : public IMesh
 {
 public:
@@ -26,12 +29,15 @@ private:
 
 	bool usesIndexBuffer;
 
+#if SUPPORT_VULKAN_WINDOW
+
 	VkBuffer vertexBuffer = VK_NULL_HANDLE;
 	VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
 
 	VkBuffer indexBuffer = VK_NULL_HANDLE;
 	VkDeviceMemory indexMemory = VK_NULL_HANDLE;
 
+#endif
 	//GLuint vertexBuffer;
 	//GLuint indexBuffer;
 	//GLuint vertexArrayObject;
