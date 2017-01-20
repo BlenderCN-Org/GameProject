@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Core\MemoryManager">
       <UniqueIdentifier>{2a147f31-1968-4d1d-bbfb-b46f480ff10f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Exceptions">
+      <UniqueIdentifier>{186a2685-c107-44e4-a5c9-d838ec9d7c1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="Core\Assets\TextureAsset.hpp">
       <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Exceptions\Exceptions.hpp">
+      <Filter>Source Files\Core\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

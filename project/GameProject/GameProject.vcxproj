@@ -211,6 +211,7 @@
     <ClInclude Include="Core\Assets\TextureAsset.hpp" />
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
+    <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
     <ClInclude Include="Core\Memory\Heap.hpp" />
