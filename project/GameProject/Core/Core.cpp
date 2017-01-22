@@ -26,6 +26,64 @@ std::string readShader(const char *filePath) {
 	return content;
 }
 
+struct Header {
+	char tag[4];
+	uint16_t major;
+	uint16_t minor;
+};
+
+struct BoolFlags
+{
+	bool useVNormals;
+	bool useVColors;
+	bool useVUV;
+	bool padding;
+	uint32_t vertCount;
+	uint32_t triangleCount;
+};
+
+struct Triangle {
+	uint32_t v1;
+	uint32_t v2;
+	uint32_t v3;
+};
+
+struct Vertex5
+{
+	glm::vec3 pos;
+	glm::vec2 uv;
+};
+
+void* createVertUVData(void* meshData, uint32_t &size) {
+
+	Header* h = (Header*)meshData;
+	BoolFlags* bf = (BoolFlags*) ((char*)meshData + sizeof(Header) );
+
+	glm::vec3* vertices = (glm::vec3*)((char*)meshData + sizeof(Header) + sizeof(BoolFlags));
+	Triangle* triangles = (Triangle*)((char*)meshData + sizeof(Header) + sizeof(BoolFlags) + (sizeof(float) * 3 * bf->vertCount));
+
+	std::vector<Vertex5> verts;
+
+	for ( size_t i = 0; i < bf->triangleCount; i++ ) {
+		Triangle t = triangles[i];
+		
+		Vertex5 v1  = { vertices[t.v1], glm::vec2(0.0f, 0.0f) };
+		Vertex5 v2 = { vertices[t.v2], glm::vec2(0.0f, 0.0f) };
+		Vertex5 v3 = { vertices[t.v3], glm::vec2(0.0f, 0.0f) };
+		
+		verts.push_back(v1);
+		verts.push_back(v2);
+		verts.push_back(v3);
+	}
+
+	size = (uint32_t)verts.size() * sizeof(Vertex5);
+
+	Vertex5* v = new Vertex5[verts.size()];
+	memcpy(v, verts.data(), size);
+
+	return v;
+}
+
 void Core::init() {
 	initSys();
 	mem.init();
@@ -77,15 +135,16 @@ void Core::init() {
 	assetMgr = new AssetManager();
 	assetMgr->setThreadManager(thrdMgr);
 
-	dragonMesh = renderEngine->createMesh();
-	dragonMesh->init(MeshPrimitiveType::TRIANGLE);
+	mesh = renderEngine->createMesh();
+	mesh->init(MeshPrimitiveType::TRIANGLE);
 
 	uint32_t size = 0;
 	void * data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
+	
+	mesh->setMeshData(data, size, MeshDataLayout::VERT_UV);
+	
+	delete data;
 
-	dragonMesh->setMeshData(data, size, MeshDataLayout::VERT_UV);
-
-	delete[] data;
 
 	shaderObj = renderEngine->createShaderObject();
 	
@@ -112,7 +171,7 @@ void Core::init() {
 void Core::release() {
 
 	shaderObj->release();
-	dragonMesh->release();
+	mesh->release();
 
 	stopWorkerThreads();
 
@@ -198,8 +257,8 @@ void Core::render(glm::mat4 viewMat) {
 	shaderObj->bindData(vp, UniformDataType::UNI_MATRIX4X4, &viewMat);
 	shaderObj->bindData(mdl, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
-	dragonMesh->bind();
-	dragonMesh->render();
+	mesh->bind();
+	mesh->render();
 
 
 	// swap

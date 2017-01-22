@@ -9,6 +9,9 @@ void CameraInput::init(glm::mat4 * view) {
 
 	mouseSpeed = 0.2f;
 
+	angleH = 0;
+	angleV = 0;
+
 	start = vec3(-1, 0, 0);
 	dir = start;
 
@@ -45,6 +48,9 @@ void CameraInput::mousepan(float x, float y) {
 		angleV = 89;
 	if ( angleV < -89 )
 		angleV = -89;
+
+	printf("(%f, %f)\n", x, y);
+	printf("(%f, %f)\n", angleH, angleV);
 
 	//rotate vertically around x
 	float rotateRad;

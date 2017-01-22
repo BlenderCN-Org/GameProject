@@ -29,6 +29,16 @@ def writeHeader(fw, version):
 		fw(struct.pack("H", 1))
 		fw(struct.pack("H", 0))
 
+def createTriangleList(tessfaces):
+	triList = []
+
+	for tri in triangles:
+		triList.append( [tri.vertices[0], tri.vertices[1], tri.vertices[2] ] )
+		if len(tri.vertices) == 4:
+			triList.append( [tri.vertices[0], tri.vertices[2], tri.vertices[3] ] )
+
+	return triList
+
 def writeVersion_1_0(context, fw, use_selection):
 	print("Writing version 1.0")
 	
@@ -52,14 +62,15 @@ def writeVersion_1_0(context, fw, use_selection):
 			fw(struct.pack("????", useVNormals, useVColors, useVUV, padding))
 			vertices = meshData.vertices
 			meshData.update(calc_tessface=True)
-			triangles = meshData.tessfaces
+			triangles = createTriangleList(meshData.tessfaces)
 			fw(struct.pack("II", len(vertices), len(triangles) ))
 
 			for vert in vertices:
 				fw(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]) )
 
 			for tri in triangles:
-				fw(struct.pack("III", tri.vertices[0], tri.vertices[1], tri.vertices[2]) )
+				fw(struct.pack("III", tri[0], tri[1], tri[2]) )
+
 
 		else:
 			print("not a mesh")

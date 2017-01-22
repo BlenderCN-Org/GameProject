@@ -57,7 +57,7 @@ private:
 
 	// temp
 
-	IMesh* dragonMesh;
+	IMesh* mesh;
 	IShaderObject* shaderObj;
 	int vp = 0;
 	int mdl = 0;
