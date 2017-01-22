@@ -31,7 +31,7 @@ private:
 	void tickFPS(float dt);
 
 	Core* core;
-	Camera cam;
+	Camera* cam;
 	CameraInput camInput;
 
 	bool running;

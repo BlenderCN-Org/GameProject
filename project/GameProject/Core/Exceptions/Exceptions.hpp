@@ -12,7 +12,11 @@ enum class ExceptionSeverity
 class BaseException {
 
 public:
+	BaseException(ExceptionSeverity severity);
+	BaseException(ExceptionSeverity severity, char* message);
+
 	ExceptionSeverity severity;
+	char* message;
 
 
 };

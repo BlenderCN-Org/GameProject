@@ -27,7 +27,7 @@ public:
 	void setFPS(int fps);
 	void update(float dt);
 
-	void render();
+	void render(glm::mat4 viewMat);
 
 	DisplaySettings* getDisplaySettings();
 
@@ -53,6 +53,15 @@ private:
 
 	ThreadManager* thrdMgr;
 	AssetManager* assetMgr;
+
+
+	// temp
+
+	IMesh* dragonMesh;
+	IShaderObject* shaderObj;
+	int vp = 0;
+	int mdl = 0;
+
 };
 
 #endif

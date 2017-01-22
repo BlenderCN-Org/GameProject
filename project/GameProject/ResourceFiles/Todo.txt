@@ -1,0 +1,84 @@
+Game Project todo:
+	Change TextArea to use mask texture, instead of stencil buffer (performance)
+	TextArea scrollable text, (horz & vert)
+	Gui focus control
+	Gui quad instances
+
+	Rework custom allocators
+
+	Threading
+		add sync point. stall main thread until all worker threads are done etc
+		add more assets to task loading.
+		add more tasks, like save to file, actions, other data processing, physics, script execution.
+
+	Text
+		formatting
+			per character color
+			numbers
+			strings
+			textures(icons) ?
+		
+RenderEngine todo:
+	Fix fullscreen mode
+	Fix crash if mesh data size is equal to zero (Render Engine)
+	Support for unicode characters (font map)
+
+	Make font scale on resolution (not sure if needed)
+
+AssetLib todo:
+	Custom format
+	DataPacking and unpacking
+
+Other Notes:
+
+Other Gui types
+	Buttons
+	CheckBox
+	Lists
+	ComboBox
+	Tree
+	ColorChooser
+	ModelPreview
+	Simple TextField
+	Label
+	ProgressBar
+
+Loader implementation (threadable)
+	textures
+	models
+	animations
+	etc.
+
+Scripting
+	lexer and parser
+	codegen? (bytecode)
+	scripting in console
+	various batch jobs
+		like world interaction
+		background jobs
+
+
+Asset
+	// allways (base asset)
+	uint32_t dataSize;
+	void* dataPtr;
+
+	uint32_t assetID;
+	enum assetType;
+	enum assetState; (loaded, unloaded, etc)
+
+	// asset specific
+	int32_t width, height;	// texure only
+	int32_t nrKeyFrames;	// animation only
+	int32_t nrBones;		// animation only
+
+
+
+Asset creation
+	mainThread creates asset object.
+	Task is created to move data to asset object.
+		task copies data (from file, memory or network)
+		task notify asset object it is host complete (CPU side)
+		task terminates and worker thread waits for new task
+	mainThread check if asset object is complete when rendering or other parts of code needs it
+		if not complete nothing should happen

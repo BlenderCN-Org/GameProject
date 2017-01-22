@@ -4,7 +4,10 @@
 // project includes
 #include "Heap.hpp"
 
+#include "../Exceptions/Exceptions.hpp"
+
 #include <Allocators\FrameAllocator.hpp>
+
 
 #include <memory>
 
@@ -22,6 +25,8 @@ public:
 
 	void setNumberOfPools(uint32_t poolCount);
 	void zeroGameData();
+
+	bool poolExists(int poolObjectTypeID);
 
 private:
 

@@ -184,6 +184,7 @@
     <ClCompile Include="Core\Assets\TextureAsset.cpp" />
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
+    <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\Memory\MemoryManager.cpp" />
@@ -239,11 +240,16 @@
     <ClInclude Include="Loader\LibraryLoader.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\CodeStructure.txt" />
-    <Text Include="..\FileStructure.txt" />
-    <Text Include="..\States.txt" />
-    <Text Include="..\Todo.txt" />
-    <Text Include="Script.txt" />
+    <Text Include="ResourceFiles\CodeStructure.txt" />
+    <Text Include="ResourceFiles\FileStructure.txt" />
+    <Text Include="ResourceFiles\MeshFormat.txt" />
+    <Text Include="ResourceFiles\Script.txt" />
+    <Text Include="ResourceFiles\States.txt" />
+    <Text Include="ResourceFiles\Todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Blender Plugin\export_mesh.py" />
+    <None Include="Blender Plugin\__init__.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

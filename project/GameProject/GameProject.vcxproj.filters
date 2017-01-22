@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Core\Exceptions">
       <UniqueIdentifier>{186a2685-c107-44e4-a5c9-d838ec9d7c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Blender Plugin">
+      <UniqueIdentifier>{789ea372-928d-4380-868d-d4a6fdd2cfe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
       <Filter>Source Files\Core\MemoryManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Exceptions\Exceptions.cpp">
+      <Filter>Source Files\Core\Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,20 +238,31 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Todo.txt">
+    <Text Include="ResourceFiles\Script.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="..\FileStructure.txt">
+    <Text Include="ResourceFiles\States.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Script.txt">
+    <Text Include="ResourceFiles\Todo.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="..\States.txt">
+    <Text Include="ResourceFiles\CodeStructure.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="..\CodeStructure.txt">
+    <Text Include="ResourceFiles\FileStructure.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="ResourceFiles\MeshFormat.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Blender Plugin\__init__.py">
+      <Filter>Resource Files\Blender Plugin</Filter>
+    </None>
+    <None Include="Blender Plugin\export_mesh.py">
+      <Filter>Resource Files\Blender Plugin</Filter>
+    </None>
   </ItemGroup>
 </Project>

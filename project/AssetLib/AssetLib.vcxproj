@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BMPLoader.cpp" />
+    <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

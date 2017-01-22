@@ -11,5 +11,5 @@ uniform mat4 worldMat;
 void main()
 {
 	fragUv = vertexUv;
-	gl_Position = viewProjMatrix * vec4((vec4(vertexPos, 1.0f) * worldMat).xyz, 1.0f);
+	gl_Position = viewProjMatrix * vec4((vec4(vertexPos, 1.0) * worldMat).xyz, 1.0);
 }

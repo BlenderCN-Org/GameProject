@@ -1,0 +1,27 @@
+
+
+Model format version 1
+---------------------------------------------
+|					HEADER					|
+---------------------------------------------
+char[4] tag == MESH
+ushort versionMajor = 1;
+ushort versionMinor = 0;
+---------------------------------------------
+|				   DATABLOCK				|
+---------------------------------------------
+bool							> useVNormals;
+bool							> useVColors;
+bool							> useVUV;
+bool							> padding; (not used)
+
+uint32_t						> vertexCount;
+uint32_t						> triangleCount;
+
+data<vertexCount				> vertices;		(float x3)
+data<vertexCount & useVNormals	> normals;		(float x3)
+data<vertexCount & useVColors	> colors;		(float x4)
+data<vertexCount & useVUV		> uvs;			(float x2)
+
+
+data<triangleCount				> triangles;	(uint32_t x3)

@@ -84,6 +84,22 @@ void MemoryManager::zeroGameData() {
 	initHeap();
 }
 
+bool MemoryManager::poolExists(int poolObjectTypeID) {
+	if ( poolObjectTypeID == 0 )
+		throw BaseException(ExceptionSeverity::eSeverityLow, "ObjectTypeID cannot be 0");
+	MemoryDataHeap* heapAsPtr = (MemoryDataHeap*)heap;
+
+	uint32_t nrPools = heapAsPtr->nrPools;
+	PoolHeap* poolHeap = (PoolHeap*)heapAsPtr->poolList;
+
+	for ( uint32_t i = 0; i < nrPools; i++ ) {
+		if ( poolHeap[i].objectTypeID == poolObjectTypeID ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void MemoryManager::initHeap() {
 	// heap is a pointer to memory
 	// first 8 bytes is the pointer value used to relocate objects on loading

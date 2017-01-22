@@ -1,0 +1,87 @@
+
+
+Script source file ext .ocs
+
+Script source parse file ext .ocp
+
+Script binary code file ext .ocb
+
+.ocs -> .ocp -> .ocb
+source -> parse -> binary
+
+execute settings
+	minimum script version : x.xx			// prevent executing .oc scripts older than specified version
+	logging	: bool							// enables .oc script logging
+	debugLogging: bool						// enables .oc script debug logging
+
+general definitions
+
+	version 1.0
+
+	defined types
+		int
+		char
+		bool
+		short
+		float
+		ptr (*)
+		singend and unsigned, unsigned prefix ex uint, uchar
+
+	defined functionality
+
+		do-while
+		while
+		for
+
+	defined constants
+		true
+		false
+
+	other keywords
+		nat retType *name*; -> native engine function declare, engine function *name* with retType needs to be registered in ocEnv
+
+	custom class support : no
+	vartype is needed : yes
+	
+	function supported : yes
+	returntype is needed : yes
+
+	Script syntax
+
+		// global/local variable definition
+		(vartype) varname = value;						sets varname of vartype to value
+		(vartype) varname, var2 = value;				sets varname and var2 of vartype to value
+		(vartype) varname, var2 = value, value2;		sets varname to value and var2 to value2, both are of vartype
+
+		// scopes										a scope can only see itself and any level above it, starting from a functional scope
+		{												functions can only see there own scope
+			scope1
+			{
+				scope2
+			}
+		}
+
+		returntype funcname (parameter)
+		{
+			scope
+
+			return (returntype)
+		}
+
+
+
+	predefined modules
+		input		input handling
+		tasks		task handling-create new tasks
+		system		system fuctions like timers and sleep etc
+		assets		asset loading and creation
+		gamelogic	game logic access, interaction, etc
+		debug		debugging functions, and output
+
+
+	parsing steps:
+
+		1) remove comments and unneeded empty lines
+		2) check types and keywords 
+		3) group function code together
+		

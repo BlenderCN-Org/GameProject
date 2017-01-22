@@ -3,7 +3,28 @@
 
 #include "Script\OcParser.hpp"
 
+#include <AssetLib\AssetLib.hpp>
+
 #include <thread>
+
+std::string readShader(const char *filePath) {
+	std::string content;
+	std::ifstream fileStream(filePath, std::ios::in);
+
+	if ( !fileStream.is_open() ) {
+		printf("Could not open file %s", filePath);
+		return "";
+	}
+
+	std::string line = "";
+	while ( !fileStream.eof() ) {
+		std::getline(fileStream, line);
+		content.append(line + "\n");
+	}
+
+	fileStream.close();
+	return content;
+}
 
 void Core::init() {
 	initSys();
@@ -56,11 +77,43 @@ void Core::init() {
 	assetMgr = new AssetManager();
 	assetMgr->setThreadManager(thrdMgr);
 
+	dragonMesh = renderEngine->createMesh();
+	dragonMesh->init(MeshPrimitiveType::TRIANGLE);
+
+	uint32_t size = 0;
+	void * data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
+
+	dragonMesh->setMeshData(data, size, MeshDataLayout::VERT_UV);
+
+	delete[] data;
+
+	shaderObj = renderEngine->createShaderObject();
+	
+	std::string vs = readShader("data/shaders/default.vs.glsl");
+	std::string gs = readShader("data/shaders/default.gs.glsl");
+	std::string fs = readShader("data/shaders/default.fs.glsl");
+
+	shaderObj->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+	shaderObj->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
+	shaderObj->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
+
+	if(!shaderObj->buildShader()) {
+		printf("shader failed to build\n");
+		assert(0 && "shader failed to build");
+	}
+
+	vp = shaderObj->getShaderUniform("viewProjMatrix");
+	mdl = shaderObj->getShaderUniform("worldMat");
+
 	performParserTests();
 	//parseOcFile("Data/Scripts/test.ocs");
 }
 
 void Core::release() {
+
+	shaderObj->release();
+	dragonMesh->release();
+
 	stopWorkerThreads();
 
 	disp.setWindow(nullptr);
@@ -135,9 +188,19 @@ void Core::update(float dt) {
 	if ( hadReset ) return;
 }
 
-void Core::render() {
+void Core::render(glm::mat4 viewMat) {
+	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
+
+	shaderObj->useShader();
+
+	shaderObj->bindData(vp, UniformDataType::UNI_MATRIX4X4, &viewMat);
+	shaderObj->bindData(mdl, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+
+	dragonMesh->bind();
+	dragonMesh->render();
+
 
 	// swap
 	window->swapBuffers();
