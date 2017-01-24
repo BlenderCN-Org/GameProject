@@ -32,7 +32,7 @@ def writeHeader(fw, version):
 def createTriangleList(tessfaces):
 	triList = []
 
-	for tri in triangles:
+	for tri in tessfaces:
 		triList.append( [tri.vertices[0], tri.vertices[1], tri.vertices[2] ] )
 		if len(tri.vertices) == 4:
 			triList.append( [tri.vertices[0], tri.vertices[2], tri.vertices[3] ] )
@@ -42,6 +42,8 @@ def createTriangleList(tessfaces):
 def writeVersion_1_0(context, fw, use_selection):
 	print("Writing version 1.0")
 	
+	dataObjectList = []
+
 	objectList = None
 
 	if(use_selection):
@@ -51,6 +53,8 @@ def writeVersion_1_0(context, fw, use_selection):
 
 	for obj in objectList:
 		if( obj.type == 'MESH'):
+			
+			data = bytearray()
 			print("a mesh")
 
 			meshData = obj.data
@@ -59,21 +63,27 @@ def writeVersion_1_0(context, fw, use_selection):
 			useVUV = False
 			padding = False
 
-			fw(struct.pack("????", useVNormals, useVColors, useVUV, padding))
+			data.extend(struct.pack("????", useVNormals, useVColors, useVUV, padding))
 			vertices = meshData.vertices
 			meshData.update(calc_tessface=True)
 			triangles = createTriangleList(meshData.tessfaces)
-			fw(struct.pack("II", len(vertices), len(triangles) ))
+			data.extend(struct.pack("II", len(vertices), len(triangles) ))
 
 			for vert in vertices:
-				fw(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]) )
+				data.extend(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]) )
 
 			for tri in triangles:
-				fw(struct.pack("III", tri[0], tri[1], tri[2]) )
+				data.extend(struct.pack("III", tri[0], tri[1], tri[2]) )
 
-
+			dataObjectList.append(data);
 		else:
 			print("not a mesh")
+
+	print("List: ", len(dataObjectList))
+	fw(struct.pack("I", len(dataObjectList)))
+	for data in dataObjectList:
+		fw(data)
+
 
 def write(context, fw, use_selection, version):
 	if(version == "VERSION_1_0"):

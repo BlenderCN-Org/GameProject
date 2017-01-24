@@ -38,6 +38,7 @@ struct BoolFlags
 	bool useVColors;
 	bool useVUV;
 	bool padding;
+	uint32_t meshCount;
 	uint32_t vertCount;
 	uint32_t triangleCount;
 };
