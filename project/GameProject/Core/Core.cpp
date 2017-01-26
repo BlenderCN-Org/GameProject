@@ -96,7 +96,6 @@ void Core::init() {
 	initSys();
 	mem.init();
 	thrdMgr = nullptr;
-	assetMgr = nullptr;
 
 	running = true;
 	hadReset = false;
@@ -140,9 +139,6 @@ void Core::init() {
 
 	startWorkerThreads();
 
-	assetMgr = new AssetManager();
-	assetMgr->setThreadManager(thrdMgr);
-
 	// temporary
 
 	shaderObj = renderEngine->createShaderObject();
@@ -178,7 +174,6 @@ void Core::release() {
 	disp.setWindow(nullptr);
 	disp.setRenderEngine(nullptr);
 
-	delete assetMgr;
 	delete thrdMgr;
 
 	delete console;

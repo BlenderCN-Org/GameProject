@@ -1,7 +1,7 @@
 #ifndef TASK_HPP
 #define TASK_HPP
 
-#include "Assets\BaseAsset.hpp"
+#include <cstdint>
 
 enum class TaskType
 {
@@ -30,7 +30,6 @@ struct LoadInfo
 
 struct AssetLoadStruct
 {
-	BaseAsset* asset;
 	LoadInfo howToLoad;
 };
 

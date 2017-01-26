@@ -5,7 +5,6 @@
 #include "RenderEngine\IRenderEngine.hpp"
 #include "Input\Input.hpp"
 #include "ThreadManager.hpp"
-#include "Assets\AssetManager.hpp"
 #include "Settings\DisplaySettings.hpp"
 #include "..\Loader\LibraryLoader.hpp"
 
@@ -56,8 +55,6 @@ private:
 	DisplaySettings disp;
 
 	ThreadManager* thrdMgr;
-	AssetManager* assetMgr;
-
 
 	// temp
 	IShaderObject* shaderObj;

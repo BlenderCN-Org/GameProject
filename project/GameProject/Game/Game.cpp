@@ -25,7 +25,7 @@ meshStruct createMeshStruct(Core* core, std::string meshName, float x, float y, 
 	IRenderEngine* re = core->getRenderEngine();
 
 	meshStruct ms{};
-	//@Leak
+
 	ms.mesh = re->createMesh();
 	ms.mesh->init(MeshPrimitiveType::TRIANGLE);
 
@@ -51,6 +51,10 @@ Game::~Game() {
 	delete player;
 	delete cam;
 
+	for ( size_t i = 0; i < tempMeshes.size(); i++ ) {
+		tempMeshes[i].mesh->release();
+	}
+
 	core->release();
 }
 
@@ -67,47 +71,11 @@ void Game::init() {
 	player = new GameObject();
 
 	//@Temporary
-	mapFile.open("data/map.world");
-
-	int objectCount = 0;
-	
-	if ( mapFile.is_open() ) {
-		std::string line = "";
-		
-		std::getline(mapFile, line);
-		objectCount = std::stoi(line);
-		
-		for ( int i = 0; i < objectCount; i++ ) {
-
-			std::string meshName = "";
-			float x = 0;
-			float y = 0;
-			float z = 0;
-
-			std::getline(mapFile, meshName);
-			
-			std::getline(mapFile, line);
-			x = std::stof(line);
-			std::getline(mapFile, line);
-			y = std::stof(line);
-			std::getline(mapFile, line);
-			z = std::stof(line);
-
-			tempMeshes.push_back(createMeshStruct(core, meshName, x, y, z));
-
-		}
-
-		int b = 0;
-
-	}
-
 	shObj = core->getShaderObject();
 
 	vpLocation = shObj->getShaderUniform("viewProjMatrix");
 	matLocation = shObj->getShaderUniform("worldMat");
-
-	mapFile.close();
-	//@EndTermporary
+	//@EndTemporary
 
 }
 
@@ -145,6 +113,13 @@ void Game::update(float dt) {
 		std::cout << "2 Pressed\n";
 		loadGame();
 	}
+	kb.code = 4;
+
+	if ( in->releasedThisFrame(kb) ) {
+		std::cout << "3 Pressed\n";
+		newGame();
+	}
+
 	//@EndTemporary
 
 }
@@ -170,7 +145,54 @@ void Game::render() {
 
 }
 
-void Game::newGame() {}
+void Game::newGame() {
+
+	for ( size_t i = 0; i < tempMeshes.size(); i++ ) {
+		tempMeshes[i].mesh->release();
+	}
+
+	tempMeshes.clear();
+
+	//@Temporary
+	mapFile.open("data/map.world");
+
+	int objectCount = 0;
+
+	if ( mapFile.is_open() ) {
+		std::string line = "";
+
+		std::getline(mapFile, line);
+		objectCount = std::stoi(line);
+
+		for ( int i = 0; i < objectCount; i++ ) {
+
+			std::string meshName = "";
+			float x = 0;
+			float y = 0;
+			float z = 0;
+
+			std::getline(mapFile, meshName);
+
+			std::getline(mapFile, line);
+			x = std::stof(line);
+			std::getline(mapFile, line);
+			y = std::stof(line);
+			std::getline(mapFile, line);
+			z = std::stof(line);
+
+			tempMeshes.push_back(createMeshStruct(core, meshName, x, y, z));
+
+		}
+
+		int b = 0;
+
+	}
+
+	mapFile.close();
+	//@EndTermporary
+
+
+}
 
 void Game::saveGame() {
 	std::cout << "Saving Game\n";

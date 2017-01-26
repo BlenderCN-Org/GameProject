@@ -96,18 +96,6 @@
     <ClCompile Include="Core\ThreadManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Assets\ModelAsset.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\TextureAsset.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\BaseAsset.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\AssetManager.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="ExceptionHandling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -220,18 +208,6 @@
     </ClInclude>
     <ClInclude Include="Core\GUI\Text.hpp">
       <Filter>Source Files\Core\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\AssetManager.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\BaseAsset.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\ModelAsset.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\TextureAsset.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Core\Exceptions\Exceptions.hpp">
       <Filter>Source Files\Core\Exceptions</Filter>
