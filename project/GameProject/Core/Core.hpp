@@ -28,11 +28,15 @@ public:
 	void update(float dt);
 
 	void render(glm::mat4 viewMat);
+	void swap();
 
 	DisplaySettings* getDisplaySettings();
 
 	MemoryManager* getMemoryManager();
+	IRenderEngine* getRenderEngine();
 
+	//@Temporary
+	IShaderObject* getShaderObject();
 private:
 
 	// core variables
@@ -56,8 +60,6 @@ private:
 
 
 	// temp
-
-	IMesh* mesh;
 	IShaderObject* shaderObj;
 	int vp = 0;
 	int mdl = 0;

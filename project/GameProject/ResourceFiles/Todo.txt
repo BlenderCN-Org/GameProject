@@ -1,33 +1,38 @@
 Game Project todo:
-	Change TextArea to use mask texture, instead of stencil buffer (performance)
-	TextArea scrollable text, (horz & vert)
-	Gui focus control
-	Gui quad instances
 
-	Rework custom allocators
+	*Have a simple demo world that can be loaded and changed offline
+	
 
-	Threading
-		add sync point. stall main thread until all worker threads are done etc
-		add more assets to task loading.
-		add more tasks, like save to file, actions, other data processing, physics, script execution.
+	-Gui stuff
+		-Change TextArea to use mask texture, instead of stencil buffer (performance)
+		-TextArea scrollable text, (horz & vert)
+		-Gui focus control
+		-Gui quad instances
 
-	Text
-		formatting
-			per character color
-			numbers
-			strings
-			textures(icons) ?
+	?Rework custom allocators
+
+	-Threading
+		-add sync point. stall main thread until all worker threads are done etc
+		-add more assets to task loading.
+		-add more tasks, like save to file, actions, other data processing, physics, script execution.
+
+	-Text
+		-formatting
+			-per character color
+			-numbers
+			-strings
+			-textures(icons) ?
 		
 RenderEngine todo:
-	Fix fullscreen mode
-	Fix crash if mesh data size is equal to zero (Render Engine)
-	Support for unicode characters (font map)
+	-Fix fullscreen mode
+	?Fix crash if mesh data size is equal to zero (Render Engine)
+	-Support for unicode characters (font map)
 
-	Make font scale on resolution (not sure if needed)
+	-Make font scale on resolution (not sure if needed)
 
 AssetLib todo:
-	Custom format
-	DataPacking and unpacking
+	-Custom format
+	-DataPacking and unpacking
 
 Other Notes:
 

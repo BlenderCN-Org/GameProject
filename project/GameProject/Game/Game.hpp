@@ -40,6 +40,15 @@ private:
 
 	GameState gstate;
 	GameObject* player;
+
+	//@Temporary
+	std::ifstream mapFile;
+	IShaderObject* shObj;
+
+	int vpLocation;
+	int matLocation;
+	//@EndTemporary
+
 };
 
 #endif

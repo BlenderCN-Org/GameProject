@@ -26,6 +26,9 @@ std::string readShader(const char *filePath) {
 	return content;
 }
 
+// temporary
+// move elsewhere
+
 struct Header {
 	char tag[4];
 	uint16_t major;
@@ -34,11 +37,12 @@ struct Header {
 
 struct BoolFlags
 {
+	uint32_t meshCount;
+
 	bool useVNormals;
 	bool useVColors;
 	bool useVUV;
 	bool padding;
-	uint32_t meshCount;
 	uint32_t vertCount;
 	uint32_t triangleCount;
 };
@@ -84,6 +88,9 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 
 	return v;
 }
+
+// end temporary
+// end move elsewhere
 
 void Core::init() {
 	initSys();
@@ -136,16 +143,7 @@ void Core::init() {
 	assetMgr = new AssetManager();
 	assetMgr->setThreadManager(thrdMgr);
 
-	mesh = renderEngine->createMesh();
-	mesh->init(MeshPrimitiveType::TRIANGLE);
-
-	uint32_t size = 0;
-	void * data = AssetLib::loadWavefrontOBJ("UnitCube.mesh", size);
-	
-	mesh->setMeshData(data, size, MeshDataLayout::VERT_UV);
-	
-	delete data;
-
+	// temporary
 
 	shaderObj = renderEngine->createShaderObject();
 	
@@ -165,6 +163,8 @@ void Core::init() {
 	vp = shaderObj->getShaderUniform("viewProjMatrix");
 	mdl = shaderObj->getShaderUniform("worldMat");
 
+	// end temporary
+
 	performParserTests();
 	//parseOcFile("Data/Scripts/test.ocs");
 }
@@ -172,7 +172,6 @@ void Core::init() {
 void Core::release() {
 
 	shaderObj->release();
-	mesh->release();
 
 	stopWorkerThreads();
 
@@ -253,15 +252,9 @@ void Core::render(glm::mat4 viewMat) {
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
 
-	shaderObj->useShader();
+}
 
-	shaderObj->bindData(vp, UniformDataType::UNI_MATRIX4X4, &viewMat);
-	shaderObj->bindData(mdl, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-
-	mesh->bind();
-	mesh->render();
-
-
+void Core::swap() {
 	// swap
 	window->swapBuffers();
 }
@@ -272,4 +265,12 @@ DisplaySettings * Core::getDisplaySettings() {
 
 MemoryManager* Core::getMemoryManager() {
 	return &mem;
+}
+
+IRenderEngine * Core::getRenderEngine() {
+	return renderEngine;
+}
+
+IShaderObject * Core::getShaderObject() {
+	return shaderObj;
 }

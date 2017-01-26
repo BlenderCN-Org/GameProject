@@ -10,12 +10,14 @@ ushort versionMinor = 0;
 ---------------------------------------------
 |				   DATABLOCK				|
 ---------------------------------------------
+uint32_t						> number of meshes in file
+
+<array start>
+
 bool							> useVNormals;
 bool							> useVColors;
 bool							> useVUV;
 bool							> padding; (not used)
-
-uint32_t						> number of meshes in file
 
 uint32_t						> vertexCount;
 uint32_t						> triangleCount;
@@ -27,3 +29,5 @@ data<vertexCount & useVUV		> uvs;			(float x2)
 
 
 data<triangleCount				> triangles;	(uint32_t x3)
+
+<array end>

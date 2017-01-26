@@ -30,7 +30,7 @@ void CameraInput::update(float dt) {
 	kb.code = 0;
 	kb.mod = 0;
 	kb.mouse = 1;
-	if ( input->isKeyBindPressed(kb) ) {
+	if ( input->isKeyBindPressed(kb, false) ) {
 		//printf("Mouse pan\n");
 		mousepan(x, y);
 	}
@@ -80,18 +80,18 @@ void CameraInput::keypan(float dt) {
 	//	camSpeed *= 9;
 	camSpeed *= dt;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD]) )
+	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false) )
 		pos += dir * camSpeed;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD]) )
+	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD], false) )
 		pos -= dir * camSpeed;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT]) ) {
+	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT], false) ) {
 		vec3 left = cross(vec3(0, 1, 0), dir);
 		left = normalize(left);
 		pos += left * camSpeed;
 	}
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT]) ) {
+	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT], false) ) {
 		vec3 left = cross(dir, vec3(0, 1, 0));
 		left = normalize(left);
 		pos += left * camSpeed;
