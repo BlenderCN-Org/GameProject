@@ -1,7 +1,7 @@
 Game Project todo:
 
-	*Have a simple demo world that can be loaded and changed offline
-	
+	<D>Have a simple demo world that can be loaded and changed offline
+
 
 	-Gui stuff
 		-Change TextArea to use mask texture, instead of stencil buffer (performance)
@@ -9,7 +9,7 @@ Game Project todo:
 		-Gui focus control
 		-Gui quad instances
 
-	?Rework custom allocators
+	<W>Rework custom allocators
 
 	-Threading
 		-add sync point. stall main thread until all worker threads are done etc
@@ -17,6 +17,7 @@ Game Project todo:
 		-add more tasks, like save to file, actions, other data processing, physics, script execution.
 
 	-Text
+		-access to renderEngine
 		-formatting
 			-per character color
 			-numbers
@@ -25,7 +26,8 @@ Game Project todo:
 		
 RenderEngine todo:
 	-Fix fullscreen mode
-	?Fix crash if mesh data size is equal to zero (Render Engine)
+	<W>Fix crash if mesh data size is equal to zero (Render Engine)
+	-Fix errors if mesh data is not set
 	-Support for unicode characters (font map)
 
 	-Make font scale on resolution (not sure if needed)

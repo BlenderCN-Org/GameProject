@@ -9,6 +9,7 @@
 #include "..\Loader\LibraryLoader.hpp"
 
 #include "Memory\MemoryManager.hpp"
+#include "Assets\AssetManager.hpp"
 
 class Core
 {
@@ -36,11 +37,15 @@ public:
 
 	//@Temporary
 	IShaderObject* getShaderObject();
+	IShaderObject* getTextShaderObject();
+	AssetManager* getAssetManager();
+
 private:
 
 	// core variables
 	Lib renderEngineLib;
 	MemoryManager mem;
+	AssetManager assetManager;
 
 	bool hadReset;
 	bool running;
@@ -60,6 +65,8 @@ private:
 	IShaderObject* shaderObj;
 	int vp = 0;
 	int mdl = 0;
+
+	IShaderObject* textShaderObj;
 
 };
 

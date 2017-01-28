@@ -126,6 +126,9 @@
     <ClCompile Include="Core\Exceptions\Exceptions.cpp">
       <Filter>Source Files\Core\Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Assets\AssetManager.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="Core\Exceptions\Exceptions.hpp">
       <Filter>Source Files\Core\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\AssetManager.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

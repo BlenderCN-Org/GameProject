@@ -8,6 +8,8 @@
 #include "../Core/Core.hpp"
 #include "Input/CameraInput.hpp"
 
+#include "..\Core\GUI\Text.hpp"
+
 class Game
 {
 public:
@@ -28,6 +30,10 @@ private:
 	void saveGame();
 	void loadGame();
 
+	int renderMenuItem(char* text, int length, int x, int y);
+	void handleMenuEvent(int advance);
+	void handleMenuEnter();
+
 	void tickFPS(float dt);
 
 	Core* core;
@@ -47,6 +53,26 @@ private:
 
 	int vpLocation;
 	int matLocation;
+
+	IShaderObject* textShObj;
+	int orthoLocation;
+	int textLocation;
+	int textureLocation;
+	int colorLocation;
+
+
+	Text* t = nullptr;
+
+	// menu
+
+	int menuItemCounter;
+	int currentMenuItem;
+	int nrMemuItems;
+	int newGameIndex;
+	int saveGameIndex;
+	int loadGameIndex;
+	int quitGameIndex;
+
 	//@EndTemporary
 
 };

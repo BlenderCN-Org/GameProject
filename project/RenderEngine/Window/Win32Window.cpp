@@ -114,7 +114,7 @@ void inputCallback(BaseWindow* wnd, LPARAM lParam) {
 		}
 
 		if ( wnd->keyCallback ) {
-			int action = raw->data.keyboard.Flags == RI_KEY_BREAK ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
+			int action = raw->data.keyboard.Message == WM_KEYUP ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
 
 			int mods = wnd->modkeys;
 

@@ -139,19 +139,32 @@ void Core::init() {
 
 	startWorkerThreads();
 
+	assetManager.init(renderEngine);
+
 	// temporary
 
 	shaderObj = renderEngine->createShaderObject();
+	textShaderObj = renderEngine->createShaderObject();
 	
 	std::string vs = readShader("data/shaders/default.vs.glsl");
 	std::string gs = readShader("data/shaders/default.gs.glsl");
 	std::string fs = readShader("data/shaders/default.fs.glsl");
+	std::string tfs = readShader("data/shaders/text.fs.glsl");
 
 	shaderObj->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
 	shaderObj->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
 	shaderObj->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
 
+	textShaderObj->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+	textShaderObj->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)tfs.c_str());
+
+	
 	if(!shaderObj->buildShader()) {
+		printf("shader failed to build\n");
+		assert(0 && "shader failed to build");
+	}
+
+	if ( !textShaderObj->buildShader() ) {
 		printf("shader failed to build\n");
 		assert(0 && "shader failed to build");
 	}
@@ -167,7 +180,10 @@ void Core::init() {
 
 void Core::release() {
 
+	textShaderObj->release();
 	shaderObj->release();
+
+	assetManager.release();
 
 	stopWorkerThreads();
 
@@ -268,4 +284,12 @@ IRenderEngine * Core::getRenderEngine() {
 
 IShaderObject * Core::getShaderObject() {
 	return shaderObj;
+}
+
+IShaderObject * Core::getTextShaderObject() {
+	return textShaderObj;
+}
+
+AssetManager * Core::getAssetManager() {
+	return &assetManager;
 }
