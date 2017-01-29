@@ -610,8 +610,7 @@ void VKWindow::deinit() {
 	DestroyWindow(windowHandle);
 }
 
-void VKWindow::setVsync(bool vsync) {
-}
+void VKWindow::setVsync(bool vsync) {}
 
 void VKWindow::pollMessages() {
 	MSG msg;

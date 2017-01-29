@@ -42,9 +42,20 @@ import math
 from bpy.props import *
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 
+from bpy_extras.io_utils import (
+        ImportHelper,
+        ExportHelper,
+        orientation_helper_factory,
+        path_reference_mode,
+        axis_conversion,
+        )
+
+
 versions = [("VERSION_1_0", "Version 1.0", "File version 1.0"),]
 
-class ExportMesh(bpy.types.Operator, ExportHelper):
+IOOBJOrientationHelper = orientation_helper_factory("IOOBJOrientationHelper", axis_forward='-Z', axis_up='Y')
+
+class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 	'''Export Mesh (.mesh)'''
 	bl_idname = 'export_scene.custom_mesh'
 	bl_label = 'Export Mesh'
@@ -60,6 +71,12 @@ class ExportMesh(bpy.types.Operator, ExportHelper):
 			default=False,
 			)
 
+	global_scale = FloatProperty(
+            name="Scale",
+            min=0.01, max=1000.0,
+            default=1.0,
+            )
+			
 	version = EnumProperty(items=versions, options=set(), default="VERSION_1_0")
 
 	def execute(self, context):
@@ -73,6 +90,13 @@ class ExportMesh(bpy.types.Operator, ExportHelper):
 											"check_existing",
 											"filter_glob",
 											) )
+		from mathutils import Matrix
+		global_matrix = (Matrix.Scale(self.global_scale, 4) *
+						axis_conversion(to_forward=self.axis_forward,
+										to_up=self.axis_up,
+										).to_4x4())
+
+		keywords["global_matrix"] = global_matrix
 
 		export_mesh.save(context, **keywords)
 

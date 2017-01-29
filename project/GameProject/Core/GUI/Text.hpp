@@ -7,8 +7,10 @@ class Text
 {
 public:
 
+	Text();
+	~Text();
+
 	void init(IRenderEngine* re);
-	void release();
 
 	void setFont(IFont* fnt);
 	void setText(char* text, size_t length, float x, float y, float scale);

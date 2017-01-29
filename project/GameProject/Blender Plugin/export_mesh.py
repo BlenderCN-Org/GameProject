@@ -39,7 +39,7 @@ def createTriangleList(tessfaces):
 
 	return triList
 
-def writeVersion_1_0(context, fw, use_selection):
+def writeVersion_1_0(context, fw, use_selection, matrix):
 	print("Writing version 1.0")
 	
 	dataObjectList = []
@@ -57,7 +57,8 @@ def writeVersion_1_0(context, fw, use_selection):
 			data = bytearray()
 			print("a mesh")
 
-			meshData = obj.data
+			meshData = obj.to_mesh(context.scene, True, 'PREVIEW', calc_tessface=False)
+			meshData.transform(matrix * obj.matrix_world)
 			useVNormals = False
 			useVColors = False
 			useVUV = False
@@ -76,6 +77,7 @@ def writeVersion_1_0(context, fw, use_selection):
 				data.extend(struct.pack("III", tri[0], tri[1], tri[2]) )
 
 			dataObjectList.append(data);
+			bpy.data.meshes.remove(meshData)
 		else:
 			print("not a mesh")
 
@@ -85,22 +87,23 @@ def writeVersion_1_0(context, fw, use_selection):
 		fw(data)
 
 
-def write(context, fw, use_selection, version):
+def write(context, fw, use_selection, version, matrix):
 	if(version == "VERSION_1_0"):
-		writeVersion_1_0(context, fw, use_selection)
+		writeVersion_1_0(context, fw, use_selection, matrix)
 	
 
 def save(context,
 		filepath,
         *,
 		use_selection=True,
-		version="VERSION_1_0"):
+		version="VERSION_1_0",
+		global_matrix=None):
 	
 	file = open(filepath, "wb")
 	fw = file.write
 
 	writeHeader(fw, version)
-	write(context, fw, use_selection, version)
+	write(context, fw, use_selection, version, global_matrix)
 
 	file.close()
 

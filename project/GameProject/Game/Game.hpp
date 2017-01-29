@@ -30,9 +30,11 @@ private:
 	void saveGame();
 	void loadGame();
 
-	int renderMenuItem(char* text, int length, int x, int y);
+	int renderMenuItem(char* text, int length);
 	void handleMenuEvent(int advance);
 	void handleMenuEnter();
+	void toggleMenu();
+	void toggleMenuTarget();
 
 	void tickFPS(float dt);
 
@@ -43,8 +45,11 @@ private:
 	bool running;
 	float timepass;
 	int fps;
+	int ffps;
 
 	GameState gstate;
+	bool gameStarted;
+
 	GameObject* player;
 
 	//@Temporary
@@ -60,12 +65,18 @@ private:
 	int textureLocation;
 	int colorLocation;
 
-
 	Text* t = nullptr;
 
 	// menu
 
-	int menuItemCounter;
+	bool enterLeaveMenuState;
+
+	int menuXTarget;
+	int menuPosX;
+	int menuPosY;
+	int stride;
+
+	int renderedMenuItems;
 	int currentMenuItem;
 	int nrMemuItems;
 	int newGameIndex;
@@ -74,7 +85,6 @@ private:
 	int quitGameIndex;
 
 	//@EndTemporary
-
 };
 
 #endif

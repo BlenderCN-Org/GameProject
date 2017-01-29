@@ -70,7 +70,6 @@ bool cmp(const Character& first, const Character& second) {
 }
 
 void Font_gl::genFontTexture() {
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
 	unsigned char* imageArray[255];

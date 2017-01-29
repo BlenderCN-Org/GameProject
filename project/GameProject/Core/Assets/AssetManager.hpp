@@ -6,15 +6,18 @@
 #include <cstdint>
 #include <vector>
 
-class AssetManager {
+#include "MeshAsset.hpp"
 
+class AssetManager {
 public:
+
+	static AssetManager* getAssetManager();
+	static void release();
 
 	AssetManager();
 	~AssetManager();
 
 	void init(IRenderEngine* renderEngine);
-	void release();
 
 	IMesh* getMesh(char* meshName);
 
@@ -22,14 +25,15 @@ public:
 
 private:
 
+	static AssetManager* assetManager;
+
 	IRenderEngine* re;
-	
+
 	//@Temporary
 	// make use of map or heap instead
-	std::vector<IMesh*> loadedMeshList;
-	
-	IFont* basicFont;
+	std::vector<MeshAsset> loadedMeshList;
 
+	IFont* basicFont;
 };
 
 #endif

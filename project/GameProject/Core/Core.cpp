@@ -26,71 +26,9 @@ std::string readShader(const char *filePath) {
 	return content;
 }
 
-// temporary
-// move elsewhere
-
-struct Header {
-	char tag[4];
-	uint16_t major;
-	uint16_t minor;
-};
-
-struct BoolFlags
-{
-	uint32_t meshCount;
-
-	bool useVNormals;
-	bool useVColors;
-	bool useVUV;
-	bool padding;
-	uint32_t vertCount;
-	uint32_t triangleCount;
-};
-
-struct Triangle {
-	uint32_t v1;
-	uint32_t v2;
-	uint32_t v3;
-};
-
-struct Vertex5
-{
-	glm::vec3 pos;
-	glm::vec2 uv;
-};
-
-void* createVertUVData(void* meshData, uint32_t &size) {
-
-	Header* h = (Header*)meshData;
-	BoolFlags* bf = (BoolFlags*) ((char*)meshData + sizeof(Header) );
-
-	glm::vec3* vertices = (glm::vec3*)((char*)meshData + sizeof(Header) + sizeof(BoolFlags));
-	Triangle* triangles = (Triangle*)((char*)meshData + sizeof(Header) + sizeof(BoolFlags) + (sizeof(float) * 3 * bf->vertCount));
-
-	std::vector<Vertex5> verts;
-
-	for ( size_t i = 0; i < bf->triangleCount; i++ ) {
-		Triangle t = triangles[i];
-		
-		Vertex5 v1  = { vertices[t.v1], glm::vec2(0.0f, 0.0f) };
-		Vertex5 v2 = { vertices[t.v2], glm::vec2(0.0f, 0.0f) };
-		Vertex5 v3 = { vertices[t.v3], glm::vec2(0.0f, 0.0f) };
-		
-		verts.push_back(v1);
-		verts.push_back(v2);
-		verts.push_back(v3);
-	}
-
-	size = (uint32_t)verts.size() * sizeof(Vertex5);
-
-	Vertex5* v = new Vertex5[verts.size()];
-	memcpy(v, verts.data(), size);
-
-	return v;
+Core::~Core() {
+	freeResources();
 }
-
-// end temporary
-// end move elsewhere
 
 void Core::init() {
 	initSys();
@@ -137,15 +75,17 @@ void Core::init() {
 
 	input->attachConsole(console);
 
+	thrdMgr = ThreadManager::getThreadManager();
+
 	startWorkerThreads();
 
-	assetManager.init(renderEngine);
-
+	assetManager = AssetManager::getAssetManager();
+	assetManager->init(renderEngine);
+	
 	// temporary
-
 	shaderObj = renderEngine->createShaderObject();
 	textShaderObj = renderEngine->createShaderObject();
-	
+
 	std::string vs = readShader("data/shaders/default.vs.glsl");
 	std::string gs = readShader("data/shaders/default.gs.glsl");
 	std::string fs = readShader("data/shaders/default.fs.glsl");
@@ -158,8 +98,7 @@ void Core::init() {
 	textShaderObj->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
 	textShaderObj->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)tfs.c_str());
 
-	
-	if(!shaderObj->buildShader()) {
+	if ( !shaderObj->buildShader() ) {
 		printf("shader failed to build\n");
 		assert(0 && "shader failed to build");
 	}
@@ -178,19 +117,18 @@ void Core::init() {
 	//parseOcFile("Data/Scripts/test.ocs");
 }
 
-void Core::release() {
-
+void Core::freeResources() {
+	// @Temporary
 	textShaderObj->release();
 	shaderObj->release();
 
-	assetManager.release();
+	assetManager->release();
 
 	stopWorkerThreads();
+	thrdMgr->release();
 
 	disp.setWindow(nullptr);
 	disp.setRenderEngine(nullptr);
-
-	delete thrdMgr;
 
 	delete console;
 
@@ -201,7 +139,6 @@ void Core::release() {
 	input->release();
 
 	deinitSys();
-	delete this;
 }
 
 bool Core::isRunning() {
@@ -217,8 +154,6 @@ bool Core::hadGraphicsReset() const {
 }
 
 void Core::startWorkerThreads() {
-	if ( !thrdMgr )
-		thrdMgr = new ThreadManager();
 	thrdMgr->startThreads(getLogicalProcessorCount());
 }
 
@@ -262,7 +197,6 @@ void Core::render(glm::mat4 viewMat) {
 	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
-
 }
 
 void Core::swap() {
@@ -288,8 +222,4 @@ IShaderObject * Core::getShaderObject() {
 
 IShaderObject * Core::getTextShaderObject() {
 	return textShaderObj;
-}
-
-AssetManager * Core::getAssetManager() {
-	return &assetManager;
 }

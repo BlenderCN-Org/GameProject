@@ -5,6 +5,20 @@
 #include <chrono>
 #include <assert.h>
 
+ThreadManager* ThreadManager::threadManager = nullptr;
+
+ThreadManager * ThreadManager::getThreadManager() {
+	if ( threadManager == nullptr )
+		threadManager = new ThreadManager();
+	return threadManager;
+}
+
+void ThreadManager::release() {
+	if ( threadManager )
+		delete threadManager;
+	threadManager = nullptr;
+}
+
 void ThreadManager::startThreads(uint32_t nrThreads) {
 	threadCount = nrThreads;
 

@@ -178,12 +178,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\AssetLoader.cpp" />
     <ClCompile Include="Core\Assets\AssetManager.cpp" />
     <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\Memory\MemoryBuffer.cpp" />
     <ClCompile Include="Core\Memory\MemoryManager.cpp" />
     <ClCompile Include="Core\Script\OcParsable.cpp" />
     <ClCompile Include="Core\Script\OcParser.cpp" />
@@ -203,13 +205,16 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Assets\AssetLoader.hpp" />
     <ClInclude Include="Core\Assets\AssetManager.hpp" />
+    <ClInclude Include="Core\Assets\MeshAsset.hpp" />
     <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
     <ClInclude Include="Core\Memory\Heap.hpp" />
+    <ClInclude Include="Core\Memory\MemoryBuffer.hpp" />
     <ClInclude Include="Core\Memory\MemoryManager.hpp" />
     <ClInclude Include="Core\Memory\ResourceAllocator.hpp" />
     <ClInclude Include="Core\Memory\StackAllocator.hpp" />

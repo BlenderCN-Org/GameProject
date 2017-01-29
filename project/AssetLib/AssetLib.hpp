@@ -13,7 +13,6 @@ namespace AssetLib
 
 	// loads data from any file into memory
 	void* fileToMemory(const char* fileName, uint32_t &dataSize);
-
 }
 
 #endif

@@ -15,8 +15,10 @@ class Core
 {
 public:
 
+	~Core();
+
 	void init();
-	void release();
+	void freeResources();
 
 	bool isRunning();
 	bool hadGraphicsReset() const;
@@ -38,14 +40,13 @@ public:
 	//@Temporary
 	IShaderObject* getShaderObject();
 	IShaderObject* getTextShaderObject();
-	AssetManager* getAssetManager();
 
 private:
 
 	// core variables
 	Lib renderEngineLib;
 	MemoryManager mem;
-	AssetManager assetManager;
+	AssetManager* assetManager;
 
 	bool hadReset;
 	bool running;
@@ -67,7 +68,6 @@ private:
 	int mdl = 0;
 
 	IShaderObject* textShaderObj;
-
 };
 
 #endif

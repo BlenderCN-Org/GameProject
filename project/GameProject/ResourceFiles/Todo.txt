@@ -1,13 +1,36 @@
+legend:
+	<D> = Done
+	<W> = Working
+	- = thing to do
+	<N> = might not happen
+
+2017-01-30's to-do:
+
+	-Create gameobjects where meshes and states are stored
+		-position state, animation state, etc
+	-Export uv, normals, and colors with mesh exporter for blender
+
+2017-01-29's to-do:
+	
+	<D>Add requested loading of meshes.
+	<D>Make the main menu togglable after game has started.
+	<D>Make managers global. So that no stupid core access is needed. maybe exception for memory manager? (since it need to be sorta thread safe)
+	<D>Remove "release" from non interface and non singelton instances
+	<D>Disable movement while in main menu
+	<D>Make asset manager use and load custom model format
+	<D>Added export orientation settings for blender export script
+	<D>Displaying fps numbers
+
+
 Game Project todo:
 
 	<D>Have a simple demo world that can be loaded and changed offline
-
 
 	-Gui stuff
 		-Change TextArea to use mask texture, instead of stencil buffer (performance)
 		-TextArea scrollable text, (horz & vert)
 		-Gui focus control
-		-Gui quad instances
+		<N>Gui quad instances (might be better with immediate)
 
 	<W>Rework custom allocators
 
@@ -30,11 +53,11 @@ RenderEngine todo:
 	-Fix errors if mesh data is not set
 	-Support for unicode characters (font map)
 
-	-Make font scale on resolution (not sure if needed)
+	<N>Make font scale on resolution (not sure if needed)
 
 AssetLib todo:
-	-Custom format
-	-DataPacking and unpacking
+	<N>Custom format
+	<N>DataPacking and unpacking
 
 Other Notes:
 

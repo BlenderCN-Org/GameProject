@@ -14,6 +14,9 @@ class ThreadManager
 {
 public:
 
+	static ThreadManager* getThreadManager();
+	static void release();
+
 	void startThreads(uint32_t nrThreads);
 	void stopThreads();
 
@@ -21,6 +24,8 @@ public:
 	Task getNextTast();
 
 private:
+
+	static ThreadManager* threadManager;
 
 	uint32_t threadCount;
 	std::thread* workerThreads;

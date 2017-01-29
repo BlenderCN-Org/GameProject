@@ -14,6 +14,8 @@ public:
 	void init(glm::mat4* viewMat);
 	void update(float dt);
 
+	void setCam(glm::vec3 _pos, glm::vec3 _dir);
+
 private:
 
 	Input* input;
@@ -39,8 +41,6 @@ private:
 
 	void mousepan(float x, float y);
 	void keypan(float dt);
-
-	void setCam(glm::vec3 _pos, glm::vec3 _dir);
 };
 
 #endif

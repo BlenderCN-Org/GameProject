@@ -7,8 +7,7 @@
 #include <vector>
 #include <string>
 
-void performParserTests() {
-}
+void performParserTests() {}
 
 void parseOcFile(const char * fileName) {
 	std::ifstream inFile(fileName, std::ios::in);

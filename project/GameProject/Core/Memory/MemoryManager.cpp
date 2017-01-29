@@ -8,7 +8,6 @@
 #include <fstream>
 
 void MemoryManager::init() {
-
 	fa = new FrameAllocator(5 * MB);
 
 	heapSize = 10 * MB;
@@ -31,7 +30,6 @@ void MemoryManager::saveHeap() {
 }
 
 void MemoryManager::loadHeap() {
-
 	// copy old heap
 	HeapPtr_t oldHeap = heap;
 	HeapPtr_t newHeap = (HeapPtr_t)nullptr;
@@ -75,7 +73,6 @@ void MemoryManager::setNumberOfPools(uint32_t poolCount) {
 		heapAsPtr->nrPools = poolCount;
 		heapAsPtr->poolList = (HeapPtr_t)allocateOnGameHeap<PoolHeap>(poolCount);
 	}
-
 }
 
 void MemoryManager::zeroGameData() {
@@ -117,7 +114,6 @@ void MemoryManager::initHeap() {
 	setNumberOfPools(3);
 
 	int b = 0;
-
 }
 
 HeapPtr_t MemoryManager::allocatePhysical(size_t size) {
@@ -199,7 +195,6 @@ void * MemoryManager::findNextFreeBlock(size_t size) {
 		}
 		// could not allocate so return nullptr
 		return nullptr;
-
 	}
 	// next was nullptr so the next free block is right after the header
 	else {

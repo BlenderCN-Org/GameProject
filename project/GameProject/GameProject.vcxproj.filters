@@ -129,6 +129,12 @@
     <ClCompile Include="Core\Assets\AssetManager.cpp">
       <Filter>Source Files\Core\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Assets\AssetLoader.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\MemoryBuffer.cpp">
+      <Filter>Source Files\Core\MemoryManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -217,6 +223,15 @@
     </ClInclude>
     <ClInclude Include="Core\Assets\AssetManager.hpp">
       <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\MeshAsset.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\AssetLoader.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\MemoryBuffer.hpp">
+      <Filter>Source Files\Core\MemoryManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

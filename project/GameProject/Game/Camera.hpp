@@ -7,18 +7,17 @@ class Camera
 {
 public:
 
-	virtual void init();
-	virtual void release();
+	Camera();
+	~Camera();
 
 	virtual float* getViewMatrix();
 	virtual float* getPerspectiveMatrix();
 	virtual float* getOrthoMatrix();
 
-//private:
+	//private:
 	glm::mat4 viewMatrix;
 	glm::mat4 perspective;
 	glm::mat4 orthoMatrix;
-
 };
 
 #endif

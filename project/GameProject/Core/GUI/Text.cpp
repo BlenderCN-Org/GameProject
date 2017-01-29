@@ -2,17 +2,17 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
+Text::Text() {}
+
+Text::~Text() {
+	if ( mesh )
+		mesh->release();
+}
+
 void Text::init(IRenderEngine* re) {
 	mesh = re->createMesh();
 	if ( mesh )
 		mesh->init(MeshPrimitiveType::TRIANGLE);
-}
-
-void Text::release() {
-	if ( mesh )
-		mesh->release();
-
-	delete this;
 }
 
 void Text::setText(char * text, size_t length, float x, float y, float scale) {

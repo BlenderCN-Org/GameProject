@@ -3,9 +3,7 @@
 #include <fstream>
 
 namespace AssetLib {
-
 	void* fileToMemory(const char* fileName, uint32_t &dataSize) {
-
 		dataSize = 0;
 		void* data = nullptr;
 

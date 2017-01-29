@@ -8,7 +8,6 @@
 
 #include <Allocators\FrameAllocator.hpp>
 
-
 #include <memory>
 
 class MemoryManager
@@ -49,7 +48,7 @@ private:
 
 			ptr = ((char*)dataPtr + sizeof(Block));
 			memset(ptr, 0, (sizeof(T) * count));
-			memset( (char*)ptr + (sizeof(T) * count) - 1, 0xFF, 1);
+			memset((char*)ptr + (sizeof(T) * count) - 1, 0xFF, 1);
 		}
 
 		// use placement new to init object
@@ -73,7 +72,6 @@ private:
 		if ( n )
 			n->prev = (HeapPtr_t)p;
 	}
-
 
 	FrameAllocator* fa;
 

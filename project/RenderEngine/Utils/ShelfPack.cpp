@@ -14,11 +14,9 @@ ShelfPack::~ShelfPack() {
 	for ( size_t i = 0; i < l; i++ ) {
 		delete nodes[i];
 	}
-
 }
 
 bool ShelfPack::addData(int w, int h, int id) {
-	
 	Node* n = new Node;
 
 	n->x = n->y = 0;

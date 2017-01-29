@@ -59,11 +59,9 @@ public:
 			heapSpace = malloc(maxSize);
 	}
 
-	T* allocate(int count) {
-	}
+	T* allocate(int count) {}
 
-	void deallocate(void* ptr, int count) {
-	}
+	void deallocate(void* ptr, int count) {}
 
 private:
 
