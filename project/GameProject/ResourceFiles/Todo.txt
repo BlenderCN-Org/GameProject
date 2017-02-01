@@ -6,9 +6,12 @@ legend:
 
 2017-01-30's to-do:
 
-	-Create gameobjects where meshes and states are stored
-		-position state, animation state, etc
-	-Export uv, normals, and colors with mesh exporter for blender
+	<D>Create gameobjects where meshes and states are stored
+		<W>position state, animation state, etc
+	<W>Export uv, normals, and colors with mesh exporter for blender
+		<W>UV coords
+		<D>Normals
+		<W>Colors
 
 2017-01-29's to-do:
 	

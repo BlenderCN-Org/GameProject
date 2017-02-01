@@ -81,7 +81,7 @@ void Core::init() {
 
 	assetManager = AssetManager::getAssetManager();
 	assetManager->init(renderEngine);
-	
+
 	// temporary
 	shaderObj = renderEngine->createShaderObject();
 	textShaderObj = renderEngine->createShaderObject();
@@ -111,7 +111,13 @@ void Core::init() {
 	vp = shaderObj->getShaderUniform("viewProjMatrix");
 	mdl = shaderObj->getShaderUniform("worldMat");
 
+	text = new Text();
+	text->init(renderEngine);
+	text->setFont(AssetManager::getAssetManager()->getBasicFont());
+
 	// end temporary
+
+	console->print("Stuff :p");
 
 	performParserTests();
 	//parseOcFile("Data/Scripts/test.ocs");
@@ -119,6 +125,9 @@ void Core::init() {
 
 void Core::freeResources() {
 	// @Temporary
+	
+	delete text;
+
 	textShaderObj->release();
 	shaderObj->release();
 
@@ -197,6 +206,25 @@ void Core::render(glm::mat4 viewMat) {
 	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
 	if ( hadReset ) return;
+}
+
+void Core::renderConsole() {
+
+	if ( input->consoleIsActive() ) {
+		textShaderObj->useShader();
+		renderEngine->setBlending(true);
+		std::string consoleText = console->getText();
+		text->setText((char*)consoleText.c_str(), consoleText.size(), 10, 1080 - 50, 1.0f);
+ 		text->render(textShaderObj, 0);
+
+		std::string consoleHistory = console->getHistory();
+
+		text->setText((char*)consoleHistory.c_str(), consoleHistory.size(), 10, 1080 - 700, 1.0f);
+		text->render(textShaderObj, 0);
+
+		renderEngine->setBlending(false);
+	}
+
 }
 
 void Core::swap() {

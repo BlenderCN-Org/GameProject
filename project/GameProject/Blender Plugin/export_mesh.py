@@ -59,22 +59,54 @@ def writeVersion_1_0(context, fw, use_selection, matrix):
 
 			meshData = obj.to_mesh(context.scene, True, 'PREVIEW', calc_tessface=False)
 			meshData.transform(matrix * obj.matrix_world)
-			useVNormals = False
+			useVNormals = True
 			useVColors = False
 			useVUV = False
 			padding = False
 
+			vertexColors = None
+			vertexUV = None
+			
+			#if len(meshData.vertex_colors) != 0:
+			#	useVColors = True
+			#	vertexColors = meshData.vertex_colors[0].data;
+			#	if len(meshData.vertex_colors) > 1:
+			#		print("Only 1 vertex color layer is supported for file version 1.0")
+			#
+			#if len(meshData.uv_layers) != 0:
+			#	useVUV = True
+			#	vertexUV = meshData.uv_layers[0].data;
+			#	if len(meshData.uv_layers) > 1:
+			#		print("Only 1 uv layer is supported for file version 1.0")
+			
 			data.extend(struct.pack("????", useVNormals, useVColors, useVUV, padding))
 			vertices = meshData.vertices
 			meshData.update(calc_tessface=True)
 			triangles = createTriangleList(meshData.tessfaces)
+
 			data.extend(struct.pack("II", len(vertices), len(triangles) ))
 
+			print(len(vertices))
+			print(len(vertexColors))
+			print(len(vertexUV))
+			
 			for vert in vertices:
-				data.extend(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]) )
+				data.extend(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]))
 
+			if useVNormals:
+				for vert in vertices:
+					data.extend(struct.pack("fff", vert.normal[0], vert.normal[1], vert.normal[2]))
+
+			#if useVColors:
+			#	for col in vertexColors:
+			#		data.extend(struct.pack("ffff", col.color[0], col.color[1], col.color[2], 1.0))
+			#
+			#if useVUV:
+			#	for uv in vertexUV:
+			#		data.extend(struct.pack("ff", uv.uv[0], uv.uv[1]))
+					
 			for tri in triangles:
-				data.extend(struct.pack("III", tri[0], tri[1], tri[2]) )
+				data.extend(struct.pack("III", tri[0], tri[1], tri[2]))
 
 			dataObjectList.append(data);
 			bpy.data.meshes.remove(meshData)

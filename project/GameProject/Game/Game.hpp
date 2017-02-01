@@ -52,6 +52,8 @@ private:
 
 	GameObject* player;
 
+	std::vector<GameObject> gameObjects;
+
 	//@Temporary
 	std::ifstream mapFile;
 	IShaderObject* shObj;

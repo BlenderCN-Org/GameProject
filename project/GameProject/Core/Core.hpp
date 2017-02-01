@@ -11,6 +11,8 @@
 #include "Memory\MemoryManager.hpp"
 #include "Assets\AssetManager.hpp"
 
+#include "GUI\Text.hpp"
+
 class Core
 {
 public:
@@ -30,6 +32,7 @@ public:
 	void update(float dt);
 
 	void render(glm::mat4 viewMat);
+	void renderConsole();
 	void swap();
 
 	DisplaySettings* getDisplaySettings();
@@ -68,6 +71,9 @@ private:
 	int mdl = 0;
 
 	IShaderObject* textShaderObj;
+
+	Text* text = nullptr;
+
 };
 
 #endif

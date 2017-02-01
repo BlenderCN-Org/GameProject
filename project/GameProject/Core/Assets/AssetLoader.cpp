@@ -28,6 +28,10 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 	BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
 
 	glm::vec3* vertices = (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount );
+	glm::vec3* normals =  bf->useVNormals ? (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount) : nullptr;
+	glm::vec4* colors = bf->useVColors ? (glm::vec4*)memBuff.returnBytes(sizeof(glm::vec4) * bf->vertCount) : nullptr;
+	glm::vec2* uv = bf->useVUV ? (glm::vec2*)memBuff.returnBytes(sizeof(glm::vec2) * bf->vertCount) : nullptr;
+
 	Triangle* triangles = (Triangle*)memBuff.returnBytes(sizeof(Triangle) * bf->triangleCount);
 
 	std::vector<Vertex5> verts;

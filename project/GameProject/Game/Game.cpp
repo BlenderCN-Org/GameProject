@@ -8,32 +8,22 @@
 
 //@Temporary
 
-struct loadedData
-{
-	std::string meshName;
-	int x, y, z;
-};
-
-struct meshStruct {
-	IMesh* mesh;
-	glm::mat4 matrix;
-};
-
-std::vector<meshStruct> tempMeshes;
-
-meshStruct createMeshStruct(Core* core, std::string meshName, float x, float y, float z) {
+GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, float z) {
 	IRenderEngine* re = core->getRenderEngine();
 
-	meshStruct ms{};
+	GameObject go;
+	IMesh* mesh = AssetManager::getAssetManager()->getMesh((char*)meshName.c_str());
 
-	ms.mesh = AssetManager::getAssetManager()->getMesh((char*)meshName.c_str());
+	go.init();
 
-	ms.matrix = glm::mat4();
-	ms.matrix[0][3] = x;
-	ms.matrix[1][3] = y;
-	ms.matrix[2][3] = z;
+	go.setMesh(mesh);
+	glm::mat4 mat = glm::mat4();
+	mat[0][3] = x;
+	mat[1][3] = y;
+	mat[2][3] = z;
+	go.setMatrix(mat);
 
-	return ms;
+	return go;
 }
 
 //@EndTemporary
@@ -131,7 +121,9 @@ void Game::update(float dt) {
 		kb.mod = 0;
 		kb.mouse = 0;
 
-		if ( in->releasedThisFrame(kb) ) {
+		bool consoleActive = Input::getInput()->consoleIsActive();
+
+		if ( in->releasedThisFrame(kb) && !consoleActive ) {
 			std::cout << "UP Pressed\n";
 			//saveGame();
 			handleMenuEvent(-1);
@@ -139,14 +131,14 @@ void Game::update(float dt) {
 
 		kb.code = 80;
 
-		if ( in->releasedThisFrame(kb) ) {
+		if ( in->releasedThisFrame(kb) && !consoleActive ) {
 			std::cout << "Down Pressed\n";
 			handleMenuEvent(+1);
 			//loadGame();
 		}
 		kb.code = 28;
 
-		if ( in->releasedThisFrame(kb) ) {
+		if ( in->releasedThisFrame(kb) && !consoleActive ) {
 			std::cout << "Enter \n";
 			//newGame();
 			handleMenuEnter();
@@ -164,11 +156,13 @@ void Game::render() {
 	shObj->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
 
 	//@Temporary
-	for ( size_t i = 0; i < tempMeshes.size(); i++ ) {
-		shObj->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &tempMeshes[i].matrix);
-		tempMeshes[i].mesh->bind();
-		tempMeshes[i].mesh->render();
+	for ( size_t i = 0; i < gameObjects.size(); i++ ) {
+		shObj->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &gameObjects[i].getMatrix());
+		IMesh* m = gameObjects[i].getMesh();
+		m->bind();
+		m->render();
 	}
+
 	IRenderEngine* re = core->getRenderEngine();
 
 	if ( gstate == GameState::eGameStage_MainMenu || menuPosX != menuXTarget ) {
@@ -188,28 +182,28 @@ void Game::render() {
 		nrMemuItems = renderedMenuItems;
 	}
 
-	if( ffps > 40 )
+	if ( ffps > 40 )
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(0, 1, 0));
 	else if ( ffps > 20 )
-		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(255.0f/255.0f, 165.0f/255.0f, 0));
-	else 
+		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(255.0f / 255.0f, 165.0f / 255.0f, 0));
+	else
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(1, 0, 0));
 
 	std::string fpsString = std::to_string(ffps) + " FPS";
 
-	t->setText((char*)fpsString.c_str(),fpsString.size(), 10, 10, 1.0);
+	t->setText((char*)fpsString.c_str(), fpsString.size(), 10, 10, 1.0);
 	re->setBlending(true);
 	t->render(textShObj, textureLocation);
 	re->setBlending(false);
 
 
 	//@EndTemporary
-
+	core->renderConsole();
 	core->swap();
 }
 
 void Game::newGame() {
-	tempMeshes.clear();
+	gameObjects.clear();
 
 	//@Temporary
 	mapFile.open("data/map.world");
@@ -237,7 +231,7 @@ void Game::newGame() {
 			std::getline(mapFile, line);
 			z = std::stof(line);
 
-			tempMeshes.push_back(createMeshStruct(core, meshName, x, y, z));
+			gameObjects.push_back(createMeshStruct(core, meshName, x, y, z));
 		}
 
 		int b = 0;

@@ -7,6 +7,8 @@
 #include "Components\BaseComponent.hpp"
 #include "Components\IBaseComponent.hpp"
 
+class IMesh;
+
 class GameObject
 {
 public:
@@ -21,10 +23,17 @@ public:
 
 	uint32_t counter;
 
+	void setMatrix(glm::mat4 mat);
+	void setMesh(IMesh* mesh);
+
+	glm::mat4 getMatrix() const;
+	IMesh* getMesh() const;
+
 private:
 
 	uint64_t gameObjectId;
 	glm::mat4 worldMatrix;
+	IMesh* mesh;
 
 	std::map<uint64_t, BaseComponent*> components;
 };

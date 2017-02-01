@@ -109,6 +109,12 @@ void Console::print(std::string text) {
 			line = "";
 		}
 	}
+
+	if ( line.size() ) 		{
+		addToHistory(line);
+		line = "";
+	}
+
 }
 
 void Console::execute() {
