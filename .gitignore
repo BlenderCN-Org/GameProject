@@ -88,3 +88,4 @@ $RECYCLE.BIN/
 *.ilk
 project/GameProject.VC.VC.opendb
 *.exp
+project/Editor/obj/

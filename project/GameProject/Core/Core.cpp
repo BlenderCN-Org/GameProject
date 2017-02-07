@@ -7,6 +7,9 @@
 
 #include <thread>
 
+int Core::width = 0;
+int Core::heigth = 0;
+
 std::string readShader(const char *filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);
@@ -46,6 +49,8 @@ void Core::init() {
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
 	disp.setResolution(1280, 720);
+	width = 720;
+	heigth = 1080;
 	disp.setVsyncMode(VSyncMode::VSYNC_ON);
 	disp.setFramerateLock(FramerateLock::FRAME_LOCK_NONE);
 	disp.setFullscreenMode(FullscreenMode::WINDOWED);
@@ -113,7 +118,7 @@ void Core::init() {
 
 	text = new Text();
 	text->init(renderEngine);
-	text->setFont(AssetManager::getAssetManager()->getBasicFont());
+	text->setFont(AssetManager::getAssetManager()->getSmallFont());
 
 	// end temporary
 
@@ -219,7 +224,9 @@ void Core::renderConsole() {
 
 		std::string consoleHistory = console->getHistory();
 
-		text->setText((char*)consoleHistory.c_str(), consoleHistory.size(), 10, 1080 - 700, 1.0f);
+		IFont* fnt = assetManager->getSmallFont();
+
+		text->setText((char*)consoleHistory.c_str(), consoleHistory.size(), 10, 1080 - 750, 1.0f);
 		text->render(textShaderObj, 0);
 
 		renderEngine->setBlending(false);

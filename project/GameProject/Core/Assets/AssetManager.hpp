@@ -22,6 +22,7 @@ public:
 	IMesh* getMesh(char* meshName);
 
 	IFont* getBasicFont();
+	IFont* getSmallFont();
 
 private:
 
@@ -34,6 +35,7 @@ private:
 	std::vector<MeshAsset> loadedMeshList;
 
 	IFont* basicFont;
+	IFont* smallFont;
 };
 
 #endif

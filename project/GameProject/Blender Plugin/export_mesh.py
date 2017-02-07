@@ -86,9 +86,9 @@ def writeVersion_1_0(context, fw, use_selection, matrix):
 
 			data.extend(struct.pack("II", len(vertices), len(triangles) ))
 
-			print(len(vertices))
-			print(len(vertexColors))
-			print(len(vertexUV))
+			#print(len(vertices))
+			#print(len(vertexColors))
+			#print(len(vertexUV))
 			
 			for vert in vertices:
 				data.extend(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]))

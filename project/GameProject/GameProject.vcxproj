@@ -180,7 +180,6 @@
   <ItemGroup>
     <ClCompile Include="Core\Assets\AssetLoader.cpp" />
     <ClCompile Include="Core\Assets\AssetManager.cpp" />
-    <ClCompile Include="Core\Console.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
@@ -191,6 +190,7 @@
     <ClCompile Include="Core\Script\OcParser.cpp" />
     <ClCompile Include="Core\Settings\DisplaySettings.cpp" />
     <ClCompile Include="Core\Settings\Settings.cpp" />
+    <ClCompile Include="Core\System\Console.cpp" />
     <ClCompile Include="Core\System\Sys.cpp" />
     <ClCompile Include="Core\ThreadManager.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
@@ -208,7 +208,6 @@
     <ClInclude Include="Core\Assets\AssetLoader.hpp" />
     <ClInclude Include="Core\Assets\AssetManager.hpp" />
     <ClInclude Include="Core\Assets\MeshAsset.hpp" />
-    <ClInclude Include="Core\Console.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
@@ -223,6 +222,7 @@
     <ClInclude Include="Core\Script\OcParser.hpp" />
     <ClInclude Include="Core\Settings\DisplaySettings.hpp" />
     <ClInclude Include="Core\Settings\Settings.hpp" />
+    <ClInclude Include="Core\System\Console.hpp" />
     <ClInclude Include="Core\System\Sys.hpp" />
     <ClInclude Include="Core\Task.hpp" />
     <ClInclude Include="Core\ThreadManager.hpp" />

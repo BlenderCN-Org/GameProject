@@ -1,5 +1,8 @@
 #include "Text.hpp"
 
+#include "../Core.hpp"
+#undef max
+
 #include <glm\gtc\matrix_transform.hpp>
 
 Text::Text() {}

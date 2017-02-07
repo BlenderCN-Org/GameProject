@@ -3,7 +3,7 @@
 
 #include <Config\Config.hpp>
 
-#include "../Console.hpp"
+#include "../System/Console.hpp"
 
 #include <map>
 #include <sstream>

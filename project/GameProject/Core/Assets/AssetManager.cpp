@@ -25,6 +25,10 @@ AssetManager::~AssetManager() {
 		basicFont->release();
 	}
 
+	if ( smallFont ) {
+		smallFont->release();
+	}
+
 	for ( size_t i = 0; i < loadedMeshList.size(); i++ ) {
 		loadedMeshList[i].mesh->release();
 	}
@@ -75,4 +79,13 @@ IFont * AssetManager::getBasicFont() {
 	}
 
 	return basicFont;
+}
+
+IFont* AssetManager::getSmallFont() {
+	if ( smallFont == nullptr ) {
+		smallFont = re->createFont();
+		smallFont->init("C:/Windows/Fonts/Arial.ttf", 8);
+	}
+
+	return smallFont;
 }

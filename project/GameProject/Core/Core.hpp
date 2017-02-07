@@ -12,6 +12,7 @@
 #include "Assets\AssetManager.hpp"
 
 #include "GUI\Text.hpp"
+//#include "System\Console.hpp"
 
 class Core
 {
@@ -43,6 +44,9 @@ public:
 	//@Temporary
 	IShaderObject* getShaderObject();
 	IShaderObject* getTextShaderObject();
+
+	static int width;
+	static int heigth;
 
 private:
 

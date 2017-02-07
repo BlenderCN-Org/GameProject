@@ -103,7 +103,7 @@ void Font_gl::genFontTexture() {
 
 	l.sort(cmp);
 
-	ShelfPack sp(128, 512);
+	ShelfPack sp(256, 512);
 
 	for ( std::list<Character>::const_iterator iterator = l.begin(), end = l.end(); iterator != end; ++iterator ) {
 		int w = iterator->size.x;
@@ -167,6 +167,11 @@ void Font_gl::genFontTexture() {
 		delete imageArray[c];
 		imageArray[c] = nullptr;
 	}
+
+//	std::ofstream out;
+//	out.open("asd.data", std::ios::binary);
+//	out.write(data, w*h);
+//	out.close();
 
 	delete data;
 }
