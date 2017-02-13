@@ -173,6 +173,9 @@
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Window\MainWindow.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

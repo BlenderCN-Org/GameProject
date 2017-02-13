@@ -41,12 +41,25 @@ void Core::init() {
 	running = true;
 	hadReset = false;
 	if ( renderEngineLib.loadLibrary("RenderEngine.dll\0") )
-		printf("Loaded\n");
+		printf("Loaded RenderEngine.dll\n");
 	else {
 		printf("Failed to load\n");
 		throw;
 	}
+
+	if ( editorLib.loadLibrary("Editor_Wrapper.dll\0") )
+		printf("Loaded Editor_Wreapper.dll\n");
+	else {
+		printf("Failed to load\n");
+		throw;
+	}
+
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
+
+	CreateEditorProc eProc = (CreateEditorProc)editorLib.getProcAddress("CreateEditor");
+
+	editor = eProc();
+	editor->initializeEditor();
 
 	disp.setResolution(1280, 720);
 	width = 720;
@@ -130,7 +143,7 @@ void Core::init() {
 
 void Core::freeResources() {
 	// @Temporary
-	
+	editor->releaseEditor();
 	delete text;
 
 	textShaderObj->release();

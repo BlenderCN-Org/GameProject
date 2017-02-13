@@ -3,6 +3,8 @@
 
 #include "IEditor.hpp"
 
+#include "Window\MainWindow.hpp"
+
 namespace Editor {
 
 	class Editor : public IEditor {
@@ -14,6 +16,7 @@ namespace Editor {
 
 	private:
 
+		MainWindowWrapper^ *mw;
 	};
 
 }

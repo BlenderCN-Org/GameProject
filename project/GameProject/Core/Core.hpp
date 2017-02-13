@@ -14,6 +14,8 @@
 #include "GUI\Text.hpp"
 //#include "System\Console.hpp"
 
+#include <Editor_Wrapper\IEditor.hpp>
+
 class Core
 {
 public:
@@ -78,6 +80,8 @@ private:
 
 	Text* text = nullptr;
 
+	Lib editorLib;
+	IEditor* editor;
 };
 
 #endif
