@@ -25,6 +25,11 @@ legend:
 	<D>Displaying fps numbers
 
 
+Editor todo:
+	Next need to make gamewindow borderless and auto resize to editor window.
+	Add panels for scene, object list.
+	Add dialogs for mesh preview, text editor, object properites.
+
 Game Project todo:
 
 	<D>Have a simple demo world that can be loaded and changed offline

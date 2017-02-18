@@ -48,6 +48,8 @@ public:
 
 	virtual void setTitle(const char* title);
 
+	virtual void* getNativeWindowHandle();
+
 	//private:
 
 	HWND getWindowHandle();

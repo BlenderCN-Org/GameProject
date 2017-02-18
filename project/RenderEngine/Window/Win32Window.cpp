@@ -19,6 +19,8 @@
 
 #define RI_MOUSE_HWHEEL 0x0800
 
+#define RESTORE_FROM_EDIT WM_USER+123
+
 // globals
 const wchar_t* windowClassName = _T("WindowClass");
 bool windowClassInitialized = false;
@@ -264,6 +266,12 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				wnd->focusCallback(wnd, false);
 			return 1;
 			break;
+		
+		case RESTORE_FROM_EDIT: {
+			SetParent(hWnd, NULL);
+			break;
+		}
+		
 		case WM_SIZE:
 		{
 			if ( wnd ) {
@@ -492,6 +500,10 @@ void BaseWindow::setTitle(const char * title) {
 	std::string t(title);
 	std::wstring str(t.begin(), t.end());
 	SetWindowText(windowHandle, str.c_str());
+}
+
+void * BaseWindow::getNativeWindowHandle() {
+	return windowHandle;
 }
 
 HWND BaseWindow::getWindowHandle() {

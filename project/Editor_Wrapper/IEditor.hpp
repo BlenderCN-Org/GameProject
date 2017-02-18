@@ -14,6 +14,8 @@ public:
 	virtual void initializeEditor() = 0;
 	virtual void releaseEditor() = 0;
 
+	virtual void setGameWindow(void* windowPtr) = 0;
+
 private:
 
 };

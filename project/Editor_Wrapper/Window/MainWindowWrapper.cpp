@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "MainWindowWrapper.hpp"
 
 void MainWindowWrapper::DoWork() {
 	window = gcnew Editor::MainWindow();
@@ -6,6 +6,14 @@ void MainWindowWrapper::DoWork() {
 	window->Show();
 
 	System::Windows::Threading::Dispatcher::Run();
+
+}
+
+IntPtr MainWindowWrapper::getGameWindowAreaHandle() {
+	
+	while ( window == nullptr );
+
+	return window->getGameWindowAreaHandle();
 }
 
 MainWindowWrapper::MainWindowWrapper() {

@@ -6,11 +6,14 @@
 ref class MainWindowWrapper
 {
 public:
+
 	Editor::MainWindow ^window;
 
 	Threading::Thread ^thrd;
 
 	void DoWork();
+
+	IntPtr getGameWindowAreaHandle();
 
 	MainWindowWrapper();
 	~MainWindowWrapper();

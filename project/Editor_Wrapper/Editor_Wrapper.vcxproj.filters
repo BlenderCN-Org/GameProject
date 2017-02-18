@@ -27,7 +27,7 @@
     <ClInclude Include="CoreInclude.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window\MainWindow.hpp">
+    <ClInclude Include="Window\MainWindowWrapper.hpp">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window\MainWindow.cpp">
+    <ClCompile Include="Window\MainWindowWrapper.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
   </ItemGroup>

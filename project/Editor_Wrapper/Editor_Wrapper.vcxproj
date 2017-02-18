@@ -167,11 +167,11 @@
     <ClInclude Include="CoreInclude.hpp" />
     <ClInclude Include="Editor.hpp" />
     <ClInclude Include="IEditor.hpp" />
-    <ClInclude Include="Window\MainWindow.hpp" />
+    <ClInclude Include="Window\MainWindowWrapper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="Window\MainWindow.cpp" />
+    <ClCompile Include="Window\MainWindowWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xaml" />

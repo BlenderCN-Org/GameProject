@@ -61,6 +61,7 @@ void Core::init() {
 	editor = eProc();
 	editor->initializeEditor();
 
+
 	disp.setResolution(1280, 720);
 	width = 720;
 	heigth = 1080;
@@ -79,6 +80,8 @@ void Core::init() {
 	renderEngine->updateViewPort(1280, 720);
 
 	window = renderEngine->getMainWindow();
+
+	editor->setGameWindow(window->getNativeWindowHandle());
 
 	disp.setRenderEngine(renderEngine);
 	disp.setWindow(window);
