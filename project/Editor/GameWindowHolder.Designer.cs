@@ -39,16 +39,18 @@
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
 			this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-			this.ClientSize = new System.Drawing.Size(715, 527);
+			this.ClientSize = new System.Drawing.Size(1280, 720);
 			this.ControlBox = false;
 			this.DoubleBuffered = true;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(1280, 720);
 			this.Name = "GameWindowHolder";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.Text = "GameWindowHolder";
+			this.ClientSizeChanged += new System.EventHandler(this.GameWindowHolder_ClientSizeChanged);
 			this.ResumeLayout(false);
 
 		}

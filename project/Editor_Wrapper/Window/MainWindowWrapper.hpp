@@ -10,10 +10,12 @@ public:
 	Editor::MainWindow ^window;
 
 	Threading::Thread ^thrd;
+	Threading::ManualResetEvent ^mre;
 
 	void DoWork();
 
 	IntPtr getGameWindowAreaHandle();
+
 
 	MainWindowWrapper();
 	~MainWindowWrapper();

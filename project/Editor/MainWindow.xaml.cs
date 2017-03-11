@@ -9,6 +9,9 @@ namespace Editor
 	public partial class MainWindow : Window
 	{
 		public GameWindowHolder gwh = null;
+
+		private TextEditor textEdit = null;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -27,7 +30,7 @@ namespace Editor
 			// Add the interop host control to the Grid
 			// control's collection of child controls.
 			this.GameWindowGrid.Children.Add(host);
-
+			
 		}
 
 		public IntPtr getGameWindowAreaHandle()
@@ -40,6 +43,17 @@ namespace Editor
 			}
 
 			return handle;
+		}
+
+		public bool WasResized()
+		{
+			bool resizeing = gwh.wasResized();
+			return resizeing;
+		}
+		
+		public Size getGameWindowSize()
+		{
+			return new Size(gwh.ClientSize.Width, gwh.ClientSize.Height);
 		}
 
 		private void Rectangle_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -71,5 +85,16 @@ namespace Editor
 			
 			this.Close();
 		}
+
+		private void TextEditorButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (textEdit == null)
+			{
+				textEdit = new TextEditor();
+			}
+			textEdit.Show();
+			textEdit.Focus();
+		}
+		
 	}
 }

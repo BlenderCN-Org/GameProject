@@ -43,14 +43,14 @@ void Core::init() {
 	if ( renderEngineLib.loadLibrary("RenderEngine.dll\0") )
 		printf("Loaded RenderEngine.dll\n");
 	else {
-		printf("Failed to load\n");
+		printf("Failed to load Renderer\n");
 		throw;
 	}
 
 	if ( editorLib.loadLibrary("Editor_Wrapper.dll\0") )
-		printf("Loaded Editor_Wreapper.dll\n");
+		printf("Loaded Editor_Wrapper.dll\n");
 	else {
-		printf("Failed to load\n");
+		printf("Failed to load Editor\n");
 		throw;
 	}
 
@@ -59,8 +59,6 @@ void Core::init() {
 	CreateEditorProc eProc = (CreateEditorProc)editorLib.getProcAddress("CreateEditor");
 
 	editor = eProc();
-	editor->initializeEditor();
-
 
 	disp.setResolution(1280, 720);
 	width = 720;
@@ -80,8 +78,6 @@ void Core::init() {
 	renderEngine->updateViewPort(1280, 720);
 
 	window = renderEngine->getMainWindow();
-
-	editor->setGameWindow(window->getNativeWindowHandle());
 
 	disp.setRenderEngine(renderEngine);
 	disp.setWindow(window);
@@ -134,12 +130,9 @@ void Core::init() {
 
 	text = new Text();
 	text->init(renderEngine);
-	text->setFont(AssetManager::getAssetManager()->getSmallFont());
+	text->setFont(AssetManager::getAssetManager()->getBasicFont());
 
 	// end temporary
-
-	console->print("Stuff :p");
-
 	performParserTests();
 	//parseOcFile("Data/Scripts/test.ocs");
 }
@@ -183,6 +176,32 @@ bool Core::hadGraphicsReset() const {
 	return renderEngine->getGraphicsReset();
 }
 
+bool Core::editorAvaible() const {
+	return (nullptr != editor);
+}
+
+bool Core::isInEditor() const {
+	return editor->isRunning();
+}
+
+void Core::startEditor() {
+	if ( editor->initializeEditor() ) {
+
+		editor->setGameWindow(window->getNativeWindowHandle());
+
+		disp.setFullscreenMode(FullscreenMode::WINDOWED_BORDERLESS);
+		disp.apply();
+	}
+}
+
+void Core::editorDetachGameWindow() {
+	editor->detach();
+}
+
+void Core::stopEditor() {
+
+}
+
 void Core::startWorkerThreads() {
 	thrdMgr->startThreads(getLogicalProcessorCount());
 }
@@ -200,6 +219,10 @@ void Core::update(float dt) {
 	mem.getFrameAllocator()->reset();
 	// reset input states, clear for next frame
 	input->reset();
+	if ( editor && editor->isRunning() ) {
+		editor->poll();
+	}
+
 	// poll messages and update camera
 	window->pollMessages();
 	running = window->isVisible();
@@ -210,8 +233,9 @@ void Core::update(float dt) {
 		int h = 0;
 		input->getWindowSize(w, h);
 
-		Resolution res = disp.getResolution();
-		renderEngine->updateViewPort(res.width, res.height);
+		renderEngine->updateViewPort(w, h);
+		//Resolution res = disp.getResolution();
+		//renderEngine->updateViewPort(res.width, res.height);
 	}
 
 	if ( input->consoleKeyWasPressed() ) {
@@ -236,11 +260,9 @@ void Core::renderConsole() {
 		renderEngine->setBlending(true);
 		std::string consoleText = console->getText();
 		text->setText((char*)consoleText.c_str(), consoleText.size(), 10, 1080 - 50, 1.0f);
- 		text->render(textShaderObj, 0);
+		text->render(textShaderObj, 0);
 
 		std::string consoleHistory = console->getHistory();
-
-		IFont* fnt = assetManager->getSmallFont();
 
 		text->setText((char*)consoleHistory.c_str(), consoleHistory.size(), 10, 1080 - 750, 1.0f);
 		text->render(textShaderObj, 0);
@@ -273,4 +295,8 @@ IShaderObject * Core::getShaderObject() {
 
 IShaderObject * Core::getTextShaderObject() {
 	return textShaderObj;
+}
+
+Console * Core::getConsole() {
+	return console;
 }

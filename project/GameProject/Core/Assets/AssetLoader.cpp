@@ -23,7 +23,7 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 		return nullptr;
 	}
 
-	printf("Mesh version: %d.%d", h->major, h->minor);
+	printf("Mesh version: %d.%d\n", h->major, h->minor);
 
 	BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
 

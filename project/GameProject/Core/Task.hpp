@@ -7,6 +7,7 @@ enum class TaskType
 {
 	eTaskType_threadTerminate = 0,
 	eTaskType_loadAsset = 1,
+	eTaskType_execute = 2,
 };
 
 enum class LoadType

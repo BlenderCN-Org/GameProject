@@ -5,15 +5,24 @@
 
 namespace Editor_clr {
 	
+	bool Editor_wrp::initializeEditor() {
 
-	void Editor_wrp::initializeEditor() {
-		printf("Editor initialize\n");
+		bool success = false;
 
-		Application::EnableVisualStyles();
+		if ( !initialized ) {
+			initialized = true;
+			printf("Editor initialize\n");
 
-		wrapper = gcnew MainWindowWrapper();
-		eventWrapper = gcnew EventWrapper();
+			Application::EnableVisualStyles();
 
+			wrapper = gcnew MainWindowWrapper();
+			eventWrapper = gcnew EventWrapper();
+			success = true;
+		} else {
+			printf("Editor already ininitalized\n");
+			
+		}
+		return success;
 	}
 
 	void Editor_wrp::releaseEditor() {
@@ -21,15 +30,43 @@ namespace Editor_clr {
 		delete this;
 	}
 
-	void Editor_wrp::poll() {}
+	void Editor_wrp::detach() {
+		SendMessage((HWND)eventWrapper->windowPtr, WM_USER + 123, 0, 0);
+	}
+
+	void Editor_wrp::attach() {
+		HWND editor = (HWND)wrapper->getGameWindowAreaHandle().ToPointer();
+		HWND windowPtr = (HWND)eventWrapper->windowPtr;
+		SetParent(windowPtr, editor);
+		SetWindowPos(windowPtr, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	}
+
+	bool Editor_wrp::isRunning() {
+		// it needs to be initialized to be runnning, so that is a good start :)
+		bool running = initialized;
+		
+		if ( wrapper.operator MainWindowWrapper ^() == nullptr || wrapper->window == nullptr) {
+			running = false;
+		} 
+
+		return running;
+	}
+
+	void Editor_wrp::poll() {
+		if ( wrapper->window->WasResized() ) {
+			System::Windows::Size s = wrapper->window->getGameWindowSize();
+			SendMessage((HWND)eventWrapper->windowPtr, WM_SIZE, SIZE_RESTORED, MAKELPARAM(s.Width, s.Height));
+		}
+
+	}
 
 	void Editor_wrp::setGameWindow(void * windowPtr) {
 		
 		HWND editor = (HWND)wrapper->getGameWindowAreaHandle().ToPointer();
-
+		
 		eventWrapper->windowPtr = windowPtr;
 		wrapper->window->Closing += gcnew System::ComponentModel::CancelEventHandler(eventWrapper, &EventWrapper::OnClosing);
-
+		
 		SetParent((HWND)windowPtr, editor);
 		SetWindowPos((HWND)windowPtr, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 	}

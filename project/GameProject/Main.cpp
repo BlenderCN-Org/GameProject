@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
 
 	initExceptionHandlers();
 
+
 	float dt = 0.0f;
 	unsigned int start = clock();
 

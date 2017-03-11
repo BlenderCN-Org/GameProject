@@ -90,3 +90,4 @@ project/GameProject.VC.VC.opendb
 *.exp
 project/Editor/obj/
 project/Gameproject.VC.db
+*.iobj

@@ -28,6 +28,13 @@ public:
 	bool isRunning();
 	bool hadGraphicsReset() const;
 
+	bool editorAvaible() const;
+	bool isInEditor() const;
+
+	void startEditor();
+	void editorDetachGameWindow();
+	void stopEditor();
+
 	void startWorkerThreads();
 	void stopWorkerThreads();
 
@@ -46,6 +53,8 @@ public:
 	//@Temporary
 	IShaderObject* getShaderObject();
 	IShaderObject* getTextShaderObject();
+
+	Console* getConsole();
 
 	static int width;
 	static int heigth;

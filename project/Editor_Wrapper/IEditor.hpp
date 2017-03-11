@@ -11,8 +11,15 @@ class IEditor {
 
 public:
 
-	virtual void initializeEditor() = 0;
+	virtual bool initializeEditor() = 0;
 	virtual void releaseEditor() = 0;
+
+	virtual void detach() = 0;
+	virtual void attach() = 0;
+
+	virtual bool isRunning() = 0;
+
+	virtual void poll() = 0;
 
 	virtual void setGameWindow(void* windowPtr) = 0;
 

@@ -49,8 +49,8 @@ void CameraInput::mousepan(float x, float y) {
 	if ( angleV < -89 )
 		angleV = -89;
 
-	printf("(%f, %f)\n", x, y);
-	printf("(%f, %f)\n", angleH, angleV);
+	/*printf("(%f, %f)\n", x, y);
+	printf("(%f, %f)\n", angleH, angleV);*/
 
 	//rotate vertically around x
 	float rotateRad;

@@ -20,8 +20,13 @@ namespace Editor_clr {
 
 	public:
 
-		virtual void initializeEditor();
+		virtual bool initializeEditor();
 		virtual void releaseEditor();
+
+		virtual void detach();
+		virtual void attach();
+
+		virtual bool isRunning();
 
 		virtual void poll();
 
@@ -30,6 +35,8 @@ namespace Editor_clr {
 		void OnClosing(System::Object ^sender, System::ComponentModel::CancelEventArgs ^e);
 
 	private:
+
+		bool initialized = false;
 
 		gcroot<MainWindowWrapper^> wrapper;
 		gcroot<EventWrapper^> eventWrapper;

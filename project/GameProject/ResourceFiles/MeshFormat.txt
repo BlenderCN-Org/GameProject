@@ -1,5 +1,73 @@
 
 
+
+
+Model format version 2
+---------------------------------------------
+|					HEADER					|
+---------------------------------------------
+char[4] tag == MESH
+ushort versionMajor = 2;
+ushort versionMinor = 0;
+---------------------------------------------
+|				   DATABLOCK				|
+---------------------------------------------
+uint32_t						> number of entires in file
+---------------------------------------------
+|					ENTRIES					|
+|-------------------------------------------|
+|Mesh entries								|
+|Animation entries (Skeleton)				|
+|Animation entries (Keyframes)				|
+|Texture entries							|
+---------------------------------------------
+char[4] entryType				> entry name
+
+<array start>	entry_array		> entry array
+
+---------------------------------------------
+|				MESH ENTRY					|
+|-------------------------------------------|
+|entryType name:							|
+|	mesh		(note: small characters)	|
+|meshflags bits:							|
+|	vertex_color	 0x0001					|
+|	vertex_normals	 0x0002					|
+|	vertex_uv		 0x0004					|
+|	vertex_animation 0x0008					|
+|	mesh_animations	 0x0010					|
+---------------------------------------------
+
+uint32_t	meshflags				>	vertex bit flags to enable colors, uv, weights, etc
+
+uint32_t	vertexCount				>	verices for mesh entry
+uint32_t	triangleCount			>	number of tirs for mesh entry
+uint8_t		vertexSize				>	size per vertex
+uint8_t		triangleSize			>	size per triangle index		(triangle count < 255 = size 1, triangle count < 65565 = size 2, etc)
+uint8_t		skeletonRef				>	referece to skeleton
+uint8_t		animKeyFrameCount		>	number of animation keyframe references
+
+data<vertexCount>					>	vertex data combined in flags order	(position is first, following vertex_colors, vertex_normal_uv, weights, bones)
+data<triangle count					>	triangle indices for the mesh
+
+data<animationRef					>	index to animation keyframes in file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Model format version 1
 ---------------------------------------------
 |					HEADER					|

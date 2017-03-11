@@ -30,9 +30,9 @@
 		{
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.CloseEditor = new System.Windows.Forms.Button();
-			this.CloseBoth = new System.Windows.Forms.Button();
 			this.Cancel = new System.Windows.Forms.Button();
+			this.CloseBoth = new System.Windows.Forms.Button();
+			this.CloseEditor = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -57,15 +57,15 @@
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			// 
-			// CloseEditor
+			// Cancel
 			// 
-			this.CloseEditor.Location = new System.Drawing.Point(6, 19);
-			this.CloseEditor.Name = "CloseEditor";
-			this.CloseEditor.Size = new System.Drawing.Size(109, 38);
-			this.CloseEditor.TabIndex = 0;
-			this.CloseEditor.Text = "Close Editor";
-			this.CloseEditor.UseVisualStyleBackColor = true;
-			this.CloseEditor.Click += new System.EventHandler(this.CloseEditor_Click);
+			this.Cancel.Location = new System.Drawing.Point(236, 19);
+			this.Cancel.Name = "Cancel";
+			this.Cancel.Size = new System.Drawing.Size(109, 38);
+			this.Cancel.TabIndex = 2;
+			this.Cancel.Text = "Cancel";
+			this.Cancel.UseVisualStyleBackColor = true;
+			this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
 			// 
 			// CloseBoth
 			// 
@@ -77,15 +77,15 @@
 			this.CloseBoth.UseVisualStyleBackColor = true;
 			this.CloseBoth.Click += new System.EventHandler(this.CloseBoth_Click);
 			// 
-			// Cancel
+			// CloseEditor
 			// 
-			this.Cancel.Location = new System.Drawing.Point(236, 19);
-			this.Cancel.Name = "Cancel";
-			this.Cancel.Size = new System.Drawing.Size(109, 38);
-			this.Cancel.TabIndex = 2;
-			this.Cancel.Text = "Cancel";
-			this.Cancel.UseVisualStyleBackColor = true;
-			this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
+			this.CloseEditor.Location = new System.Drawing.Point(6, 19);
+			this.CloseEditor.Name = "CloseEditor";
+			this.CloseEditor.Size = new System.Drawing.Size(109, 38);
+			this.CloseEditor.TabIndex = 0;
+			this.CloseEditor.Text = "Close Editor";
+			this.CloseEditor.UseVisualStyleBackColor = true;
+			this.CloseEditor.Click += new System.EventHandler(this.CloseEditor_Click);
 			// 
 			// CloseEditorMessageBox
 			// 
@@ -93,6 +93,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.ClientSize = new System.Drawing.Size(374, 110);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label1);

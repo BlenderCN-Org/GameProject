@@ -93,11 +93,15 @@ void Game::update(float dt) {
 	//@Temporary
 	Input* in = Input::getInput();
 
+	if ( in->sizeChange ) {
+		int w = 0, h = 0;
+		in->getWindowSize(w, h);
+		*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
+	}
+
 	if ( in->releasedThisFrame(KeyBind{ 1,0,0 }, false) && gameStarted ) {
 		enterLeaveMenuState = true;
 		toggleMenuTarget();
-
-		//toggleMenu();
 	}
 
 	if ( enterLeaveMenuState ) {
@@ -124,7 +128,7 @@ void Game::update(float dt) {
 		bool consoleActive = Input::getInput()->consoleIsActive();
 
 		if ( in->releasedThisFrame(kb) && !consoleActive ) {
-			std::cout << "UP Pressed\n";
+			//std::cout << "UP Pressed\n";
 			//saveGame();
 			handleMenuEvent(-1);
 		}
@@ -132,14 +136,14 @@ void Game::update(float dt) {
 		kb.code = 80;
 
 		if ( in->releasedThisFrame(kb) && !consoleActive ) {
-			std::cout << "Down Pressed\n";
+			//std::cout << "Down Pressed\n";
 			handleMenuEvent(+1);
 			//loadGame();
 		}
 		kb.code = 28;
 
 		if ( in->releasedThisFrame(kb) && !consoleActive ) {
-			std::cout << "Enter \n";
+			//std::cout << "Enter \n";
 			//newGame();
 			handleMenuEnter();
 		}
@@ -175,6 +179,8 @@ void Game::render() {
 		if ( gameStarted )
 			saveGameIndex = renderMenuItem("Save Game", 9);
 		loadGameIndex = renderMenuItem("Load Game", 9);
+		if ( core->editorAvaible() )
+			editorIndex = renderMenuItem("Editor", 6);
 		quitGameIndex = renderMenuItem("Quit", 4);
 
 		re->setBlending(false);
@@ -303,8 +309,15 @@ void Game::handleMenuEnter() {
 	if ( choice == loadGameIndex ) {
 		loadGame();
 	}
-	if ( choice == quitGameIndex ) {
+
+	if ( choice == editorIndex ) {
+		core->startEditor();
+	}
+
+	if ( choice == quitGameIndex && !core->isInEditor() ) {
 		running = false;
+	} else if ( choice == quitGameIndex && core->isInEditor() ) {
+		core->getConsole()->print("Editor mode enabled cannot quit using game menu");
 	}
 }
 

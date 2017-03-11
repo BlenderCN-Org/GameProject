@@ -84,6 +84,7 @@ private:
 	int newGameIndex;
 	int saveGameIndex;
 	int loadGameIndex;
+	int editorIndex;
 	int quitGameIndex;
 
 	//@EndTemporary

@@ -159,11 +159,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Editor\Editor.csproj">
-      <Project>{633b3438-6a99-4461-aac6-e97740de1a34}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CoreInclude.hpp" />
     <ClInclude Include="Editor.hpp" />
     <ClInclude Include="IEditor.hpp" />
@@ -175,6 +170,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Editor\Editor.csproj">
+      <Project>{da006573-7035-4e70-9477-a882077f3504}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
