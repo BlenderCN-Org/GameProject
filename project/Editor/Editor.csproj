@@ -80,6 +80,9 @@
     <Compile Include="CloseEditorMessageBox.Designer.cs">
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameSettings.xaml.cs">
+      <DependentUpon>GameSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxHighlightTextbox\DarkSyntaxHighlightedTextbox.xaml.cs">
       <DependentUpon>DarkSyntaxHighlightedTextbox.xaml</DependentUpon>
     </Compile>
@@ -102,6 +105,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DarkRichTextBoxRes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

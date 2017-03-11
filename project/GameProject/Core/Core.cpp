@@ -185,7 +185,7 @@ bool Core::isInEditor() const {
 }
 
 void Core::startEditor() {
-	if ( editor->initializeEditor() ) {
+	if ( editorAvaible() && editor->initializeEditor() ) {
 
 		editor->setGameWindow(window->getNativeWindowHandle());
 

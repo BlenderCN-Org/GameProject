@@ -135,6 +135,9 @@
     <ClCompile Include="Core\System\Console.cpp">
       <Filter>Source Files\Core\System</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Assets\MasterFile.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="Core\System\Console.hpp">
       <Filter>Source Files\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\MasterFile.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

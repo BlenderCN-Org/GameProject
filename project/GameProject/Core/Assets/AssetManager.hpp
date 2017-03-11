@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "MeshAsset.hpp"
+#include "MasterFile.hpp"
 
 class AssetManager {
 public:
@@ -24,6 +25,8 @@ public:
 	IFont* getBasicFont();
 	IFont* getSmallFont();
 
+	MasterFile masterFile;
+
 private:
 
 	static AssetManager* assetManager;
@@ -36,6 +39,7 @@ private:
 
 	IFont* basicFont;
 	IFont* smallFont;
+
 };
 
 #endif

@@ -44,6 +44,14 @@
 		</Style>
 
 	</Window.Resources>
+	
+	<Window.CommandBindings>
+		<CommandBinding Command="local:MainWindowCommands.SaveAndPack" Executed="SaveAndPack_Executed"/>
+		<CommandBinding x:Name="SaveCommand" Command="ApplicationCommands.Save" Executed="SaveCommand_Executed"/>
+	</Window.CommandBindings>
+	<Window.InputBindings>
+		<KeyBinding Key="S" Modifiers="Ctrl" Command="ApplicationCommands.Save"/>
+	</Window.InputBindings>
 
 	<WindowChrome.WindowChrome>
 		<WindowChrome 
@@ -65,13 +73,13 @@
 				<local:DarkMenuItem Header="_File" BorderThickness="1" >
 					<local:DarkMenuItem Header="_Open" />
 					<local:DarkMenuItem Header="_Close"/>
-					<local:DarkMenuItem Header="_Save"/>
-					<local:DarkMenuItem Header="S_ave And Pack"/>
+					<local:DarkMenuItem Command="ApplicationCommands.Save"/>
+					<local:DarkMenuItem Command="local:MainWindowCommands.SaveAndPack"/>
 				</local:DarkMenuItem>
 				<local:DarkMenuItem Header="_Edit">
 				</local:DarkMenuItem>
 				<local:DarkMenuItem Header="_Game">
-					<local:DarkMenuItem Header="Game _Settings"/>
+					<local:DarkMenuItem Header="Game _Settings" Click="GameSettingsButton_Click"/>
 				</local:DarkMenuItem>
 				<local:DarkMenuItem Header="E_ditor">
 					<local:DarkMenuItem Header="_Text Editor" Click="TextEditorButton_Click"/>
@@ -82,13 +90,17 @@
 			</Menu>
 
 			<Grid DockPanel.Dock="Top" Height="25">
-				<ToolBarTray>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="47*"/>
+					<ColumnDefinition Width="333*"/>
+				</Grid.ColumnDefinitions>
+				<ToolBarTray Grid.ColumnSpan="2">
 					<ToolBar x:Name="toolBar" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" Band="1" BandIndex="1">
 						<Button Content="Gasd"/>
 					</ToolBar>
 				</ToolBarTray>
 			</Grid>
-			
+
 			<StatusBar DockPanel.Dock="Bottom" Height="25" Background="#FF4F4F4F">
 				<ProgressBar VerticalAlignment="Top" Width="100" Value="50" Height="15" Background="#FF747474">
 					<ProgressBar.Foreground>

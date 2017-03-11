@@ -51,6 +51,10 @@ void Game::init() {
 
 	player = new GameObject();
 
+	if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
+		core->startEditor();
+	}
+
 	//@Temporary
 	shObj = core->getShaderObject();
 	textShObj = core->getTextShaderObject();
