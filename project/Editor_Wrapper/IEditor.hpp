@@ -7,12 +7,18 @@
 #define EDITOR_API _declspec(dllimport)
 #endif
 
+#include "../GameProject/IExtension.hpp"
+
+#define SAVECALLBACK 0x00000001
+
 class IEditor {
 
 public:
 
 	virtual bool initializeEditor() = 0;
 	virtual void releaseEditor() = 0;
+
+	virtual void registerExtension(int callbackIndex, IExtension* ext) = 0;
 
 	virtual void detach() = 0;
 	virtual void attach() = 0;

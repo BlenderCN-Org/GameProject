@@ -16,9 +16,11 @@ struct MasterFileHeader {
 	uint32_t entries;
 };
 
+
 class MasterFile
 {
-	
+	friend class MasterFileExtension;
+
 public:
 	MasterFile();
 	~MasterFile();
@@ -27,6 +29,7 @@ public:
 
 private:
 
+	const char* fileName;
 	std::ifstream masterFileHandle;
 
 

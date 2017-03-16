@@ -58,6 +58,9 @@
     <Filter Include="Resource Files\Blender Plugin">
       <UniqueIdentifier>{789ea372-928d-4380-868d-d4a6fdd2cfe0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Extensions">
+      <UniqueIdentifier>{c7156fc7-d3c2-48b5-b3bc-485b719b9ed4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -137,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="Core\Assets\MasterFile.cpp">
       <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Extensions\MasterFileExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="Core\Assets\MasterFile.hpp">
       <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\MasterFileExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="IExtension.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

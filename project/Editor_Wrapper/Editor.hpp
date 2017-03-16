@@ -14,6 +14,7 @@ namespace Editor_clr {
 	public:
 		void* windowPtr = nullptr;
 		void OnClosing(System::Object ^sender, System::ComponentModel::CancelEventArgs ^e);
+
 	};
 
 	class Editor_wrp : public IEditor {
@@ -23,6 +24,8 @@ namespace Editor_clr {
 		virtual bool initializeEditor();
 		virtual void releaseEditor();
 
+		virtual void registerExtension(int callbackIndex, IExtension* ext);
+
 		virtual void detach();
 		virtual void attach();
 
@@ -31,8 +34,6 @@ namespace Editor_clr {
 		virtual void poll();
 
 		virtual void setGameWindow(void* windowPtr);
-
-		void OnClosing(System::Object ^sender, System::ComponentModel::CancelEventArgs ^e);
 
 	private:
 

@@ -10,7 +10,7 @@ namespace Editor
 	public partial class MainWindow : Window
 	{
 		public GameWindowHolder gwh = null;
-
+		
 		private TextEditor textEdit = null;
 		private GameSettings gameSettings = null;
 
@@ -121,14 +121,20 @@ namespace Editor
 			gameSettings.Focus();
 		}
 
-		private void SaveCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+		private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			Console.Write("Foobar\n");
+			EventHandler.SaveEventArgs sav = new EventHandler.SaveEventArgs();
+			sav.FileName = "Foobar";
+			sav.PackData = false;
+			EventHandler.EventManager.OnSaveEvent(sav);
 		}
 
 		private void SaveAndPack_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			Console.Write("barfoo\n");
+			EventHandler.SaveEventArgs sav = new EventHandler.SaveEventArgs();
+			sav.FileName = "Foobar";
+			sav.PackData = true;
+			EventHandler.EventManager.OnSaveEvent(sav);
 		}
 	}
 
@@ -144,8 +150,7 @@ namespace Editor
 										new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift)
 						}
 				);
-
-		//Define more commands here, just like the one above
+		
 	}
 
 }

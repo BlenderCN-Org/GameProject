@@ -219,12 +219,11 @@ void Core::update(float dt) {
 	mem.getFrameAllocator()->reset();
 	// reset input states, clear for next frame
 	input->reset();
+	window->pollMessages();
 	if ( editor && editor->isRunning() ) {
 		editor->poll();
 	}
-
 	// poll messages and update camera
-	window->pollMessages();
 	running = window->isVisible();
 
 	// window size change event

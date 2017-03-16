@@ -80,6 +80,7 @@
     <Compile Include="CloseEditorMessageBox.Designer.cs">
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="EventHandler\EventManager.cs" />
     <Compile Include="GameSettings.xaml.cs">
       <DependentUpon>GameSettings.xaml</DependentUpon>
     </Compile>

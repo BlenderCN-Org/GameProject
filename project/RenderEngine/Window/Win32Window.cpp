@@ -266,12 +266,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				wnd->focusCallback(wnd, false);
 			return 1;
 			break;
-		
+
 		case RESTORE_FROM_EDIT: {
+			wnd->setWindowBorderless(false);
 			SetParent(hWnd, NULL);
 			break;
 		}
-		
+
 		case WM_SIZE:
 		{
 			if ( wnd ) {
@@ -285,6 +286,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			}
 			printf("Resize\n");
 		}
+
 		break;
 		case WM_CLOSE:
 			break;
@@ -755,7 +757,7 @@ void VKWindow::swapBuffers() {
 
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
 			vkEndCommandBuffer(presentBuffers[i]);
-		}
+}
 	}
 }
 
