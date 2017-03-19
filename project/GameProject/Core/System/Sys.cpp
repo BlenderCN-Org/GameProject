@@ -5,6 +5,7 @@
 
 // std includes
 
+#include <fstream>
 #include <thread>
 
 // os-specific includes
@@ -22,6 +23,9 @@ PDH_HCOUNTER* cpuCore;
 #endif
 
 void initSys() {
+
+	srand(time(nullptr));
+
 	cpuCore = new PDH_HCOUNTER[getLogicalProcessorCount()];
 
 	PdhOpenQuery(NULL, NULL, &cpuQuery);
@@ -58,6 +62,12 @@ int getLogicalProcessorCount() {
 
 void pollCpuUsage() {
 	PdhCollectQueryData(cpuQuery);
+}
+
+bool fileExists(const char * fileName)
+{
+	std::ifstream infile(fileName);
+	return infile.good();
 }
 
 int getCoreUsage(int coreIndex = -1) {

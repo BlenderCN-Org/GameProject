@@ -12,7 +12,6 @@ public:
 	virtual void execute(int nrArgs, void** args);
 
 private:
-	MasterFile masterFile;
 
 };
 

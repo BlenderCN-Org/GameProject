@@ -16,6 +16,8 @@ void initSys();
 void deinitSys();
 void pollCpuUsage();
 
+bool fileExists(const char* fileName);
+
 int getLogicalProcessorCount();
 
 int getCoreUsage(int coreIndex);

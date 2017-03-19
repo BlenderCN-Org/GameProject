@@ -7,7 +7,7 @@ MasterFile::~MasterFile() {}
 bool MasterFile::loadMaster(const char * masterFileName) {
 
 	bool status = true;
-
+	fileName = masterFileName;
 	masterFileHandle.open(masterFileName);
 	status = masterFileHandle.is_open();
 
