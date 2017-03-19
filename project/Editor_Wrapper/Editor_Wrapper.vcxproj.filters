@@ -24,11 +24,11 @@
     <ClInclude Include="Editor.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CoreInclude.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window\MainWindowWrapper.hpp">
       <Filter>Source Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreInclude.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -183,6 +183,7 @@
     <ClCompile Include="Core\Assets\MasterFile.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
+    <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
     <ClCompile Include="Core\Extensions\MasterFileExtension.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Core\Assets\MeshAsset.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
+    <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
     <ClInclude Include="Core\Extensions\MasterFileExtension.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />

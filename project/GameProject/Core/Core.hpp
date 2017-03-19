@@ -15,6 +15,7 @@
 //#include "System\Console.hpp"
 
 #include <Editor_Wrapper\IEditor.hpp>
+#include "Extensions\ExtensionHandler.hpp"
 
 class Core
 {
@@ -79,6 +80,8 @@ private:
 	DisplaySettings disp;
 
 	ThreadManager* thrdMgr;
+
+	ExtensionHandler* extHandler = nullptr;
 
 	// temp
 	IShaderObject* shaderObj;

@@ -144,6 +144,9 @@
     <ClCompile Include="Core\Extensions\MasterFileExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Extensions\ExtensionHandler.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="IExtension.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\ExtensionHandler.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

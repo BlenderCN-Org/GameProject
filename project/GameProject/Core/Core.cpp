@@ -60,6 +60,10 @@ void Core::init() {
 
 	editor = eProc();
 
+	extHandler = new ExtensionHandler();
+
+	extHandler->loadExtensions(editor);
+
 	disp.setResolution(1280, 720);
 	width = 720;
 	heigth = 1080;
@@ -139,6 +143,8 @@ void Core::init() {
 
 void Core::freeResources() {
 	// @Temporary
+	extHandler->unloadExtension(editor);
+	delete extHandler;
 	editor->releaseEditor();
 	delete text;
 

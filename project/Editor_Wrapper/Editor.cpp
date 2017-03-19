@@ -36,7 +36,7 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::registerExtension(int callbackIndex, IExtension * ext) {
-
+		extensionMap[callbackIndex] = ext;
 	}
 
 	void Editor_wrp::detach() {
