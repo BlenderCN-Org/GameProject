@@ -11,8 +11,8 @@ namespace Editor
 	{
 		public GameWindowHolder gwh = null;
 		
-		private TextEditor textEdit = null;
-		private GameSettings gameSettings = null;
+		private EditorWindows.TextEditor textEdit = null;
+		private EditorWindows.GameSettings gameSettings = null;
 
 		public MainWindow()
 		{
@@ -105,7 +105,7 @@ namespace Editor
 		{
 			if (textEdit == null)
 			{
-				textEdit = new TextEditor();
+				textEdit = new EditorWindows.TextEditor();
 			}
 			textEdit.Show();
 			textEdit.Focus();
@@ -115,7 +115,7 @@ namespace Editor
 		{
 			if (gameSettings == null)
 			{
-				gameSettings = new GameSettings();
+				gameSettings = new EditorWindows.GameSettings();
 			}
 			gameSettings.Show();
 			gameSettings.Focus();

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Editor
+namespace Editor.EditorWindows
 {
 	/// <summary>
 	/// Interaction logic for TextEditor.xaml

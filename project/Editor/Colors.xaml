@@ -9,5 +9,6 @@
 	<SolidColorBrush x:Key="DarkBorderBrush" Color="#FF171B29"/>
 	<SolidColorBrush x:Key="DarkStaticBorderBrush" Color="#FF363D55"/>
 	<SolidColorBrush x:Key="DarkScrollbarThumbBrush" Color="#FF151515"/>
+    <SolidColorBrush x:Key="DarkMouseOverBrush" Color="#FF48516E"/>
 
 </ResourceDictionary>

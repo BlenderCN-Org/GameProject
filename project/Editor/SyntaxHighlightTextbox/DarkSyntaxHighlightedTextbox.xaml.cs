@@ -15,7 +15,6 @@ namespace Editor
 	public partial class DarkSyntaxHighlightedTextbox : TextBox
 	{
 
-
 		private SyntaxHighlightTextbox.DrawControl linenumberContext;
 		private SyntaxHighlightTextbox.DrawControl renderContext;
 
@@ -67,7 +66,7 @@ namespace Editor
 			if (it.Current == null)
 				return;
 
-			Console.WriteLine("{0}, {1}, {2}", it.Current.AddedLength, it.Current.Offset, it.Current.RemovedLength);
+			//Console.WriteLine("{0}, {1}, {2}", it.Current.AddedLength, it.Current.Offset, it.Current.RemovedLength);
 
 			InvalidateMeasure();
 			UpdateLayout();

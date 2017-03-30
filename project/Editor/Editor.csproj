@@ -80,8 +80,11 @@
     <Compile Include="CloseEditorMessageBox.Designer.cs">
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindows\SelectWindow_dropDown.xaml.cs">
+      <DependentUpon>SelectWindow_dropDown.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventHandler\EventManager.cs" />
-    <Compile Include="GameSettings.xaml.cs">
+    <Compile Include="EditorWindows\GameSettings.xaml.cs">
       <DependentUpon>GameSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="SyntaxHighlightTextbox\DarkSyntaxHighlightedTextbox.xaml.cs">
@@ -94,10 +97,14 @@
       <DependentUpon>GameWindowHolder.cs</DependentUpon>
     </Compile>
     <Compile Include="SyntaxHighlightTextbox\DrawControl.cs" />
-    <Compile Include="TextEditor.xaml.cs">
+    <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
     <Page Include="Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DarkComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -109,7 +116,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GameSettings.xaml">
+    <Page Include="DarkTabItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditorWindows\GameSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\SelectWindow_dropDown.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -132,7 +147,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TextEditor.xaml">
+    <Page Include="EditorWindows\TextEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,6 +185,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

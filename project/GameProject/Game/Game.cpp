@@ -51,9 +51,12 @@ void Game::init() {
 
 	player = new GameObject();
 
-	if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
-		core->startEditor();
+	if (!AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst")) {
+		core->getConsole()->print("Could not load masterfile\n");
 	}
+	//if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
+		core->startEditor();
+	//}
 
 	//@Temporary
 	shObj = core->getShaderObject();

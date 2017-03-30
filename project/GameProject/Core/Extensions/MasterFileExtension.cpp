@@ -8,7 +8,6 @@ void MasterFileExtension::saveMasterFile() {
 
 	MasterFile* mstFile = &AssetManager::getAssetManager()->masterFile;
 
-
 	const char* fileName = mstFile->fileName;
 	std::string tempName = std::string(fileName) + std::to_string((rand() * rand()));
 
