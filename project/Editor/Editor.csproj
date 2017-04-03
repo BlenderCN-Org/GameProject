@@ -61,6 +61,7 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -79,6 +80,29 @@
     </Compile>
     <Compile Include="CloseEditorMessageBox.Designer.cs">
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSources\SceneData.cs" />
+    <Compile Include="EditorWindows\AddItemDialog.xaml.cs">
+      <DependentUpon>AddItemDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
+      <DependentUpon>AddScene.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\ConfirmDialog.xaml.cs">
+      <DependentUpon>ConfirmDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\Controls\AdornerControls\AdornerCenterControl.xaml.cs">
+      <DependentUpon>AdornerCenterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\Controls\AdornerControls\DropAdorner.cs" />
+    <Compile Include="EditorWindows\Controls\DockGrid.xaml.cs">
+      <DependentUpon>DockGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\Controls\ObjectList.xaml.cs">
+      <DependentUpon>ObjectList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\DragWindow.xaml.cs">
+      <DependentUpon>DragWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\SelectWindow_dropDown.xaml.cs">
       <DependentUpon>SelectWindow_dropDown.xaml</DependentUpon>
@@ -100,25 +124,53 @@
     <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
-    <Page Include="Colors.xaml">
+    <Page Include="EditorWindows\Controls\AdornerControls\AdornerCenterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DarkComboBox.xaml">
+    <Page Include="EditorWindows\Controls\DockGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DarkMenuItem.xaml">
+    <Page Include="EditorWindows\Controls\ObjectList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DarkRichTextBoxRes.xaml">
+    <Page Include="EditorWindows\DragWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DarkTabItem.xaml">
+    <Page Include="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DarkComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DarkMenuItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DarkRichTextBoxRes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DarkTabItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditorWindows\AddItemDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddScene.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\ConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\GameSettings.xaml">
       <SubType>Designer</SubType>
@@ -128,11 +180,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\DarkButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SyntaxHighlightTextbox\DarkSyntaxHighlightedTextbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DictRes.xaml">
+    <Page Include="Styles\DictRes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,9 +196,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="DarkMenuItem.xaml.cs">
-      <DependentUpon>DarkMenuItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

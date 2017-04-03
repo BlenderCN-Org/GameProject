@@ -1,49 +1,50 @@
-﻿<Window x:Class="Editor.EditorWindows.TextEditor"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor"		
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Editor.EditorWindows.TextEditor"		
         mc:Ignorable="d"
-        Title="TextEditor" Height="900" Width="1200" Background="{DynamicResource DarkBackground}" Closing="TextEditor_closing">
+        Title="TextEditor" Height="900" Width="1200" Background="{DynamicResource DarkBackground}" Closing="TextEditor_closing" WindowStartupLocation="CenterOwner">
 
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../dictRes.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</Window.Resources>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/DictRes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-	<DockPanel>
-		<Menu DockPanel.Dock="Top" x:Name="menu" Grid.Column="1" Height="21" Margin="0" VerticalAlignment="Top" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" Background="{DynamicResource DarkBackground}" Foreground="{DynamicResource DarkForeground}">
-			<local:DarkMenuItem Header="_File">
-			</local:DarkMenuItem>
-			<local:DarkMenuItem Header="_Edit">
-				<local:DarkMenuItem Command="Copy"/>
-				<local:DarkMenuItem Command="Cut"/>
-				<local:DarkMenuItem Command="Paste"/>
-			</local:DarkMenuItem>
-			<local:DarkMenuItem Header="_Settings">
-			</local:DarkMenuItem>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" x:Name="menu" Grid.Column="1" Height="21" Margin="0" VerticalAlignment="Top" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" Background="{DynamicResource DarkBackground}" Foreground="{DynamicResource DarkForeground}">
+            <MenuItem Header="_File" Style="{DynamicResource MenuItemStyle1}"/>
+            <MenuItem Header="_Edit" Style="{DynamicResource MenuItemStyle1}">
+                <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}"/>
+                <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}"/>
+                <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}"/>
+            </MenuItem>
+            <MenuItem Header="_Settings" Style="{DynamicResource MenuItemStyle1}">
+                <MenuItem x:Name="HexToggle" Header="ToggleHexView" IsCheckable="True" Style="{DynamicResource MenuItemStyle1}"/>
+            </MenuItem>
 
-		</Menu>
+        </Menu>
 
-		<Grid Background="{DynamicResource DarkBackground}">
-			<!--<Grid.ColumnDefinitions>
+        <Grid x:Name="Grid" Background="{DynamicResource DarkBackground}">
+            <!--<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"/>
 				<ColumnDefinition Width="1*"/>
 			</Grid.ColumnDefinitions>-->
-			<local:DarkSyntaxHighlightedTextbox x:Name="TextBox" TextWrapping="NoWrap" AcceptsTab="True" AcceptsReturn="True" Margin="10,10,10,10" Style="{DynamicResource DarkTextBox}" >
-				<local:DarkSyntaxHighlightedTextbox.ContextMenu>
-					<ContextMenu Style="{DynamicResource DarkContextMenuStyle}">
-						<local:DarkMenuItem Command="Copy"/>
-						<local:DarkMenuItem Command="Cut"/>
-						<local:DarkMenuItem Command="Paste"/>
-					</ContextMenu>
-				</local:DarkSyntaxHighlightedTextbox.ContextMenu>
-			</local:DarkSyntaxHighlightedTextbox>
-		</Grid>
-	</DockPanel>
+            <local:DarkSyntaxHighlightedTextbox x:Name="TextBox" TextWrapping="NoWrap" AcceptsTab="True" AcceptsReturn="True" Margin="10,10,10,10" Style="{DynamicResource DarkTextBox}" >
+                <local:DarkSyntaxHighlightedTextbox.ContextMenu>
+                    <ContextMenu Style="{DynamicResource DarkContextMenuStyle}">
+                        <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}"/>
+                        <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}"/>
+                        <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}"/>
+                    </ContextMenu>
+                </local:DarkSyntaxHighlightedTextbox.ContextMenu>
+            </local:DarkSyntaxHighlightedTextbox>
+        </Grid>
+    </DockPanel>
 
 </Window>

@@ -173,5 +173,5 @@ void Font_gl::genFontTexture() {
 //	out.write(data, w*h);
 //	out.close();
 
-	delete data;
+	delete [] data;
 }

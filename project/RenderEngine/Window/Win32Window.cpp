@@ -75,7 +75,7 @@ BOOL characterCallback(BaseWindow* wnd, UINT msg, WPARAM wParam) {
 }
 
 void inputCallback(BaseWindow* wnd, LPARAM lParam) {
-	UINT dwSize;
+	UINT dwSize = 0;
 
 	GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
 					sizeof(RAWINPUTHEADER));

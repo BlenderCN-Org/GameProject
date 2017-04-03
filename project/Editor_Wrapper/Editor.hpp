@@ -24,7 +24,7 @@ namespace Editor_clr {
 		virtual bool initializeEditor();
 		virtual void releaseEditor();
 
-		virtual void registerExtension(int callbackIndex, IExtension* ext);
+		virtual void registerExtension(int callbackIndex, IExtension<void>* ext);
 
 		virtual void detach();
 		virtual void attach();

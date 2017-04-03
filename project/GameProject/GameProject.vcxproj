@@ -185,6 +185,7 @@
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
     <ClCompile Include="Core\Extensions\MasterFileExtension.cpp" />
+    <ClCompile Include="Core\Extensions\QueryDataExtension.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\Memory\MemoryBuffer.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
     <ClInclude Include="Core\Extensions\MasterFileExtension.hpp" />
+    <ClInclude Include="Core\Extensions\QueryDataExtension.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
     <ClInclude Include="Core\Memory\Heap.hpp" />

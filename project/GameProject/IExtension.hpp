@@ -1,9 +1,21 @@
 #ifndef IEXTENSION_HPP
 #define IEXTENSION_HPP
 
+struct ExtensionSaveEvent {
+	char* fileName;
+	bool pack;
+};
+
+struct ExtensionQueryDataEvent {
+	int objectType;
+	int nrObjects;
+	void* objectList;
+};
+
+template<typename T>
 class IExtension {
 public:
-	virtual void execute(int argv, void** argc) = 0;
+	virtual void execute(int nrArgs, T* arg) = 0;
 };
 
 #endif

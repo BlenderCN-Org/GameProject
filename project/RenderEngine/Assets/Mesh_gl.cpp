@@ -46,7 +46,7 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		meshPrimitive = GL_QUADS;
 
 	dataLayout = layout;
-	if ( layout = VERT_UV ) {
+	if ( layout == VERT_UV ) {
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -84,7 +84,7 @@ void * Mesh_gl::map(size_t & dataSize) {
 	void* dataPtr = nullptr;
 
 	if ( !isMapped ) {
-		if ( dataLayout = VERT_UV ) {
+		if ( dataLayout == VERT_UV ) {
 			dataSize = vertexCount * sizeof(Vertex5);
 		}
 

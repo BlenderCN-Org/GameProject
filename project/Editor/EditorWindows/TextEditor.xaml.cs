@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.ComponentModel.Design;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace Editor.EditorWindows
 {
@@ -7,9 +10,10 @@ namespace Editor.EditorWindows
 	/// </summary>
 	public partial class TextEditor : Window
 	{
-		public TextEditor()
+        public TextEditor()
 		{
-			InitializeComponent();
+            InitializeComponent();
+
 		}
 
 		private void TextEditor_closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -17,5 +21,5 @@ namespace Editor.EditorWindows
 			e.Cancel = true;
 			Hide();
 		}
-	}
+    }
 }

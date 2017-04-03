@@ -197,7 +197,7 @@ void Texture_gl::bind() {
 		update = false;
 		compressChange = false;
 	} else if ( compressChange ) {
-		int format;
+		int format = 0;
 		switch ( components ) {
 			case 1:
 				format = GL_RED;

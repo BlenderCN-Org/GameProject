@@ -5,11 +5,11 @@
 #include "../Assets/MasterFile.hpp"
 
 
-class MasterFileExtension : public IExtension {
+class MasterFileExtension : public IExtension<ExtensionSaveEvent> {
 
 public:
 	void saveMasterFile();
-	virtual void execute(int nrArgs, void** args);
+	virtual void execute(int nrArgs, ExtensionSaveEvent* args);
 
 private:
 

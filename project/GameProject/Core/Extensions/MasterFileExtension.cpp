@@ -45,7 +45,7 @@ void MasterFileExtension::saveMasterFile() {
 
 }
 
-void MasterFileExtension::execute(int nrArgs, void ** args)
+void MasterFileExtension::execute(int nrArgs, ExtensionSaveEvent* args)
 {
 	printf("MasterFileExtension -> Execute!\n");
 	saveMasterFile();

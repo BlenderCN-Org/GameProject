@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace Editor
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, IDisposable
 	{
 		public GameWindowHolder gwh = null;
 		
@@ -20,8 +23,11 @@ namespace Editor
 			gwh = new GameWindowHolder();
 			gwh.TopLevel = false;
 
-			// Create the interop host control.
-			System.Windows.Forms.Integration.WindowsFormsHost host =
+            new EditorWindows.DragWindow().Show();
+            new EditorWindows.DragWindow().Show();
+
+            // Create the interop host control.
+            System.Windows.Forms.Integration.WindowsFormsHost host =
 				new System.Windows.Forms.Integration.WindowsFormsHost();
 
 			// Create the MaskedTextBox control.
@@ -106,6 +112,7 @@ namespace Editor
 			if (textEdit == null)
 			{
 				textEdit = new EditorWindows.TextEditor();
+                textEdit.Owner = this;
 			}
 			textEdit.Show();
 			textEdit.Focus();
@@ -116,7 +123,8 @@ namespace Editor
 			if (gameSettings == null)
 			{
 				gameSettings = new EditorWindows.GameSettings();
-			}
+                gameSettings.Owner = this;
+            }
 			gameSettings.Show();
 			gameSettings.Focus();
 		}
@@ -136,7 +144,53 @@ namespace Editor
 			sav.PackData = true;
 			EventHandler.EventManager.OnSaveEvent(sav);
 		}
-	}
+
+        protected virtual void Dispose(bool managed)
+        {
+            gwh.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem =
+                      VisualUpwardSearch<TreeViewItem>(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                treeViewItem.IsSelected = true;
+                e.Handled = true;
+            }
+            
+        }
+
+        static T VisualUpwardSearch<T>(DependencyObject source) where T : DependencyObject
+        {
+            DependencyObject returnVal = source;
+
+            while (returnVal != null && !(returnVal is T))
+            {
+                DependencyObject tempReturnVal = null;
+                if (returnVal is Visual || returnVal is Visual3D)
+                {
+                    tempReturnVal = VisualTreeHelper.GetParent(returnVal);
+                }
+                if (tempReturnVal == null)
+                {
+                    returnVal = LogicalTreeHelper.GetParent(returnVal);
+                }
+                else returnVal = tempReturnVal;
+            }
+
+            return returnVal as T;
+        }
+
+    }
 
 	public static class MainWindowCommands
 	{

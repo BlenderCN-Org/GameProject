@@ -27,6 +27,7 @@ MainWindowWrapper::MainWindowWrapper() {
 }
 
 MainWindowWrapper::~MainWindowWrapper() {
+	mre->Close();
 	window->Close();
 	thrd->Abort();
 }

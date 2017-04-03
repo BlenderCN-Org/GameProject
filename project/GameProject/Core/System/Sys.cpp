@@ -24,7 +24,7 @@ PDH_HCOUNTER* cpuCore;
 
 void initSys() {
 
-	srand(time(nullptr));
+	srand((unsigned int)time(nullptr));
 
 	cpuCore = new PDH_HCOUNTER[getLogicalProcessorCount()];
 

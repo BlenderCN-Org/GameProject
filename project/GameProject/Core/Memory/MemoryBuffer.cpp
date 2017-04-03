@@ -16,7 +16,9 @@ void MemoryBuffer::setData(void * data, uint32_t dataSize) {
 		throw "Data cannot be null\n";
 
 	memoryData = malloc(dataSize);
-	memcpy(memoryData, data, dataSize);
+	if (memoryData != NULL) {
+		memcpy(memoryData, data, dataSize);
+	}
 
 	totalDataSize = dataSize;
 	offset = 0;

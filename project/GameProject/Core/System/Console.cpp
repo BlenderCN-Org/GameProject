@@ -180,7 +180,7 @@ std::string Console::getHistory() {
 }
 
 int Console::getHistroryCount() {
-	return historyBuffer.size();
+	return (int)historyBuffer.size();
 }
 
 void Console::addToHistory(std::string h) {

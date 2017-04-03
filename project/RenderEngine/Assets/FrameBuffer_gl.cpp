@@ -78,7 +78,7 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 
 	glDrawBuffers(colorAttachmentCount, drawBuffers);
 
-	delete drawBuffers;
+	delete [] drawBuffers;
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
@@ -103,7 +103,7 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 				glDeleteTextures(1, &depthAttachment);
 			}
 		}
-		delete colorAttachments;
+		delete [] colorAttachments;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

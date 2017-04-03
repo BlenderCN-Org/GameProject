@@ -14,31 +14,42 @@ using System.Windows.Shapes;
 
 namespace Editor.EditorWindows
 {
-	/// <summary>
-	/// Interaction logic for GameSettings.xaml
-	/// </summary>
-	public partial class GameSettings : Window
-	{
-		public GameSettings()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Interaction logic for GameSettings.xaml
+    /// </summary>
+    public partial class GameSettings : Window
+    {
+        public GameSettings()
+        {
+            InitializeComponent();
 
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			e.Cancel = true;
-			Hide();
-		}
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
 
         private void StartupScriptSelect_Click(object sender, RoutedEventArgs e)
         {
             SelectWindow_dropDown wnd = new SelectWindow_dropDown();
             wnd.Owner = this;
             wnd.Title = "Select Starup Script";
-            wnd.SelectedValue.Items.Add("Script");
+
+            EventHandler.QueryDataArgs args = new EventHandler.QueryDataArgs();
+            args.ObjectType = Editor.EventHandler.ObjectTypes.SCRIPT;
+            args.returnList = new List<object>();
+            EventHandler.EventManager.OnQueryDataEvent(args);
+
+            foreach (var item in args.returnList)
+            {
+                wnd.SelectedValue.Items.Add(item);
+            }
+
             wnd.ShowDialog();
 
-            if(wnd.DialogResult.HasValue && wnd.DialogResult.Value)
+            if (wnd.DialogResult.HasValue && wnd.DialogResult.Value && wnd.SelectedValue.SelectedValue != null)
             {
                 StartupScriptBox.Text = wnd.SelectedValue.SelectedValue.ToString();
             }
@@ -53,10 +64,68 @@ namespace Editor.EditorWindows
             wnd.SelectedValue.Items.Add("Scene");
             wnd.ShowDialog();
 
-            if (wnd.DialogResult.HasValue && wnd.DialogResult.Value)
+            if (wnd.DialogResult.HasValue && wnd.DialogResult.Value && wnd.SelectedValue.SelectedValue != null)
             {
                 MainMenuSceneBox.Text = wnd.SelectedValue.SelectedValue.ToString();
             }
+        }
+
+        private void Grid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (SceneTab.IsVisible)
+            {
+                sceneList.Items.Clear();
+
+                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+
+                args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+                args.returnList = new List<object>();
+                EventHandler.EventManager.OnQueryDataEvent(args);
+
+                foreach (var item in args.returnList)
+                {
+                    sceneList.Items.Add(item);
+                }
+            }
+        }
+
+        private void deleteSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmDialog cfDlg = new ConfirmDialog();
+            cfDlg.Owner = this;
+            cfDlg.ShowDialog();
+
+            if(cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
+            {
+                Console.WriteLine("Delete selected item");
+            }
+            else
+            {
+                Console.WriteLine("Abort delete");
+            }
+
+        }
+
+        private void addSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddItemDialog addDlg = new AddItemDialog();
+
+            addDlg.Owner = this;
+
+            AddItemDlgPages.AddScene newScenePage = new AddItemDlgPages.AddScene();
+            
+            addDlg.PageArea.Children.Add(newScenePage);
+
+            addDlg.PageArea.Height = newScenePage.Height;
+            addDlg.PageArea.Width = newScenePage.Width;
+
+            addDlg.InvalidateMeasure();
+            addDlg.InvalidateArrange();
+
+            addDlg.ShowDialog();
+
+
+
         }
     }
 }

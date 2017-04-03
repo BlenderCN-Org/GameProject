@@ -7,7 +7,7 @@
 
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="DarkRichTextBoxRes.xaml"/>
+                <ResourceDictionary Source="Styles/DictRes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 

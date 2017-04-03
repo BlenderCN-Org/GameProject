@@ -7,13 +7,15 @@
 namespace Editor_clr {
 
 	static void OnSaveEvent(System::Object^ sender, Editor::EventHandler::SaveEventArgs^ saveArgs);
-	std::map<int, IExtension*> extensionMap;
+	static void OnQueryEvent(System::Object^ sender, Editor::EventHandler::QueryDataArgs^ queryArgs);
+
+	std::map<int, IExtension<void>*> extensionMap;
 
 	bool Editor_wrp::initializeEditor() {
 
 		bool success = false;
 
-		if ( !initialized ) {
+		if (!initialized) {
 			initialized = true;
 			printf("Editor initialize\n");
 
@@ -35,7 +37,7 @@ namespace Editor_clr {
 		delete this;
 	}
 
-	void Editor_wrp::registerExtension(int callbackIndex, IExtension * ext) {
+	void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
 		extensionMap[callbackIndex] = ext;
 	}
 
@@ -54,7 +56,7 @@ namespace Editor_clr {
 		// it needs to be initialized to be runnning, so that is a good start :)
 		bool running = initialized;
 
-		if ( wrapper.operator MainWindowWrapper ^ () == nullptr || wrapper->window == nullptr ) {
+		if (wrapper.operator MainWindowWrapper ^ () == nullptr || wrapper->window == nullptr) {
 			running = false;
 		}
 
@@ -62,7 +64,7 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::poll() {
-		if ( wrapper->window->WasResized() ) {
+		if (wrapper->window->WasResized()) {
 			System::Windows::Size s = wrapper->window->getGameWindowSize();
 			SendMessage((HWND)eventWrapper->windowPtr, WM_SIZE, SIZE_RESTORED, MAKELPARAM(s.Width, s.Height));
 		}
@@ -76,6 +78,7 @@ namespace Editor_clr {
 		eventWrapper->windowPtr = windowPtr;
 		wrapper->window->Closing += gcnew System::ComponentModel::CancelEventHandler(eventWrapper, &EventWrapper::OnClosing);
 		Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&OnSaveEvent);
+		Editor::EventHandler::EventManager::onQueryDataEvent += gcnew System::EventHandler<Editor::EventHandler::QueryDataArgs^>(&OnQueryEvent);
 
 		SetParent((HWND)windowPtr, editor);
 		SetWindowPos((HWND)windowPtr, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -91,9 +94,9 @@ namespace Editor_clr {
 
 		System::Windows::Forms::DialogResult dlr = mb.ShowDialog();
 
-		if ( dlr == System::Windows::Forms::DialogResult::Yes ) {
+		if (dlr == System::Windows::Forms::DialogResult::Yes) {
 			SendMessage((HWND)windowPtr, WM_USER + 123, 0, 0);
-		} else if ( dlr == System::Windows::Forms::DialogResult::No ) {
+		} else if (dlr == System::Windows::Forms::DialogResult::No) {
 			ShowWindow((HWND)windowPtr, false);
 		} else {
 			e->Cancel = true;
@@ -112,9 +115,57 @@ namespace Editor_clr {
 		Console::Write(": ");
 		Console::WriteLine(saveArgs->PackData);
 
-		if ( extensionMap.count(SAVECALLBACK) >= 1 ) {
-			extensionMap[SAVECALLBACK]->execute(0, nullptr);
+		ExtensionSaveEvent extSave;
+		extSave.fileName = "blabla";
+		extSave.pack = saveArgs->PackData;
+		if (extensionMap.count(SAVE_CALLBACK) >= 1 && extensionMap[SAVE_CALLBACK]) {
+			extensionMap[SAVE_CALLBACK]->execute(1, &extSave);
 		}
+	}
+
+	static void OnQueryEvent(System::Object^ sender, Editor::EventHandler::QueryDataArgs^ queryArgs) {
+
+		std::cout << "QueryEvent\n";
+		
+		if (extensionMap.count(GET_OBJECTS_CALLBACK) >= 1 && extensionMap[GET_OBJECTS_CALLBACK]) {
+			int type = 0;
+			if (queryArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCRIPT) {
+				type = OBJECT_TYPE_SCRIPT;
+			}
+
+			if (queryArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCENE) {
+				queryArgs->returnList->Add(gcnew Editor::DataSources::SceneData("Test", "Test"));
+				return;
+			}
+
+			if (type != 0) {
+
+				ExtensionQueryDataEvent query;
+
+				query.objectType = type;
+				query.nrObjects = 0;
+				query.objectList = nullptr;
+
+				extensionMap[GET_OBJECTS_CALLBACK]->execute(1, &query);
+
+				query.objectList = new char*[query.nrObjects];
+
+				extensionMap[GET_OBJECTS_CALLBACK]->execute(1, &query);
+
+				char** charArray = (char**)query.objectList;
+
+				for (int i = 0; i < query.nrObjects; i++) {
+
+					char* item = ((char**)query.objectList)[i];
+
+					System::String^ str = gcnew System::String(item);
+					queryArgs->returnList->Add(str);
+				}
+
+				delete[] query.objectList;
+			}
+		}
+
 	}
 
 }
