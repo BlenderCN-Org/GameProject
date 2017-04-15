@@ -30,6 +30,19 @@ Editor todo:
 	Add panels for scene, object list.
 	Add dialogs for mesh preview, text editor, object properites.
 
+
+	Window notes:
+
+		Drag window with single user stuff dock (dock have border to move window)
+		DragWindow -> grid -> DockPanel (UC) -> User stuff
+
+		Drag window with multiple user stuff dock (window have border for move)
+		DockPanel have no border, DockPanel1 and DockPanel2 have 
+		DragWindow -> grid -> DockPanel (UC) -> DockPanel1 -> User stuff
+											 -> DockPanel2 -> User stuff
+
+		
+
 Game Project todo:
 
 	<D>Have a simple demo world that can be loaded and changed offline

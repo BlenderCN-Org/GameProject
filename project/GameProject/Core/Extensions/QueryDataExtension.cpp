@@ -8,7 +8,7 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 		return;
 	}
 
-	if (args->objectType == OBJECT_TYPE_SCRIPT) {
+	if (args->objectType == OBJECT_TYPE_SCRIPT || args->objectType == OBJECT_TYPE_SCENE) {
 
 		if (args->nrObjects == 0 && args->objectList == nullptr) {
 			args->nrObjects = 2;
@@ -21,4 +21,9 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 		}
 	}
 
+}
+
+IExtension<void>* QueryDataExtension::toExtensionPtr()
+{
+	return (IExtension<void>*)this;
 }

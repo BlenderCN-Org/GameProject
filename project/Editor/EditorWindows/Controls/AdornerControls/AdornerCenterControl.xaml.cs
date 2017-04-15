@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Editor.EditorWindows.Controls.AdornerControls
@@ -25,8 +16,46 @@ namespace Editor.EditorWindows.Controls.AdornerControls
             InitializeComponent();
         }
 
+        public enum dropLocation
+        {
+            none,
+            center,
+            top,
+            bottom,
+            left,
+            right
+        }
+
         Rectangle rect = null;
-        public Rectangle pRect = null;
+
+        public dropLocation GetDrop()
+        {
+
+            if (pRect == center)
+            {
+                return dropLocation.center;
+            }
+            else if (pRect == top)
+            {
+                return dropLocation.top;
+            }
+            else if (pRect == bottom)
+            {
+                return dropLocation.bottom;
+            }
+            else if (pRect == left)
+            {
+                return dropLocation.left;
+            }
+            else if (pRect == right)
+            {
+                return dropLocation.right;
+            }
+
+            return dropLocation.none;
+        }
+
+        Rectangle pRect = null;
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -36,6 +65,7 @@ namespace Editor.EditorWindows.Controls.AdornerControls
             VerticalAlignment va = VerticalAlignment.Stretch;
             HorizontalAlignment ha = HorizontalAlignment.Stretch;
 
+            pRect = sender as Rectangle;
             if (sender as Rectangle == center)
             {
                 w = ActualWidth;
@@ -101,7 +131,7 @@ namespace Editor.EditorWindows.Controls.AdornerControls
 
         private void Rectangle_MouseMove(object sender, MouseEventArgs e)
         {
-            pRect = rect;
+            //pRect = rect;
         }
 
     }

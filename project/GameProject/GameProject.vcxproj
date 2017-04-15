@@ -183,6 +183,7 @@
     <ClCompile Include="Core\Assets\MasterFile.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
+    <ClCompile Include="Core\Extensions\AddDataExtension.cpp" />
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
     <ClCompile Include="Core\Extensions\MasterFileExtension.cpp" />
     <ClCompile Include="Core\Extensions\QueryDataExtension.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Core\Assets\MeshAsset.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
+    <ClInclude Include="Core\Extensions\AddDataExtension.hpp" />
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
     <ClInclude Include="Core\Extensions\MasterFileExtension.hpp" />
     <ClInclude Include="Core\Extensions\QueryDataExtension.hpp" />

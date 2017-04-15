@@ -12,17 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Editor.EventHandler;
 
 namespace Editor.EditorWindows.AddItemDlgPages
 {
     /// <summary>
     /// Interaction logic for AddScene.xaml
     /// </summary>
-    public partial class AddScene : UserControl
+    public partial class AddScene : UserControl, IAddItemBase
     {
         public AddScene()
         {
             InitializeComponent();
+        }
+
+        public ObjectTypes GetAddType()
+        {
+            return ObjectTypes.SCENE;
+        }
+
+        public string GetFormId()
+        {
+            return FormID.Text;
+        }
+
+        public string GetName()
+        {
+            return SceneName.Text;
         }
     }
 }

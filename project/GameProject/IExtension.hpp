@@ -12,10 +12,17 @@ struct ExtensionQueryDataEvent {
 	void* objectList;
 };
 
+struct ExtensionAddItemEvent {
+
+};
+
 template<typename T>
 class IExtension {
 public:
 	virtual void execute(int nrArgs, T* arg) = 0;
+
+	virtual IExtension<void>* toExtensionPtr() = 0;
+
 };
 
 #endif

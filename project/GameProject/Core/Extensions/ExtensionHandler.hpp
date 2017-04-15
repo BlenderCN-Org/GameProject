@@ -3,6 +3,7 @@
 
 #include "MasterFileExtension.hpp"
 #include "QueryDataExtension.hpp"
+#include "AddDataExtension.hpp"
 #include <Editor_Wrapper\IEditor.hpp>
 
 class ExtensionHandler
@@ -14,6 +15,7 @@ public:
 
 	MasterFileExtension* masterFileExtension = nullptr;
 	QueryDataExtension* queryDataExtension = nullptr;
+	AddDataExtension* addDataExtension = nullptr;
 
 private:
 	bool canInitialize = true;

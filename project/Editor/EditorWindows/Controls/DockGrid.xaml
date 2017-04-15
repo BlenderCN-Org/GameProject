@@ -11,9 +11,9 @@
             <RowDefinition x:Name="BorderHeight" Height="20"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="#FF232323" MouseMove="Border_MouseMove"/>
-        <DockPanel Grid.Row="1" x:Name="DockingGrid" Margin="0" Background="Transparent" AllowDrop="True">
+        <Border Grid.Row="0" Background="#FF232323" MouseMove="Border_MouseMove" PreviewMouseDown="Border_PreviewMouseDown"/>
+        <Grid Grid.Row="1" x:Name="DockingGrid" Margin="0" Background="Transparent" AllowDrop="True">
 
-        </DockPanel>
+        </Grid>
     </Grid>
 </UserControl>

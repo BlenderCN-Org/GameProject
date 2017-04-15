@@ -150,6 +150,9 @@
     <ClCompile Include="Core\Extensions\QueryDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Extensions\AddDataExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -261,6 +264,9 @@
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
     <ClInclude Include="Core\Extensions\QueryDataExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\AddDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
   </ItemGroup>

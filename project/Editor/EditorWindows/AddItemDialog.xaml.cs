@@ -23,5 +23,27 @@ namespace Editor.EditorWindows
         {
             InitializeComponent();
         }
+
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+            AddItemDlgPages.IAddItemBase baseType = PageArea.Children.OfType<AddItemDlgPages.IAddItemBase>().First();
+
+            EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
+            {
+                Name = baseType.GetName(),
+                FormID = baseType.GetFormId(),
+                ObjectType = baseType.GetAddType()
+            };
+
+            EventHandler.EventManager.OnAddObjectEvent(args);
+
+            Close();
+
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

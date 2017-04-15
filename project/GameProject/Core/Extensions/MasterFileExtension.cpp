@@ -50,3 +50,8 @@ void MasterFileExtension::execute(int nrArgs, ExtensionSaveEvent* args)
 	printf("MasterFileExtension -> Execute!\n");
 	saveMasterFile();
 }
+
+IExtension<void>* MasterFileExtension::toExtensionPtr()
+{
+	return (IExtension<void>*)this;
+}

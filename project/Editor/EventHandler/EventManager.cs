@@ -18,14 +18,21 @@ namespace Editor.EventHandler
 
     public class SaveEventArgs
 	{
-		public string FileName { get; set; }
 		public bool PackData { get; set; }
 	}
 
     public class QueryDataArgs
     {
         public ObjectTypes ObjectType { get; set; }
-        public List<object> returnList { get; set; }
+        public List<DataSources.BaseData> ReturnList { get; set; }
+    }
+
+    public class AddObjectArgs
+    {
+        public ObjectTypes ObjectType { get; set; }
+        public string Name { get; set; }
+        public string FormID { get; set; }
+        public object Data { get; set; }
     }
 
 	public static class EventManager
@@ -33,6 +40,7 @@ namespace Editor.EventHandler
 
 		public static EventHandler<SaveEventArgs> onSaveEvent;
         public static EventHandler<QueryDataArgs> onQueryDataEvent;
+        public static EventHandler<AddObjectArgs> onAddObjectEvent;
 
 		public static void OnSaveEvent(SaveEventArgs saveArgs)
 		{
@@ -42,6 +50,11 @@ namespace Editor.EventHandler
         public static void OnQueryDataEvent(QueryDataArgs queryArgs)
         {
             onQueryDataEvent?.Invoke(null, queryArgs);
+        }
+
+        public static void OnAddObjectEvent(AddObjectArgs addArgs)
+        {
+            onAddObjectEvent?.Invoke(null, addArgs);
         }
 
 	}

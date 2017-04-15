@@ -11,7 +11,8 @@ public:
 	void saveMasterFile();
 	virtual void execute(int nrArgs, ExtensionSaveEvent* args);
 
-private:
+	// Inherited via IExtension
+	virtual IExtension<void>* toExtensionPtr() override;
 
 };
 

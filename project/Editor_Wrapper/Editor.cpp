@@ -8,6 +8,7 @@ namespace Editor_clr {
 
 	static void OnSaveEvent(System::Object^ sender, Editor::EventHandler::SaveEventArgs^ saveArgs);
 	static void OnQueryEvent(System::Object^ sender, Editor::EventHandler::QueryDataArgs^ queryArgs);
+	static void OnAddEvent(System::Object^ sender, Editor::EventHandler::AddObjectArgs^ addArgs);
 
 	std::map<int, IExtension<void>*> extensionMap;
 
@@ -79,6 +80,7 @@ namespace Editor_clr {
 		wrapper->window->Closing += gcnew System::ComponentModel::CancelEventHandler(eventWrapper, &EventWrapper::OnClosing);
 		Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&OnSaveEvent);
 		Editor::EventHandler::EventManager::onQueryDataEvent += gcnew System::EventHandler<Editor::EventHandler::QueryDataArgs^>(&OnQueryEvent);
+		Editor::EventHandler::EventManager::onAddObjectEvent += gcnew System::EventHandler<Editor::EventHandler::AddObjectArgs^>(&OnAddEvent);
 
 		SetParent((HWND)windowPtr, editor);
 		SetWindowPos((HWND)windowPtr, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -111,7 +113,6 @@ namespace Editor_clr {
 	static void OnSaveEvent(System::Object^ sender, Editor::EventHandler::SaveEventArgs^ saveArgs) {
 
 		std::cout << "SaveEvent\n";
-		Console::Write(saveArgs->FileName);
 		Console::Write(": ");
 		Console::WriteLine(saveArgs->PackData);
 
@@ -128,15 +129,8 @@ namespace Editor_clr {
 		std::cout << "QueryEvent\n";
 		
 		if (extensionMap.count(GET_OBJECTS_CALLBACK) >= 1 && extensionMap[GET_OBJECTS_CALLBACK]) {
-			int type = 0;
-			if (queryArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCRIPT) {
-				type = OBJECT_TYPE_SCRIPT;
-			}
-
-			if (queryArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCENE) {
-				queryArgs->returnList->Add(gcnew Editor::DataSources::SceneData("Test", "Test"));
-				return;
-			}
+			
+			int type = (int)queryArgs->ObjectType;
 
 			if (type != 0) {
 
@@ -159,13 +153,27 @@ namespace Editor_clr {
 					char* item = ((char**)query.objectList)[i];
 
 					System::String^ str = gcnew System::String(item);
-					queryArgs->returnList->Add(str);
+					Editor::DataSources::BaseData^ data = gcnew Editor::DataSources::BaseData();
+					data->Name = str;
+					queryArgs->ReturnList->Add(data);
 				}
 
 				delete[] query.objectList;
 			}
 		}
+	}
 
+	static void OnAddEvent(System::Object^ sender, Editor::EventHandler::AddObjectArgs ^ addArgs)
+	{
+		std::cout << "AddEvent\n";
+
+		if (extensionMap.count(ADD_OBJECT_CALLBACK) >= 1 && extensionMap[ADD_OBJECT_CALLBACK]) {
+
+			int type =(int)addArgs->ObjectType;
+
+			extensionMap[ADD_OBJECT_CALLBACK]->execute(0, nullptr);
+
+		}
 	}
 
 }

@@ -39,10 +39,10 @@ namespace Editor.EditorWindows
 
             EventHandler.QueryDataArgs args = new EventHandler.QueryDataArgs();
             args.ObjectType = Editor.EventHandler.ObjectTypes.SCRIPT;
-            args.returnList = new List<object>();
+            args.ReturnList = new List<DataSources.BaseData>();
             EventHandler.EventManager.OnQueryDataEvent(args);
 
-            foreach (var item in args.returnList)
+            foreach (var item in args.ReturnList)
             {
                 wnd.SelectedValue.Items.Add(item);
             }
@@ -61,7 +61,17 @@ namespace Editor.EditorWindows
             SelectWindow_dropDown wnd = new SelectWindow_dropDown();
             wnd.Owner = this;
             wnd.Title = "Select Main Menu Scene";
-            wnd.SelectedValue.Items.Add("Scene");
+
+            EventHandler.QueryDataArgs args = new EventHandler.QueryDataArgs();
+            args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+            args.ReturnList = new List<DataSources.BaseData>();
+            EventHandler.EventManager.OnQueryDataEvent(args);
+
+            foreach (var item in args.ReturnList)
+            {
+                wnd.SelectedValue.Items.Add(item);
+            }
+
             wnd.ShowDialog();
 
             if (wnd.DialogResult.HasValue && wnd.DialogResult.Value && wnd.SelectedValue.SelectedValue != null)
@@ -79,10 +89,10 @@ namespace Editor.EditorWindows
                 EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
 
                 args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
-                args.returnList = new List<object>();
+                args.ReturnList = new List<DataSources.BaseData>();
                 EventHandler.EventManager.OnQueryDataEvent(args);
 
-                foreach (var item in args.returnList)
+                foreach (var item in args.ReturnList)
                 {
                     sceneList.Items.Add(item);
                 }

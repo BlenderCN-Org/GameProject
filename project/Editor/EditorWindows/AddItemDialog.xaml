@@ -21,8 +21,8 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid x:Name="PageArea" Grid.Row="0" />
-        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="75" IsCancel="True" Grid.Row="1" Margin="0,0,10,5" Template="{DynamicResource ButtonControlTemplate1}"/>
-        <Button x:Name="Create" Content="Create" HorizontalAlignment="Right" Width="75" Grid.Row="1" Margin="0,0,90,5" Template="{DynamicResource ButtonControlTemplate1}"/>
+        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="75" IsCancel="True" Grid.Row="1" Margin="0,0,10,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Cancel_Click"/>
+        <Button x:Name="Create" Content="Create" HorizontalAlignment="Right" Width="75" Grid.Row="1" Margin="0,0,90,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Create_Click"/>
 
     </Grid>
 </Window>

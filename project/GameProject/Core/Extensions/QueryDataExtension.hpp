@@ -12,7 +12,8 @@ public:
 	//template<typename T>
 	virtual void execute(int nrArgs, ExtensionQueryDataEvent* args);
 
-private:
+	// Inherited via IExtension
+	virtual IExtension<void>* toExtensionPtr() override;
 
 };
 

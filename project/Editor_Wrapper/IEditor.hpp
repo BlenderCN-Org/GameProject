@@ -13,6 +13,7 @@
 #define SAVE_CALLBACK              0x00000001
 #define GET_OBJECTS_CALLBACK       0x00000002
 #define SET_SETTINGS_CALLBACK      0x00000003
+#define ADD_OBJECT_CALLBACK		   0x00000004
 
 // Object types
 #define OBJECT_TYPE_STATIC         0x0001
@@ -23,6 +24,7 @@
 #define OBJECT_TYPE_SCRIPT		   0x0020
 #define OBJECT_TYPE_DECAL		   0x0040
 #define OBJECT_TYPE_AUDIO		   0x0080
+#define OBJECT_TYPE_SCENE		   0x0100
 
 class IEditor {
 

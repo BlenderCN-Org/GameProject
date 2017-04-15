@@ -23,8 +23,20 @@ namespace Editor
 			gwh = new GameWindowHolder();
 			gwh.TopLevel = false;
 
-            new EditorWindows.DragWindow().Show();
-            new EditorWindows.DragWindow().Show();
+            EditorWindows.AddItemDialog addDlg = new EditorWindows.AddItemDialog();
+
+            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddStaticObj());
+
+            addDlg.Show();
+
+            //EditorWindows.DragWindow wnd1 = new EditorWindows.DragWindow();
+            //EditorWindows.DragWindow wnd2 = new EditorWindows.DragWindow();
+            //
+            //wnd1.PanelArea.DockingGrid.Children.Add(new EditorWindows.Controls.ObjectList());
+            //wnd2.PanelArea.DockingGrid.Children.Add(new EditorWindows.Controls.ObjectList());
+            //
+            //wnd1.Show();
+            //wnd2.Show();
 
             // Create the interop host control.
             System.Windows.Forms.Integration.WindowsFormsHost host =
@@ -38,6 +50,7 @@ namespace Editor
 			// Add the interop host control to the Grid
 			// control's collection of child controls.
 			this.GameWindowGrid.Children.Add(host);
+            Grid.SetRow(host, 0);
 
 		}
 
@@ -132,7 +145,6 @@ namespace Editor
 		private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			EventHandler.SaveEventArgs sav = new EventHandler.SaveEventArgs();
-			sav.FileName = "Foobar";
 			sav.PackData = false;
 			EventHandler.EventManager.OnSaveEvent(sav);
 		}
@@ -140,7 +152,6 @@ namespace Editor
 		private void SaveAndPack_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			EventHandler.SaveEventArgs sav = new EventHandler.SaveEventArgs();
-			sav.FileName = "Foobar";
 			sav.PackData = true;
 			EventHandler.EventManager.OnSaveEvent(sav);
 		}

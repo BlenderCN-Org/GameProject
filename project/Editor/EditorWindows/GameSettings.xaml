@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Editor"
-        xmlns:c="clr-namespace:Editor.DataSources"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Editor.EditorWindows.GameSettings"
+    xmlns:c="clr-namespace:Editor.DataSources"
+    x:Class="Editor.EditorWindows.GameSettings"
         mc:Ignorable="d"
         Title="GameSettings" Height="400" Width="500" Closing="Window_Closing" Background="{DynamicResource DarkBackground}" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
 
@@ -44,7 +43,7 @@
                 <Grid Background="{DynamicResource DarkBackground}" IsVisibleChanged="Grid_IsVisibleChanged">
                     <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196">
                         <ListView.Resources>
-                            <c:SceneData x:Key="sceneDataSource"/>
+                            <c:BaseData x:Key="sceneDataSource"/>
                         </ListView.Resources>
                         <ListView.ItemsSource>
                             <Binding Mode="OneWay" Source="{StaticResource sceneDataSource}"/>

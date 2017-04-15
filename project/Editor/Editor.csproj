@@ -81,12 +81,40 @@
     <Compile Include="CloseEditorMessageBox.Designer.cs">
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataSources\SceneData.cs" />
+    <Compile Include="DataSources\BaseData.cs" />
     <Compile Include="EditorWindows\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddAmmo.xaml.cs">
+      <DependentUpon>AddAmmo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddAnimObj.xaml.cs">
+      <DependentUpon>AddAnimObj.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddArmor.xaml.cs">
+      <DependentUpon>AddArmor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddDecal.xaml.cs">
+      <DependentUpon>AddDecal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddDialog.xaml.cs">
+      <DependentUpon>AddDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddItemBase.cs" />
     <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
       <DependentUpon>AddScene.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddScript.xaml.cs">
+      <DependentUpon>AddScript.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddSound.xaml.cs">
+      <DependentUpon>AddSound.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddStaticObj.xaml.cs">
+      <DependentUpon>AddStaticObj.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddWeapon.xaml.cs">
+      <DependentUpon>AddWeapon.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
@@ -100,6 +128,9 @@
     </Compile>
     <Compile Include="EditorWindows\Controls\ObjectList.xaml.cs">
       <DependentUpon>ObjectList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\Controls\SceneWindow.xaml.cs">
+      <DependentUpon>SceneWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\DragWindow.xaml.cs">
       <DependentUpon>DragWindow.xaml</DependentUpon>
@@ -124,6 +155,42 @@
     <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditorWindows\AddItemDlgPages\AddAmmo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddAnimObj.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddArmor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddDecal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddScript.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddSound.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddStaticObj.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddWeapon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditorWindows\Controls\AdornerControls\AdornerCenterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\Controls\ObjectList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\Controls\SceneWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,6 +290,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="GameWindowHolder.resx">
+      <DependentUpon>GameWindowHolder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
