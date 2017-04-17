@@ -7,6 +7,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <dinput.h>
 #define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
@@ -51,7 +52,8 @@ public:
 	virtual void* getNativeWindowHandle();
 
 	//private:
-
+	IDirectInput8* dinput8dev = nullptr;
+	IDirectInputDevice8* inputDevice = nullptr;
 	HWND getWindowHandle();
 
 	WindowResizeCallback_t* resizeCallback = 0;

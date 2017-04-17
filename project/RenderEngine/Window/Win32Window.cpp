@@ -4,6 +4,7 @@
 #include "Window.hpp"
 #include "WindowSystem.hpp"
 #include "VulkanWindowHelper.hpp"
+#include "InputHandling.hpp"
 
 // global includes
 #include <GL\glew.h>
@@ -16,8 +17,6 @@
 #include <tchar.h>
 #include <strsafe.h>
 #include <sstream>
-
-#define RI_MOUSE_HWHEEL 0x0800
 
 #define RESTORE_FROM_EDIT WM_USER+123
 
@@ -35,7 +34,7 @@ HWND setupWindow();
 // global function definitions
 
 void setupRID(HWND windowHandle) {
-	RAWINPUTDEVICE rid[2];
+	RAWINPUTDEVICE rid[3];
 
 	rid[0].usUsagePage = 0x01;
 	rid[0].usUsage = 0x02;
@@ -47,7 +46,10 @@ void setupRID(HWND windowHandle) {
 	rid[1].dwFlags = RIDEV_NOHOTKEYS;   // adds HID keyboard and also ignores legacy keyboard messages
 	rid[1].hwndTarget = windowHandle;
 
-	//g_hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
+	rid[2].usUsagePage = 0x01;
+	rid[2].usUsage = 0x05;
+	rid[2].dwFlags = 0;   // add gamepad
+	rid[2].hwndTarget = windowHandle;
 
 	if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
 		//registration failed. Call GetLastError for the cause of the error
@@ -91,162 +93,14 @@ void inputCallback(BaseWindow* wnd, LPARAM lParam) {
 	}
 
 	RAWINPUT* raw = (RAWINPUT*)lpb;
-
 	if ( raw->header.dwType == RIM_TYPEKEYBOARD ) {
-		if ( raw->data.keyboard.Flags == RI_KEY_MAKE ) {
-			if ( raw->data.keyboard.VKey == VK_SHIFT ) {
-				wnd->modkeys |= MODKEY_SHIFT;
-			} else if ( raw->data.keyboard.VKey == VK_CONTROL ) {
-				wnd->modkeys |= MODKEY_CTRL;
-			} else if ( raw->data.keyboard.VKey == VK_MENU ) {
-				wnd->modkeys |= MODKEY_ALT;
-			} else if ( raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN ) {
-				wnd->modkeys |= MODKEY_SUPER;
-			}
-		} else {
-			if ( raw->data.keyboard.VKey == VK_SHIFT ) {
-				wnd->modkeys &= ~MODKEY_SHIFT;
-			} else if ( raw->data.keyboard.VKey == VK_CONTROL ) {
-				wnd->modkeys &= ~MODKEY_CTRL;
-			} else if ( raw->data.keyboard.VKey == VK_MENU ) {
-				wnd->modkeys &= ~MODKEY_ALT;
-			} else if ( raw->data.keyboard.VKey == VK_LWIN || raw->data.keyboard.VKey == VK_RWIN ) {
-				wnd->modkeys &= ~MODKEY_SUPER;
-			}
-		}
-
-		if ( wnd->keyCallback ) {
-			int action = raw->data.keyboard.Message == WM_KEYUP ? ACTION_BUTTON_UP : ACTION_BUTTON_DOWN;
-
-			int mods = wnd->modkeys;
-
-			wnd->keyCallback(wnd, raw->data.keyboard.MakeCode, action, mods);
-			//printf("keyCallback\n");
-		}
-
+		processRawKeyboardEvents(wnd, raw->data.keyboard);
 		//printf("key event\n");
 	} else if ( raw->header.dwType == RIM_TYPEMOUSE ) {
-		if ( wnd->mouseButtonCallback ) {
-			int button = -1;
-			int action = 0;
-			int mods = wnd->modkeys;
-			switch ( raw->data.mouse.usButtonFlags ) {
-				case(RI_MOUSE_BUTTON_1_DOWN):
-				{
-					button = 0;
-					action = ACTION_BUTTON_DOWN;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_1_UP):
-				{
-					button = 0;
-					action = ACTION_BUTTON_UP;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_2_DOWN):
-				{
-					button = 1;
-					action = ACTION_BUTTON_DOWN;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_2_UP):
-				{
-					button = 1;
-					action = ACTION_BUTTON_UP;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_3_DOWN):
-				{
-					button = 2;
-					action = ACTION_BUTTON_DOWN;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_3_UP):
-				{
-					button = 2;
-					action = ACTION_BUTTON_UP;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_4_DOWN):
-				{
-					button = 3;
-					action = ACTION_BUTTON_DOWN;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_4_UP):
-				{
-					button = 3;
-					action = ACTION_BUTTON_UP;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_5_DOWN):
-				{
-					button = 4;
-					action = ACTION_BUTTON_DOWN;
-					break;
-				}
-				case(RI_MOUSE_BUTTON_5_UP):
-				{
-					button = 4;
-					action = ACTION_BUTTON_UP;
-					break;
-				}
-				default:
-					break;
-			}
-			if ( button != -1 )
-				wnd->mouseButtonCallback(wnd, button, action, mods);
-			//printf("mouse button callback\n");
-
-			//std::cout << button;
-		}
-
-		if ( wnd->mouseMoveCallback ) {
-			POINT pt;
-			GetCursorPos(&pt);
-
-			ScreenToClient(wnd->getWindowHandle(), &pt);
-			wnd->mouseMoveCallback(wnd, pt.x, pt.y);
-
-			//printf("move callback\n");
-		}
-
-		if ( wnd->mouseDeltaCallback ) {
-			float mouseDX = (float)raw->data.mouse.lLastX;
-			float mouseDY = (float)raw->data.mouse.lLastY;
-
-			wnd->mouseDeltaCallback(wnd, mouseDX, mouseDY);
-			//printf("delta callback\n");
-		}
-
-		if ( wnd->scrollCallback ) {
-			short scrollX = 0;
-			short scrollY = 0;
-
-			if ( RI_MOUSE_WHEEL == raw->data.mouse.usButtonFlags ) {
-				scrollX = (short)raw->data.mouse.usButtonData;
-			}
-			if ( RI_MOUSE_HWHEEL == raw->data.mouse.usButtonFlags ) {
-				scrollY = (short)raw->data.mouse.usButtonData;
-			}
-
-			wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
-		}
-
-		if ( wnd->cursorLock ) {
-			RECT rec;
-			GetWindowRect(wnd->getWindowHandle(), &rec);
-
-			int posX = (rec.right - rec.left) / 2;
-			posX += rec.left;
-
-			int posY = (rec.bottom - rec.top) / 2;
-			posY += rec.top;
-
-			SetCursorPos(posX, posY);
-		}
-
+		processRawMouseEvents(wnd, raw->data.mouse);
 		//printf("\nmouse event\n");
+	} else {
+	processRawHidEvents(wnd, raw);
 	}
 	delete[] lpb;
 }
@@ -259,11 +113,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_SETFOCUS:
 			if ( wnd->focusCallback )
 				wnd->focusCallback(wnd, true);
+			enableXinput(true);
 			return 1;
 			break;
 		case WM_KILLFOCUS:
 			if ( wnd->focusCallback )
 				wnd->focusCallback(wnd, false);
+			enableXinput(false);
 			return 1;
 			break;
 
@@ -272,7 +128,6 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			SetParent(hWnd, NULL);
 			break;
 		}
-
 		case WM_SIZE:
 		{
 			if ( wnd ) {
@@ -293,10 +148,12 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		case WM_ACTIVATEAPP:
 			// g_bWindowActive is used to control if the Windows key is filtered by the keyboard hook or not.
-			if ( wParam == TRUE )
+			if (wParam == TRUE) {
 				g_bWindowActive = true;
-			else
+			}
+			else {
 				g_bWindowActive = false;
+			}
 			break;
 
 		case WM_CHAR:
@@ -521,7 +378,7 @@ void GLWindow::init() {
 
 	if ( windowHandle ) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
-
+		setupDirectInput(this);
 		deviceContext = GetDC(windowHandle);
 		openglRenderContext = createOpenGLContext(deviceContext);
 
@@ -539,6 +396,7 @@ void GLWindow::init() {
 }
 
 void GLWindow::deinit() {
+	dinput8dev->Release();
 	wglMakeCurrent(0, 0);
 	wglDeleteContext(openglRenderContext);
 
@@ -552,6 +410,9 @@ void GLWindow::setVsync(bool vSync) {
 
 void GLWindow::pollMessages() {
 	MSG msg;
+
+	processXInput(this);
+
 	while ( PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE) ) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);

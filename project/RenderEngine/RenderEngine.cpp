@@ -312,17 +312,5 @@ void RenderEngine::printInfo(GLinfo info) {
 
 IRenderEngine* CreateRenderEngine() {
 
-
-	BYTE b = __readfsbyte(0x18);
-	BYTE b2 = __readfsbyte(0x2c);
-
-	DWORD d = TlsAlloc();
-	int v = 12;
-	TlsSetValue(d, &v);
-	v = 0;
-	int* ptr = (int*)TlsGetValue(d);
-	v = *ptr;
-	TlsFree(d);
-
 	return new RenderEngine();
 }

@@ -111,6 +111,12 @@
     <ClInclude Include="Assets\Texture_gl.hpp">
       <Filter>Source Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Window\InputHandling.hpp">
+      <Filter>Source Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\InputHelper.hpp">
+      <Filter>Source Files\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -163,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="Assets\Mesh_vk.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\InputHandling.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\InputHelper.cpp">
+      <Filter>Source Files\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
