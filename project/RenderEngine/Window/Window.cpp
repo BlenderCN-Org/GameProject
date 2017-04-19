@@ -37,3 +37,13 @@ void BaseWindow::setWindowFocusCallback(WindowFocus_t callback) {
 void BaseWindow::setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback) {
 	mouseDeltaCallback = callback;
 }
+
+void BaseWindow::setWindowControllerAxisCallback(WindowControllerAxisCallback_t callback)
+{
+	controllerAxisCallback = callback;
+}
+
+void BaseWindow::setWindowControllerButtonCallback(WindowControllerButtonCallback_t callback)
+{
+	controllerButtonCallback = callback;
+}

@@ -113,3 +113,60 @@ LCleanup:
 
 	return bIsXinputDevice;
 }
+
+bool OutsideDeadZoneCompare(SHORT oldValue, SHORT &newValue, SHORT deadzone) {
+
+	SHORT oldAbs = abs(oldValue);
+	SHORT newAbs = abs(newValue);
+
+	// new value outsize of deadzone detect as input
+	if (newAbs > deadzone) {
+		return true;
+	}
+	if (oldAbs > deadzone && newAbs < deadzone) {
+		newValue = 0;
+		return true;
+	}
+	
+	newValue = 0;
+	// no change
+	return false;
+}
+
+bool XInputStateChangedThisFrame(PXINPUT_STATE oldState, PXINPUT_STATE newState)
+{
+	bool buttonStateChange = false;
+	bool axisStateChange = false;
+
+	_XINPUT_GAMEPAD oState = oldState->Gamepad;
+	_XINPUT_GAMEPAD nState = newState->Gamepad;
+
+	if (oState.wButtons != nState.wButtons) {
+		buttonStateChange = true;
+	}
+
+	if (oState.bLeftTrigger != nState.bLeftTrigger) {
+		axisStateChange = true;
+	}
+	if (oState.bRightTrigger != nState.bRightTrigger) {
+		axisStateChange = true;
+	}
+	
+	if (OutsideDeadZoneCompare(oState.sThumbLX, nState.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) ) {
+		axisStateChange = true;
+	}
+	if (OutsideDeadZoneCompare(oState.sThumbLY, nState.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+		axisStateChange = true;
+	}
+	
+	if (OutsideDeadZoneCompare(oState.sThumbRX, nState.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+		axisStateChange = true;
+	}
+	if (OutsideDeadZoneCompare(oState.sThumbRY, nState.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+		axisStateChange = true;
+	}
+
+	newState->Gamepad = nState;
+	oldState->Gamepad = newState->Gamepad;
+	return (buttonStateChange || axisStateChange);
+}

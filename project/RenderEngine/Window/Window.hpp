@@ -8,6 +8,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <dinput.h>
+#include <Xinput.h>
 #define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
@@ -42,6 +43,9 @@ public:
 	virtual void setWindowKeyboardCallback(WindowKeyCallback_t callback);
 	virtual void setWindowCharacterCallback(WindowCharacterCallback_t callback);
 
+	virtual void setWindowControllerAxisCallback(WindowControllerAxisCallback_t callback);
+	virtual void setWindowControllerButtonCallback(WindowControllerButtonCallback_t callback);
+
 	virtual void setWindowFocusCallback(WindowFocus_t callback);
 
 	virtual void setWindowMouseDeltaCallback(WindowMouseDeltaCallback_t callback);
@@ -54,6 +58,7 @@ public:
 	//private:
 	IDirectInput8* dinput8dev = nullptr;
 	IDirectInputDevice8* inputDevice = nullptr;
+	XINPUT_STATE lastState;
 	HWND getWindowHandle();
 
 	WindowResizeCallback_t* resizeCallback = 0;
@@ -63,12 +68,16 @@ public:
 	WindowKeyCallback_t* keyCallback = 0;
 	WindowCharacterCallback_t* characterCallback = 0;
 
+	WindowControllerAxisCallback_t* controllerAxisCallback = 0;
+	WindowControllerButtonCallback_t* controllerButtonCallback = 0;
+
 	WindowFocus_t* focusCallback = 0;
 
 	WindowMouseDeltaCallback_t* mouseDeltaCallback = 0;
 
 	bool cursorLock = false;
 	int modkeys = 0;
+	bool inputProcessedByControllers = false;
 
 protected:
 	HWND windowHandle;

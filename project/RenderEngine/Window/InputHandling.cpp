@@ -17,6 +17,8 @@
 std::vector<GUID> directInputDevices;
 
 void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
+	if (wnd->inputProcessedByControllers)
+		return;
 	if (wnd->mouseButtonCallback) {
 		int button = -1;
 		int action = 0;
@@ -139,24 +141,33 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 }
 
 void processRawKeyboardEvents(BaseWindow * wnd, RAWKEYBOARD keyBoardEvents) {
+	if (wnd->inputProcessedByControllers)
+		return;
 	if (keyBoardEvents.Flags == RI_KEY_MAKE) {
 		if (keyBoardEvents.VKey == VK_SHIFT) {
 			wnd->modkeys |= MODKEY_SHIFT;
-		} else if (keyBoardEvents.VKey == VK_CONTROL) {
+		}
+		else if (keyBoardEvents.VKey == VK_CONTROL) {
 			wnd->modkeys |= MODKEY_CTRL;
-		} else if (keyBoardEvents.VKey == VK_MENU) {
+		}
+		else if (keyBoardEvents.VKey == VK_MENU) {
 			wnd->modkeys |= MODKEY_ALT;
-		} else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
+		}
+		else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
 			wnd->modkeys |= MODKEY_SUPER;
 		}
-	} else {
+	}
+	else {
 		if (keyBoardEvents.VKey == VK_SHIFT) {
 			wnd->modkeys &= ~MODKEY_SHIFT;
-		} else if (keyBoardEvents.VKey == VK_CONTROL) {
+		}
+		else if (keyBoardEvents.VKey == VK_CONTROL) {
 			wnd->modkeys &= ~MODKEY_CTRL;
-		} else if (keyBoardEvents.VKey == VK_MENU) {
+		}
+		else if (keyBoardEvents.VKey == VK_MENU) {
 			wnd->modkeys &= ~MODKEY_ALT;
-		} else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
+		}
+		else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
 			wnd->modkeys &= ~MODKEY_SUPER;
 		}
 	}
@@ -171,6 +182,8 @@ void processRawKeyboardEvents(BaseWindow * wnd, RAWKEYBOARD keyBoardEvents) {
 	}
 }
 
+
+// this is probably not the way to do controllers using XInput and DirectInputInstead
 void processRawHidEvents(BaseWindow* wnd, PRAWINPUT raw) {
 	return;
 	std::cout << "GamePad/joystic\n";
@@ -228,62 +241,78 @@ void enableXinput(bool enable) {
 
 void processXInput(BaseWindow * wnd) {
 
+	wnd->inputProcessedByControllers = false;
+
 	//XINPUT_CAPABILITIES caps;
 	//
 	//XInputGetCapabilities(0, 0, &caps);
 
-	XINPUT_STATE state;
-	if (XInputGetState(0, &state) == ERROR_SUCCESS) {
-	
-		std::cout << "Button State: " << state.Gamepad.wButtons << std::endl;
-		std::cout << "Left Trigger: " << (int)state.Gamepad.bLeftTrigger << std::endl;
-		std::cout << "Right Trigger: " << (int)state.Gamepad.bRightTrigger << std::endl;
-		std::cout << "R Thumb X: " << state.Gamepad.sThumbRX << std::endl;
-		std::cout << "R Thumb Y: " << state.Gamepad.sThumbRY << std::endl;
-		std::cout << "L Thumb X: " << state.Gamepad.sThumbLX << std::endl;
-		std::cout << "L Thumb Y: " << state.Gamepad.sThumbLY << std::endl;
-		return;
-	}
-
 	// makes sure xinput device is always priority
-	if (wnd->inputDevice) {
-		wnd->inputDevice->Acquire();
+	if ( true || wnd->controllerAxisCallback && wnd->controllerButtonCallback) {
 
-		wnd->inputDevice->Poll();
 
-		DIJOYSTATE2 state{ 0 };
+		XINPUT_STATE state;
+		if (XInputGetState(0, &state) == ERROR_SUCCESS) {
 
-		wnd->inputDevice->GetDeviceState(sizeof(DIJOYSTATE2), &state);
+			if (XInputStateChangedThisFrame(&wnd->lastState, &state))
+			{
+				std::cout << "State changed!" << std::endl;
+				wnd->inputProcessedByControllers = true;
 
-		int* dptr = (int*)&state;
+				std::cout << "Button State: " << state.Gamepad.wButtons << std::endl;
+				std::cout << "Left Trigger: " << (int)state.Gamepad.bLeftTrigger << std::endl;
+				std::cout << "Right Trigger: " << (int)state.Gamepad.bRightTrigger << std::endl;
+				std::cout << "R Thumb X: " << (float)(state.Gamepad.sThumbRX) / 32767.0 << std::endl;
+				std::cout << "R Thumb Y: " << (float)(state.Gamepad.sThumbRY) / 32767.0 << std::endl;
+				std::cout << "L Thumb X: " << (float)(state.Gamepad.sThumbLX) / 32767.0 << std::endl;
+				std::cout << "L Thumb Y: " << (float)(state.Gamepad.sThumbLY) / 32767.0 << std::endl;
 
-		std::cout << "state: " << std::endl;
+			}
 
-		for (size_t i = 0; i < sizeof(DIJOYSTATE2)/sizeof(int); i++) {
-			std::cout << std::hex << (int)dptr[i] << " ";
-			if (i % 4 == 0)
-				std::cout << std::endl;
+			// return to prevent double controller processing
+			return;
 		}
-		std::cout << std::endl;
 
-		//std::cout << "Rx: " << state.lRx << std::endl;
-		//std::cout << "Ry: " << state.lRy << std::endl;
-		//std::cout << "Rz: " << state.lRz << std::endl;
-		//std::cout << "x: " << state.lX << std::endl;
-		//std::cout << "y: " << state.lY << std::endl;
-		//std::cout << "z: " << state.lZ << std::endl;
-		//
-		//std::cout << "POW: " << state.rgdwPOV << std::endl;
-		//std::cout << "slider: " << state.rglSlider << std::endl;
-		//
-		//std::cout << "buttons: ";
-		//for (size_t i = 0; i < 32; i++) {
-		//	std::cout << state.rgbButtons[i] << " ";
-		//}
-		//std::cout << std::endl;
+		// legacy controller support
+		if (wnd->inputDevice) {
+			wnd->inputDevice->Acquire();
 
-		// force return so that input is not registered twice
-		return;
+			wnd->inputDevice->Poll();
+
+			DIJOYSTATE2 state{ 0 };
+
+			wnd->inputDevice->GetDeviceState(sizeof(DIJOYSTATE2), &state);
+
+			int* dptr = (int*)&state;
+
+			std::cout << "state: " << std::endl;
+
+			for (size_t i = 0; i < sizeof(DIJOYSTATE2) / sizeof(int); i++) {
+				std::cout << std::hex << (int)dptr[i] << " ";
+				if (i % 4 == 0)
+					std::cout << std::endl;
+			}
+			std::cout << std::endl;
+
+			//std::cout << "Rx: " << state.lRx << std::endl;
+			//std::cout << "Ry: " << state.lRy << std::endl;
+			//std::cout << "Rz: " << state.lRz << std::endl;
+			//std::cout << "x: " << state.lX << std::endl;
+			//std::cout << "y: " << state.lY << std::endl;
+			//std::cout << "z: " << state.lZ << std::endl;
+			//
+			//std::cout << "POW: " << state.rgdwPOV << std::endl;
+			//std::cout << "slider: " << state.rglSlider << std::endl;
+			//
+			//std::cout << "buttons: ";
+			//for (size_t i = 0; i < 32; i++) {
+			//	std::cout << state.rgbButtons[i] << " ";
+			//}
+			//std::cout << std::endl;
+
+			wnd->inputProcessedByControllers = true;
+			return;
+		}
 	}
 
 	//if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
