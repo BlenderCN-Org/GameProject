@@ -97,6 +97,23 @@ namespace Editor.EditorWindows
                     sceneList.Items.Add(item);
                 }
             }
+
+            if (MenuTab.IsVisible)
+            {
+                menuList.Items.Clear();
+
+                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+                args.ObjectType = Editor.EventHandler.ObjectTypes.DIALOG;
+                args.ReturnList = new List<DataSources.BaseData>();
+                EventHandler.EventManager.OnQueryDataEvent(args);
+
+                foreach (var item in args.ReturnList)
+                {
+                    if( item.GetType().Equals(typeof(DataSources.MenuItem)) )
+                        menuList.Items.Add(item);
+                }
+
+            }
         }
 
         private void deleteSceneButton_Click(object sender, RoutedEventArgs e)
@@ -133,8 +150,16 @@ namespace Editor.EditorWindows
             addDlg.InvalidateArrange();
 
             addDlg.ShowDialog();
+            
+        }
 
+        private void addMenuButton_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
+        
+        private void deleteMenuButton_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

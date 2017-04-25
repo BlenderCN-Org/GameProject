@@ -1,4 +1,6 @@
 #include "Core.hpp"
+#include "CoreGlobals.hpp"
+
 #include "System\Sys.hpp"
 
 #include "Script\OcParser.hpp"
@@ -136,6 +138,12 @@ void Core::init() {
 	text->init(renderEngine);
 	text->setFont(AssetManager::getAssetManager()->getBasicFont());
 
+	g_core = this;
+	g_assetManager = assetManager;
+	g_threadManager = thrdMgr;
+	g_memoryManager = nullptr;
+	g_renderEngine = renderEngine;
+
 	// end temporary
 	performParserTests();
 	//parseOcFile("Data/Scripts/test.ocs");
@@ -168,6 +176,12 @@ void Core::freeResources() {
 	input->release();
 
 	deinitSys();
+
+	g_core = nullptr;
+	g_assetManager = nullptr;
+	g_threadManager = nullptr;
+	g_memoryManager = nullptr;
+	g_renderEngine = nullptr;
 }
 
 bool Core::isRunning() {

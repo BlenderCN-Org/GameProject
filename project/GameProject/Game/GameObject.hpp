@@ -43,7 +43,7 @@ private:
 template<typename T>
 inline BaseComponent* GameObject::getComponent() {
 	if ( components.count(IBaseComponent<T>::TypeID) ) {
-		return components.find(IBaseComponent<T>::TypeID);
+		return components.at(IBaseComponent<T>::TypeID);
 	}
 	return nullptr;
 }

@@ -25,7 +25,7 @@ namespace Editor
 
             EditorWindows.AddItemDialog addDlg = new EditorWindows.AddItemDialog();
 
-            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddStaticObj());
+            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
 
             addDlg.Show();
 

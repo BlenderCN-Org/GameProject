@@ -4,6 +4,8 @@
 
 #include <AssetLib\AssetLib.hpp>
 
+#include "Forms\MenuForm.hpp"
+
 AssetManager* AssetManager::assetManager = nullptr;
 
 AssetManager * AssetManager::getAssetManager() {
@@ -70,6 +72,33 @@ IMesh * AssetManager::getMesh(char * meshName) {
 	}
 
 	return mesh;
+}
+
+bool AssetManager::loadMenu(Menu ** ppMenu, char * menuName)
+{
+	bool success = true;
+
+	uint32_t formID = masterFile.getFormIDFromNamedSection(menuName);
+	
+	formID = 1234;
+	
+	MenuForm* form = (MenuForm*)masterFile.getForm(formID);
+
+	Menu* menu = new Menu();
+
+	menu->menuVisible = (form->flags & MENU_VISIBLE);
+	menu->totalMenuItems = form->nrMenuItems;
+
+	menu->menuItems = new MenuItem[menu->totalMenuItems];
+
+	for (uint32_t i = 0; i < menu->totalMenuItems; i++)
+	{
+		//menu->menuItems[i]
+	}
+
+	*ppMenu = menu;
+
+	return success;
 }
 
 IFont * AssetManager::getBasicFont() {

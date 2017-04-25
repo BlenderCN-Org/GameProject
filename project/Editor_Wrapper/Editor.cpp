@@ -134,6 +134,17 @@ namespace Editor_clr {
 
 			if (type != 0) {
 
+				if (queryArgs->ObjectType == Editor::EventHandler::ObjectTypes::DIALOG)
+				{
+					Editor::DataSources::MenuItem^ data = gcnew Editor::DataSources::MenuItem();
+
+					data->Name = "Test";
+					data->Command = "Foobar";
+					queryArgs->ReturnList->Add(data);
+
+					return;
+				}
+
 				ExtensionQueryDataEvent query;
 
 				query.objectType = type;
@@ -155,6 +166,7 @@ namespace Editor_clr {
 					System::String^ str = gcnew System::String(item);
 					Editor::DataSources::BaseData^ data = gcnew Editor::DataSources::BaseData();
 					data->Name = str;
+					data->EditorID = "1234";
 					queryArgs->ReturnList->Add(data);
 				}
 

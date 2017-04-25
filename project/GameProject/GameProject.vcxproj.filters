@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Core\Extensions">
       <UniqueIdentifier>{c7156fc7-d3c2-48b5-b3bc-485b719b9ed4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\GUI\Menu">
+      <UniqueIdentifier>{e1634fee-dbb4-4b60-b417-61988146fbb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Assets\Forms">
+      <UniqueIdentifier>{0271ee96-9eae-4734-b5cc-58920f82d3b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -152,6 +158,21 @@
     </ClCompile>
     <ClCompile Include="Core\Extensions\AddDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\Menu\Menu.cpp">
+      <Filter>Source Files\Core\GUI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Forms\MenuForm.cpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Forms\BaseForm.cpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI\Menu\MenuItem.cpp">
+      <Filter>Source Files\Core\GUI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\CoreGlobals.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +289,21 @@
     </ClInclude>
     <ClInclude Include="Core\Extensions\AddDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\Menu\Menu.hpp">
+      <Filter>Source Files\Core\GUI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI\Menu\MenuItem.hpp">
+      <Filter>Source Files\Core\GUI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\Forms\BaseForm.hpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\Forms\MenuForm.hpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\CoreGlobals.hpp">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

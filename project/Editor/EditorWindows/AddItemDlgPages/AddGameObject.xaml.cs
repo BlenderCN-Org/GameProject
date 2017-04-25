@@ -18,9 +18,9 @@ namespace Editor.EditorWindows.AddItemDlgPages
     /// <summary>
     /// Interaction logic for AddStatic.xaml
     /// </summary>
-    public partial class AddStaticObj : UserControl
+    public partial class AddGameObject : UserControl
     {
-        public AddStaticObj()
+        public AddGameObject()
         {
             InitializeComponent();
         }

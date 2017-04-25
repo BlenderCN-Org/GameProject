@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Editor.EditorWindows.AddItemDlgPages.AddStaticObj"
+﻿<UserControl x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -33,7 +33,7 @@
                     </Border>
                 </Grid>
             </TabItem>
-            <TabItem Header="Lod" Template="{DynamicResource TabItemControlTemplate1}">
+            <TabItem Header="Lod" Template="{DynamicResource TabItemControlTemplate1}" Visibility="Visible">
                 <Grid Background="{DynamicResource DarkBackground}">
                     <Label Content="Todo implement lod stuff" HorizontalAlignment="Left" Height="55" Margin="35,29,0,0" VerticalAlignment="Top" Width="158"/>
                 </Grid>

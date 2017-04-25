@@ -10,6 +10,8 @@
 
 #include "..\Core\GUI\Text.hpp"
 
+#include "../Core/GUI/Menu/Menu.hpp"
+
 class Game
 {
 public:
@@ -30,7 +32,7 @@ private:
 	void saveGame();
 	void loadGame();
 
-	int renderMenuItem(char* text, int length);
+	//int renderMenuItem(char* text, int length);
 	void handleMenuEvent(int advance);
 	void handleMenuEnter();
 	void toggleMenu();
@@ -38,8 +40,8 @@ private:
 
 	void tickFPS(float dt);
 
-	Core* core;
-	Camera* cam;
+	Core* core = nullptr;
+	Camera* cam = nullptr;
 	CameraInput camInput;
 
 	bool running;
@@ -50,42 +52,28 @@ private:
 	GameState gstate;
 	bool gameStarted;
 
-	GameObject* player;
+	GameObject* player = nullptr;
 
 	std::vector<GameObject> gameObjects;
 
+	// mainMenu
+
+	Menu* mainMenu = nullptr;
+
 	//@Temporary
 	std::ifstream mapFile;
-	IShaderObject* shObj;
+	IShaderObject* shObj = nullptr;
 
 	int vpLocation;
 	int matLocation;
 
-	IShaderObject* textShObj;
+	IShaderObject* textShObj = nullptr;
 	int orthoLocation;
 	int textLocation;
 	int textureLocation;
 	int colorLocation;
 
 	Text* t = nullptr;
-
-	// menu
-
-	bool enterLeaveMenuState;
-
-	int menuXTarget;
-	int menuPosX;
-	int menuPosY;
-	int stride;
-
-	int renderedMenuItems;
-	int currentMenuItem;
-	int nrMemuItems;
-	int newGameIndex;
-	int saveGameIndex;
-	int loadGameIndex;
-	int editorIndex;
-	int quitGameIndex;
 
 	//@EndTemporary
 };

@@ -82,39 +82,16 @@
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\BaseData.cs" />
+    <Compile Include="DataSources\MenuItem.cs" />
     <Compile Include="EditorWindows\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddAmmo.xaml.cs">
-      <DependentUpon>AddAmmo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddAnimObj.xaml.cs">
-      <DependentUpon>AddAnimObj.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddArmor.xaml.cs">
-      <DependentUpon>AddArmor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddDecal.xaml.cs">
-      <DependentUpon>AddDecal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddDialog.xaml.cs">
-      <DependentUpon>AddDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddItemBase.cs" />
     <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
       <DependentUpon>AddScene.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddScript.xaml.cs">
-      <DependentUpon>AddScript.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddSound.xaml.cs">
-      <DependentUpon>AddSound.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddStaticObj.xaml.cs">
-      <DependentUpon>AddStaticObj.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddWeapon.xaml.cs">
-      <DependentUpon>AddWeapon.xaml</DependentUpon>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml.cs">
+      <DependentUpon>AddGameObject.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
@@ -155,39 +132,7 @@
     <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
-    <Page Include="EditorWindows\AddItemDlgPages\AddAmmo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddAnimObj.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddArmor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddDecal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddScript.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddSound.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddStaticObj.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddWeapon.xaml">
+    <Page Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

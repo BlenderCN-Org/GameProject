@@ -14,15 +14,41 @@ void MasterFileExtension::saveMasterFile() {
 	std::ofstream tempFile(tempName, std::ios::binary);
 
 	MasterFileHeader hdr{};
-	hdr.tag[0] = 'M';
-	hdr.tag[1] = 'A';
-	hdr.tag[2] = 'S';
-	hdr.tag[3] = 'T';
+	memcpy(hdr.tag, "MAST", 4);
 
 	hdr.version.major = 1;
 	hdr.version.major = 0;
+	
+	hdr.entries = (uint32_t)mstFile->entries.size();
+	hdr.namedEntries = 0;
+	hdr.preloadEntries = 0;
 
+	// write header
 	tempFile.write((char*)&hdr, sizeof(hdr));
+
+	// write tables
+	
+	FormOffsetTable offsetTable = mstFile->offsetTable;
+
+
+	// write forms
+	for (FormEntries::const_iterator it = mstFile->entries.begin(); it != mstFile->entries.end(); it++ )
+	{
+		BaseForm* form = it->second.form;
+		uint32_t size = form->getFormSize();
+		void* data = malloc(size);
+		form->getFormData(data);
+		tempFile.write((char*)data, size);
+	}
+	//for (uint32_t i = 0; i < hdr.entries; i++)
+	//{
+	//	BaseForm* form = mstFile->entries.at(i).form;
+	//	
+	//	uint32_t size = form->getFormSize();
+	//	void* data = malloc(size);
+	//	form->getFormData(data);
+	//	tempFile.write((char*)data, size);
+	//}
 
 	tempFile.close();
 

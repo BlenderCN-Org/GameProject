@@ -4,6 +4,20 @@ legend:
 	- = thing to do
 	<N> = might not happen
 
+
+2017-04-25's to-do:
+	<W>Allow editor to add entries and such to main menu
+		<W>Define callback types for adding, removing and editing menu form
+			<W>callback for adding form
+			<W>callback for removing form
+			<W>callback for editing form
+			<N>callback to get form info
+
+2017-04-22's and 2017-04-23's to-do:
+	<D>Main menu not visible ever while in editor mode
+	<D>Main menu loaded from data file (master file)
+	
+
 2017-01-30's to-do:
 
 	<D>Create gameobjects where meshes and states are stored

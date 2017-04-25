@@ -180,13 +180,18 @@
   <ItemGroup>
     <ClCompile Include="Core\Assets\AssetLoader.cpp" />
     <ClCompile Include="Core\Assets\AssetManager.cpp" />
+    <ClCompile Include="Core\Assets\Forms\BaseForm.cpp" />
+    <ClCompile Include="Core\Assets\Forms\MenuForm.cpp" />
     <ClCompile Include="Core\Assets\MasterFile.cpp" />
     <ClCompile Include="Core\Core.cpp" />
+    <ClCompile Include="Core\CoreGlobals.cpp" />
     <ClCompile Include="Core\Exceptions\Exceptions.cpp" />
     <ClCompile Include="Core\Extensions\AddDataExtension.cpp" />
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
     <ClCompile Include="Core\Extensions\MasterFileExtension.cpp" />
     <ClCompile Include="Core\Extensions\QueryDataExtension.cpp" />
+    <ClCompile Include="Core\GUI\Menu\Menu.cpp" />
+    <ClCompile Include="Core\GUI\Menu\MenuItem.cpp" />
     <ClCompile Include="Core\GUI\Text.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\Memory\MemoryBuffer.cpp" />
@@ -212,14 +217,19 @@
   <ItemGroup>
     <ClInclude Include="Core\Assets\AssetLoader.hpp" />
     <ClInclude Include="Core\Assets\AssetManager.hpp" />
+    <ClInclude Include="Core\Assets\Forms\BaseForm.hpp" />
+    <ClInclude Include="Core\Assets\Forms\MenuForm.hpp" />
     <ClInclude Include="Core\Assets\MasterFile.hpp" />
     <ClInclude Include="Core\Assets\MeshAsset.hpp" />
     <ClInclude Include="Core\Core.hpp" />
+    <ClInclude Include="Core\CoreGlobals.hpp" />
     <ClInclude Include="Core\Exceptions\Exceptions.hpp" />
     <ClInclude Include="Core\Extensions\AddDataExtension.hpp" />
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
     <ClInclude Include="Core\Extensions\MasterFileExtension.hpp" />
     <ClInclude Include="Core\Extensions\QueryDataExtension.hpp" />
+    <ClInclude Include="Core\GUI\Menu\Menu.hpp" />
+    <ClInclude Include="Core\GUI\Menu\MenuItem.hpp" />
     <ClInclude Include="Core\GUI\Text.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
     <ClInclude Include="Core\Memory\Heap.hpp" />

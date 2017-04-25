@@ -28,9 +28,11 @@ GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, 
 
 //@EndTemporary
 
-Game::Game() : player(nullptr), running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu), gameStarted(false), enterLeaveMenuState(false) {}
+Game::Game() : player(nullptr), running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu), gameStarted(false) {}
 
 Game::~Game() {
+	delete mainMenu;
+
 	delete player;
 	delete cam;
 
@@ -55,7 +57,7 @@ void Game::init() {
 		core->getConsole()->print("Could not load masterfile\n");
 	}
 	//if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
-		core->startEditor();
+	core->startEditor();
 	//}
 
 	//@Temporary
@@ -74,12 +76,12 @@ void Game::init() {
 	t->init(core->getRenderEngine());
 	t->setFont(AssetManager::getAssetManager()->getBasicFont());
 
+	if (AssetManager::getAssetManager()->loadMenu(&mainMenu, "MainMenu")) {
+		core->getConsole()->print("Menu loaded!\n");
+	}
+
 	//@EndTemporary
 
-	nrMemuItems = 4;
-	currentMenuItem = 0;
-
-	menuPosX = 1920 - 250;
 }
 
 bool Game::isRunning() const {
@@ -91,42 +93,24 @@ void Game::update(float dt) {
 	tickFPS(dt);
 	running = core->isRunning();
 
-	int fontSize = AssetManager::getAssetManager()->getBasicFont()->getFontSize();
+	// stuff that we only do while not being in the editor
+	if (!core->isInEditor()) {
+		mainMenu->update();
+	}
 
-	renderedMenuItems = 0;
-	menuPosY = 1080 - 200;
-	stride = fontSize + 10;
-
-	//@Temporary
 	Input* in = Input::getInput();
-
-	if ( in->sizeChange ) {
+	if (in->sizeChange) {
 		int w = 0, h = 0;
 		in->getWindowSize(w, h);
 		*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
 	}
 
-	if ( in->releasedThisFrame(KeyBind{ 1,0,0 }, false) && gameStarted ) {
-		enterLeaveMenuState = true;
-		toggleMenuTarget();
-	}
-
-	if ( enterLeaveMenuState ) {
-		if ( menuPosX == menuXTarget ) {
-			enterLeaveMenuState = false;
-			toggleMenu();
-		}
-
-		if ( menuXTarget > menuPosX ) menuPosX += 10;
-		else menuPosX -= 10;
-	}
-
 	// update gameStuffz
-	if ( gstate == GameState::eGameState_PlayMode && (!enterLeaveMenuState) ) {
+	if (gstate == GameState::eGameState_PlayMode) {
 		camInput.update(dt);
 	}
 
-	else if ( gstate == GameState::eGameStage_MainMenu ) {
+	else if (gstate == GameState::eGameStage_MainMenu) {
 		KeyBind kb;
 		kb.code = 72;
 		kb.mod = 0;
@@ -134,7 +118,7 @@ void Game::update(float dt) {
 
 		bool consoleActive = Input::getInput()->consoleIsActive();
 
-		if ( in->releasedThisFrame(kb) && !consoleActive ) {
+		if (in->releasedThisFrame(kb) && !consoleActive) {
 			//std::cout << "UP Pressed\n";
 			//saveGame();
 			handleMenuEvent(-1);
@@ -142,14 +126,14 @@ void Game::update(float dt) {
 
 		kb.code = 80;
 
-		if ( in->releasedThisFrame(kb) && !consoleActive ) {
+		if (in->releasedThisFrame(kb) && !consoleActive) {
 			//std::cout << "Down Pressed\n";
 			handleMenuEvent(+1);
 			//loadGame();
 		}
 		kb.code = 28;
 
-		if ( in->releasedThisFrame(kb) && !consoleActive ) {
+		if (in->releasedThisFrame(kb) && !consoleActive) {
 			//std::cout << "Enter \n";
 			//newGame();
 			handleMenuEnter();
@@ -167,37 +151,23 @@ void Game::render() {
 	shObj->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
 
 	//@Temporary
-	for ( size_t i = 0; i < gameObjects.size(); i++ ) {
+	for (size_t i = 0; i < gameObjects.size(); i++) {
 		shObj->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &gameObjects[i].getMatrix());
 		IMesh* m = gameObjects[i].getMesh();
 		m->bind();
 		m->render();
 	}
 
-	IRenderEngine* re = core->getRenderEngine();
-
-	if ( gstate == GameState::eGameStage_MainMenu || menuPosX != menuXTarget ) {
-		textShObj->useShader();
-
-
-		re->setBlending(true);
-
-		newGameIndex = renderMenuItem("New Game", 8);
-		if ( gameStarted )
-			saveGameIndex = renderMenuItem("Save Game", 9);
-		loadGameIndex = renderMenuItem("Load Game", 9);
-		if ( core->editorAvaible() )
-			editorIndex = renderMenuItem("Editor", 6);
-		quitGameIndex = renderMenuItem("Quit", 4);
-
-		re->setBlending(false);
-
-		nrMemuItems = renderedMenuItems;
+	// stuff that we only do while not being in the editor
+	if (!core->isInEditor()) {
+		mainMenu->render();
 	}
 
-	if ( ffps > 40 )
+	IRenderEngine* re = core->getRenderEngine();
+
+	if (ffps > 60)
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(0, 1, 0));
-	else if ( ffps > 20 )
+	else if (ffps > 30)
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(255.0f / 255.0f, 165.0f / 255.0f, 0));
 	else
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(1, 0, 0));
@@ -223,13 +193,13 @@ void Game::newGame() {
 
 	int objectCount = 0;
 
-	if ( mapFile.is_open() ) {
+	if (mapFile.is_open()) {
 		std::string line = "";
 
 		std::getline(mapFile, line);
 		objectCount = std::stoi(line);
 
-		for ( int i = 0; i < objectCount; i++ ) {
+		for (int i = 0; i < objectCount; i++) {
 			std::string meshName = "";
 			float x = 0;
 			float y = 0;
@@ -251,8 +221,8 @@ void Game::newGame() {
 	}
 
 	gameStarted = true;
-	enterLeaveMenuState = true;
-	menuXTarget = 1950;
+	//mainMenu->enterLeaveMenuState = true;
+	//mainMenu->menuXTarget = 1950;
 
 	camInput.setCam(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1));
 
@@ -272,83 +242,63 @@ void Game::loadGame() {
 	core->getMemoryManager()->loadHeap();
 }
 
-int Game::renderMenuItem(char * text, int length) {
-	glm::mat4 vp = *(glm::mat4*)cam->getOrthoMatrix();
-
-	glm::vec3 color = glm::vec3(1, 1, 1);
-
-	int index = renderedMenuItems;
-
-	if ( index == currentMenuItem )
-		color = glm::vec3(1, 0, 0);
-
-	textShObj->bindData(orthoLocation, UniformDataType::UNI_MATRIX4X4, &vp);
-	textShObj->bindData(textLocation, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &color);
-	t->setText(text, length, (float)menuPosX, (float)menuPosY, 1.0);
-	menuPosY += stride;
-
-	t->render(textShObj, textureLocation);
-
-	renderedMenuItems++;
-
-	return index;
-}
 
 void Game::handleMenuEvent(int advance) {
-	currentMenuItem += advance;
-
-	if ( currentMenuItem < 0 ) currentMenuItem += nrMemuItems;
-	if ( currentMenuItem >= nrMemuItems ) currentMenuItem -= nrMemuItems;
+	//mainMenu->currentMenuItem += advance;
+	//
+	//if (mainMenu->currentMenuItem < 0) mainMenu->currentMenuItem += mainMenu->nrMemuItems;
+	//if (mainMenu->currentMenuItem >= mainMenu->nrMemuItems) mainMenu->currentMenuItem -= mainMenu->nrMemuItems;
 }
 
 void Game::handleMenuEnter() {
-	int choice = currentMenuItem;
-
-	if ( choice == newGameIndex ) {
-		newGame();
-	}
-
-	if ( choice == saveGameIndex ) {
-		saveGame();
-	}
-
-	if ( choice == loadGameIndex ) {
-		loadGame();
-	}
-
-	if ( choice == editorIndex ) {
-		core->startEditor();
-	}
-
-	if ( choice == quitGameIndex && !core->isInEditor() ) {
-		running = false;
-	} else if ( choice == quitGameIndex && core->isInEditor() ) {
-		core->getConsole()->print("Editor mode enabled cannot quit using game menu");
-	}
+	//int choice = mainMenu->currentMenuItem;
+	//
+	//if (choice == mainMenu->newGameIndex) {
+	//	newGame();
+	//}
+	//
+	//if (choice == mainMenu->saveGameIndex) {
+	//	saveGame();
+	//}
+	//
+	//if (choice == mainMenu->loadGameIndex) {
+	//	loadGame();
+	//}
+	//
+	//if (choice == mainMenu->editorIndex) {
+	//	core->startEditor();
+	//}
+	//
+	//if (choice == mainMenu->quitGameIndex && !core->isInEditor()) {
+	//	running = false;
+	//}
+	//else if (choice == mainMenu->quitGameIndex && core->isInEditor()) {
+	//	core->getConsole()->print("Editor mode enabled cannot quit using game menu");
+	//}
 }
 
 void Game::toggleMenu() {
-	if ( gstate == GameState::eGameStage_MainMenu && gameStarted ) {
-		gstate = GameState::eGameState_PlayMode;
-	} else {
-		gstate = GameState::eGameStage_MainMenu;
-		currentMenuItem = 0;
-	}
+	//if (gstate == GameState::eGameStage_MainMenu && gameStarted) {
+	//	gstate = GameState::eGameState_PlayMode;
+	//}
+	//else {
+	//	gstate = GameState::eGameStage_MainMenu;
+	//	mainMenu->currentMenuItem = 0;
+	//}
 }
 
 void Game::toggleMenuTarget() {
-	if ( gstate == GameState::eGameStage_MainMenu )
-		menuXTarget = 1950;
-	else
-		menuXTarget = 1920 - 250;
+	//if (gstate == GameState::eGameStage_MainMenu)
+	//	mainMenu->menuXTarget = 1950;
+	//else
+	//	mainMenu->menuXTarget = 1920 - 250;
 }
 
 void Game::tickFPS(float dt) {
 	fps++;
 	timepass += dt;
 
-	if ( timepass > 1.0f ) {
+	if (timepass > 1.0f) {
 		core->setFPS(fps);
 		ffps = fps;
 		fps = 0;

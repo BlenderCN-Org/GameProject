@@ -8,6 +8,7 @@
 
 #include "MeshAsset.hpp"
 #include "MasterFile.hpp"
+#include "../GUI/Menu/Menu.hpp"
 
 class AssetManager {
 public:
@@ -21,6 +22,8 @@ public:
 	void init(IRenderEngine* renderEngine);
 
 	IMesh* getMesh(char* meshName);
+
+	bool loadMenu(Menu** ppMenu, char* menuName);
 
 	IFont* getBasicFont();
 	IFont* getSmallFont();

@@ -60,8 +60,44 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="General" Template="{DynamicResource TabItemControlTemplate1}">
-                <Grid Background="{DynamicResource DarkBackground}" />
+            <TabItem x:Name="MenuTab" Header="MenuStuff" Template="{DynamicResource TabItemControlTemplate1}">
+                <Grid Background="{DynamicResource DarkBackground}" IsVisibleChanged="Grid_IsVisibleChanged">
+                    <ListView x:Name="menuList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196">
+                        <ListView.Resources>
+                            <c:MenuItem x:Key="menuItemSource"/>
+                        </ListView.Resources>
+                        <ListView.ItemsSource>
+                            <Binding Mode="OneWay" Source="{StaticResource menuItemSource}"/>
+                        </ListView.ItemsSource>
+                        <ListView.View>
+                            <GridView >
+                                <GridViewColumn Header="Menu Name" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Command" DisplayMemberBinding="{Binding Command}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="addMenuButton" Content="Add" HorizontalAlignment="Left" Height="25" Margin="11,308,0,0" VerticalAlignment="Top" Width="93" Template="{StaticResource ButtonControlTemplate1}" Click="addMenuButton_Click"/>
+                    <Button x:Name="deleteMenuButton" Content="Delete" HorizontalAlignment="Left" Height="25" Margin="109,308,0,0" VerticalAlignment="Top" Width="97" Template="{StaticResource ButtonControlTemplate1}" Click="deleteMenuButton_Click" IsEnabled="{Binding SelectedItems.Count, ElementName=menuList, Mode=OneWay}"/>
+                    <Button Content="^" HorizontalAlignment="Left" Height="28" Margin="211,114,0,0" VerticalAlignment="Top" Width="29" Template="{StaticResource ButtonControlTemplate1}"/>
+                    <Button Content="^" HorizontalAlignment="Left" Height="28" Margin="211,147,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.5,0.5" Template="{StaticResource ButtonControlTemplate1}">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="323" Margin="245,10,0,0" VerticalAlignment="Top" Width="233">
+                        <Grid>
+                            <TextBox HorizontalAlignment="Left" Height="25" Margin="10,36,0,0" Text="" VerticalAlignment="Top" Width="211" Style="{DynamicResource DarkTextBox}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" IsEnabled="{Binding SelectedItems.Count, ElementName=menuList, Mode=OneWay}"/>
+                            <TextBox HorizontalAlignment="Left" Height="25" Margin="10,98,0,0" Text="" VerticalAlignment="Top" Width="211" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" IsEnabled="{Binding SelectedItems.Count, ElementName=menuList, Mode=OneWay}"/>
+                            <Label Content="Name:" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="214" Foreground="{DynamicResource DarkForeground}"/>
+                            <Label Content="Command:" HorizontalAlignment="Left" Margin="7,67,0,0" VerticalAlignment="Top" Width="214" Foreground="{DynamicResource DarkForeground}"/>
+                        </Grid>
+                    </Border>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
