@@ -1,11 +1,12 @@
-﻿<UserControl x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages"
+             xmlns:StandardControls="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls" x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Background="{DynamicResource DarkBackground}">
+             d:DesignHeight="321" d:DesignWidth="300" Background="{DynamicResource DarkBackground}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -15,12 +16,9 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <Label Content="Object Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
-        <Label Content="Edtior ID:" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,85,0,0" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
-        <TabControl HorizontalAlignment="Left" Height="177" Margin="10,113,0,0" VerticalAlignment="Top" Width="280" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}"  >
+    <Grid Margin="5">
+        <StandardControls:NameAndID HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TabControl HorizontalAlignment="Left" Height="177" Margin="0,135,0,0" VerticalAlignment="Top" Width="290" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}"  >
             <TabItem Header="General" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
                     <Label Content="Mesh file" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
@@ -39,6 +37,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
     </Grid>
 </UserControl>

@@ -9,6 +9,7 @@
 
 void MemoryManager::init() {
 	fa = new FrameAllocator(5 * MB);
+	ta = new TimeAllocator(5 * MB);
 
 	heapSize = 10 * MB;
 	heap = allocatePhysical(heapSize);
@@ -21,6 +22,7 @@ void MemoryManager::init() {
 void MemoryManager::release() {
 	deallocatePhysical(heap);
 	delete fa;
+	delete ta;
 }
 
 void MemoryManager::saveHeap() {
@@ -51,6 +53,11 @@ void MemoryManager::loadHeap() {
 
 FrameAllocator* MemoryManager::getFrameAllocator() {
 	return fa;
+}
+
+TimeAllocator* MemoryManager::getTimeAllocator()
+{
+	return ta;
 }
 
 void MemoryManager::setNumberOfPools(uint32_t poolCount) {

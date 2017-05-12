@@ -59,6 +59,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -86,12 +87,18 @@
     <Compile Include="EditorWindows\AddItemDialog.xaml.cs">
       <DependentUpon>AddItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddGameDialog.xaml.cs">
+      <DependentUpon>AddGameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddItemBase.cs" />
     <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
       <DependentUpon>AddScene.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml.cs">
       <DependentUpon>AddGameObject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml.cs">
+      <DependentUpon>NameAndID.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
@@ -132,7 +139,15 @@
     <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditorWindows\AddItemDlgPages\AddGameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,6 +187,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\DarkScrollViewWithGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\DarkTabItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\DarkButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DarkTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

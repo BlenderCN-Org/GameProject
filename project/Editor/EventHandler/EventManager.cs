@@ -46,9 +46,8 @@ namespace Editor.EventHandler
 
 		public static EventHandler<SaveEventArgs> onSaveEvent;
         public static EventHandler<QueryDataArgs> onQueryDataEvent;
-        public static EventHandler<AddObjectArgs> onAddObjectEvent;
 
-        public static EventHandler<FormArgs> onAddFormEvent;
+        public static EventHandler<AddObjectArgs> onAddObjectEvent;
         public static EventHandler<FormArgs> onDeleteFormEvent;
         public static EventHandler<FormArgs> onEditFormEvent;
         
@@ -67,12 +66,7 @@ namespace Editor.EventHandler
         {
             onAddObjectEvent?.Invoke(null, addArgs);
         }
-
-        public static void OnAddFormEvent(FormArgs args)
-        {
-            onAddFormEvent?.Invoke(null, args);
-        }
-
+        
         public static void OnDeleteFormEvent(FormArgs args)
         {
             onDeleteFormEvent?.Invoke(null, args);

@@ -237,6 +237,7 @@
     <ClInclude Include="Core\Memory\MemoryManager.hpp" />
     <ClInclude Include="Core\Memory\ResourceAllocator.hpp" />
     <ClInclude Include="Core\Memory\StackAllocator.hpp" />
+    <ClInclude Include="Core\Memory\TimeAllocator.hpp" />
     <ClInclude Include="Core\SafeQueue.hpp" />
     <ClInclude Include="Core\Script\OcParsable.hpp" />
     <ClInclude Include="Core\Script\OcParser.hpp" />

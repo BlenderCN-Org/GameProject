@@ -10,14 +10,14 @@ namespace Editor.DataSources
         {
         }
 
-        public BaseData(string eid, string name)
+        public BaseData(uint eid, string name)
         {
             EditorID = eid;
             Name = name;
         }
 
 
-        public string EditorID { get; set; }
+        public uint EditorID { get; set; }
 
         public string Name { get; set; }
 
@@ -25,11 +25,7 @@ namespace Editor.DataSources
 
         public override string ToString()
         {
-
-            if (EditorID != null && EditorID.Length > 0)
-                return Name + " ( " + EditorID + " )";
-            else
-                return Name + " ( No ID found )";
+            return Name + " ( " + EditorID + " )";
         }
 
         private void OnPropertyChanged(string info)

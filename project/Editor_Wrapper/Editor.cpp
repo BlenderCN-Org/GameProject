@@ -126,7 +126,7 @@ namespace Editor_clr {
 
 	static void OnQueryEvent(System::Object^ sender, Editor::EventHandler::QueryDataArgs^ queryArgs) {
 
-		std::cout << "QueryEvent\n";
+		std::cout << "QueryEvent" << (int)queryArgs->ObjectType << "\n";
 		
 		if (extensionMap.count(GET_OBJECTS_CALLBACK) >= 1 && extensionMap[GET_OBJECTS_CALLBACK]) {
 			
@@ -153,20 +153,18 @@ namespace Editor_clr {
 
 				extensionMap[GET_OBJECTS_CALLBACK]->execute(1, &query);
 
-				query.objectList = new char*[query.nrObjects];
+				query.objectList = new IObject*[query.nrObjects];
 
 				extensionMap[GET_OBJECTS_CALLBACK]->execute(1, &query);
 
-				char** charArray = (char**)query.objectList;
-
 				for (int i = 0; i < query.nrObjects; i++) {
 
-					char* item = ((char**)query.objectList)[i];
+					IObject* obj = query.objectList[i];
 
-					System::String^ str = gcnew System::String(item);
+					System::String^ str = gcnew System::String(obj->getName());
 					Editor::DataSources::BaseData^ data = gcnew Editor::DataSources::BaseData();
 					data->Name = str;
-					data->EditorID = "1234";
+					data->EditorID = obj->getFormID();
 					queryArgs->ReturnList->Add(data);
 				}
 

@@ -27,16 +27,16 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ListView Grid.Column="0" Margin="5,0,0,5" >
+            <ListView Grid.Column="0" Margin="5,0,0,5" Style="{DynamicResource DarkListViewWithGridView}" >
                 <ListView.View>
-                    <GridView>
+                    <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}">
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView Grid.Column="2" Margin="0,0,5,5" >
+            <ListView Grid.Column="2" Margin="0,0,5,5" Style="{DynamicResource DarkListViewWithGridView}" >
                 <ListView.View>
-                    <GridView>
+                    <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}">
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>

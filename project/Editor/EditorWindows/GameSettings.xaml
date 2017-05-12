@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <TabControl Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}" Foreground="{DynamicResource DarkForeground}" >
+        <TabControl x:Name="tabControl" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}" Foreground="{DynamicResource DarkForeground}" SelectionChanged="tabControl_SelectionChanged">
             <TabItem Header="Startup" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}" >
                     <Grid Margin="10,10,10,0" VerticalAlignment ="Top" Height="80" Background="{DynamicResource ScrollBar.MouseOver.Background}">
@@ -40,8 +40,8 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="SceneTab" Header="Scenes" Template="{DynamicResource TabItemControlTemplate1}">
-                <Grid Background="{DynamicResource DarkBackground}" IsVisibleChanged="Grid_IsVisibleChanged">
-                    <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196">
+                <Grid Background="{DynamicResource DarkBackground}">
+                    <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Style="{DynamicResource DarkListViewWithGridView}" >
                         <ListView.Resources>
                             <c:BaseData x:Key="sceneDataSource"/>
                         </ListView.Resources>
@@ -49,8 +49,8 @@
                             <Binding Mode="OneWay" Source="{StaticResource sceneDataSource}"/>
                         </ListView.ItemsSource>
                         <ListView.View>
-                            <GridView >
-                                <GridViewColumn Header="Form ID" DisplayMemberBinding="{Binding EditorID}"/>
+                            <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}" >
+                                <GridViewColumn Header="Form ID" DisplayMemberBinding="{Binding EditorID}" />
                                 <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                             </GridView>
                         </ListView.View>
@@ -61,8 +61,8 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="MenuTab" Header="MenuStuff" Template="{DynamicResource TabItemControlTemplate1}">
-                <Grid Background="{DynamicResource DarkBackground}" IsVisibleChanged="Grid_IsVisibleChanged">
-                    <ListView x:Name="menuList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196">
+                <Grid Background="{DynamicResource DarkBackground}">
+                    <ListView x:Name="menuList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Style="{DynamicResource DarkListViewWithGridView}">
                         <ListView.Resources>
                             <c:MenuItem x:Key="menuItemSource"/>
                         </ListView.Resources>
@@ -70,7 +70,7 @@
                             <Binding Mode="OneWay" Source="{StaticResource menuItemSource}"/>
                         </ListView.ItemsSource>
                         <ListView.View>
-                            <GridView >
+                            <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}" >
                                 <GridViewColumn Header="Menu Name" DisplayMemberBinding="{Binding Name}"/>
                                 <GridViewColumn Header="Command" DisplayMemberBinding="{Binding Command}"/>
                             </GridView>

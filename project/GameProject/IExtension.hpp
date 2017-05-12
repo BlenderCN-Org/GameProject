@@ -6,10 +6,18 @@ struct ExtensionSaveEvent {
 	bool pack;
 };
 
+class IObject
+{
+public:
+	virtual const char* getName() = 0;
+	virtual const int getFormID() = 0;
+	virtual void* getData() = 0;
+};
+
 struct ExtensionQueryDataEvent {
 	int objectType;
 	int nrObjects;
-	void* objectList;
+	IObject** objectList;
 };
 
 struct ExtensionAddItemEvent {

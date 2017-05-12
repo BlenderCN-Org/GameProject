@@ -7,6 +7,7 @@
 #include "../Exceptions/Exceptions.hpp"
 
 #include <Allocators\FrameAllocator.hpp>
+#include "TimeAllocator.hpp"
 
 #include <memory>
 
@@ -21,6 +22,7 @@ public:
 	void loadHeap();
 
 	FrameAllocator* getFrameAllocator();
+	TimeAllocator* getTimeAllocator();
 
 	void setNumberOfPools(uint32_t poolCount);
 	void zeroGameData();
@@ -74,6 +76,7 @@ private:
 	}
 
 	FrameAllocator* fa;
+	TimeAllocator* ta;
 
 	size_t heapSize;
 	HeapPtr_t heap;

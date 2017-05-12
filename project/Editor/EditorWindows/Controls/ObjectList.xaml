@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Editor.EditorWindows"
+             xmlns:data="clr-namespace:Editor.DataSources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -29,31 +30,57 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="10*" MinWidth="50"/>
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="treeView"  Background="#FF3C3C3C" BorderBrush="Black">
-            <TreeView.ItemContainerStyle>
+        <TreeView x:Name="treeView" Style="{DynamicResource DarkTreeView}" >
+            <!--<TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <!-- We have to select the item which is right-clicked on -->
+                    --><!-- We have to select the item which is right-clicked on --><!--
                     <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown"
                                 Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
                 </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeViewItem Header="Static objects" Foreground="White"/>
-            <TreeViewItem Header="Animation objects" Foreground="White"/>
-            <TreeViewItem Header="Weapons" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Armor" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Ammo" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Dialog Assets" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Scripts" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Decals" Foreground="White"></TreeViewItem>
-            <TreeViewItem Header="Audio" Foreground="White"></TreeViewItem>
+            </TreeView.ItemContainerStyle>-->
+            <TreeViewItem Header="Static objects"/>
+            <TreeViewItem Header="Animation objects"/>
+            <TreeViewItem Header="Weapons"/>
+            <TreeViewItem Header="Armor"/>
+            <TreeViewItem Header="Ammo"/>
+            <TreeViewItem Header="Dialog Assets"/>
+            <TreeViewItem Header="Scripts"/>
+            <TreeViewItem Header="Decals"/>
+            <TreeViewItem Header="Audio"/>
         </TreeView>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#FF1D1D1D" />
-        <ListView x:Name="listView" Grid.Column="2" Margin="5">
+        <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New"/>
+                    <MenuItem Header="Edit"/>
+                    <MenuItem Header="Delete"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
+                <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}">
+                    <GridViewColumn Header="asd"/>
+                    <GridViewColumn Header="fgh"/>
+                    <GridViewColumn Header="aa"/>
                 </GridView>
             </ListView.View>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
+            <ListViewItem Content="blablablabl"/>
         </ListView>
     </Grid>
 </UserControl>

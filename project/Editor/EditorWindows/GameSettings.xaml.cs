@@ -17,11 +17,30 @@ namespace Editor.EditorWindows
     /// <summary>
     /// Interaction logic for GameSettings.xaml
     /// </summary>
+    /// 
+
+    public static class ElementHelper
+    {
+        public static bool IsUserVisible(this UIElement element)
+        {
+            if (!element.IsVisible)
+                return false;
+            var container = VisualTreeHelper.GetParent(element) as FrameworkElement;
+            if (container == null) throw new ArgumentNullException("container");
+
+            Rect bounds = element.TransformToAncestor(container).TransformBounds(new Rect(0.0, 0.0, element.RenderSize.Width, element.RenderSize.Height));
+            Rect rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
+            return rect.IntersectsWith(bounds);
+        }
+    }
+
     public partial class GameSettings : Window
     {
         public GameSettings()
         {
             InitializeComponent();
+
+            // add loading of general info
 
         }
 
@@ -80,37 +99,44 @@ namespace Editor.EditorWindows
             }
         }
 
-        private void Grid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SceneTab.IsVisible)
+            if (e.Source == tabControl)
             {
-                sceneList.Items.Clear();
 
-                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
-
-                args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
-                args.ReturnList = new List<DataSources.BaseData>();
-                EventHandler.EventManager.OnQueryDataEvent(args);
-
-                foreach (var item in args.ReturnList)
+                // TODO - Make each tab a custom user control so that we can do
+                // tabControl.SelectedItem.executeQuery() or something similar
+                if (tabControl.SelectedItem == SceneTab)
                 {
-                    sceneList.Items.Add(item);
+                    sceneList.Items.Clear();
+
+                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+
+                    args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+                    args.ReturnList = new List<DataSources.BaseData>();
+                    EventHandler.EventManager.OnQueryDataEvent(args);
+
+                    foreach (var item in args.ReturnList)
+                    {
+                        sceneList.Items.Add(item);
+                    }
                 }
-            }
 
-            if (MenuTab.IsVisible)
-            {
-                menuList.Items.Clear();
-
-                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
-                args.ObjectType = Editor.EventHandler.ObjectTypes.DIALOG;
-                args.ReturnList = new List<DataSources.BaseData>();
-                EventHandler.EventManager.OnQueryDataEvent(args);
-
-                foreach (var item in args.ReturnList)
+                if (tabControl.SelectedItem == MenuTab)
                 {
-                    if( item.GetType().Equals(typeof(DataSources.MenuItem)) )
-                        menuList.Items.Add(item);
+                    menuList.Items.Clear();
+
+                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+                    args.ObjectType = Editor.EventHandler.ObjectTypes.DIALOG;
+                    args.ReturnList = new List<DataSources.BaseData>();
+                    EventHandler.EventManager.OnQueryDataEvent(args);
+
+                    foreach (var item in args.ReturnList)
+                    {
+                        if (item.GetType().Equals(typeof(DataSources.MenuItem)))
+                            menuList.Items.Add(item);
+                    }
+
                 }
 
             }
@@ -122,7 +148,7 @@ namespace Editor.EditorWindows
             cfDlg.Owner = this;
             cfDlg.ShowDialog();
 
-            if(cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
+            if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
             {
                 Console.WriteLine("Delete selected item");
             }
@@ -140,7 +166,7 @@ namespace Editor.EditorWindows
             addDlg.Owner = this;
 
             AddItemDlgPages.AddScene newScenePage = new AddItemDlgPages.AddScene();
-            
+
             addDlg.PageArea.Children.Add(newScenePage);
 
             addDlg.PageArea.Height = newScenePage.Height;
@@ -150,14 +176,14 @@ namespace Editor.EditorWindows
             addDlg.InvalidateArrange();
 
             addDlg.ShowDialog();
-            
+
         }
 
         private void addMenuButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
-        
+
         private void deleteMenuButton_Click(object sender, RoutedEventArgs e)
         {
 

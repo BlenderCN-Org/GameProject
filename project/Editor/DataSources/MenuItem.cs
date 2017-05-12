@@ -13,7 +13,7 @@ namespace Editor.DataSources
 
         }
 
-        public MenuItem(string eid, string name) : base(eid, name)
+        public MenuItem(uint eid, string name) : base(eid, name)
         {
         }
 

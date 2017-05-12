@@ -305,6 +305,9 @@
     <ClInclude Include="Core\CoreGlobals.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Memory\TimeAllocator.hpp">
+      <Filter>Source Files\Core\MemoryManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ResourceFiles\Script.txt">

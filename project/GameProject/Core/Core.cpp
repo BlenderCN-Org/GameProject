@@ -141,7 +141,7 @@ void Core::init() {
 	g_core = this;
 	g_assetManager = assetManager;
 	g_threadManager = thrdMgr;
-	g_memoryManager = nullptr;
+	g_memoryManager = &mem;
 	g_renderEngine = renderEngine;
 
 	// end temporary
@@ -237,6 +237,7 @@ void Core::setFPS(int _fps) {
 
 void Core::update(float dt) {
 	mem.getFrameAllocator()->reset();
+	mem.getTimeAllocator()->tick(dt);
 	// reset input states, clear for next frame
 	input->reset();
 	window->pollMessages();
