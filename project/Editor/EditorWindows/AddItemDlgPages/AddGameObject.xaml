@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages"
-             xmlns:StandardControls="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls" x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
+             xmlns:StandardControls="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
+             x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
              mc:Ignorable="d" 
              d:DesignHeight="321" d:DesignWidth="300" Background="{DynamicResource DarkBackground}">
 
@@ -17,7 +18,7 @@
     </UserControl.Resources>
 
     <Grid Margin="5">
-        <StandardControls:NameAndID HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <StandardControls:NameAndID x:Name="IdControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TabControl HorizontalAlignment="Left" Height="177" Margin="0,135,0,0" VerticalAlignment="Top" Width="290" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}"  >
             <TabItem Header="General" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">

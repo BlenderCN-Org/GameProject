@@ -83,14 +83,18 @@
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\BaseData.cs" />
+    <Compile Include="DataSources\CommandType.cs" />
     <Compile Include="DataSources\MenuItem.cs" />
-    <Compile Include="EditorWindows\AddItemDialog.xaml.cs">
-      <DependentUpon>AddItemDialog.xaml</DependentUpon>
+    <Compile Include="EditorWindows\AddEditItemDialog.xaml.cs">
+      <DependentUpon>AddEditItemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddGameDialog.xaml.cs">
       <DependentUpon>AddGameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddItemBase.cs" />
+    <Compile Include="EditorWindows\AddItemDlgPages\AddMenuPanel.xaml.cs">
+      <DependentUpon>AddMenuPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
       <DependentUpon>AddScene.xaml</DependentUpon>
     </Compile>
@@ -99,6 +103,9 @@
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml.cs">
       <DependentUpon>NameAndID.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\SelectCommand.xaml.cs">
+      <DependentUpon>SelectCommand.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
@@ -147,7 +154,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\AddMenuPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\AddItemDlgPages\StandardControls\SelectCommand.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -195,7 +210,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="EditorWindows\AddItemDialog.xaml">
+    <Page Include="EditorWindows\AddEditItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

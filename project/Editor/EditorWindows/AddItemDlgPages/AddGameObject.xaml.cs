@@ -12,17 +12,38 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Editor.EventHandler;
 
 namespace Editor.EditorWindows.AddItemDlgPages
 {
     /// <summary>
     /// Interaction logic for AddStatic.xaml
     /// </summary>
-    public partial class AddGameObject : UserControl
+    public partial class AddGameObject : UserControl, IAddItemBase
     {
         public AddGameObject()
         {
             InitializeComponent();
+        }
+
+        public ObjectTypes GetAddType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public uint GetFormId()
+        {
+            return UInt32.Parse(IdControl.ObjectID.Text);
+        }
+
+        public object GetItemData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetName()
+        {
+            return IdControl.ObjectName.Text;
         }
     }
 }

@@ -179,7 +179,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Rectangle x:Name="UpperHighlight" Fill="#75FFFFFF" Visibility="Collapsed"/>
-                                <GridViewRowPresenter Grid.RowSpan="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <GridViewRowPresenter Grid.RowSpan="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}">
                                     <!--<GridViewRowPresenter.Resources>
                                         <Style TargetType="ContentPresenter">
                                             <Style.Setters>

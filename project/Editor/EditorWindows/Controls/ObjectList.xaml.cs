@@ -50,5 +50,42 @@ namespace Editor.EditorWindows.Controls
             return returnVal as T;
         }
 
+        private void NewMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            bool edit = false;
+            AddEditItemDialog dlg = new AddEditItemDialog(edit);
+            dlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
+            dlg.Show();
+        }
+
+        private void EditMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            bool edit = true;
+            AddEditItemDialog dlg = new AddEditItemDialog(edit);
+            dlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
+            dlg.Show();
+        }
+
+        private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            
+            DataSources.BaseData data = listView.Items[listView.SelectedIndex] as DataSources.BaseData;
+            if (data != null)
+            {
+                EventHandler.FormArgs args = new EventHandler.FormArgs();
+                args.FormID = data.EditorID;
+
+                EventHandler.EventManager.OnDeleteFormEvent(args);
+            }
+        }
+
+        private void listSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DeleteItem.IsEnabled = false;
+            if(listView.SelectedIndex != -1)
+            {
+                DeleteItem.IsEnabled = true;
+            }
+        }
     }
 }

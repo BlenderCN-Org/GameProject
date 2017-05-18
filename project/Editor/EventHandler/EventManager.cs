@@ -31,7 +31,7 @@ namespace Editor.EventHandler
     {
         public ObjectTypes ObjectType { get; set; }
         public string Name { get; set; }
-        public string FormID { get; set; }
+        public UInt32 FormID { get; set; }
         public object Data { get; set; }
     }
 

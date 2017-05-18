@@ -10,7 +10,6 @@ namespace Editor.DataSources
     {
         public MenuItem()
         {
-
         }
 
         public MenuItem(uint eid, string name) : base(eid, name)

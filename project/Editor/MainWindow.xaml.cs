@@ -23,9 +23,9 @@ namespace Editor
 			gwh = new GameWindowHolder();
 			gwh.TopLevel = false;
 
-            EditorWindows.AddItemDialog addDlg = new EditorWindows.AddItemDialog();
+            EditorWindows.AddEditItemDialog addDlg = new EditorWindows.AddEditItemDialog();
 
-            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
+            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddMenuPanel());
 
             addDlg.Show();
 

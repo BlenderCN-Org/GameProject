@@ -16,11 +16,14 @@
     </UserControl.Resources>
 
     <Grid Height="120" Width="200">
-        <Label Content="Object Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
-        <Label Content="Edtior ID:" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,85,0,0" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
-        <Button Content="Get Id" HorizontalAlignment="Left" Margin="135,85,0,0" VerticalAlignment="Top" Width="55" Template="{DynamicResource ButtonControlTemplate1}" Height="23"/>
-
+        <Border BorderThickness="1" BorderBrush="Black">
+            <Grid>
+                <Label x:Name="ObjectLabel" Content="Object Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}"/>
+                <TextBox x:Name="ObjectName" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" Text="" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
+                <Label Content="Edtior ID:" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}"/>
+                <TextBox x:Name="ObjectID" HorizontalAlignment="Left" Height="23" Margin="10,85,0,0" Text="" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False" AcceptsReturn="False" HorizontalScrollBarVisibility="Disabled"/>
+                <Button Content="Get Id" HorizontalAlignment="Left" Margin="135,85,0,0" VerticalAlignment="Top" Width="55" Template="{DynamicResource ButtonControlTemplate1}" Height="23"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

@@ -12,9 +12,9 @@ namespace AssetLib {
 		if ( inFile.is_open() ) {
 			std::streamoff fileSize = inFile.tellg();
 			inFile.seekg(0, inFile.beg);
-			data = new char[fileSize];
+			data = new char[(size_t)fileSize];
 
-			memset(data, 0, fileSize);
+			memset(data, 0, (size_t)fileSize);
 
 			inFile.read((char*)data, fileSize);
 			dataSize = (uint32_t)fileSize;

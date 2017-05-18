@@ -12,6 +12,8 @@ namespace Editor.EditorWindows.AddItemDlgPages
 
         string GetName();
 
-        string GetFormId();
+        UInt32 GetFormId();
+
+        object GetItemData();
     }
 }

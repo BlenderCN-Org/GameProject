@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Window">
       <UniqueIdentifier>{40a7bda9-ca7a-4ee1-bc50-db8a9e8b248a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Extensions">
+      <UniqueIdentifier>{47b2c3ad-7ee8-4143-b82a-161db2c6b386}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IEditor.hpp">
@@ -30,8 +33,8 @@
     <ClInclude Include="CoreInclude.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ExtensionMap.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,10 +44,17 @@
     <ClCompile Include="Window\MainWindowWrapper.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Editor_Wrapper.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <ClCompile Include="ExtensionMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveEvent.cpp">
+      <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvent.cpp">
+      <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectEvents.cpp">
+      <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

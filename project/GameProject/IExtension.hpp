@@ -1,6 +1,8 @@
 #ifndef IEXTENSION_HPP
 #define IEXTENSION_HPP
 
+#include <cstdint>
+
 struct ExtensionSaveEvent {
 	char* fileName;
 	bool pack;
@@ -15,13 +17,22 @@ public:
 };
 
 struct ExtensionQueryDataEvent {
-	int objectType;
-	int nrObjects;
+	uint32_t objectType;
+	uint32_t nrObjects;
 	IObject** objectList;
 };
 
 struct ExtensionAddItemEvent {
+	uint32_t objectType;
+	IObject* objectData;
+};
 
+struct ExtensionDeleteItemEvent {
+	uint32_t formID;
+};
+
+struct ExtensionEditItemEvent {
+	IObject* objectData;
 };
 
 template<typename T>

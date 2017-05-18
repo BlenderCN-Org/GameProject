@@ -161,7 +161,7 @@ namespace Editor.EditorWindows
 
         private void addSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            AddItemDialog addDlg = new AddItemDialog();
+            AddEditItemDialog addDlg = new AddEditItemDialog();
 
             addDlg.Owner = this;
 

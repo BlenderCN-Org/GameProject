@@ -8,6 +8,8 @@ namespace Editor.DataSources
         
         public BaseData()
         {
+            Name = "Test";
+            EditorID = 123;
         }
 
         public BaseData(uint eid, string name)

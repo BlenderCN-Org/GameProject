@@ -42,7 +42,7 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 		else {
 			MasterFile* mst = &g_assetManager->masterFile;
 			
-			for (int i = 0; i < args->nrObjects; i++)
+			for (uint32_t i = 0; i < args->nrObjects; i++)
 			{
 				Simple* s = g_memoryManager->getTimeAllocator()->allocateTimedObject<Simple>(5.0f);
 				s->formID = i;

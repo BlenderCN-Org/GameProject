@@ -16,11 +16,11 @@
 #endif
 #endif  // _DEBUG
 
+
 int main(int argc, char* argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	initExceptionHandlers();
-
 
 	float dt = 0.0f;
 	unsigned int start = clock();

@@ -39,6 +39,7 @@ void MasterFileExtension::saveMasterFile() {
 		void* data = malloc(size);
 		form->getFormData(data);
 		tempFile.write((char*)data, size);
+		free(data);
 	}
 	//for (uint32_t i = 0; i < hdr.entries; i++)
 	//{
