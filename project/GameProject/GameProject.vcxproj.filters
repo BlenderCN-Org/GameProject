@@ -67,6 +67,9 @@
     <Filter Include="Source Files\Core\Assets\Forms">
       <UniqueIdentifier>{0271ee96-9eae-4734-b5cc-58920f82d3b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Assets\Structs">
+      <UniqueIdentifier>{8ede4143-6fc2-48f3-9430-b6fb91e34fed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -173,6 +176,18 @@
     </ClCompile>
     <ClCompile Include="Core\CoreGlobals.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Extensions\GetFormIDExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Forms\SceneForm.cpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Extensions\DeleteDataExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Extensions\EditDataExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +322,21 @@
     </ClInclude>
     <ClInclude Include="Core\Memory\TimeAllocator.hpp">
       <Filter>Source Files\Core\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\GetFormIDExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\Forms\SceneForm.hpp">
+      <Filter>Source Files\Core\Assets\Forms</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\DeleteDataExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\Structs\Color.hpp">
+      <Filter>Source Files\Core\Assets\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\EditDataExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

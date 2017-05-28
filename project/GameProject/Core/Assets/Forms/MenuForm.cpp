@@ -1,10 +1,11 @@
 #include "MenuForm.hpp"
 
 #include "../../Memory/MemoryBuffer.hpp"
+#include <Editor_Wrapper/IEditor.hpp>
 
 MenuForm::MenuForm()
 {
-	//memcpy(tag, "MENU", 4);
+	memcpy(tag, "MENU", 4);
 	//formID = 1234;
 	//flags = MENU_VISIBLE;
 	//nrMenuItems = 2;
@@ -75,4 +76,8 @@ BaseForm * MenuForm::createFromData(void * data, uint32_t size)
 
 	memBuff.deleteBuffer();
 	return form;
+}
+
+uint32_t MenuForm::getType() {
+	return 0;
 }

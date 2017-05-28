@@ -15,5 +15,9 @@ namespace Editor.EditorWindows.AddItemDlgPages
         UInt32 GetFormId();
 
         object GetItemData();
+
+        bool IsValidData();
+
+        string GetFailMessage();
     }
 }

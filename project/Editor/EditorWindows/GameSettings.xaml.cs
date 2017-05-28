@@ -18,7 +18,7 @@ namespace Editor.EditorWindows
     /// Interaction logic for GameSettings.xaml
     /// </summary>
     /// 
-
+    
     public static class ElementHelper
     {
         public static bool IsUserVisible(this UIElement element)
@@ -36,6 +36,9 @@ namespace Editor.EditorWindows
 
     public partial class GameSettings : Window
     {
+
+        private int selectedItem = -1;
+
         public GameSettings()
         {
             InitializeComponent();
@@ -108,6 +111,7 @@ namespace Editor.EditorWindows
                 // tabControl.SelectedItem.executeQuery() or something similar
                 if (tabControl.SelectedItem == SceneTab)
                 {
+                    selectedItem = -1;
                     sceneList.Items.Clear();
 
                     EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
@@ -148,9 +152,14 @@ namespace Editor.EditorWindows
             cfDlg.Owner = this;
             cfDlg.ShowDialog();
 
+            EventHandler.FormArgs fa = new EventHandler.FormArgs()
+            {
+                FormID = (sceneList.SelectedItem as DataSources.BaseData).EditorID
+            };
+
             if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
             {
-                Console.WriteLine("Delete selected item");
+                EventHandler.EventManager.OnDeleteFormEvent(fa);
             }
             else
             {
@@ -177,6 +186,33 @@ namespace Editor.EditorWindows
 
             addDlg.ShowDialog();
 
+            DataSources.Scene bd = new DataSources.Scene();
+
+            bd.EditorID = newScenePage.GetFormId();
+            bd.Name = newScenePage.GetName();
+
+            sceneList.Items.Add(bd);
+            sceneList.SelectedIndex = sceneList.Items.Count - 1;
+
+        }
+
+        private void sceneListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if( selectedItem != -1)
+            {
+                // do Edit Event
+                EventHandler.FormArgs fa = new EventHandler.FormArgs();
+                fa.FormID = ((DataSources.Scene)sceneList.Items[selectedItem]).EditorID;
+                fa.Data = ((DataSources.Scene)sceneList.Items[selectedItem]);
+                EventHandler.EventManager.OnEditFormEvent(fa);
+            }
+
+            DeleteItem.IsEnabled = false;
+            if (sceneList.SelectedIndex != -1)
+            {
+                DeleteItem.IsEnabled = true;
+                selectedItem = sceneList.SelectedIndex;
+            }
         }
 
         private void addMenuButton_Click(object sender, RoutedEventArgs e)

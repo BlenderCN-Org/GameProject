@@ -9,7 +9,7 @@ uint32_t copyToPtr(void* ptr, uint32_t offset, void* data, uint32_t dataSize);
 
 struct FormHeader{
 	char tag[4];
-uint32_t formID;
+    uint32_t formID;
 	uint32_t formSize;
 };
 
@@ -30,6 +30,8 @@ public:
 	virtual void getFormData(void * pData) = 0;
 
 	virtual BaseForm* createFromData(void* data, uint32_t size) = 0;
+
+	virtual uint32_t getType() = 0;
 
 protected:
 

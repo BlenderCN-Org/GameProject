@@ -22,7 +22,7 @@
 
             <TextBox x:Name="FormID" HorizontalAlignment="Left" Height="25" Margin="10,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="216" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False"/>
             <Label x:Name="label_Copy" Content="Form ID:" HorizontalAlignment="Left" Height="25" Margin="10,70,0,0" VerticalAlignment="Top" Width="79" Foreground="{DynamicResource DarkForeground}"/>
-            <Button x:Name="button" Content="Get" HorizontalAlignment="Left" Margin="231,102,0,0" VerticalAlignment="Top" Width="59" Height="23" Template="{DynamicResource ButtonControlTemplate1}"/>
+            <Button x:Name="GetIDButton" Content="Get" HorizontalAlignment="Left" Margin="231,100,0,0" VerticalAlignment="Top" Width="59" Height="25" Template="{DynamicResource ButtonControlTemplate1}" Click="GetIDButton_Click"/>
 
         </Grid>
     </Grid>

@@ -24,27 +24,35 @@ namespace Editor.EditorWindows
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             AddItemDlgPages.IAddItemBase baseType = PageArea.Children.OfType<AddItemDlgPages.IAddItemBase>().First();
-            if (editContent)
+
+            if (baseType.IsValidData())
             {
-                EventHandler.FormArgs args = new EventHandler.FormArgs()
+                if (editContent)
                 {
-                    FormID = baseType.GetFormId(),
-                    Data = baseType.GetItemData()
-                };
-                EventHandler.EventManager.OnEditFormEvent(args);
+                    EventHandler.FormArgs args = new EventHandler.FormArgs()
+                    {
+                        FormID = baseType.GetFormId(),
+                        Data = baseType.GetItemData()
+                    };
+                    EventHandler.EventManager.OnEditFormEvent(args);
+                }
+                else
+                {
+                    EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
+                    {
+                        Name = baseType.GetName(),
+                        FormID = baseType.GetFormId(),
+                        ObjectType = baseType.GetAddType()
+                    };
+
+                    EventHandler.EventManager.OnAddObjectEvent(args);
+                }
+                Close();
             }
             else
             {
-                EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
-                {
-                    Name = baseType.GetName(),
-                    FormID = baseType.GetFormId(),
-                    ObjectType = baseType.GetAddType()
-                };
-
-                EventHandler.EventManager.OnAddObjectEvent(args);
+                MessageBox.Show(baseType.GetFailMessage());
             }
-            Close();
 
         }
 

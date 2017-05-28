@@ -26,6 +26,7 @@ public:
 	virtual uint32_t getFormSize();
 	virtual void getFormData(void * pData);
 	virtual BaseForm* createFromData(void* data, uint32_t size);
+	virtual uint32_t getType();
 
 private:
 

@@ -20,7 +20,7 @@
     <UserControl.DataContext>
         <data:CommandType x:Name="CommandData" Description="Adf" Type="12"/>
     </UserControl.DataContext>
-    
+
     <Grid Margin="5">
         <StandardControls:NameAndID x:Name="IdControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ListView x:Name="menuItemList" HorizontalAlignment="Left" Height="275" Margin="0,125,0,0" VerticalAlignment="Top" Width="200"
@@ -48,7 +48,7 @@
 
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="275" Margin="238,125,0,0" VerticalAlignment="Top" Width="410">
             <Grid>
-                <TextBox x:Name="Name" HorizontalAlignment="Left" Height="25" Margin="10,36,0,0" Text="" VerticalAlignment="Top" Width="211" Style="{DynamicResource DarkTextBox}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" IsEnabled="{Binding SelectedItems.Count, ElementName=menuItemList, Mode=OneWay}"/>
+                <TextBox x:Name="MenuName" HorizontalAlignment="Left" Height="25" Margin="10,36,0,0" Text="" VerticalAlignment="Top" Width="211" Style="{DynamicResource DarkTextBox}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" IsEnabled="{Binding SelectedItems.Count, ElementName=menuItemList, Mode=OneWay}"/>
                 <TextBox x:Name="Command" HorizontalAlignment="Left" Height="25" Margin="10,98,0,0" VerticalAlignment="Top" Width="211" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" IsEnabled="False" Text="{Binding Command, Mode=OneWay}"/>
                 <Label Content="Name:" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="214" Foreground="{DynamicResource DarkForeground}"/>
                 <Label Content="Command:" HorizontalAlignment="Left" Margin="7,67,0,0" VerticalAlignment="Top" Width="214" Foreground="{DynamicResource DarkForeground}"/>
@@ -57,7 +57,6 @@
                 <TextBox HorizontalAlignment="Left" Height="25" Margin="32,146,0,0" Text="" VerticalAlignment="Top" Width="189" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" IsEnabled="False"/>
                 <Button Content="..." HorizontalAlignment="Left" Margin="226,146,0,0" VerticalAlignment="Top" Width="36" Height="25" Template="{DynamicResource ButtonControlTemplate1}" IsEnabled="{Binding IsChecked, ElementName=EnableTrigger, Mode=OneWay}"/>
                 <CheckBox x:Name="Visible" Content="Affect Visibility" HorizontalAlignment="Left" Margin="32,176,0,0" VerticalAlignment="Top" Width="189" Foreground="{DynamicResource DarkForeground}" IsEnabled="{Binding IsChecked, ElementName=EnableTrigger, Mode=OneWay}"/>
-
             </Grid>
         </Border>
         <Button Content="Preview Menu" HorizontalAlignment="Left" Margin="238,406,0,0" VerticalAlignment="Top" Width="100" Height="25" Template="{DynamicResource ButtonControlTemplate1}"/>

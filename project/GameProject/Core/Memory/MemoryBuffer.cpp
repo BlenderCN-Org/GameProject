@@ -31,7 +31,7 @@ void MemoryBuffer::setOffset(uint32_t _offset) {
 }
 
 void * MemoryBuffer::returnBytes(uint32_t bytesToReturn) {
-	if ( bytesToReturn > (totalDataSize - offset) ) throw "Trying to read more that than avaible in the buffer\n";
+	if ( bytesToReturn > (totalDataSize - offset) ) throw "Trying to read more than avaible in the buffer\n";
 	
 	char* data = (char*)memoryData + offset;
 	offset += bytesToReturn;

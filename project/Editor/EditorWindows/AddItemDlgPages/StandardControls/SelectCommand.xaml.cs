@@ -33,7 +33,7 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
 
                 DataSources.CommandType type = CommandType.SelectedItem as DataSources.CommandType;
 
-                int b = 0;
+                //int b = 0;
             }
 
         }

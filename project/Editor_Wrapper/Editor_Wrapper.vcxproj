@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="ExtensionMap.cpp" />
+    <ClCompile Include="GetFormIDEvent.cpp" />
     <ClCompile Include="ObjectEvents.cpp" />
     <ClCompile Include="QueryEvent.cpp" />
     <ClCompile Include="SaveEvent.cpp" />

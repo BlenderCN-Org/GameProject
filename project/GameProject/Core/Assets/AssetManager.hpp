@@ -11,6 +11,9 @@
 #include "../GUI/Menu/Menu.hpp"
 
 class AssetManager {
+
+	friend class AddDataExtension;
+
 public:
 
 	static AssetManager* getAssetManager();
@@ -42,6 +45,8 @@ private:
 
 	IFont* basicFont;
 	IFont* smallFont;
+
+	void addScene(const char* sceneName, uint32_t formID, void* data, uint32_t dataSize);
 
 };
 

@@ -5,6 +5,8 @@
 #include <AssetLib\AssetLib.hpp>
 
 #include "Forms\MenuForm.hpp"
+#include "Forms\SceneForm.hpp"
+#include <Editor_Wrapper\IEditor.hpp>
 
 AssetManager* AssetManager::assetManager = nullptr;
 
@@ -117,4 +119,16 @@ IFont* AssetManager::getSmallFont() {
 	}
 
 	return smallFont;
+}
+
+void AssetManager::addScene(const char * sceneName, uint32_t formID, void * data, uint32_t dataSize)
+{
+	SceneForm* scene = new SceneForm();
+
+	scene->formID = formID;
+	size_t strLen = std::string(sceneName).length();
+	memset(scene->name, 0, 128);
+	memcpy(scene->name, sceneName, strLen > 128 ? 128 : strLen);
+
+	masterFile.addForm(OBJECT_TYPE_SCENE, scene, formID);
 }

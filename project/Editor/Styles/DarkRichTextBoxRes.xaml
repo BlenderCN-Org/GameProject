@@ -298,8 +298,8 @@
 		<Setter Property="AllowDrop" Value="true"/>
 		<Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
 		<Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-		<Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
-		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
+		<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type TextBoxBase}">

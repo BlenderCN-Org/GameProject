@@ -34,12 +34,14 @@ void MasterFileExtension::saveMasterFile() {
 	// write forms
 	for (FormEntries::const_iterator it = mstFile->entries.begin(); it != mstFile->entries.end(); it++ )
 	{
-		BaseForm* form = it->second.form;
-		uint32_t size = form->getFormSize();
-		void* data = malloc(size);
-		form->getFormData(data);
-		tempFile.write((char*)data, size);
-		free(data);
+		if (it->second.deleted == false) {
+			BaseForm* form = it->second.form;
+			uint32_t size = form->getFormSize();
+			void* data = malloc(size);
+			form->getFormData(data);
+			tempFile.write((char*)data, size);
+			free(data);
+		}
 	}
 	//for (uint32_t i = 0; i < hdr.entries; i++)
 	//{

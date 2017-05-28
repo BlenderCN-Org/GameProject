@@ -4,15 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:c="clr-namespace:Editor.DataSources"
+        xmlns:StandardControls="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
         x:Class="Editor.EditorWindows.GameSettings"
         mc:Ignorable="d"
-        Title="GameSettings" Height="400" Width="500" Closing="Window_Closing" Background="{DynamicResource DarkBackground}" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="GameSettings" Height="400" Width="528" Closing="Window_Closing" Background="{DynamicResource DarkBackground}" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/dictRes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -42,13 +44,21 @@
             </TabItem>
             <TabItem x:Name="SceneTab" Header="Scenes" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
-                    <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Style="{DynamicResource DarkListViewWithGridView}" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="113*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Style="{DynamicResource DarkListViewWithGridView}"
+                              SelectionChanged="sceneListSelectionChanged" Grid.ColumnSpan="2">
                         <ListView.Resources>
-                            <c:BaseData x:Key="sceneDataSource"/>
+                            <c:Scene x:Key="sceneDataSource" />
                         </ListView.Resources>
-                        <ListView.ItemsSource>
-                            <Binding Mode="OneWay" Source="{StaticResource sceneDataSource}"/>
-                        </ListView.ItemsSource>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="NewItem" Header="New" />
+                                <MenuItem x:Name="DeleteItem" Header="Delete" IsEnabled="False"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}" >
                                 <GridViewColumn Header="Form ID" DisplayMemberBinding="{Binding EditorID}" />
@@ -56,9 +66,33 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button x:Name="addSceneButton" Content="Add" HorizontalAlignment="Left" Height="25" Margin="11,308,0,0" VerticalAlignment="Top" Width="93" Template="{StaticResource ButtonControlTemplate1}" Click="addSceneButton_Click"/>
-                    <Button x:Name="deleteSceneButton" Content="Delete" HorizontalAlignment="Left" Height="25" Margin="109,308,0,0" VerticalAlignment="Top" Width="97" Template="{StaticResource ButtonControlTemplate1}" Click="deleteSceneButton_Click" IsEnabled="{Binding SelectedItems.Count, ElementName=sceneList, Mode=OneWay}"/>
-
+                    <Button x:Name="addSceneButton" Content="Add" HorizontalAlignment="Left" Height="25" Margin="11,308,0,0" VerticalAlignment="Top" Width="93" Template="{StaticResource ButtonControlTemplate1}" Click="addSceneButton_Click" Grid.ColumnSpan="2"/>
+                    <Button x:Name="deleteSceneButton" Content="Delete" HorizontalAlignment="Left" Height="25" Margin="73,308,0,0" VerticalAlignment="Top" Width="97" Template="{StaticResource ButtonControlTemplate1}" Click="deleteSceneButton_Click" IsEnabled="{Binding SelectedItems.Count, ElementName=sceneList, Mode=OneWay}" Grid.Column="1"/>
+                    <StandardControls:SceneInfo DataContext="{Binding SelectedItem,ElementName=sceneList, Mode=TwoWay}" HorizontalAlignment="Left" Height="293" Margin="175,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="Settings" Header="Settings" Template="{DynamicResource TabItemControlTemplate1}">
+                <Grid Background="{DynamicResource DarkBackground}">
+                    <GroupBox Header="Settings" HorizontalAlignment="Left" Height="134" VerticalAlignment="Top" Width="255" Margin="10,10,0,0" Style="{DynamicResource DarkGroupBox}">
+                        <Grid>
+                            <CheckBox x:Name="AllowPreloading" Content="Allow Scene Preloading" HorizontalAlignment="Left" Margin="10,10,-2,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}">
+                                <CheckBox.ToolTip>
+                                    <ToolTip Background="{DynamicResource DarkBackground}" ToolTipService.ShowDuration="60000">
+                                        <StackPanel>
+                                            <TextBlock Foreground="{DynamicResource DarkForeground}">Allows assets to be preloaded</TextBlock>
+                                            <TextBlock Foreground="{DynamicResource DarkForeground}">for faster load times between scenes</TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </CheckBox.ToolTip>
+                            </CheckBox>
+                            <Label Content="Distance" Foreground="{DynamicResource DarkForeground}" HorizontalAlignment="Left" Margin="20,26,0,0" VerticalAlignment="Top" Height="29" Width="56"/>
+                            <TextBox HorizontalAlignment="Left" Height="22" Margin="74,30,0,0" TextWrapping="Wrap" Text="10" TextAlignment="Right" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" IsEnabled="{Binding IsChecked,ElementName=AllowPreloading}"/>
+                            <Label Content="Units" Foreground="{DynamicResource DarkForeground}" HorizontalAlignment="Left" Margin="194,26,0,0" VerticalAlignment="Top" Height="29" Width="39"/>
+                            <CheckBox x:Name="DelayedUnloading" Content="Delayed Asset Unloading" Foreground="{DynamicResource DarkForeground}" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Height="22" Margin="74,80,0,0" TextWrapping="Wrap" Text="300" TextAlignment="Right" VerticalAlignment="Top" Width="103" Style="{DynamicResource DarkTextBox}" IsEnabled="{Binding IsChecked,ElementName=DelayedUnloading}"/>
+                            <Label Content="Seconds" Foreground="{DynamicResource DarkForeground}" HorizontalAlignment="Left" Margin="177,76,0,0" VerticalAlignment="Top" Height="29" Width="56"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="MenuTab" Header="MenuStuff" Template="{DynamicResource TabItemControlTemplate1}">

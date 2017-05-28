@@ -41,6 +41,11 @@ namespace Editor.EventHandler
         public object Data { get; set; }
     }
 
+    public class GetFormIDArgs
+    {
+        public UInt32 FormID { get; set; }
+    }
+
 	public static class EventManager
 	{
 
@@ -50,7 +55,7 @@ namespace Editor.EventHandler
         public static EventHandler<AddObjectArgs> onAddObjectEvent;
         public static EventHandler<FormArgs> onDeleteFormEvent;
         public static EventHandler<FormArgs> onEditFormEvent;
-        
+        public static EventHandler<GetFormIDArgs> onGetFormIDEvent;
 
         public static void OnSaveEvent(SaveEventArgs saveArgs)
 		{
@@ -75,6 +80,11 @@ namespace Editor.EventHandler
         public static void OnEditFormEvent(FormArgs args)
         {
             onEditFormEvent?.Invoke(null, args);
+        }
+
+        public static void OnGetFormIDEvent(GetFormIDArgs args)
+        {
+            onGetFormIDEvent?.Invoke(null, args);
         }
 
     }

@@ -18,10 +18,33 @@ namespace Editor.DataSources
             Name = name;
         }
 
+        private uint editorID;
+        private string name;
 
-        public uint EditorID { get; set; }
+        public uint EditorID
+        {
+            get { return editorID; }
+            set {
+                if (editorID != value)
+                {
+                    editorID = value;
+                    this.OnPropertyChanged("EditorID");
+                }
+            }
+        }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    this.OnPropertyChanged("Name");
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

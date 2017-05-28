@@ -7,6 +7,7 @@
 #include <fstream>
 
 #include <map>
+#include <set>
 #include <vector>
 
 struct VersionRecord {
@@ -44,6 +45,8 @@ typedef std::map<uint32_t, FormEntry> FormEntries;
 class MasterFile
 {
 	friend class MasterFileExtension;
+	friend class DeleteDataExtension;
+	friend class EditDataExtension;
 
 public:
 	MasterFile();
@@ -57,7 +60,18 @@ public:
 	BaseForm* getForm(const uint32_t formID);
 
 	bool isFormPresent(const uint32_t formID);
+	bool isFormDeleted(const uint32_t formID);
+
 	uint32_t getFormIDFromNamedSection(const char* name);
+
+	bool isIDTaken(uint32_t formID);
+
+	uint32_t getNextFormID();
+
+	void addForm(uint32_t type, BaseForm* form, uint32_t formID);
+	
+	uint32_t getNumberUsingType(uint32_t type);
+	uint32_t getFormIDFromTypeAndIndex(uint32_t type, uint32_t index);
 
 private:
 
@@ -67,6 +81,9 @@ private:
 	FormEntries entries;
 	std::map<std::string, uint32_t> namedEntriesTable;
 
+	std::map<uint32_t, std::set<uint32_t> > typeMapper;
+
+	uint32_t nextID;
 
 };
 

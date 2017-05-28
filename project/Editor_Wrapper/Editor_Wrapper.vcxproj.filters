@@ -56,5 +56,8 @@
     <ClCompile Include="ObjectEvents.cpp">
       <Filter>Source Files\Extensions</Filter>
     </ClCompile>
+    <ClCompile Include="GetFormIDEvent.cpp">
+      <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

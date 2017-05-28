@@ -10,20 +10,12 @@ Todo:
 Today:
 
 	Project:
+		- Asset interface or something for editor
 		<W> Rework custom allocators
 	RenderEngine:
 
 	Editor:
-		<W> Allow editor to add entries and such to main menu
-			<D> Define callback types for adding, removing and editing menu form
-				<D> callback for adding form
-				<D> callback for removing form
-				<D> callback for editing form
-				<D> callback to get form info
-			- Make Editor add entries
-			- Make Editor change entry
-			- Make Editor delete entry
-			- Make Editor get form info
+
 List:
 
 	Project:
@@ -91,6 +83,7 @@ List:
 
 
 	Editor:
+		- Select file to load
 		<W> Add dialogs for mesh preview, text editor, object properites etc.
 			- Mesh previewer
 			<W> Text editor
@@ -130,6 +123,16 @@ Done Stuff:
 	Editor:
 		<D> Next need to make gamewindow borderless and auto resize to editor window.
 		<D> Add panels for scene, object list.
+		<D> Allow editor to add entries and such to main menu
+			<D> Define callback types for adding, removing and editing menu form
+				<D> callback for adding form
+				<D> callback for removing form
+				<D> callback for editing form
+				<D> callback to get form info
+			<D> Make Editor add entries
+			<D> Make Editor delete entry
+			<D> Make Editor get form info
+			<D> Make Editor change entry
 
 Other Notes:
 

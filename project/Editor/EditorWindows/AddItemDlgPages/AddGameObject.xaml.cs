@@ -31,6 +31,11 @@ namespace Editor.EditorWindows.AddItemDlgPages
             throw new NotImplementedException();
         }
 
+        public string GetFailMessage()
+        {
+            throw new NotImplementedException();
+        }
+
         public uint GetFormId()
         {
             return UInt32.Parse(IdControl.ObjectID.Text);
@@ -44,6 +49,11 @@ namespace Editor.EditorWindows.AddItemDlgPages
         public string GetName()
         {
             return IdControl.ObjectName.Text;
+        }
+
+        public bool IsValidData()
+        {
+            throw new NotImplementedException();
         }
     }
 }

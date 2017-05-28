@@ -23,11 +23,11 @@ namespace Editor
 			gwh = new GameWindowHolder();
 			gwh.TopLevel = false;
 
-            EditorWindows.AddEditItemDialog addDlg = new EditorWindows.AddEditItemDialog();
-
-            addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddMenuPanel());
-
-            addDlg.Show();
+            //EditorWindows.AddEditItemDialog addDlg = new EditorWindows.AddEditItemDialog();
+            
+            //addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.StandardControls.SceneInfo());
+            
+            //addDlg.Show();
 
             //EditorWindows.DragWindow wnd1 = new EditorWindows.DragWindow();
             //EditorWindows.DragWindow wnd2 = new EditorWindows.DragWindow();
