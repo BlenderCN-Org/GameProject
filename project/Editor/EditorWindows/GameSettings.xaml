@@ -62,7 +62,7 @@
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}" >
                                 <GridViewColumn Header="Form ID" DisplayMemberBinding="{Binding EditorID}" />
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding NameWState}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

@@ -65,11 +65,13 @@ struct KeyBind
 class Input
 {
 public:
+	Input();
 
 	static Input* getInput();
 	static void release();
 
 	void attachConsole(Console* con);
+	void clearCallbacks();
 	void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
 
 	bool isKeyBindPressed(KeyBind &keyBind, bool includeMods = true);
@@ -93,16 +95,16 @@ public:
 
 	void print();
 
-private:
+//private:
 
 	Config keyConf;
 	Console* console;
 	bool consoleActive;
 
+	bool blockInput;
 	bool focus;
 
 	static Input* singleton;
-	Input();
 
 	void loadkeyBinds();
 	void saveKeyBinds();

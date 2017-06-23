@@ -36,6 +36,9 @@
     <ClInclude Include="ExtensionMap.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="EditorWindow.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor.cpp">
@@ -58,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="GetFormIDEvent.cpp">
       <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorWindow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

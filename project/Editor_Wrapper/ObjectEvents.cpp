@@ -18,6 +18,9 @@ public:
 	virtual uint32_t dataSize() override {
 		return 0;
 	}
+	virtual bool isDeleted() override {
+		return false;
+	}
 
 	const char* name;
 	uint32_t formID;

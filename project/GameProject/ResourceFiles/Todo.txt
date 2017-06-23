@@ -15,14 +15,20 @@ Today:
 	RenderEngine:
 
 	Editor:
-
+		- Remove win32Host
+			<D> Render and resize in wpf editor
+			<W> Handle input events
+			<W> give editor access to render engine
+			- move pixelbuffer to editor
+			- Cleanup win32Host code
+			- Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
 List:
 
 	Project:
 
-		- Divide into multiple projects
+		<W> Divide into multiple projects
+			<W> Memory
 			- Console
-			- Memory
 			- Threading
 			- Scripts
 		
@@ -121,6 +127,7 @@ Done Stuff:
 	RenderEngine:
 
 	Editor:
+		<D> Fix delete
 		<D> Next need to make gamewindow borderless and auto resize to editor window.
 		<D> Add panels for scene, object list.
 		<D> Allow editor to add entries and such to main menu

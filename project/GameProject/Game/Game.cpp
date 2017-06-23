@@ -2,10 +2,11 @@
 
 #include "../Core/Input/Input.hpp"
 
-#include <glm\gtc\matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <AssetLib\AssetLib.hpp>
+#include <AssetLib/AssetLib.hpp>
 
+#include "../Core/CoreGlobals.hpp"
 //@Temporary
 
 GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, float z) {
@@ -58,6 +59,8 @@ void Game::init() {
 	}
 	//if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
 	core->startEditor();
+	newGame();
+	gstate = GameState::eGameState_PlayMode;
 	//}
 
 	//@Temporary
@@ -102,7 +105,23 @@ void Game::update(float dt) {
 	if (in->sizeChange) {
 		int w = 0, h = 0;
 		in->getWindowSize(w, h);
-		*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
+		if (w != 0 && h != 0) {
+			*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
+		}
+	}
+
+	KeyBind kb;
+	kb.code = 28;
+	kb.mod = 0;
+	kb.mouse = 0;
+
+
+	if (in->releasedThisFrame(kb)) {
+		//std::cout << "UP Pressed\n";
+		//saveGame();
+		//handleMenuEvent(-1);
+		maxDx = 0.0f;
+		maxDy= 0.0f;
 	}
 
 	// update gameStuffz
@@ -164,21 +183,31 @@ void Game::render() {
 	}
 
 	IRenderEngine* re = core->getRenderEngine();
-
-	if (ffps > 60)
+	textShObj->useShader();
+	textShObj->bindData(orthoLocation, UniformDataType::UNI_MATRIX4X4, cam->getOrthoMatrix());
+	textShObj->bindData(textLocation, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	if (ffps >= 60)
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(0, 1, 0));
-	else if (ffps > 30)
+	else if (ffps >= 30)
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(255.0f / 255.0f, 165.0f / 255.0f, 0));
 	else
 		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(1, 0, 0));
 
 	std::string fpsString = std::to_string(ffps) + " FPS";
 
+	Input* in = Input::getInput();
+
+	maxDx = max(in->xDelta, maxDx);
+	maxDy = max(in->yDelta, maxDy);
+
+	fpsString += "\nMax dx/dy: (" + std::to_string(maxDx) + ", " + std::to_string(maxDy);
+
+	//fpsString += "\nMem: " + std::to_string(g_allocator->getUsedSize()) + "/" + std::to_string(g_allocator->getHeapSize());
+
 	t->setText((char*)fpsString.c_str(), fpsString.size(), 10, 10, 1.0);
 	re->setBlending(true);
 	t->render(textShObj, textureLocation);
 	re->setBlending(false);
-
 
 	//@EndTemporary
 	core->renderConsole();

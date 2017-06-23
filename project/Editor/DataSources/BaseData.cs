@@ -10,6 +10,7 @@ namespace Editor.DataSources
         {
             Name = "Test";
             EditorID = 123;
+            deleted = false;
         }
 
         public BaseData(uint eid, string name)
@@ -20,6 +21,7 @@ namespace Editor.DataSources
 
         private uint editorID;
         private string name;
+        private bool deleted;
 
         public uint EditorID
         {
@@ -42,6 +44,26 @@ namespace Editor.DataSources
                 {
                     name = value;
                     this.OnPropertyChanged("Name");
+                    this.OnPropertyChanged("NameWState");
+                }
+            }
+        }
+
+        public string NameWState
+        {
+            get { return name + (deleted ? " D" : ""); }
+        }
+
+        public bool Deleted
+        {
+            get { return deleted; }
+            set
+            {
+                if(deleted != value)
+                {
+                    deleted = value;
+                    this.OnPropertyChanged("Deleted");
+                    this.OnPropertyChanged("NameWState");
                 }
             }
         }
@@ -50,7 +72,7 @@ namespace Editor.DataSources
 
         public override string ToString()
         {
-            return Name + " ( " + EditorID + " )";
+            return Name + " ( " + EditorID + " )" + (deleted ? " D" : "");
         }
 
         private void OnPropertyChanged(string info)

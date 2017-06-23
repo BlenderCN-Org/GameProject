@@ -10,6 +10,7 @@
 #include "IAnimatedMesh.hpp"
 #include "IShaderObject.hpp"
 #include "IFrameBuffer.hpp"
+#include "IPixelBuffer.hpp"
 #include "ITexture.hpp"
 
 #include "IFont.hpp"
@@ -89,6 +90,8 @@ public:
 	virtual ITexture* createTexture() = 0;
 
 	virtual IFrameBuffer* createFrameBuffer() = 0;
+
+	virtual IPixelBuffer* createPixelBuffer() = 0;
 
 	virtual IFont* createFont() = 0;
 

@@ -8,6 +8,7 @@
 #endif
 
 #include "../GameProject/IExtension.hpp"
+#include <RenderEngine/IWindow.hpp>
 
 // callback defines
 #define SAVE_CALLBACK              0x00000001
@@ -44,6 +45,10 @@ public:
 	virtual bool isRunning() = 0;
 
 	virtual void poll() = 0;
+
+	virtual IWindow* getEditorWindow() = 0;
+
+	virtual void postPixels(uint32_t width, uint32_t height, void* data) = 0;
 
 	virtual void setGameWindow(void* windowPtr) = 0;
 

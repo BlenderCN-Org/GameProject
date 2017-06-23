@@ -3,11 +3,13 @@
 
 #include <vector>
 #include <iostream>
+#include "../CoreGlobals.hpp"
 
 struct AllocObj
 {
 	float time;
 	void* ptr;
+	void(*destroy)(void*);
 };
 
 class TimeAllocator
@@ -18,7 +20,7 @@ public:
 	~TimeAllocator()
 	{
 		for (size_t i = 0; i < allocatedObjects.size(); i++) {
-			delete allocatedObjects[i].ptr;
+			allocatedObjects[i].destroy(allocatedObjects[i].ptr);
 			allocatedObjects.erase(allocatedObjects.begin() + i);
 			i--;
 		}
@@ -31,7 +33,7 @@ public:
 		o.time = ttl;
 		T* t = new T();
 		o.ptr = t;
-
+		o.destroy = [](void* x) { delete (T*)x; };
 		allocatedObjects.push_back(o);
 		return t;
 	}
@@ -42,7 +44,7 @@ public:
 		{
 			allocatedObjects[i].time -= dt;
 			if (allocatedObjects[i].time < 0.0f) {
-				delete allocatedObjects[i].ptr;
+				allocatedObjects[i].destroy(allocatedObjects[i].ptr);
 				allocatedObjects.erase(allocatedObjects.begin() + i );
 				i--;
 			}

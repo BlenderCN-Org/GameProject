@@ -13,5 +13,4 @@ extern AssetManager* g_assetManager;
 extern MemoryManager* g_memoryManager;
 extern ThreadManager* g_threadManager;
 
-
 #endif

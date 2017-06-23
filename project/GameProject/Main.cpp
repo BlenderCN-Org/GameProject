@@ -5,22 +5,18 @@
 
 #include "ExceptionHandling.hpp"
 
+#include <Memory\MemoryMan.hpp>
+
 //#include <vld.h>
 
-#define _CRTDBG_MAP_ALLOC
-
-#ifdef _DEBUG
-#ifndef DBG_NEW
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#define new DBG_NEW
-#endif
-#endif  // _DEBUG
-
 int main(int argc, char* argv[]) {
+
+	InitMemoryManagement();
+
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	initExceptionHandlers();
-
+	
 	float dt = 0.0f;
 	unsigned int start = clock();
 
@@ -37,6 +33,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	delete g;
+	
+	ReleaseMemoryManagement();
 
 	return 0;
 }

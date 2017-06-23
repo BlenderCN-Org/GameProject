@@ -22,6 +22,7 @@ public:
 	virtual const uint32_t getFormID() = 0;
 	virtual void* getData() = 0;
 	virtual uint32_t dataSize() = 0;
+	virtual bool isDeleted() = 0;
 };
 
 struct ExtensionQueryDataEvent {

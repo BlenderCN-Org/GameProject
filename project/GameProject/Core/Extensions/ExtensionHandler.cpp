@@ -1,7 +1,7 @@
 #include "ExtensionHandler.hpp"
+#include "../CoreGlobals.hpp"
 
-void ExtensionHandler::unloadExtension(IEditor* edit)
-{
+void ExtensionHandler::unloadExtension(IEditor* edit) {
 	// unregsiter using nullptr
 	edit->registerExtension(SAVE_CALLBACK, nullptr);
 	edit->registerExtension(GET_OBJECTS_CALLBACK, nullptr);
@@ -29,8 +29,7 @@ void ExtensionHandler::unloadExtension(IEditor* edit)
 	canInitialize = true;
 }
 
-void ExtensionHandler::loadExtensions(IEditor* edit)
-{
+void ExtensionHandler::loadExtensions(IEditor* edit) {
 	// safe check if we have initialized extensions already
 	if (!canInitialize) return;
 

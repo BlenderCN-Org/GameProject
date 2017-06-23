@@ -6,6 +6,7 @@
 #include "Assets\Font_gl.hpp"
 #include "Assets\ShaderObject_gl.hpp"
 #include "Assets\FrameBuffer_gl.hpp"
+#include "Assets\PixelBuffer_gl.hpp"
 #include "Assets\Texture_gl.hpp"
 
 #include "Shader.h"
@@ -20,7 +21,8 @@ extern "C"
 										  GLsizei length,
 										  const GLchar* message,
 										  void* userParam) {
-		if ( severity != GL_DEBUG_SEVERITY_NOTIFICATION ) {
+		// supress id 131154 PBO performance warning
+		if ( severity != GL_DEBUG_SEVERITY_NOTIFICATION && id != 131154) {
 			printf("---------------------opengl-callback-start------------\n");
 			printf("message: %s\n", message);
 			printf("type: ");
@@ -148,6 +150,7 @@ void RenderEngine::renderDebugFrame() {
 	c.v = 0.5f;
 	c.s = 1.0f;
 	clearColor = HSV2RGB(c);
+	glDrawBuffer(GL_BACK);
 	if ( reci.renderEngineType == RenderEngineType::eRenderOpenGL ) {
 		//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -276,6 +279,13 @@ ITexture * RenderEngine::createTexture() {
 IFrameBuffer * RenderEngine::createFrameBuffer() {
 	if ( reci.renderEngineType == RenderEngineType::eRenderOpenGL ) {
 		return new FrameBuffer_gl();
+	}
+	return nullptr;
+}
+
+IPixelBuffer* RenderEngine::createPixelBuffer() {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		return new PixelBuffer_gl();
 	}
 	return nullptr;
 }

@@ -24,11 +24,15 @@ public:
 	virtual uint32_t dataSize() override {
 		return sizeize;
 	}
+	virtual bool isDeleted() override {
+		return deleted;
+	}
 
 	const char* name = nullptr;
 	uint32_t formID = 0;
 	void* data = nullptr;
 	uint32_t sizeize = 0;
+	bool deleted = false;
 };
 
 struct Name {
@@ -66,11 +70,9 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 				s->formID = mst->getFormIDFromTypeAndIndex(args->objectType, i);
 				SceneForm* frm = (SceneForm*)mst->getForm(s->formID);
 				s->name = (char*)g_memoryManager->getTimeAllocator()->allocateTimedObject<Name>(5.0f);
-				bool deleted = mst->isFormDeleted(s->formID);
+				s->deleted = mst->isFormDeleted(s->formID);
 
-				std::string str = deleted ? "(*) " : "";
-
-				str += std::string(frm->getName());
+				std::string str = std::string(frm->getName());
 
 				SceneStuff* sc = g_memoryManager->getTimeAllocator()->allocateTimedObject<SceneStuff>(5.0f);
 				sc->hasFog = frm->fogEnabled;

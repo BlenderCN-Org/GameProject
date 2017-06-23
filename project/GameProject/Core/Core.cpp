@@ -37,6 +37,7 @@ Core::~Core() {
 
 void Core::init() {
 	initSys();
+
 	mem.init();
 	thrdMgr = nullptr;
 
@@ -59,7 +60,6 @@ void Core::init() {
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
 	CreateEditorProc eProc = (CreateEditorProc)editorLib.getProcAddress("CreateEditor");
-
 	editor = eProc();
 
 	extHandler = new ExtensionHandler();
@@ -67,8 +67,8 @@ void Core::init() {
 	extHandler->loadExtensions(editor);
 
 	disp.setResolution(1280, 720);
-	width = 720;
-	heigth = 1080;
+	width = 1280;
+	heigth = 720;
 	disp.setVsyncMode(VSyncMode::VSYNC_ON);
 	disp.setFramerateLock(FramerateLock::FRAME_LOCK_NONE);
 	disp.setFullscreenMode(FullscreenMode::WINDOWED);
@@ -104,6 +104,15 @@ void Core::init() {
 
 	assetManager = AssetManager::getAssetManager();
 	assetManager->init(renderEngine);
+
+	pixelBuffers[0] = renderEngine->createPixelBuffer();
+	pixelBuffers[1] = renderEngine->createPixelBuffer();
+
+	pixelBuffers[0]->init();
+	pixelBuffers[1]->init();
+
+	pixelBuffers[0]->resize(width, heigth);
+	pixelBuffers[1]->resize(width, heigth);
 
 	// temporary
 	shaderObj = renderEngine->createShaderObject();
@@ -151,6 +160,10 @@ void Core::init() {
 
 void Core::freeResources() {
 	// @Temporary
+
+	pixelBuffers[0]->release();
+	pixelBuffers[1]->release();
+
 	extHandler->unloadExtension(editor);
 	delete extHandler;
 	editor->releaseEditor();
@@ -209,6 +222,8 @@ void Core::startEditor() {
 
 		editor->setGameWindow(window->getNativeWindowHandle());
 
+		input->setupCallbacks(editor->getEditorWindow());
+
 		disp.setFullscreenMode(FullscreenMode::WINDOWED_BORDERLESS);
 		disp.apply();
 	}
@@ -254,8 +269,12 @@ void Core::update(float dt) {
 		input->getWindowSize(w, h);
 
 		renderEngine->updateViewPort(w, h);
+		pixelBuffers[0]->resize(w, h);
+		pixelBuffers[1]->resize(w, h);
 		//Resolution res = disp.getResolution();
 		//renderEngine->updateViewPort(res.width, res.height);
+		width =  w;
+		heigth = h;
 	}
 
 	if ( input->consoleKeyWasPressed() ) {
@@ -268,9 +287,28 @@ void Core::update(float dt) {
 }
 
 void Core::render(glm::mat4 viewMat) {
+
 	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
-	if ( hadReset ) return;
+	if (hadReset) return;
+
+	/* PBO readback */
+	pboIndex = (pboIndex + 1) % 2;
+	pboNextIndex = (pboIndex + 1) % 2;
+
+	pixelBuffers[pboIndex]->read(width, heigth);
+
+	void* data = pixelBuffers[pboNextIndex]->map();
+	uint32_t w, h;
+	pixelBuffers[pboNextIndex]->getSize(w, h);
+
+	if (data && editor->isRunning()) {
+		editor->postPixels(width, heigth, data);
+	}
+	pixelBuffers[pboNextIndex]->unMap();
+
+	/* PBO readback */
+
 }
 
 void Core::renderConsole() {

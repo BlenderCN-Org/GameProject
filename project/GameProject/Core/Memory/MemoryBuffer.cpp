@@ -4,7 +4,7 @@
 
 void MemoryBuffer::deleteBuffer() {
 	if ( memoryData )
-		delete memoryData;
+		free(memoryData);
 	memoryData = nullptr;
 	offset = totalDataSize = 0;
 }

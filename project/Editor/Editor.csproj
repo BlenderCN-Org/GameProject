@@ -61,6 +61,7 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
@@ -140,6 +141,10 @@
     <Compile Include="EditorWindows\GameSettings.xaml.cs">
       <DependentUpon>GameSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EventHandler\IEditWindow.cs" />
+    <Compile Include="GameWindowBitmap.xaml.cs">
+      <DependentUpon>GameWindowBitmap.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxHighlightTextbox\DarkSyntaxHighlightedTextbox.xaml.cs">
       <DependentUpon>DarkSyntaxHighlightedTextbox.xaml</DependentUpon>
     </Compile>
@@ -198,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\DragWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameWindowBitmap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,6 +5,8 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
+#include "../CoreGlobals.hpp"
+
 Text::Text() {}
 
 Text::~Text() {
@@ -27,6 +29,8 @@ void Text::setText(char * text, size_t length, float x, float y, float scale) {
 		const size_t bytesPerCharacter = sizeof(float) * nrVerexFloats;
 
 		size_t arraySize = nrVerexFloats * length;
+
+		//float* verts = g_allocator->allocate<float>(arraySize, 0.0f);
 
 		float* verts = new float[arraySize];
 

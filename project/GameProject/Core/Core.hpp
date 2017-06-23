@@ -83,6 +83,10 @@ private:
 
 	ExtensionHandler* extHandler = nullptr;
 
+	IPixelBuffer* pixelBuffers[2];
+	int pboIndex = 0;
+	int pboNextIndex = 0;
+
 	// temp
 	IShaderObject* shaderObj;
 	int vp = 0;

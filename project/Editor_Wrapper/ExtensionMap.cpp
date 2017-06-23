@@ -22,4 +22,7 @@ namespace Extensions
 	{
 		return sizeize;
 	}
+	bool AddObject::isDeleted() {
+		return false;
+	}
 }

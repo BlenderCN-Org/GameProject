@@ -75,6 +75,9 @@ private:
 
 	Text* t = nullptr;
 
+	float maxDx = 0.0f;
+	float maxDy = 0.0f;
+
 	//@EndTemporary
 };
 

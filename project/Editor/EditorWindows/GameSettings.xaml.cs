@@ -157,6 +157,8 @@ namespace Editor.EditorWindows
                 FormID = (sceneList.SelectedItem as DataSources.BaseData).EditorID
             };
 
+            (sceneList.SelectedItem as DataSources.BaseData).Deleted = true;
+
             if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
             {
                 EventHandler.EventManager.OnDeleteFormEvent(fa);

@@ -28,8 +28,11 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::releaseEditor() {
-		printf("I have no clue\n");
+		editorWindowWrapper->~EditorWindowWrapper();
+		printf("Releasing editor\n");
 		delete this;
+		long long mem = GC::GetTotalMemory(true);
+		printf("GC Mem allocated %I64d\n", mem);
 	}
 
 	void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
@@ -63,7 +66,20 @@ namespace Editor_clr {
 			System::Windows::Size s = wrapper->window->getGameWindowSize();
 			SendMessage((HWND)eventWrapper->windowPtr, WM_SIZE, SIZE_RESTORED, MAKELPARAM(s.Width, s.Height));
 		}
+		if (editorWindowWrapper.operator EditorWindowWrapper ^() != nullptr) {
+			editorWindowWrapper->poll();
+		}
 
+	}
+
+	IWindow * Editor_wrp::getEditorWindow() {
+		return &editWindow;
+	}
+
+	void Editor_wrp::postPixels(uint32_t width, uint32_t height, void* data) {
+		System::IntPtr^ ptr = gcnew IntPtr(data);
+		
+		wrapper->window->DrawGameWindowPixels(*ptr, width, height);
 	}
 
 	void Editor_wrp::setGameWindow(void * windowPtr) {
@@ -71,6 +87,8 @@ namespace Editor_clr {
 		HWND editor = (HWND)wrapper->getGameWindowAreaHandle().ToPointer();
 
 		eventWrapper->windowPtr = windowPtr;
+		editorWindowWrapper = gcnew EditorWindowWrapper(&editWindow);
+		wrapper->window->SetEditWindow(editorWindowWrapper);
 		wrapper->window->Closing += gcnew System::ComponentModel::CancelEventHandler(eventWrapper, &EventWrapper::OnClosing);
 		Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&Extensions::OnSaveEvent);
 		Editor::EventHandler::EventManager::onQueryDataEvent += gcnew System::EventHandler<Editor::EventHandler::QueryDataArgs^>(&Extensions::OnQueryEvent);

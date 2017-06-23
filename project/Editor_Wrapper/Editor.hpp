@@ -2,6 +2,7 @@
 #define EDITOR_HPP
 
 #include "IEditor.hpp"
+#include "EditorWindow.hpp"
 #include <Windows.h>
 
 #include "Window\MainWindowWrapper.hpp"
@@ -33,6 +34,10 @@ namespace Editor_clr {
 
 		virtual void poll();
 
+		virtual IWindow* getEditorWindow();
+
+		virtual void postPixels(uint32_t width, uint32_t height, void* data);
+
 		virtual void setGameWindow(void* windowPtr);
 
 	private:
@@ -41,6 +46,10 @@ namespace Editor_clr {
 
 		gcroot<MainWindowWrapper^> wrapper;
 		gcroot<EventWrapper^> eventWrapper;
+		gcroot<EditorWindowWrapper^> editorWindowWrapper;
+
+
+		EditorWindow editWindow;
 
 	};
 

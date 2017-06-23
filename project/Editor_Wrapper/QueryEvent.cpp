@@ -32,6 +32,7 @@ namespace Extensions {
 
 			System::String^ str = gcnew System::String(obj->getName());
 			Editor::DataSources::Scene^ data = gcnew Editor::DataSources::Scene();
+			data->Deleted = obj->isDeleted() ? true : false;
 			data->Name = str;
 			data->EditorID = obj->getFormID();
 			data->FogColorNear = *toColor(sc->fog[0], sc->fog[1], sc->fog[2], sc->fog[3]);//System::Windows::Media::Color::FromArgb(sc->fog[3] * 255.0f, sc->skyColor[0] * 255.0f, sc->skyColor[1] * 255.0f, sc->skyColor[2] * 255.0f);

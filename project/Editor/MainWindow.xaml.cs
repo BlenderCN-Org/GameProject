@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
 namespace Editor
@@ -17,16 +19,16 @@ namespace Editor
 		private EditorWindows.TextEditor textEdit = null;
 		private EditorWindows.GameSettings gameSettings = null;
 
-		public MainWindow()
+        public MainWindow()
 		{
 			InitializeComponent();
 			gwh = new GameWindowHolder();
 			gwh.TopLevel = false;
 
             //EditorWindows.AddEditItemDialog addDlg = new EditorWindows.AddEditItemDialog();
-            
-            //addDlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.StandardControls.SceneInfo());
-            
+            //
+            //addDlg.PageArea.Children.Add(bm);
+            //
             //addDlg.Show();
 
             //EditorWindows.DragWindow wnd1 = new EditorWindows.DragWindow();
@@ -47,12 +49,42 @@ namespace Editor
 			// Assign the MaskedTextBox control as the host control's child.
 			host.Child = gwh;
 
-			// Add the interop host control to the Grid
-			// control's collection of child controls.
-			this.GameWindowGrid.Children.Add(host);
-            Grid.SetRow(host, 0);
+            // Add the interop host control to the Grid
+            // control's collection of child controls.
+            //this.GameWindowGrid.Children.Add(host);
+            //this.GameWindowGrid.Children.Add(bm);
+            //Grid.SetRow(bm, 0);
+            //GameHolder.Children.Add(bm);
 
 		}
+
+        public void SetEditWindow(EventHandler.IEditWindow editWindow)
+        {
+            gameBitMap.editWindow = editWindow;
+
+            double w = 0.0;
+            double h = 0.0;
+            if (!gameBitMap.Dispatcher.CheckAccess())
+            {
+                gameBitMap.Dispatcher.Invoke(new Action(() => {
+                    w = gameBitMap.ActualWidth;
+                    h = gameBitMap.ActualHeight;
+                })
+                );
+            }
+            else
+            {
+                w = gameBitMap.ActualWidth;
+                h = gameBitMap.ActualHeight;
+            }
+
+            editWindow.WindowResizeCallback((int)w, (int)h);
+        }
+
+        public void DrawGameWindowPixels(IntPtr pixels, UInt32 width, UInt32 height)
+        {
+            gameBitMap.SetBitMap(pixels, width, height);
+        }
 
 		public IntPtr getGameWindowAreaHandle()
 		{
@@ -71,13 +103,29 @@ namespace Editor
 
 		public bool WasResized()
 		{
-			bool resizeing = gwh.wasResized();
-			return resizeing;
+            //bool resizeing = gwh.wasResized();
+            bool resizeing = gameBitMap.wasResized();
+            return resizeing;
 		}
 
 		public Size getGameWindowSize()
 		{
-			return new Size(gwh.ClientSize.Width, gwh.ClientSize.Height);
+            double w = 0.0;
+            double h = 0.0;
+            if(!gameBitMap.Dispatcher.CheckAccess())
+            {
+                gameBitMap.Dispatcher.Invoke(new Action(() => {
+                    w = gameBitMap.ActualWidth;
+                    h = gameBitMap.ActualHeight;
+                })
+                );
+            }
+            else
+            {
+                w = gameBitMap.ActualWidth;
+                h = gameBitMap.ActualHeight;
+            }
+			return new Size(w, h);
 		}
 
 		private void Rectangle_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

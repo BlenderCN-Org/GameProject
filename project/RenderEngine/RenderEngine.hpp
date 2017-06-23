@@ -62,6 +62,8 @@ public:
 
 	virtual IFrameBuffer* createFrameBuffer();
 
+	virtual IPixelBuffer* createPixelBuffer();
+
 	virtual IFont* createFont();
 
 	virtual IWindow* getMainWindow();

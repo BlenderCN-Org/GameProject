@@ -16,12 +16,12 @@ namespace Extensions
 		virtual const uint32_t getFormID() override;
 		virtual void * getData() override;
 		virtual uint32_t dataSize() override;
+		virtual bool isDeleted() override;
 
 		const char* name;
 		uint32_t formID;
 		void* data;
 		uint32_t sizeize;
-
 	};
 
 	extern std::map<int, IExtension<void>*> extensionMap;
