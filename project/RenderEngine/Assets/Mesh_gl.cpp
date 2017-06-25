@@ -1,7 +1,10 @@
 #include "Mesh_gl.hpp"
 
+#include <glm/glm.hpp>
+
 #include "../Utils/MemoryManager.hpp"
 #include <memory>
+
 
 struct Vertex5 {
 	Vertex5(float _x, float _y, float _z, float _u, float _v) {
@@ -27,6 +30,7 @@ void Mesh_gl::init(MeshPrimitiveType ptype) {
 
 	vertexCount = 0;
 	triangleCount = 0;
+	radius = 0.0f;
 }
 
 void Mesh_gl::release() {
@@ -62,7 +66,19 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex5), (void*)(sizeof(GLfloat) * 3));
 
 		vertexCount = (GLsizei)size / sizeof(Vertex5);
+		radius = 0;
+		Vertex5* verts = (Vertex5*)data;
+		for (GLsizei i = 0; i < vertexCount; i++) {
+			Vertex5& v = verts[i];
+			glm::vec3 v2 = glm::vec3(v.x, v.y, v.z);
+			radius = glm::max(radius, glm::distance(v2, glm::vec3(0.0f)));
+		}
+
 	}
+}
+
+float Mesh_gl::getRadius() {
+	return radius;
 }
 
 void Mesh_gl::bind() {

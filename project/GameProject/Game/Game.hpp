@@ -66,6 +66,7 @@ private:
 
 	int vpLocation;
 	int matLocation;
+	int selectedLoc;
 
 	IShaderObject* textShObj = nullptr;
 	int orthoLocation;
@@ -77,6 +78,8 @@ private:
 
 	float maxDx = 0.0f;
 	float maxDy = 0.0f;
+
+	glm::vec3 mouseRay;
 
 	//@EndTemporary
 };

@@ -30,6 +30,11 @@ struct VKinfo {
 	const char* version;
 };
 
+struct DisplaySize {
+	float width;
+	float height;
+};
+
 class RenderEngine : public IRenderEngine {
 public:
 
@@ -71,6 +76,8 @@ public:
 	virtual size_t getMemoryUsage() const;
 	virtual size_t getMaxMemory() const;
 
+	virtual void toNormalizedDeviceSpace(float &x, float &y);
+
 private:
 
 	void printInfo(GLinfo info);
@@ -83,6 +90,9 @@ private:
 	FT_Library fontLibrary;
 
 	GLWindow glWindow;
+
+	DisplaySize size;
+
 #if SUPPORT_VULKAN_WINDOW
 	VKWindow vkWindow;
 #endif

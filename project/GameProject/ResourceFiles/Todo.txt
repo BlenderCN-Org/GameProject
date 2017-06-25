@@ -15,13 +15,13 @@ Today:
 	RenderEngine:
 
 	Editor:
-		- Remove win32Host
+		<W> Remove win32Host
 			<D> Render and resize in wpf editor
-			<W> Handle input events
+			<D> Handle input events
+			<D> Cleanup win32Host code
+			<D> Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
 			<W> give editor access to render engine
 			- move pixelbuffer to editor
-			- Cleanup win32Host code
-			- Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
 List:
 
 	Project:
@@ -54,6 +54,7 @@ List:
 				- Simple TextField
 				- Label
 				- ProgressBar
+				- Image/Icon
 			- Text
 				- formatting
 					- per character color
@@ -89,11 +90,15 @@ List:
 
 
 	Editor:
+		- Add objects to game world
+			- Drag and drop from object window
+			- Double click in object window
+			
 		- Select file to load
 		<W> Add dialogs for mesh preview, text editor, object properites etc.
 			- Mesh previewer
 			<W> Text editor
-				- Plain Text
+				<D> Plain Text
 				- Hex view
 				- Line numbers
 				- Syntax Highlighting
@@ -123,6 +128,7 @@ Done Stuff:
 		<D> Main menu loaded from data file (master file)
 		<D> Main menu not visible ever while in editor mode
 		<D> Access to renderEngine
+		<D> Ray from mouse cursor
 
 	RenderEngine:
 

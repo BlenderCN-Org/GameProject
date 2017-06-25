@@ -29,6 +29,8 @@ public:
 	glm::mat4 getMatrix() const;
 	IMesh* getMesh() const;
 
+	float raidus;
+
 private:
 
 	uint64_t gameObjectId;

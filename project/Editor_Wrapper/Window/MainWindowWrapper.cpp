@@ -1,5 +1,6 @@
 #include "MainWindowWrapper.hpp"
 
+
 void MainWindowWrapper::DoWork() {
 	window = gcnew Editor::MainWindow();
 	
@@ -9,10 +10,8 @@ void MainWindowWrapper::DoWork() {
 
 }
 
-IntPtr MainWindowWrapper::getGameWindowAreaHandle() {
-	
+void MainWindowWrapper::waitForInit() {
 	mre->WaitOne();
-	return window->getGameWindowAreaHandle();
 }
 
 MainWindowWrapper::MainWindowWrapper() {
@@ -23,11 +22,13 @@ MainWindowWrapper::MainWindowWrapper() {
 	thrd->SetApartmentState(Threading::ApartmentState::STA);
 	thrd->IsBackground = true;
 	thrd->Start();
-
+	
 }
 
 MainWindowWrapper::~MainWindowWrapper() {
 	mre->Close();
-	window->Close();
+	delete window;
+	//window->Close();
+	thrd->Sleep(100);
 	thrd->Abort();
 }

@@ -4,22 +4,23 @@ using System.Collections.Generic;
 namespace Editor.EventHandler
 {
 
-    public enum ObjectTypes{
+    public enum ObjectTypes
+    {
         STATIC = 0x0001,
-        ANIM   = 0x0002,
+        ANIM = 0x0002,
         WEAPON = 0x0004,
-        AMMO   = 0x0008,
+        AMMO = 0x0008,
         DIALOG = 0x0010,
         SCRIPT = 0x0020,
-        DECAL  = 0x0040,
-        AUDIO  = 0x0080,
-        SCENE  = 0x0100
+        DECAL = 0x0040,
+        AUDIO = 0x0080,
+        SCENE = 0x0100
     }
 
     public class SaveEventArgs
-	{
-		public bool PackData { get; set; }
-	}
+    {
+        public bool PackData { get; set; }
+    }
 
     public class QueryDataArgs
     {
@@ -46,10 +47,22 @@ namespace Editor.EventHandler
         public UInt32 FormID { get; set; }
     }
 
-	public static class EventManager
-	{
+    public enum CloseType
+    {
+        CLOSE,
+        HIDE,
+        ABORT
+    }
 
-		public static EventHandler<SaveEventArgs> onSaveEvent;
+    public class CloseArgs
+    {
+        public CloseType close;
+    }
+
+    public static class EventManager
+    {
+
+        public static EventHandler<SaveEventArgs> onSaveEvent;
         public static EventHandler<QueryDataArgs> onQueryDataEvent;
 
         public static EventHandler<AddObjectArgs> onAddObjectEvent;
@@ -58,9 +71,9 @@ namespace Editor.EventHandler
         public static EventHandler<GetFormIDArgs> onGetFormIDEvent;
 
         public static void OnSaveEvent(SaveEventArgs saveArgs)
-		{
-			onSaveEvent?.Invoke(null, saveArgs);
-		}
+        {
+            onSaveEvent?.Invoke(null, saveArgs);
+        }
 
         public static void OnQueryDataEvent(QueryDataArgs queryArgs)
         {
@@ -71,7 +84,7 @@ namespace Editor.EventHandler
         {
             onAddObjectEvent?.Invoke(null, addArgs);
         }
-        
+
         public static void OnDeleteFormEvent(FormArgs args)
         {
             onDeleteFormEvent?.Invoke(null, args);

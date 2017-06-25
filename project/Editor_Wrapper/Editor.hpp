@@ -14,7 +14,10 @@ namespace Editor_clr {
 	ref class EventWrapper {
 	public:
 		void* windowPtr = nullptr;
-		void OnClosing(System::Object ^sender, System::ComponentModel::CancelEventArgs ^e);
+		void OnClosing(System::Object ^sender, Editor::EventHandler::CloseArgs ^e);
+
+		bool closeEditor = false;
+		bool hideEditor = false;
 
 	};
 
@@ -22,25 +25,29 @@ namespace Editor_clr {
 
 	public:
 
+		Editor_wrp() {
+			editorStatus = EditorStatus::STOPPED;
+		}
+
 		virtual bool initializeEditor();
 		virtual void releaseEditor();
 
+		virtual void startEditor();
+		virtual void stopEditor();
+
 		virtual void registerExtension(int callbackIndex, IExtension<void>* ext);
 
-		virtual void detach();
-		virtual void attach();
+		virtual EditorStatus getStatus() const;
 
-		virtual bool isRunning();
-
-		virtual void poll();
+		virtual void update();
 
 		virtual IWindow* getEditorWindow();
 
 		virtual void postPixels(uint32_t width, uint32_t height, void* data);
 
-		virtual void setGameWindow(void* windowPtr);
-
 	private:
+
+		void poll();
 
 		bool initialized = false;
 
@@ -50,6 +57,8 @@ namespace Editor_clr {
 
 
 		EditorWindow editWindow;
+
+		EditorStatus editorStatus;
 
 	};
 

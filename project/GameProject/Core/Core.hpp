@@ -60,6 +60,8 @@ public:
 	static int width;
 	static int heigth;
 
+	EditorStatus currentEditorStatus;
+
 private:
 
 	// core variables

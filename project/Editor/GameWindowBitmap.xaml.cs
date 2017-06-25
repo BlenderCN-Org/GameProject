@@ -22,18 +22,7 @@ namespace Editor
     /// </summary>
     public partial class GameWindowBitmap : UserControl
     {
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetCursorPos(ref Win32Point pt);
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct Win32Point
-        {
-            public Int32 X;
-            public Int32 Y;
-        };
-
+        
         [DllImport("user32.dll")]
         static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
@@ -42,20 +31,6 @@ namespace Editor
         public GameWindowBitmap()
         {
             InitializeComponent();
-
-            //byte[] a = new byte[(int)ActualWidth * (int)ActualHeight];
-            //for (int i = 0; i < a.Length; i++)
-            //{
-            //    a[i] = (byte)i;
-            //}
-            //
-            //var pixelFormat = PixelFormats.Gray8;
-            //var bpp = (pixelFormat.BitsPerPixel + 7) / 8;
-            //
-            //var bitmap = BitmapSource.Create((int)ActualWidth, (int)ActualHeight, 0, 0, pixelFormat, null, a, (int)ActualWidth * bpp);
-            //
-            //RenderedBitmap.Source = bitmap;
-
 
         }
 
@@ -143,10 +118,8 @@ namespace Editor
         {
             if (editWindow != null)
             {
-
-                Win32Point w32Mouse = new Win32Point();
-                GetCursorPos(ref w32Mouse);
-                editWindow.WindowMouseMoveCallback(w32Mouse.X, w32Mouse.Y);
+                Point p = e.GetPosition(this);
+                editWindow.WindowMouseMoveCallback((int)p.X, (int)p.Y);
             }
         }
 

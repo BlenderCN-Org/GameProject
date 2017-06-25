@@ -30,6 +30,8 @@ public:
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout) = 0;
 
+	virtual float getRadius() = 0;
+
 	virtual void bind() = 0;
 	virtual void render() = 0;
 

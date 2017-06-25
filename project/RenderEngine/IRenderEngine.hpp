@@ -99,6 +99,9 @@ public:
 
 	virtual size_t getMemoryUsage() const = 0;
 	virtual size_t getMaxMemory() const = 0;
+
+	virtual void toNormalizedDeviceSpace(float &x, float &y) = 0;
+
 };
 
 extern "C" RENDERENGINE_API IRenderEngine* CreateRenderEngine();

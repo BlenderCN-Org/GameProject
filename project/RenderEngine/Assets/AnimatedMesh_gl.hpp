@@ -10,6 +10,7 @@ public:
 	virtual void release();
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout);
+	virtual float getRadius();
 
 	virtual void bind() {};
 	virtual void render() {};

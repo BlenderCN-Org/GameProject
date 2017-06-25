@@ -9,6 +9,26 @@
 #include "../Core/CoreGlobals.hpp"
 //@Temporary
 
+bool sphereInRay(glm::vec3 const & rayStart, glm::vec3 const & rayDir, float const radius, glm::mat4 const &mat) {
+
+	glm::vec3 spherePos = glm::vec3(mat[0][3], mat[1][3], mat[2][3]);
+
+	glm::vec3 m = rayStart - spherePos;
+	float b = glm::dot(m, rayDir);
+	float c = glm::dot(m, m) - (radius * radius);
+
+	if (c > 0.0f && b > 0.0f) {
+		return false;
+	}
+
+	float discr = (b*b) - c;
+	if (discr < 0.0f) {
+		return false;
+	}
+
+	return true;
+}
+
 GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, float z) {
 	IRenderEngine* re = core->getRenderEngine();
 
@@ -23,6 +43,7 @@ GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, 
 	mat[1][3] = y;
 	mat[2][3] = z;
 	go.setMatrix(mat);
+	go.raidus = mesh->getRadius();
 
 	return go;
 }
@@ -69,6 +90,7 @@ void Game::init() {
 
 	vpLocation = shObj->getShaderUniform("viewProjMatrix");
 	matLocation = shObj->getShaderUniform("worldMat");
+	selectedLoc = shObj->getShaderUniform("selectedColor");
 
 	orthoLocation = textShObj->getShaderUniform("viewProjMatrix");
 	textLocation = textShObj->getShaderUniform("worldMat");
@@ -121,7 +143,8 @@ void Game::update(float dt) {
 		//saveGame();
 		//handleMenuEvent(-1);
 		maxDx = 0.0f;
-		maxDy= 0.0f;
+		maxDy = 0.0f;
+		core->startEditor();
 	}
 
 	// update gameStuffz
@@ -170,12 +193,21 @@ void Game::render() {
 	shObj->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
 
 	//@Temporary
+	Input* in = Input::getInput();
+
+	mouseRay = cam->calculateMouseRay((float)in->xPos, (float)in->yPos, core->getRenderEngine());
 	for (size_t i = 0; i < gameObjects.size(); i++) {
 		shObj->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &gameObjects[i].getMatrix());
+		if (sphereInRay(cam->getPos(), mouseRay, gameObjects[i].raidus, gameObjects[i].getMatrix())) {
+			shObj->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f, 0.0f, 0.0f));
+		} else {
+			shObj->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f, 1.0f, 1.0f));
+		}
 		IMesh* m = gameObjects[i].getMesh();
 		m->bind();
 		m->render();
 	}
+
 
 	// stuff that we only do while not being in the editor
 	if (!core->isInEditor()) {
@@ -195,14 +227,18 @@ void Game::render() {
 
 	std::string fpsString = std::to_string(ffps) + " FPS";
 
-	Input* in = Input::getInput();
-
 	maxDx = max(in->xDelta, maxDx);
 	maxDy = max(in->yDelta, maxDy);
 
 	fpsString += "\nMax dx/dy: (" + std::to_string(maxDx) + ", " + std::to_string(maxDy);
+	fpsString += "\nMouse x/y: (" + std::to_string(in->xPos) + ", " + std::to_string(in->yPos);
 
-	//fpsString += "\nMem: " + std::to_string(g_allocator->getUsedSize()) + "/" + std::to_string(g_allocator->getHeapSize());
+	fpsString += "\nMouseRay x/y/z: (" + std::to_string(mouseRay.x) + ", " + std::to_string(mouseRay.y) + ", " + std::to_string(mouseRay.z);
+
+	if (core->currentEditorStatus == STARTING) {
+		fpsString += "\nEditor Starting!";
+	}
+
 
 	t->setText((char*)fpsString.c_str(), fpsString.size(), 10, 10, 1.0);
 	re->setBlending(true);

@@ -14,8 +14,7 @@ public:
 
 	void DoWork();
 
-	IntPtr getGameWindowAreaHandle();
-
+	void waitForInit();
 
 	MainWindowWrapper();
 	~MainWindowWrapper();

@@ -16,13 +16,13 @@ std::string readShader(const char *filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);
 
-	if ( !fileStream.is_open() ) {
+	if (!fileStream.is_open()) {
 		printf("Could not open file %s", filePath);
 		return "";
 	}
 
 	std::string line = "";
-	while ( !fileStream.eof() ) {
+	while (!fileStream.eof()) {
 		std::getline(fileStream, line);
 		content.append(line + "\n");
 	}
@@ -43,14 +43,14 @@ void Core::init() {
 
 	running = true;
 	hadReset = false;
-	if ( renderEngineLib.loadLibrary("RenderEngine.dll\0") )
+	if (renderEngineLib.loadLibrary("RenderEngine.dll\0"))
 		printf("Loaded RenderEngine.dll\n");
 	else {
 		printf("Failed to load Renderer\n");
 		throw;
 	}
 
-	if ( editorLib.loadLibrary("Editor_Wrapper.dll\0") )
+	if (editorLib.loadLibrary("Editor_Wrapper.dll\0"))
 		printf("Loaded Editor_Wrapper.dll\n");
 	else {
 		printf("Failed to load Editor\n");
@@ -130,12 +130,12 @@ void Core::init() {
 	textShaderObj->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
 	textShaderObj->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)tfs.c_str());
 
-	if ( !shaderObj->buildShader() ) {
+	if (!shaderObj->buildShader()) {
 		printf("shader failed to build\n");
 		assert(0 && "shader failed to build");
 	}
 
-	if ( !textShaderObj->buildShader() ) {
+	if (!textShaderObj->buildShader()) {
 		printf("shader failed to build\n");
 		assert(0 && "shader failed to build");
 	}
@@ -202,7 +202,7 @@ bool Core::isRunning() {
 }
 
 bool Core::hadGraphicsReset() const {
-	if ( console->reset ) {
+	if (console->reset) {
 		console->reset = false;
 		return true;
 	}
@@ -214,27 +214,33 @@ bool Core::editorAvaible() const {
 }
 
 bool Core::isInEditor() const {
-	return editor->isRunning();
+	return editor->getStatus() == EditorStatus::RUNNING;
 }
 
 void Core::startEditor() {
-	if ( editorAvaible() && editor->initializeEditor() ) {
+	if (editorAvaible() && editor->initializeEditor()) {
 
-		editor->setGameWindow(window->getNativeWindowHandle());
-
-		input->setupCallbacks(editor->getEditorWindow());
-
-		disp.setFullscreenMode(FullscreenMode::WINDOWED_BORDERLESS);
-		disp.apply();
+		//input->setupCallbacks(editor->getEditorWindow());
+		//
+		//disp.setFullscreenMode(FullscreenMode::WINDOWED_BORDERLESS);
+		//disp.apply();
+		//
+		//window->showWindow(false);
+		editor->startEditor();
+		//Task t;
+		//t.type = TaskType::eTaskType_execute;
+		//ExecuteTask* task = new ExecuteTask;
+		//task->ptr = editor;
+		//task->call = [](void* x) { ((IEditor*)x)->startEditor(); };
+		//t.data = task;
+		//thrdMgr->queueTask(t);
 	}
 }
 
-void Core::editorDetachGameWindow() {
-	editor->detach();
-}
+void Core::editorDetachGameWindow() {}
 
 void Core::stopEditor() {
-
+	editor->stopEditor();
 }
 
 void Core::startWorkerThreads() {
@@ -242,7 +248,7 @@ void Core::startWorkerThreads() {
 }
 
 void Core::stopWorkerThreads() {
-	if ( thrdMgr )
+	if (thrdMgr)
 		thrdMgr->stopThreads();
 }
 
@@ -256,14 +262,44 @@ void Core::update(float dt) {
 	// reset input states, clear for next frame
 	input->reset();
 	window->pollMessages();
-	if ( editor && editor->isRunning() ) {
-		editor->poll();
+	EditorStatus status = editor->getStatus();
+	if (editor && status == EditorStatus::RUNNING || status == EditorStatus::HIDDEN) {
+		editor->update();
 	}
 	// poll messages and update camera
-	running = window->isVisible();
+	running = window->isVisible() || status == EditorStatus::RUNNING || status == EditorStatus::HIDDEN;
+
+	// we are changing status
+	if (currentEditorStatus != status) {
+
+		switch (status) {
+			case STARTING:
+				break;
+			case RUNNING:
+				window->showWindow(false);
+				input->setupCallbacks(editor->getEditorWindow());
+				break;
+			case HIDDEN:
+				window->showWindow(true);
+				input->setupCallbacks(window);
+				break;
+			case STOPPING:
+				break;
+			case STOPPED:
+				break;
+			default:
+				break;
+		}
+
+		currentEditorStatus = status;
+	}
+
+	if (window->isVisible() == false && status == EditorStatus::HIDDEN) {
+		stopEditor();
+	}
 
 	// window size change event
-	if ( input->sizeChange ) {
+	if (input->sizeChange) {
 		int w = 0;
 		int h = 0;
 		input->getWindowSize(w, h);
@@ -273,17 +309,17 @@ void Core::update(float dt) {
 		pixelBuffers[1]->resize(w, h);
 		//Resolution res = disp.getResolution();
 		//renderEngine->updateViewPort(res.width, res.height);
-		width =  w;
+		width = w;
 		heigth = h;
 	}
 
-	if ( input->consoleKeyWasPressed() ) {
+	if (input->consoleKeyWasPressed()) {
 		input->toggleConsole();
 		console->setVisible(input->consoleIsActive());
 	}
 
 	hadReset = renderEngine->getGraphicsReset();
-	if ( hadReset ) return;
+	if (hadReset) return;
 }
 
 void Core::render(glm::mat4 viewMat) {
@@ -302,7 +338,7 @@ void Core::render(glm::mat4 viewMat) {
 	uint32_t w, h;
 	pixelBuffers[pboNextIndex]->getSize(w, h);
 
-	if (data && editor->isRunning()) {
+	if (data && isInEditor()) {
 		editor->postPixels(width, heigth, data);
 	}
 	pixelBuffers[pboNextIndex]->unMap();
@@ -313,7 +349,7 @@ void Core::render(glm::mat4 viewMat) {
 
 void Core::renderConsole() {
 
-	if ( input->consoleIsActive() ) {
+	if (input->consoleIsActive()) {
 		textShaderObj->useShader();
 		renderEngine->setBlending(true);
 		std::string consoleText = console->getText();

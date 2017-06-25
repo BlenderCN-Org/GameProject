@@ -10,25 +10,15 @@
 #include "../GameProject/IExtension.hpp"
 #include <RenderEngine/IWindow.hpp>
 
-// callback defines
-#define SAVE_CALLBACK              0x00000001
-#define GET_OBJECTS_CALLBACK       0x00000002
-#define SET_SETTINGS_CALLBACK      0x00000003
-#define ADD_OBJECT_CALLBACK		   0x00000004
-#define DELETE_OBJECT_CALLBACK	   0x00000005
-#define EDIT_OBJECT_CALLBACK	   0x00000006
-#define GET_FORMID_CALLBACK		   0x00000007
+enum EditorStatus {
+	UNINITIALIZED,	// editor not initialized, call initializeEditor
+	STOPPED,		// no operations allowed, call start on editor
+	STARTING,		// editor is starting up, show loading message or something
+	RUNNING,		// editor is running, you can edit stuff
+	HIDDEN,			// editor is running in background
+	STOPPING,		// no operations allowed, editor is closing
+};
 
-// Object types
-#define OBJECT_TYPE_STATIC         0x0001
-#define OBJECT_TYPE_ANIM		   0x0002
-#define OBJECT_TYPE_WEAPON		   0x0004
-#define OBJECT_TYPE_AMMO		   0x0008
-#define OBJECT_TYPE_DIALOG		   0x0010
-#define OBJECT_TYPE_SCRIPT		   0x0020
-#define OBJECT_TYPE_DECAL		   0x0040
-#define OBJECT_TYPE_AUDIO		   0x0080
-#define OBJECT_TYPE_SCENE		   0x0100
 
 class IEditor {
 
@@ -37,20 +27,18 @@ public:
 	virtual bool initializeEditor() = 0;
 	virtual void releaseEditor() = 0;
 
+	virtual void startEditor() = 0;
+	virtual void stopEditor() = 0;
+
 	virtual void registerExtension(int callbackIndex, IExtension<void>* ext) = 0;
 
-	virtual void detach() = 0;
-	virtual void attach() = 0;
+	virtual EditorStatus getStatus() const = 0;
 
-	virtual bool isRunning() = 0;
-
-	virtual void poll() = 0;
+	virtual void update() = 0;
 
 	virtual IWindow* getEditorWindow() = 0;
 
 	virtual void postPixels(uint32_t width, uint32_t height, void* data) = 0;
-
-	virtual void setGameWindow(void* windowPtr) = 0;
 
 private:
 
