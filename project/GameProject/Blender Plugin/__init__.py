@@ -51,7 +51,9 @@ from bpy_extras.io_utils import (
         )
 
 
-versions = [("VERSION_1_0", "Version 1.0", "File version 1.0"),]
+versions = [("VERSION_1_0", "Version 1.0", "File version 1.0"),
+			("VERSION_1_1", "Version 1.1", "File version 1.1")
+]
 
 IOOBJOrientationHelper = orientation_helper_factory("IOOBJOrientationHelper", axis_forward='-Z', axis_up='Y')
 

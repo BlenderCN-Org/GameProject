@@ -111,38 +111,102 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 	}
 
 	printf("Mesh version: %d.%d\n", h->major, h->minor);
+	if (h->major == 1 && h->minor == 0) {
+		BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
 
-	BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
+		glm::vec3* vertices = (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount);
+		glm::vec3* normals = bf->useVNormals ? (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount) : nullptr;
+		glm::vec4* colors = bf->useVColors ? (glm::vec4*)memBuff.returnBytes(sizeof(glm::vec4) * bf->vertCount) : nullptr;
+		glm::vec2* uv = bf->useVUV ? (glm::vec2*)memBuff.returnBytes(sizeof(glm::vec2) * bf->vertCount) : nullptr;
 
-	glm::vec3* vertices = (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount);
-	glm::vec3* normals = bf->useVNormals ? (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount) : nullptr;
-	glm::vec4* colors = bf->useVColors ? (glm::vec4*)memBuff.returnBytes(sizeof(glm::vec4) * bf->vertCount) : nullptr;
-	glm::vec2* uv = bf->useVUV ? (glm::vec2*)memBuff.returnBytes(sizeof(glm::vec2) * bf->vertCount) : nullptr;
+		Triangle* triangles = (Triangle*)memBuff.returnBytes(sizeof(Triangle) * bf->triangleCount);
 
-	Triangle* triangles = (Triangle*)memBuff.returnBytes(sizeof(Triangle) * bf->triangleCount);
+		std::vector<Vertex5> verts;
 
-	std::vector<Vertex5> verts;
+		for (size_t i = 0; i < bf->triangleCount; i++) {
+			Triangle t = triangles[i];
 
-	for (size_t i = 0; i < bf->triangleCount; i++) {
-		Triangle t = triangles[i];
+			Vertex5 v1 = { vertices[t.v1], glm::vec2(0.0f, 0.0f) };
+			Vertex5 v2 = { vertices[t.v2], glm::vec2(0.0f, 0.0f) };
+			Vertex5 v3 = { vertices[t.v3], glm::vec2(0.0f, 0.0f) };
 
-		Vertex5 v1 = { vertices[t.v1], glm::vec2(0.0f, 0.0f) };
-		Vertex5 v2 = { vertices[t.v2], glm::vec2(0.0f, 0.0f) };
-		Vertex5 v3 = { vertices[t.v3], glm::vec2(0.0f, 0.0f) };
+			verts.push_back(v1);
+			verts.push_back(v2);
+			verts.push_back(v3);
+		}
 
-		verts.push_back(v1);
-		verts.push_back(v2);
-		verts.push_back(v3);
+		memBuff.deleteBuffer();
+
+		size = (uint32_t)verts.size() * sizeof(Vertex5);
+
+		Vertex5* v = new Vertex5[verts.size()];
+		memcpy(v, verts.data(), size);
+
+		return v;
+	} else if (h->major == 1 && h->minor == 1) {
+		uint32_t* nrObj = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
+		uint32_t* nrBones = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
+		printf("nrBones: %d\n", (int)*nrBones);
+
+		glm::vec3* points = (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * (*nrBones));
+
+		std::vector<Vertex5> verts;
+
+		for (size_t i = 0; i < (*nrBones); i++) {
+
+			points[i] *= 1.0f;
+
+			printf("b (%f, %f, %f)\n", points[i].x, points[i].y, points[i].z);
+
+			glm::vec3 vo1(-0.01f, -0.01f,  0.01f);
+			glm::vec3 vo2(-0.01f,  0.01f,  0.01f);
+			glm::vec3 vo3(-0.01f, -0.01f, -0.01f);
+			glm::vec3 vo4(-0.01f,  0.01f, -0.01f);
+			glm::vec3 vo5( 0.01f, -0.01f,  0.01f);
+			glm::vec3 vo6( 0.01f,  0.01f,  0.01f);
+			glm::vec3 vo7( 0.01f, -0.01f, -0.01f);
+			glm::vec3 vo8( 0.01f,  0.01f, -0.01f);
+
+			glm::vec3 p = points[i];
+
+			Vertex5 v1 = { p + vo1, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v2 = { p + vo2, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v3 = { p + vo3, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v4 = { p + vo4, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v5 = { p + vo5, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v6 = { p + vo6, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v7 = { p + vo7, glm::vec2(0.0f, 0.0f) };
+			Vertex5 v8 = { p + vo8, glm::vec2(0.0f, 0.0f) };
+
+			verts.push_back( v2 ); verts.push_back( v3 ); verts.push_back( v1 ); 				 	  
+			verts.push_back( v4 ); verts.push_back( v7 ); verts.push_back( v3 );
+							 	 				   		 				 	  
+			verts.push_back( v8 ); verts.push_back( v5 ); verts.push_back( v7 );
+			verts.push_back( v6 ); verts.push_back( v1 ); verts.push_back( v5 );
+							 	 				   		 				 	  
+			verts.push_back( v7 ); verts.push_back( v1 ); verts.push_back( v3 );
+			verts.push_back( v4 ); verts.push_back( v6 ); verts.push_back( v8 );
+							 	 				   		 				 	  
+			verts.push_back( v2 ); verts.push_back( v4 ); verts.push_back( v3 );
+			verts.push_back( v4 ); verts.push_back( v8 ); verts.push_back( v7 );
+							 	 				   		 				 	  
+			verts.push_back( v8 ); verts.push_back( v6 ); verts.push_back( v5 );
+			verts.push_back( v6 ); verts.push_back( v2 ); verts.push_back( v1 );
+							 	 				   		 				 	  
+			verts.push_back( v7 ); verts.push_back( v5 ); verts.push_back( v1 );
+			verts.push_back( v4 ); verts.push_back( v2 ); verts.push_back( v6 );
+
+		}
+
+		memBuff.deleteBuffer();
+		size = (uint32_t)verts.size() * sizeof(Vertex5);
+
+		Vertex5* v = new Vertex5[verts.size()];
+		memcpy(v, verts.data(), size);
+
+		return v;
 	}
-
-	memBuff.deleteBuffer();
-
-	size = (uint32_t)verts.size() * sizeof(Vertex5);
-
-	Vertex5* v = new Vertex5[verts.size()];
-	memcpy(v, verts.data(), size);
-
-	return v;
+	return nullptr;
 }
 
 
@@ -248,7 +312,7 @@ void AssetManager::updateEntry(Entry* entry) {
 	currentFile->updateEntry(entry);
 }
 
-void AssetManager::setStartupSceneRef(uint32_t ref) 	{
+void AssetManager::setStartupSceneRef(uint32_t ref) {
 	startupSceneRefId = ref;
 }
 

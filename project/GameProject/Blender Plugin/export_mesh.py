@@ -28,6 +28,9 @@ def writeHeader(fw, version):
 	if(version == "VERSION_1_0"):
 		fw(struct.pack("H", 1))
 		fw(struct.pack("H", 0))
+	if(version == "VERSION_1_1"):
+		fw(struct.pack("H", 1))
+		fw(struct.pack("H", 1))
 
 def createTriangleList(tessfaces):
 	triList = []
@@ -108,8 +111,49 @@ def writeVersion_1_0(context, fw, use_selection, matrix):
 			for tri in triangles:
 				data.extend(struct.pack("III", tri[0], tri[1], tri[2]))
 
-			dataObjectList.append(data);
+			dataObjectList.append(data)
 			bpy.data.meshes.remove(meshData)
+		else:
+			print("not a mesh")
+
+	print("List: ", len(dataObjectList))
+	fw(struct.pack("I", len(dataObjectList)))
+	for data in dataObjectList:
+		fw(data)
+
+def writeVersion_1_1(context, fw, use_selection, matrix):
+	print("Writing version 1.1")
+	
+	dataObjectList = []
+
+	objectList = None
+
+	if(use_selection):
+		objectList = context.selected_objects
+	else:
+		objectList = context.scene.objects
+
+	for obj in objectList:
+		if( obj.type == 'ARMATURE'):
+			print("Armature")
+
+			arm = obj.data.copy()
+
+			arm.transform(matrix * obj.matrix_world)
+
+			data = bytearray()
+
+			bones = arm.bones
+			nrBones = len(bones)
+			print("Nr bones ", nrBones)
+			data.extend(struct.pack("I", nrBones))
+			for b in bones:
+				v = b.tail_local.xyz
+				print(b.name, ", ", v.x, v.y, v.z)
+				data.extend(struct.pack("fff", v.x, v.y, v.z))
+
+			dataObjectList.append(data)
+			bpy.data.armatures.remove(arm)
 		else:
 			print("not a mesh")
 
@@ -122,7 +166,8 @@ def writeVersion_1_0(context, fw, use_selection, matrix):
 def write(context, fw, use_selection, version, matrix):
 	if(version == "VERSION_1_0"):
 		writeVersion_1_0(context, fw, use_selection, matrix)
-	
+	elif(version == "VERSION_1_1"):
+		writeVersion_1_1(context, fw, use_selection, matrix)
 
 def save(context,
 		filepath,

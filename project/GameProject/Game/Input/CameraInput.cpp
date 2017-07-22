@@ -78,7 +78,7 @@ void CameraInput::keypan(float dt) {
 
 	//if (i->getKeyInfo(GLFW_KEY_LEFT_SHIFT))
 	//	camSpeed *= 9;
-	camSpeed *= dt;
+	camSpeed *= dt * 0.1f;
 
 	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false) )
 		pos += dir * camSpeed;

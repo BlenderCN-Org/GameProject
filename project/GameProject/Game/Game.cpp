@@ -109,7 +109,7 @@ void Game::init() {
 
 	gstate = GameState::eGameState_PlayMode;
 
-	gameObjects.push_back(createGo(assetManager, "data/meshes/unitcube.mesh", 0, 0, 0));
+	gameObjects.push_back(createGo(assetManager, "data/meshes/test.mesh", 0, 0, 0));
 
 	core->startEditor();
 
