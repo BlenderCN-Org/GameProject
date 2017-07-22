@@ -10,18 +10,15 @@ Todo:
 Today:
 
 	Project:
-		- Asset interface or something for editor
-		<W> Rework custom allocators
+		- Create GameObject class
+			- Create baseComponent
+				- define all components in game
+		- define "world" file format
+			- define ways to store components and gameobject templates (prefabs)
 	RenderEngine:
 
 	Editor:
-		<W> Remove win32Host
-			<D> Render and resize in wpf editor
-			<D> Handle input events
-			<D> Cleanup win32Host code
-			<D> Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
-			<W> give editor access to render engine
-			- move pixelbuffer to editor
+		
 List:
 
 	Project:
@@ -90,6 +87,8 @@ List:
 
 
 	Editor:
+		- Figure out why editorGameBitmap was to small and caused a crash. (rare)
+			- easy fix (check array size with pixel size)
 		- Add objects to game world
 			- Drag and drop from object window
 			- Double click in object window
@@ -133,6 +132,13 @@ Done Stuff:
 	RenderEngine:
 
 	Editor:
+		<D> Remove win32Host
+			<D> Render and resize in wpf editor
+			<D> Handle input events
+			<D> Cleanup win32Host code
+			<D> Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
+			<D> give editor access to render engine
+			<D> move pixelbuffer to editor
 		<D> Fix delete
 		<D> Next need to make gamewindow borderless and auto resize to editor window.
 		<D> Add panels for scene, object list.

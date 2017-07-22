@@ -1,7 +1,7 @@
 #ifndef IFONT_HPP
 #define IFONT_HPP
 
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 
 struct Character {
 	unsigned int     charID;  // ID handle of the glyph texture

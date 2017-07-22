@@ -2,7 +2,6 @@
 #define ADDDATAEXTENSION_HPP
 
 #include "../../IExtension.hpp"
-#include "../Assets/MasterFile.hpp"
 
 
 class AddDataExtension : public IExtension<ExtensionAddItemEvent> {

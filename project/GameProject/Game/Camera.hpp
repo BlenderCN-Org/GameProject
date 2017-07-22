@@ -17,7 +17,7 @@ public:
 	virtual float* getOrthoMatrix();
 
 	glm::vec3 calculateMouseRay(float x, float y, IRenderEngine* renderEngine);
-	glm::vec3 getPos();
+	glm::vec3 getPos() const;
 
 	//private:
 	glm::mat4 viewMatrix;

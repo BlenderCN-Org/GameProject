@@ -3,6 +3,7 @@
 #include <iostream>
 
 std::map<int, IExtension<void>*> Extensions::extensionMap;
+IAssetManager* Extensions::assetMan;
 
 namespace Extensions
 {

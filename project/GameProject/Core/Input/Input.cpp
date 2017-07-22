@@ -16,10 +16,10 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 	singleton->modkey = mods;
 	if (singleton->consoleActive)
 		if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
-			singleton->console->print("\n>");
-			singleton->console->execute();
+			/*singleton->console->print("\n>");
+			singleton->console->execute();*/
 		} else if (scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2)) {
-			singleton->console->backSpace();
+			//singleton->console->backSpace();
 		}
 		//printf("Scancode %d with modkey %d\n", scancode, mods);
 
@@ -62,10 +62,10 @@ void Input::scrollCallback(IWindow * window, int xoffset, int yoffset) {
 }
 
 void Input::characterCallback(IWindow * window, unsigned int codepoint) {
-	if (singleton->consoleActive && singleton->console) {
-		printf("%c", codepoint);
-		singleton->console->keyPress(codepoint);
-	}
+	//if (singleton->consoleActive && singleton->console) {
+	//	printf("%c", codepoint);
+	//	//singleton->console->keyPress(codepoint);
+	//}
 }
 
 void Input::sizeCallback(IWindow * window, int w, int h) {
@@ -78,10 +78,10 @@ void Input::sizeCallback(IWindow * window, int w, int h) {
 
 void Input::focusCallback(IWindow * window, bool focus) {
 	singleton->focus = focus;
-	printf("focus %d\n", focus);
+	//printf("focus %d\n", focus);
 	if (focus == false) {
 		singleton->keyMap.clear();
-		printf("Clearing key mappings\n");
+		//printf("Clearing key mappings\n");
 	}
 }
 
@@ -108,9 +108,9 @@ void Input::release() {
 	singleton = nullptr;
 }
 
-void Input::attachConsole(Console * con) {
-	console = con;
-}
+//void Input::attachConsole(Console * con) {
+//	console = con;
+//}
 
 void Input::clearCallbacks() {
 	if (window) {
@@ -172,9 +172,9 @@ bool Input::consoleKeyWasPressed() {
 
 void Input::toggleConsole() {
 	//printf("Console toggle\n");
-	if (consoleActive) {
+	/*if (consoleActive) {
 		console->backSpace();
-	}
+	}*/
 
 	consoleActive = !consoleActive;
 }
@@ -184,7 +184,7 @@ bool Input::consoleIsActive() {
 }
 
 void Input::reset() {
-	
+
 	//printf("Pos (%d,%d)\n", int(xPos), int(yPos));
 	//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
 	blockInput = false;

@@ -1,26 +1,17 @@
 #include "GameObject.hpp"
 
+GameObject::~GameObject() {
+	std::map<uint64_t, BaseComponent*>::iterator it = components.begin();
+	std::map<uint64_t, BaseComponent*>::iterator eit = components.end();
+	for (it; it != eit; it++) {
+		BaseComponent* b = it->second;
+		delete b;
+	}
+}
+
 void GameObject::init() {}
 
-void GameObject::update(float dt) {}
-
-void GameObject::addComponent(BaseComponent* component) {
+void GameObject::addComponent(BaseComponent * component) {
 	components[component->getComponentID()] = component;
 	component->setAttachedOn(this);
-}
-
-void GameObject::setMatrix(glm::mat4 mat) {
-	worldMatrix = mat;
-}
-
-void GameObject::setMesh(IMesh * _mesh) {
-	mesh = _mesh;
-}
-
-glm::mat4 GameObject::getMatrix() const {
-	return worldMatrix;
-}
-
-IMesh * GameObject::getMesh() const {
-	return mesh;
 }

@@ -14,7 +14,8 @@ namespace Editor.EventHandler
         SCRIPT = 0x0020,
         DECAL = 0x0040,
         AUDIO = 0x0080,
-        SCENE = 0x0100
+        SCENE = 0x0100,
+        RENDERLAYER = 0x0200
     }
 
     public class SaveEventArgs
@@ -38,6 +39,7 @@ namespace Editor.EventHandler
 
     public class FormArgs
     {
+        public ObjectTypes ObjectType { get; set; }
         public UInt32 FormID { get; set; }
         public object Data { get; set; }
     }

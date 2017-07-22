@@ -3,11 +3,7 @@
 #include <Editor_Wrapper\IEditor.hpp>
 
 #include "../CoreGlobals.hpp"
-#include "../Assets/AssetManager.hpp"
-#include "../Memory/MemoryManager.hpp"
-
-#include "../Assets/Forms/SceneForm.hpp"
-
+#include "../AssetManager.hpp"
 
 class Simple : public IObject {
 public:
@@ -45,36 +41,35 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 		return;
 	}
 
-	MasterFile* mst = &g_assetManager->masterFile;
 
 	if (args->objectType == OBJECT_TYPE_SCRIPT) {
 
-		if (args->nrObjects == 0 && args->objectList == nullptr) {
+		/*if (args->nrObjects == 0 && args->objectList == nullptr) {
 			args->nrObjects = 2;
 		} else {
 
 			for (uint32_t i = 0; i < args->nrObjects; i++) {
-				Simple* s = g_memoryManager->getTimeAllocator()->allocateTimedObject<Simple>(5.0f);
+				Simple* s = g_timeAllocator->allocateTimedObject<Simple>(5.0f);
 				s->formID = i;
 				args->objectList[i] = s;
 			}
-		}
+		}*/
 	} else if (args->objectType == OBJECT_TYPE_SCENE) {
 
-		if (args->nrObjects == 0 && args->objectList == nullptr) {
+		/*if (args->nrObjects == 0 && args->objectList == nullptr) {
 			args->nrObjects = mst->getNumberUsingType(args->objectType);
 		} else {
 
 			for (uint32_t i = 0; i < args->nrObjects; i++) {
-				Simple* s = g_memoryManager->getTimeAllocator()->allocateTimedObject<Simple>(5.0f);
+				Simple* s = g_timeAllocator->allocateTimedObject<Simple>(5.0f);
 				s->formID = mst->getFormIDFromTypeAndIndex(args->objectType, i);
 				SceneForm* frm = (SceneForm*)mst->getForm(s->formID);
-				s->name = (char*)g_memoryManager->getTimeAllocator()->allocateTimedObject<Name>(5.0f);
+				s->name = (char*)g_timeAllocator->allocateTimedObject<Name>(5.0f);
 				s->deleted = mst->isFormDeleted(s->formID);
 
 				std::string str = std::string(frm->getName());
 
-				SceneStuff* sc = g_memoryManager->getTimeAllocator()->allocateTimedObject<SceneStuff>(5.0f);
+				SceneStuff* sc = g_timeAllocator->allocateTimedObject<SceneStuff>(5.0f);
 				sc->hasFog = frm->fogEnabled;
 				sc->hasWater = frm->enableWater;
 				sc->skyColor[0] = frm->skyColor.r;
@@ -98,7 +93,8 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 				s->data = sc;
 				args->objectList[i] = s;
 			}
-		}
+		}*/
+	} else if (args->objectType == OBJECT_TYPE_RENDERLAYER) {
 	}
 
 }

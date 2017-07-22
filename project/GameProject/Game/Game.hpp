@@ -1,16 +1,15 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "GameState.hpp"
-#include "Chunk.hpp"
 #include "Camera.hpp"
-
-#include "../Core/Core.hpp"
+#include "GameState.hpp"
+#include "GameObject.hpp"
 #include "Input/CameraInput.hpp"
 
-#include "..\Core\GUI\Text.hpp"
+#include "../Core/Core.hpp"
+#include "../Core/AssetManager.hpp"
 
-#include "../Core/GUI/Menu/Menu.hpp"
+#include <vector>
 
 class Game
 {
@@ -23,25 +22,22 @@ public:
 
 	bool isRunning() const;
 
-	void update(float dt);
-	void render();
+	void updateAndRender(float dt);
 
 private:
 
-	void newGame();
-	void saveGame();
-	void loadGame();
+	void render();
 
-	//int renderMenuItem(char* text, int length);
-	void handleMenuEvent(int advance);
-	void handleMenuEnter();
-	void toggleMenu();
-	void toggleMenuTarget();
+	void updateMenu(float dt);
+	void updateEditor(float dt);
+	void updateGame(float dt);
+	void updateLoading(float dt);
 
 	void tickFPS(float dt);
 
 	Core* core = nullptr;
 	Camera* cam = nullptr;
+	AssetManager* assetManager = nullptr;
 	CameraInput camInput;
 
 	bool running;
@@ -50,38 +46,16 @@ private:
 	int ffps;
 
 	GameState gstate;
-	bool gameStarted;
+	bool gamePaused;
 
-	GameObject* player = nullptr;
+	IShaderObject* shdr;
+	int32_t vpLocation;
+	int32_t matLocation;
+	int32_t selectedLoc;
 
-	std::vector<GameObject> gameObjects;
+	// @todo not use vector
+	std::vector<GameObject*> gameObjects;
 
-	// mainMenu
-
-	Menu* mainMenu = nullptr;
-
-	//@Temporary
-	std::ifstream mapFile;
-	IShaderObject* shObj = nullptr;
-
-	int vpLocation;
-	int matLocation;
-	int selectedLoc;
-
-	IShaderObject* textShObj = nullptr;
-	int orthoLocation;
-	int textLocation;
-	int textureLocation;
-	int colorLocation;
-
-	Text* t = nullptr;
-
-	float maxDx = 0.0f;
-	float maxDy = 0.0f;
-
-	glm::vec3 mouseRay;
-
-	//@EndTemporary
 };
 
 #endif

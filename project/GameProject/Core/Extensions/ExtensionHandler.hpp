@@ -3,7 +3,7 @@
 
 #include <Editor_Wrapper\IEditor.hpp>
 
-#include "MasterFileExtension.hpp"
+#include "SaveExtension.hpp"
 #include "QueryDataExtension.hpp"
 #include "AddDataExtension.hpp"
 #include "GetFormIDExtension.hpp"
@@ -17,7 +17,7 @@ public:
 	void unloadExtension(IEditor* edit);
 	void loadExtensions(IEditor* edit);
 
-	MasterFileExtension* masterFileExtension = nullptr;
+	SaveExtension* masterFileExtension = nullptr;
 	QueryDataExtension* queryDataExtension = nullptr;
 	AddDataExtension* addDataExtension = nullptr;
 	GetFormIDExtension* getFormIDExtension = nullptr;

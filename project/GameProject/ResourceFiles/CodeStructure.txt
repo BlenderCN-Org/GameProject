@@ -13,3 +13,57 @@ game
 		chunks
 	logic (movement, physics, etc)
 	gamestates (save, load, pause, dialog states, etc)
+
+
+
+main:
+
+	game->init();
+
+	loop:
+	game->updateAndRender(dt);
+
+
+game::updateAndRender(dt)
+	update(dt);
+	render();
+
+game::init()
+	core->init();				// handle window and map input, contains binding to editor and such
+	AssetManager->init();		// handle resources like meshes, textures etc
+	state = main_menu;			// current game state, should start in main_menu
+
+game::update()
+	core->update(dt);
+
+	// logic for different mode, update what to render
+	if state main_menu logic for menu
+	if state game_running logic for game
+	if state editor logic for editor
+	if state pause pause game
+	if state loading show loading screen
+
+	core->syncThreads();
+
+game::render()
+	currChuck = getCurrChunk();
+	chunks[] currChunk->getChunksInRadius(viewDistance);
+
+	RenderComponents[] = getVisibleObjects(chunks);
+	for RenderComponents do render(it);
+
+	core->syncThreads();
+
+
+
+update_xyz()
+
+	instances.clear();
+
+	for all gameobjects do
+		doPhysics(go);
+		shouldRender = testCulling(go);
+		if shouldRender do instances.addInstance(go);
+
+	sortInstances(); closest to camera renders first
+

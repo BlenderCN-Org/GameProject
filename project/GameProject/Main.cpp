@@ -24,8 +24,7 @@ int main(int argc, char* argv[]) {
 	g->init();
 
 	while ( g->isRunning() ) {
-		g->update(dt);
-		g->render();
+		g->updateAndRender(dt);
 
 		unsigned int temp = clock();
 		dt = unsigned int(temp - start) / 1000.0f;

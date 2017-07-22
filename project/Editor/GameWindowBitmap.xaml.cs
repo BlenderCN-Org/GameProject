@@ -22,7 +22,7 @@ namespace Editor
     /// </summary>
     public partial class GameWindowBitmap : UserControl
     {
-        
+
         [DllImport("user32.dll")]
         static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
@@ -71,20 +71,30 @@ namespace Editor
         {
             var pixelFormat = PixelFormats.Bgr32;
             var bpp = (pixelFormat.BitsPerPixel + 7) / 8;
-
-            var bitmap = BitmapSource.Create((int)wid, (int)hei, 0, 0, pixelFormat, null, ptr, (int)wid * bpp);
-
-            RenderedBitmap.Source = bitmap;
+            if (wid * hei * bpp == ptr.Length)
+            {
+                var bitmap = BitmapSource.Create((int)wid, (int)hei, 0, 0, pixelFormat, null, ptr, (int)wid * bpp);
+                RenderedBitmap.Source = bitmap;
+            }
             //Width = wid;
             //Height = hei;
         }
+
+        byte[] buffer = null;
+        UInt32 w = 0;
+        UInt32 h = 0;
 
         public void SetBitMap(IntPtr ptr, UInt32 wid, UInt32 hei)
         {
             if (wid != 0 && hei != 0)
             {
                 // copy buffer data before invoking
-                byte[] buffer = new byte[wid * hei * 4];
+                //if (w != wid || h != hei)
+                //{
+                buffer = new byte[wid * hei * 4];
+                w = wid;
+                h = hei;
+                //}
                 Marshal.Copy(ptr, buffer, 0, buffer.Length);
 
                 if (!RenderedBitmap.Dispatcher.CheckAccess())

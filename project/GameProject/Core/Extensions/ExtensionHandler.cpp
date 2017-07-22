@@ -34,7 +34,7 @@ void ExtensionHandler::loadExtensions(IEditor* edit) {
 	if (!canInitialize) return;
 
 	// allocate extensions
-	masterFileExtension = new MasterFileExtension();
+	masterFileExtension = new SaveExtension();
 	queryDataExtension = new QueryDataExtension();
 	addDataExtension = new AddDataExtension();
 	getFormIDExtension = new GetFormIDExtension();

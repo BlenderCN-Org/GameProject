@@ -1,51 +1,36 @@
 #ifndef GAMEOBJECT_HPP
 #define GAMEOBJECT_HPP
 
-#include <glm\glm.hpp>
+#include "Components/BaseComponent.hpp"
+
 #include <map>
 
-#include "Components\BaseComponent.hpp"
-#include "Components\IBaseComponent.hpp"
 
-class IMesh;
+class GameObject {
 
-class GameObject
-{
 public:
 
-	virtual void init();
-	virtual void update(float dt);
+	virtual ~GameObject();
+
+	void init();
 
 	void addComponent(BaseComponent* component);
 
 	template <typename T>
 	BaseComponent* getComponent();
 
-	uint32_t counter;
-
-	void setMatrix(glm::mat4 mat);
-	void setMesh(IMesh* mesh);
-
-	glm::mat4 getMatrix() const;
-	IMesh* getMesh() const;
-
-	float raidus;
-
 private:
 
-	uint64_t gameObjectId;
-	glm::mat4 worldMatrix;
-	IMesh* mesh;
-
 	std::map<uint64_t, BaseComponent*> components;
-};
 
-#endif
+};
 
 template<typename T>
 inline BaseComponent* GameObject::getComponent() {
-	if ( components.count(IBaseComponent<T>::TypeID) ) {
-		return components.at(IBaseComponent<T>::TypeID);
+	if (components.count(IBaseComponent<T>::typeID)) {
+		return components.at(IBaseComponent<T>::typeID);
 	}
 	return nullptr;
 }
+
+#endif

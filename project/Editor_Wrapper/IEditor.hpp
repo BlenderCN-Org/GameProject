@@ -7,7 +7,9 @@
 #define EDITOR_API _declspec(dllimport)
 #endif
 
+#include "../GameProject/IAssetManager.hpp"
 #include "../GameProject/IExtension.hpp"
+#include <RenderEngine/IRenderEngine.hpp>
 #include <RenderEngine/IWindow.hpp>
 
 enum EditorStatus {
@@ -24,7 +26,7 @@ class IEditor {
 
 public:
 
-	virtual bool initializeEditor() = 0;
+	virtual bool initializeEditor(IRenderEngine* re) = 0;
 	virtual void releaseEditor() = 0;
 
 	virtual void startEditor() = 0;
@@ -38,7 +40,9 @@ public:
 
 	virtual IWindow* getEditorWindow() = 0;
 
-	virtual void postPixels(uint32_t width, uint32_t height, void* data) = 0;
+	virtual void postPixels(uint32_t width, uint32_t height) = 0;
+
+	virtual void setAssetManager(IAssetManager* assetMan) = 0;
 
 private:
 

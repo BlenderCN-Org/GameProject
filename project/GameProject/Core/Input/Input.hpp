@@ -1,24 +1,23 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
+#include <RenderEngine/IWindow.hpp>
 #include <Config\Config.hpp>
 
-#include "../System/Console.hpp"
 
 #include <map>
 #include <sstream>
 
-struct InputEvent
-{
+struct InputEvent {
 	int code;
 	bool mouse;
 
 	inline friend bool operator< (const InputEvent& lhs, const InputEvent& rhs) {
 		int l = lhs.code;
 		int r = rhs.code;
-		if ( lhs.mouse )
+		if (lhs.mouse)
 			l = -(l + 1);
-		if ( rhs.mouse )
+		if (rhs.mouse)
 			r = -(r + 1);
 		return (l < r);
 	};
@@ -31,8 +30,7 @@ struct InputEvent
 	inline friend bool operator!=(const InputEvent& lhs, const InputEvent& rhs) { return !(lhs == rhs); }
 };
 
-struct KeyBind
-{
+struct KeyBind {
 	int code;
 	int mod;
 	bool mouse;
@@ -62,15 +60,14 @@ struct KeyBind
 	}
 };
 
-class Input
-{
+class Input {
 public:
 	Input();
 
 	static Input* getInput();
 	static void release();
 
-	void attachConsole(Console* con);
+	//void attachConsole(Console* con);
 	void clearCallbacks();
 	void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
 
@@ -95,10 +92,10 @@ public:
 
 	void print();
 
-//private:
+	//private:
 
 	Config keyConf;
-	Console* console;
+	//Console* console;
 	bool consoleActive;
 
 	bool blockInput;
@@ -142,8 +139,7 @@ public:
 	static void mouseDeltaCallback(IWindow* window, float dx, float dy);
 };
 
-enum KEYBINDS_NAME
-{
+enum KEYBINDS_NAME {
 	KEYBIND_FORWARD = 0,
 	KEYBIND_BACKWARD,
 	KEYBIND_LEFT,

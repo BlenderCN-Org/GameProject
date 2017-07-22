@@ -2,10 +2,8 @@
 #define MASTERFILEEXTENSION_HPP
 
 #include "../../IExtension.hpp"
-#include "../Assets/MasterFile.hpp"
 
-
-class MasterFileExtension : public IExtension<ExtensionSaveEvent> {
+class SaveExtension : public IExtension<ExtensionSaveEvent> {
 
 public:
 	void saveMasterFile();

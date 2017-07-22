@@ -1,12 +1,16 @@
 #include "Game.hpp"
+#include "Components/RenderComponent.hpp"
+#include "Components/TransformComponent.hpp"
 
+#include "../Core/CoreGlobals.hpp"
 #include "../Core/Input/Input.hpp"
-
-#include <glm/gtc/matrix_transform.hpp>
+#include "../Core/AssetManager.hpp"
 
 #include <AssetLib/AssetLib.hpp>
 
-#include "../Core/CoreGlobals.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <iostream>
 //@Temporary
 
 bool sphereInRay(glm::vec3 const & rayStart, glm::vec3 const & rayDir, float const radius, glm::mat4 const &mat) {
@@ -29,37 +33,62 @@ bool sphereInRay(glm::vec3 const & rayStart, glm::vec3 const & rayDir, float con
 	return true;
 }
 
-GameObject createMeshStruct(Core* core, std::string meshName, float x, float y, float z) {
-	IRenderEngine* re = core->getRenderEngine();
+std::string readShader(const char *filePath) {
+	std::string content;
+	std::ifstream fileStream(filePath, std::ios::in);
 
-	GameObject go;
-	IMesh* mesh = AssetManager::getAssetManager()->getMesh((char*)meshName.c_str());
+	if (!fileStream.is_open()) {
+		printf("Could not open file %s", filePath);
+		return "";
+	}
 
-	go.init();
+	std::string line = "";
+	while (!fileStream.eof()) {
+		std::getline(fileStream, line);
+		content.append(line + "\n");
+	}
 
-	go.setMesh(mesh);
-	glm::mat4 mat = glm::mat4();
-	mat[0][3] = x;
-	mat[1][3] = y;
-	mat[2][3] = z;
-	go.setMatrix(mat);
-	go.raidus = mesh->getRadius();
+	fileStream.close();
+	return content;
+}
 
+
+GameObject* createGo(AssetManager* assetManager, std::string meshName, float x, float y, float z) {
+
+	GameObject* go = new GameObject();
+	uint32_t instanceID = assetManager->loadMesh((char*)meshName.c_str());
+	RenderComponent* rc = new RenderComponent();
+	rc->init();
+	rc->setInstanceId(instanceID);
+	go->addComponent(rc);
+	
+	TransformComponent* tc = new TransformComponent();
+	tc->init();
+	tc->setPosition(glm::vec3(x, y, z));
+	go->addComponent(tc);
+	
 	return go;
 }
 
 //@EndTemporary
 
-Game::Game() : player(nullptr), running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu), gameStarted(false) {}
+Game::Game() : running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu) {}
 
 Game::~Game() {
-	delete mainMenu;
+	
+	std::vector<GameObject*>::const_iterator it = gameObjects.begin();
+	std::vector<GameObject*>::const_iterator eit = gameObjects.end();
 
-	delete player;
+	for (it; it != eit; it++) {
+		if (*it) {
+			delete *it;
+		}
+	}
+
+	shdr->release();
+	assetManager->freeResources();
+	delete assetManager;
 	delete cam;
-
-	delete t;
-
 	delete core;
 }
 
@@ -69,43 +98,40 @@ void Game::init() {
 
 	cam = new Camera();
 
+	assetManager = new AssetManager();
+	assetManager->init();
+	
 	camInput.init((glm::mat4*)cam->getViewMatrix());
 	*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(1280), float(720), 0.0001f, 100.0f);
 	*(glm::mat4*)(cam->getOrthoMatrix()) = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f);
 
-	player = new GameObject();
+	gstate = GameState::eGameStage_MainMenu;
 
-	if (!AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst")) {
-		core->getConsole()->print("Could not load masterfile\n");
-	}
-	//if ( !AssetManager::getAssetManager()->masterFile.loadMaster("Data/master.mst") ) {
-	core->startEditor();
-	newGame();
 	gstate = GameState::eGameState_PlayMode;
-	//}
 
-	//@Temporary
-	shObj = core->getShaderObject();
-	textShObj = core->getTextShaderObject();
+	gameObjects.push_back(createGo(assetManager, "data/meshes/unitcube.mesh", 0, 0, 0));
 
-	vpLocation = shObj->getShaderUniform("viewProjMatrix");
-	matLocation = shObj->getShaderUniform("worldMat");
-	selectedLoc = shObj->getShaderUniform("selectedColor");
+	core->startEditor();
 
-	orthoLocation = textShObj->getShaderUniform("viewProjMatrix");
-	textLocation = textShObj->getShaderUniform("worldMat");
-	textureLocation = textShObj->getShaderUniform("text");
-	colorLocation = textShObj->getShaderUniform("textColor");
+	std::string vs = readShader("data/shaders/default.vs.glsl");
+	std::string gs = readShader("data/shaders/default.gs.glsl");
+	std::string fs = readShader("data/shaders/default.fs.glsl");
 
-	t = new Text();
-	t->init(core->getRenderEngine());
-	t->setFont(AssetManager::getAssetManager()->getBasicFont());
+	shdr = core->getRenderEngine()->createShaderObject();
+	shdr->init();
 
-	if (AssetManager::getAssetManager()->loadMenu(&mainMenu, "MainMenu")) {
-		core->getConsole()->print("Menu loaded!\n");
+	shdr->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+	shdr->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
+	shdr->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
+
+	if (!shdr->buildShader()) {
+		printf("shader failed to build\n");
+		assert(0 && "shader failed to build");
 	}
 
-	//@EndTemporary
+	vpLocation = shdr->getShaderUniform("viewProjMatrix");
+	matLocation = shdr->getShaderUniform("worldMat");
+	selectedLoc = shdr->getShaderUniform("selectedColor");
 
 }
 
@@ -113,15 +139,11 @@ bool Game::isRunning() const {
 	return running;
 }
 
-void Game::update(float dt) {
+void Game::updateAndRender(float dt) {
+
 	core->update(dt);
 	tickFPS(dt);
 	running = core->isRunning();
-
-	// stuff that we only do while not being in the editor
-	if (!core->isInEditor()) {
-		mainMenu->update();
-	}
 
 	Input* in = Input::getInput();
 	if (in->sizeChange) {
@@ -131,57 +153,28 @@ void Game::update(float dt) {
 			*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
 		}
 	}
-
-	KeyBind kb;
-	kb.code = 28;
-	kb.mod = 0;
-	kb.mouse = 0;
-
-
-	if (in->releasedThisFrame(kb)) {
-		//std::cout << "UP Pressed\n";
-		//saveGame();
-		//handleMenuEvent(-1);
-		maxDx = 0.0f;
-		maxDy = 0.0f;
-		core->startEditor();
+	
+	switch (gstate) {
+		case GameState::eGameStage_MainMenu:
+			updateMenu(dt);
+			break;
+		case GameState::eGameState_EditorMode:
+			updateEditor(dt);
+			break;
+		case GameState::eGameState_PlayMode:
+			updateGame(dt);
+			break;
+		case GameState::eGameState_loading:
+			updateLoading(dt);
+			break;
+		case GameState::eGameState_Undefined:
+		default:
+			break;
 	}
 
-	// update gameStuffz
-	if (gstate == GameState::eGameState_PlayMode) {
-		camInput.update(dt);
-	}
+	//core->syncThreads();
 
-	else if (gstate == GameState::eGameStage_MainMenu) {
-		KeyBind kb;
-		kb.code = 72;
-		kb.mod = 0;
-		kb.mouse = 0;
-
-		bool consoleActive = Input::getInput()->consoleIsActive();
-
-		if (in->releasedThisFrame(kb) && !consoleActive) {
-			//std::cout << "UP Pressed\n";
-			//saveGame();
-			handleMenuEvent(-1);
-		}
-
-		kb.code = 80;
-
-		if (in->releasedThisFrame(kb) && !consoleActive) {
-			//std::cout << "Down Pressed\n";
-			handleMenuEvent(+1);
-			//loadGame();
-		}
-		kb.code = 28;
-
-		if (in->releasedThisFrame(kb) && !consoleActive) {
-			//std::cout << "Enter \n";
-			//newGame();
-			handleMenuEnter();
-		}
-	}
-	//@EndTemporary
+	render();
 }
 
 void Game::render() {
@@ -189,174 +182,46 @@ void Game::render() {
 
 	core->render(vp);
 
-	shObj->useShader();
-	shObj->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
+	std::vector<GameObject*>::const_iterator it = gameObjects.begin();
+	std::vector<GameObject*>::const_iterator eit = gameObjects.end();
 
-	//@Temporary
-	Input* in = Input::getInput();
+	shdr->useShader();
+	shdr->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
+	shdr->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f));
 
-	mouseRay = cam->calculateMouseRay((float)in->xPos, (float)in->yPos, core->getRenderEngine());
-	for (size_t i = 0; i < gameObjects.size(); i++) {
-		shObj->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &gameObjects[i].getMatrix());
-		if (sphereInRay(cam->getPos(), mouseRay, gameObjects[i].raidus, gameObjects[i].getMatrix())) {
-			shObj->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f, 0.0f, 0.0f));
-		} else {
-			shObj->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f, 1.0f, 1.0f));
+	for (it; it != eit; it++) {
+		if (*it) {
+			RenderComponent* rc = (RenderComponent*)(*it)->getComponent<RenderComponent>();
+			TransformComponent* tc = (TransformComponent*)(*it)->getComponent<TransformComponent>();
+
+			if (rc != nullptr) {
+				IMesh* mesh = assetManager->getMeshFromInstanceId(rc->getInstanceId());
+				if (mesh != nullptr) {
+
+					glm::mat4 mdl = tc->getModelMatrix();
+					shdr->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &mdl);
+					mesh->bind();
+					mesh->render();
+				}
+			}
 		}
-		IMesh* m = gameObjects[i].getMesh();
-		m->bind();
-		m->render();
 	}
 
-
-	// stuff that we only do while not being in the editor
-	if (!core->isInEditor()) {
-		mainMenu->render();
-	}
-
-	IRenderEngine* re = core->getRenderEngine();
-	textShObj->useShader();
-	textShObj->bindData(orthoLocation, UniformDataType::UNI_MATRIX4X4, cam->getOrthoMatrix());
-	textShObj->bindData(textLocation, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	if (ffps >= 60)
-		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(0, 1, 0));
-	else if (ffps >= 30)
-		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(255.0f / 255.0f, 165.0f / 255.0f, 0));
-	else
-		textShObj->bindData(colorLocation, UniformDataType::UNI_FLOAT3, &glm::vec3(1, 0, 0));
-
-	std::string fpsString = std::to_string(ffps) + " FPS";
-
-	maxDx = max(in->xDelta, maxDx);
-	maxDy = max(in->yDelta, maxDy);
-
-	fpsString += "\nMax dx/dy: (" + std::to_string(maxDx) + ", " + std::to_string(maxDy);
-	fpsString += "\nMouse x/y: (" + std::to_string(in->xPos) + ", " + std::to_string(in->yPos);
-
-	fpsString += "\nMouseRay x/y/z: (" + std::to_string(mouseRay.x) + ", " + std::to_string(mouseRay.y) + ", " + std::to_string(mouseRay.z);
-
-	if (core->currentEditorStatus == STARTING) {
-		fpsString += "\nEditor Starting!";
-	}
-
-
-	t->setText((char*)fpsString.c_str(), fpsString.size(), 10, 10, 1.0);
-	re->setBlending(true);
-	t->render(textShObj, textureLocation);
-	re->setBlending(false);
-
-	//@EndTemporary
-	core->renderConsole();
 	core->swap();
 }
 
-void Game::newGame() {
-	gameObjects.clear();
+void Game::updateMenu(float dt) {}
 
-	//@Temporary
-	mapFile.open("data/map.world");
+void Game::updateEditor(float dt) {
 
-	int objectCount = 0;
-
-	if (mapFile.is_open()) {
-		std::string line = "";
-
-		std::getline(mapFile, line);
-		objectCount = std::stoi(line);
-
-		for (int i = 0; i < objectCount; i++) {
-			std::string meshName = "";
-			float x = 0;
-			float y = 0;
-			float z = 0;
-
-			std::getline(mapFile, meshName);
-
-			std::getline(mapFile, line);
-			x = std::stof(line);
-			std::getline(mapFile, line);
-			y = std::stof(line);
-			std::getline(mapFile, line);
-			z = std::stof(line);
-
-			gameObjects.push_back(createMeshStruct(core, meshName, x, y, z));
-		}
-
-		int b = 0;
-	}
-
-	gameStarted = true;
-	//mainMenu->enterLeaveMenuState = true;
-	//mainMenu->menuXTarget = 1950;
-
-	camInput.setCam(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1));
-
-	mapFile.close();
-	//@EndTermporary
 }
 
-void Game::saveGame() {
-	std::cout << "Saving Game\n";
-
-	core->getMemoryManager()->saveHeap();
+void Game::updateGame(float dt) {
+	camInput.update(dt);
 }
 
-void Game::loadGame() {
-	std::cout << "Loading Game\n";
+void Game::updateLoading(float dt) {
 
-	core->getMemoryManager()->loadHeap();
-}
-
-
-void Game::handleMenuEvent(int advance) {
-	//mainMenu->currentMenuItem += advance;
-	//
-	//if (mainMenu->currentMenuItem < 0) mainMenu->currentMenuItem += mainMenu->nrMemuItems;
-	//if (mainMenu->currentMenuItem >= mainMenu->nrMemuItems) mainMenu->currentMenuItem -= mainMenu->nrMemuItems;
-}
-
-void Game::handleMenuEnter() {
-	//int choice = mainMenu->currentMenuItem;
-	//
-	//if (choice == mainMenu->newGameIndex) {
-	//	newGame();
-	//}
-	//
-	//if (choice == mainMenu->saveGameIndex) {
-	//	saveGame();
-	//}
-	//
-	//if (choice == mainMenu->loadGameIndex) {
-	//	loadGame();
-	//}
-	//
-	//if (choice == mainMenu->editorIndex) {
-	//	core->startEditor();
-	//}
-	//
-	//if (choice == mainMenu->quitGameIndex && !core->isInEditor()) {
-	//	running = false;
-	//}
-	//else if (choice == mainMenu->quitGameIndex && core->isInEditor()) {
-	//	core->getConsole()->print("Editor mode enabled cannot quit using game menu");
-	//}
-}
-
-void Game::toggleMenu() {
-	//if (gstate == GameState::eGameStage_MainMenu && gameStarted) {
-	//	gstate = GameState::eGameState_PlayMode;
-	//}
-	//else {
-	//	gstate = GameState::eGameStage_MainMenu;
-	//	mainMenu->currentMenuItem = 0;
-	//}
-}
-
-void Game::toggleMenuTarget() {
-	//if (gstate == GameState::eGameStage_MainMenu)
-	//	mainMenu->menuXTarget = 1950;
-	//else
-	//	mainMenu->menuXTarget = 1920 - 250;
 }
 
 void Game::tickFPS(float dt) {
@@ -364,7 +229,6 @@ void Game::tickFPS(float dt) {
 	timepass += dt;
 
 	if (timepass > 1.0f) {
-		core->setFPS(fps);
 		ffps = fps;
 		fps = 0;
 		timepass -= 1.0f;

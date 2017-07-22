@@ -6,8 +6,9 @@ void MainWindowWrapper::DoWork() {
 	
 	window->Show();
 	mre->Set();
+	
 	System::Windows::Threading::Dispatcher::Run();
-
+	
 }
 
 void MainWindowWrapper::waitForInit() {
@@ -31,4 +32,5 @@ MainWindowWrapper::~MainWindowWrapper() {
 	//window->Close();
 	thrd->Sleep(100);
 	thrd->Abort();
+
 }

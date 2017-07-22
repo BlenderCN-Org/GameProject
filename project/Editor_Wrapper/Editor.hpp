@@ -29,7 +29,7 @@ namespace Editor_clr {
 			editorStatus = EditorStatus::STOPPED;
 		}
 
-		virtual bool initializeEditor();
+		virtual bool initializeEditor(IRenderEngine* re);
 		virtual void releaseEditor();
 
 		virtual void startEditor();
@@ -43,7 +43,9 @@ namespace Editor_clr {
 
 		virtual IWindow* getEditorWindow();
 
-		virtual void postPixels(uint32_t width, uint32_t height, void* data);
+		virtual void postPixels(uint32_t width, uint32_t height);
+
+		virtual void setAssetManager(IAssetManager* assetMan);
 
 	private:
 
@@ -59,6 +61,12 @@ namespace Editor_clr {
 		EditorWindow editWindow;
 
 		EditorStatus editorStatus;
+
+		IRenderEngine* renderEngine;
+
+		IPixelBuffer* pixelBuffers[2];
+		int pboIndex = 0;
+		int pboNextIndex = 0;
 
 	};
 

@@ -37,7 +37,8 @@ namespace Editor.EditorWindows
     public partial class GameSettings : Window
     {
 
-        private int selectedItem = -1;
+        private int selectedSceneItem = -1;
+        private int selectedRenderLayerItem = -1;
 
         public GameSettings()
         {
@@ -111,7 +112,7 @@ namespace Editor.EditorWindows
                 // tabControl.SelectedItem.executeQuery() or something similar
                 if (tabControl.SelectedItem == SceneTab)
                 {
-                    selectedItem = -1;
+                    selectedSceneItem = -1;
                     sceneList.Items.Clear();
 
                     EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
@@ -139,6 +140,24 @@ namespace Editor.EditorWindows
                     {
                         if (item.GetType().Equals(typeof(DataSources.MenuItem)))
                             menuList.Items.Add(item);
+                    }
+
+                }
+
+                if (tabControl.SelectedItem == RenderLayersTab)
+                {
+                    selectedRenderLayerItem = -1;
+                    renderLayerList.Items.Clear();
+
+                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+                    args.ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER;
+                    args.ReturnList = new List<DataSources.BaseData>();
+                    EventHandler.EventManager.OnQueryDataEvent(args);
+
+                    foreach (var item in args.ReturnList)
+                    {
+                        if (item.GetType().Equals(typeof(DataSources.MenuItem)))
+                            renderLayerList.Items.Add(item);
                     }
 
                 }
@@ -200,20 +219,21 @@ namespace Editor.EditorWindows
 
         private void sceneListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if( selectedItem != -1)
+            if(selectedSceneItem != -1)
             {
                 // do Edit Event
                 EventHandler.FormArgs fa = new EventHandler.FormArgs();
-                fa.FormID = ((DataSources.Scene)sceneList.Items[selectedItem]).EditorID;
-                fa.Data = ((DataSources.Scene)sceneList.Items[selectedItem]);
+                fa.FormID = ((DataSources.Scene)sceneList.Items[selectedSceneItem]).EditorID;
+                fa.Data = ((DataSources.Scene)sceneList.Items[selectedSceneItem]);
+                fa.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
                 EventHandler.EventManager.OnEditFormEvent(fa);
             }
 
-            DeleteItem.IsEnabled = false;
+            DeleteSceneItem.IsEnabled = false;
             if (sceneList.SelectedIndex != -1)
             {
-                DeleteItem.IsEnabled = true;
-                selectedItem = sceneList.SelectedIndex;
+                DeleteSceneItem.IsEnabled = true;
+                selectedSceneItem = sceneList.SelectedIndex;
             }
         }
 
@@ -225,6 +245,73 @@ namespace Editor.EditorWindows
         private void deleteMenuButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void addRenderLayerButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            EventHandler.GetFormIDArgs formIdArgs = new Editor.EventHandler.GetFormIDArgs();
+            formIdArgs.FormID = 0;
+            EventHandler.EventManager.OnGetFormIDEvent(formIdArgs);
+
+            DataSources.RenderLayer bd = new DataSources.RenderLayer(formIdArgs.FormID, "New Renderlayer");
+            
+            renderLayerList.Items.Add(bd);
+            renderLayerList.SelectedItem = bd;
+
+            EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
+            {
+                Name = bd.Name,
+                FormID = bd.EditorID,
+                ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER
+            };
+
+            EventHandler.EventManager.OnAddObjectEvent(args);
+
+        }
+
+        private void deleteRenderLayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmDialog cfDlg = new ConfirmDialog();
+            cfDlg.Owner = this;
+            cfDlg.ShowDialog();
+
+            EventHandler.FormArgs fa = new EventHandler.FormArgs()
+            {
+                FormID = (renderLayerList.SelectedItem as DataSources.BaseData).EditorID
+            };
+
+            (renderLayerList.SelectedItem as DataSources.BaseData).Deleted = true;
+
+            if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
+            {
+                renderLayerList.Items.Remove(renderLayerList.SelectedItem);
+                EventHandler.EventManager.OnDeleteFormEvent(fa);
+            }
+            else
+            {
+                Console.WriteLine("Abort delete");
+            }
+        }
+
+        private void renderLayerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (selectedRenderLayerItem != -1)
+            {
+                // do Edit Event
+                EventHandler.FormArgs fa = new EventHandler.FormArgs();
+                fa.FormID = ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).EditorID;
+                fa.Data = ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]);
+                fa.ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER;
+                EventHandler.EventManager.OnEditFormEvent(fa);
+            }
+
+            DeleteRenderLayerItem.IsEnabled = false;
+            if (renderLayerList.SelectedIndex != -1)
+            {
+                DeleteRenderLayerItem.IsEnabled = true;
+                selectedRenderLayerItem = renderLayerList.SelectedIndex;
+            }
         }
     }
 }

@@ -19,29 +19,29 @@ void Section::write(std::ofstream & outFile) {
 	}
 }
 
-void Section::addString(std::string name, std::string value) {
-	settingsMap[name] = value;
+void Section::addString(std::string _name, std::string value) {
+	settingsMap[_name] = value;
 }
 
-void Section::addInteger(std::string name, int value) {
+void Section::addInteger(std::string _name, int value) {
 	std::string v = std::to_string(value);
-	settingsMap[name] = v;
+	settingsMap[_name] = v;
 }
 
-void Section::addBoolean(std::string name, bool value) {
+void Section::addBoolean(std::string _name, bool value) {
 	std::string v = "";
 	if ( value )
 		v = "true";
 	else
 		v = "false";
-	settingsMap[name] = v;
+	settingsMap[_name] = v;
 }
 
-int Section::getInteger(std::string name, int def) {
+int Section::getInteger(std::string _name, int def) {
 	int retVal = def;
 
-	if ( settingsMap.count(name) ) {
-		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
+	if ( settingsMap.count(_name) ) {
+		std::map<std::string, std::string>::const_iterator value = settingsMap.find(_name);
 
 		retVal = std::stoi(value->second);
 	}
@@ -49,11 +49,11 @@ int Section::getInteger(std::string name, int def) {
 	return retVal;
 }
 
-std::string Section::getString(std::string name, std::string def) {
+std::string Section::getString(std::string _name, std::string def) {
 	std::string retVal = def;
 
-	if ( settingsMap.count(name) ) {
-		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
+	if ( settingsMap.count(_name) ) {
+		std::map<std::string, std::string>::const_iterator value = settingsMap.find(_name);
 
 		retVal = value->second;
 	}
@@ -61,11 +61,11 @@ std::string Section::getString(std::string name, std::string def) {
 	return retVal;
 }
 
-bool Section::getBoolean(std::string name, bool def) {
+bool Section::getBoolean(std::string _name, bool def) {
 	bool retVal = def;
 
-	if ( settingsMap.count(name) ) {
-		std::map<std::string, std::string>::const_iterator value = settingsMap.find(name);
+	if ( settingsMap.count(_name) ) {
+		std::map<std::string, std::string>::const_iterator value = settingsMap.find(_name);
 		std::string vLower = value->second;
 
 		std::transform(vLower.begin(), vLower.end(), vLower.begin(), ::tolower);

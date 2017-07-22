@@ -41,7 +41,7 @@ glm::vec3 Camera::calculateMouseRay(float x, float y, IRenderEngine* re) {
 	return glm::normalize(vec3(ray));
 }
 
-glm::vec3 Camera::getPos() {
+glm::vec3 Camera::getPos() const{
 	glm::mat4 view = glm::inverse(viewMatrix);
 	
 	float x = view[3][0];

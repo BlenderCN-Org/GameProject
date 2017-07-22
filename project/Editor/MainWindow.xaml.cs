@@ -43,6 +43,12 @@ namespace Editor
 
         }
 
+        ~MainWindow()
+        {
+            textEdit.Close();
+            gameSettings.Close();
+        }
+
         public void invokeShow()
         {
             if (!Dispatcher.CheckAccess())

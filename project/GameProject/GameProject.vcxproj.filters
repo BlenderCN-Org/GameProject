@@ -19,29 +19,8 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{df4fe985-802d-45f1-a124-4e7ef9048a31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Components">
-      <UniqueIdentifier>{e5dd61d1-d41f-4712-b4c0-fbaee3b10e3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Settings">
-      <UniqueIdentifier>{5bdac77a-483a-4be1-8433-5ec2b13936c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Assets">
-      <UniqueIdentifier>{72c9461c-daa8-4e80-88e4-66d387ee868a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\LibLoader">
-      <UniqueIdentifier>{dd4dab2f-890b-45a9-8caf-86f2263b65bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core\Input">
       <UniqueIdentifier>{d9fee019-c918-4751-a5a5-faf525243ea2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\GUI">
-      <UniqueIdentifier>{cd685844-927e-4198-b49a-bb8d271a39fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\GUI\Editor">
-      <UniqueIdentifier>{e227cd14-f47c-4a04-abc3-dde143ab481a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Script">
-      <UniqueIdentifier>{c70c6952-b6f2-4b8a-bf70-37183620a2dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core\System">
       <UniqueIdentifier>{91981ae1-26c3-4326-867f-51ac1fe9f68d}</UniqueIdentifier>
@@ -49,26 +28,17 @@
     <Filter Include="Source Files\Game\Input">
       <UniqueIdentifier>{1882d1ef-dc04-4306-a968-63c7c3bff398}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\MemoryManager">
-      <UniqueIdentifier>{2a147f31-1968-4d1d-bbfb-b46f480ff10f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Exceptions">
-      <UniqueIdentifier>{186a2685-c107-44e4-a5c9-d838ec9d7c1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Blender Plugin">
       <UniqueIdentifier>{789ea372-928d-4380-868d-d4a6fdd2cfe0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core\Extensions">
       <UniqueIdentifier>{c7156fc7-d3c2-48b5-b3bc-485b719b9ed4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\GUI\Menu">
-      <UniqueIdentifier>{e1634fee-dbb4-4b60-b417-61988146fbb1}</UniqueIdentifier>
+    <Filter Include="Source Files\Game\Components">
+      <UniqueIdentifier>{6f7850a4-0ed2-48d7-a5de-e428dbc8cde6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Assets\Forms">
-      <UniqueIdentifier>{0271ee96-9eae-4734-b5cc-58920f82d3b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Assets\Structs">
-      <UniqueIdentifier>{8ede4143-6fc2-48f3-9430-b6fb91e34fed}</UniqueIdentifier>
+    <Filter Include="Source Files\Core\Assets">
+      <UniqueIdentifier>{52f36dc9-2702-4571-8347-fc3f17be79b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,77 +51,20 @@
     <ClCompile Include="Game\Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameObject.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Components\RenderComponent.cpp">
-      <Filter>Source Files\Game\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Chunk.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Components\BaseComponent.cpp">
-      <Filter>Source Files\Game\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Settings\Settings.cpp">
-      <Filter>Source Files\Core\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Settings\DisplaySettings.cpp">
-      <Filter>Source Files\Core\Settings</Filter>
-    </ClCompile>
-    <ClCompile Include="Loader\LibraryLoader.cpp">
-      <Filter>Source Files\LibLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\ThreadManager.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="ExceptionHandling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Input\Input.cpp">
       <Filter>Source Files\Core\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Core\GUI\Text.cpp">
-      <Filter>Source Files\Core\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Script\OcParser.cpp">
-      <Filter>Source Files\Core\Script</Filter>
-    </ClCompile>
     <ClCompile Include="Core\System\Sys.cpp">
       <Filter>Source Files\Core\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Script\OcParsable.cpp">
-      <Filter>Source Files\Core\Script</Filter>
     </ClCompile>
     <ClCompile Include="Game\Camera.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\Input\CameraInput.cpp">
       <Filter>Source Files\Game\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Memory\MemoryManager.cpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Exceptions\Exceptions.cpp">
-      <Filter>Source Files\Core\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\AssetManager.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\AssetLoader.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Memory\MemoryBuffer.cpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\System\Console.cpp">
-      <Filter>Source Files\Core\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\MasterFile.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Extensions\MasterFileExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
@@ -162,26 +75,11 @@
     <ClCompile Include="Core\Extensions\AddDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
-    <ClCompile Include="Core\GUI\Menu\Menu.cpp">
-      <Filter>Source Files\Core\GUI\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\Forms\MenuForm.cpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\Forms\BaseForm.cpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\GUI\Menu\MenuItem.cpp">
-      <Filter>Source Files\Core\GUI\Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Core\CoreGlobals.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Extensions\GetFormIDExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Assets\Forms\SceneForm.cpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
     </ClCompile>
     <ClCompile Include="Core\Extensions\DeleteDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
@@ -189,24 +87,51 @@
     <ClCompile Include="Core\Extensions\EditDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
+    <ClCompile Include="Core\System\LibraryLoader.cpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameObject.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\RenderComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\BaseComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\PhysicsComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Components\TransformComponent.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\AssetManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\RenderLayer.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\GameFile.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Extensions\SaveExtension.cpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\GameFileEditor.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Loader\LibraryLoader.hpp">
-      <Filter>Source Files\LibLoader</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Camera.hpp">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Chunk.hpp">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Game.hpp">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameObject.hpp">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameState.hpp">
@@ -215,83 +140,14 @@
     <ClInclude Include="Game\Input\CameraInput.hpp">
       <Filter>Source Files\Game\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Components\BaseComponent.hpp">
-      <Filter>Source Files\Game\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Components\IBaseComponent.hpp">
-      <Filter>Source Files\Game\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Components\RenderComponent.hpp">
-      <Filter>Source Files\Game\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Core.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\SafeQueue.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Task.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\ThreadManager.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\System\Sys.hpp">
       <Filter>Source Files\Core\System</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Settings\DisplaySettings.hpp">
-      <Filter>Source Files\Core\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Settings\Settings.hpp">
-      <Filter>Source Files\Core\Settings</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Script\OcParsable.hpp">
-      <Filter>Source Files\Core\Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Script\OcParser.hpp">
-      <Filter>Source Files\Core\Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\Heap.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\MemoryManager.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\ResourceAllocator.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\StackAllocator.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Input\Input.hpp">
       <Filter>Source Files\Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\GUI\Text.hpp">
-      <Filter>Source Files\Core\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Exceptions\Exceptions.hpp">
-      <Filter>Source Files\Core\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\AssetManager.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\MeshAsset.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\AssetLoader.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\MemoryBuffer.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\System\Console.hpp">
-      <Filter>Source Files\Core\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\MasterFile.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Extensions\MasterFileExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
     <ClInclude Include="IExtension.hpp">
       <Filter>Source Files</Filter>
@@ -305,38 +161,65 @@
     <ClInclude Include="Core\Extensions\AddDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
-    <ClInclude Include="Core\GUI\Menu\Menu.hpp">
-      <Filter>Source Files\Core\GUI\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\GUI\Menu\MenuItem.hpp">
-      <Filter>Source Files\Core\GUI\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\Forms\BaseForm.hpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Assets\Forms\MenuForm.hpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
-    </ClInclude>
     <ClInclude Include="Core\CoreGlobals.hpp">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Memory\TimeAllocator.hpp">
-      <Filter>Source Files\Core\MemoryManager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Extensions\GetFormIDExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Assets\Forms\SceneForm.hpp">
-      <Filter>Source Files\Core\Assets\Forms</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Extensions\DeleteDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Assets\Structs\Color.hpp">
-      <Filter>Source Files\Core\Assets\Structs</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Extensions\EditDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\LibraryLoader.hpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameObject.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\BaseComponent.hpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\IBaseComponent.hpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\RenderComponent.hpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\PhysicsComponent.hpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Components\TransformComponent.hpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\AssetManager.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\RenderLayer.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\GameFile.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Extensions\SaveExtension.hpp">
+      <Filter>Source Files\Core\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\GVar.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\GameFileEditor.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="IAssetManager.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileStructs.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

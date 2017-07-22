@@ -25,6 +25,7 @@ namespace Extensions
 	};
 
 	extern std::map<int, IExtension<void>*> extensionMap;
+	extern IAssetManager* assetMan;
 
 	// save event
 	void OnSaveEvent(System::Object^ sender, Editor::EventHandler::SaveEventArgs^ saveArgs);

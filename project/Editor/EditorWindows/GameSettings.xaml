@@ -42,6 +42,30 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="RenderLayersTab" Header="Render Layers" Template="{DynamicResource TabItemControlTemplate1}">
+                <Grid Background="{DynamicResource DarkBackground}">
+                    <ListView x:Name="renderLayerList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="198" Style="{DynamicResource DarkListViewWithGridView}" SelectionChanged="renderLayerList_SelectionChanged">
+                        <ListView.Resources>
+                            <c:RenderLayer x:Key="renderLayerDataSource" />
+                        </ListView.Resources>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="NewRenderLayerItem" Header="New" Click="addRenderLayerButton_Click"/>
+                                <MenuItem x:Name="DeleteRenderLayerItem" Header="Delete" IsEnabled="False" Click="deleteRenderLayerButton_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}" >
+                                <GridViewColumn Header="Form ID" DisplayMemberBinding="{Binding EditorID}" />
+                                <GridViewColumn Header="Layer Name" DisplayMemberBinding="{Binding NameWState}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StandardControls:RenderLayerInfo DataContext="{Binding SelectedItem,ElementName=renderLayerList, Mode=TwoWay}" HorizontalAlignment="Left" Margin="215,10,0,0" VerticalAlignment="Top" Height="323"/>
+                    <Button x:Name="addRenderLayerButton" Content="Add" HorizontalAlignment="Left" Height="25" Margin="11,308,0,0" VerticalAlignment="Top" Width="93" Template="{StaticResource ButtonControlTemplate1}" Click="addRenderLayerButton_Click" />
+                    <Button x:Name="deleteRenderLayerButton" Content="Delete" HorizontalAlignment="Left" Height="25" Margin="111,308,0,0" VerticalAlignment="Top" Width="97" Template="{StaticResource ButtonControlTemplate1}" IsEnabled="{Binding SelectedItems.Count, ElementName=renderLayerList, Mode=OneWay}" Click="deleteRenderLayerButton_Click"/>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="SceneTab" Header="Scenes" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
                     <Grid.ColumnDefinitions>
@@ -55,8 +79,8 @@
                         </ListView.Resources>
                         <ListView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="NewItem" Header="New" />
-                                <MenuItem x:Name="DeleteItem" Header="Delete" IsEnabled="False"/>
+                                <MenuItem x:Name="NewSceneItem" Header="New" Click="addSceneButton_Click"/>
+                                <MenuItem x:Name="DeleteSceneItem" Header="Delete" IsEnabled="False" Click="deleteSceneButton_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>

@@ -6,7 +6,7 @@
 
 namespace Editor_clr {
 
-	bool Editor_wrp::initializeEditor() {
+	bool Editor_wrp::initializeEditor(IRenderEngine* re) {
 
 		if (!initialized) {
 			editorStatus = EditorStatus::STOPPED;
@@ -19,13 +19,28 @@ namespace Editor_clr {
 			Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
 
 			initialized = true;
+
+			renderEngine = re;
+
+			pixelBuffers[0] = renderEngine->createPixelBuffer();
+			pixelBuffers[1] = renderEngine->createPixelBuffer();
+
+			pixelBuffers[0]->init();
+			pixelBuffers[1]->init();
+
+			pixelBuffers[0]->resize(10, 10);
+			pixelBuffers[1]->resize(10, 10);
+			Extensions::assetMan = nullptr;
 		}
 		return true;
 	}
 
 	void Editor_wrp::releaseEditor() {
 		printf("Releasing editor\n");
+		pixelBuffers[0]->release();
+		pixelBuffers[1]->release();
 		delete this;
+		//GC::Collect();
 		long long mem = GC::GetTotalMemory(true);
 		printf("GC Mem allocated %I64d\n", mem);
 	}
@@ -47,7 +62,7 @@ namespace Editor_clr {
 			editorWindowWrapper = gcnew EditorWindowWrapper(&editWindow);
 			wrapper->window->SetEditWindow(editorWindowWrapper);
 			wrapper->window->onCloseEvent += gcnew System::EventHandler<Editor::EventHandler::CloseArgs^>(eventWrapper, &EventWrapper::OnClosing);
-			
+
 			editorStatus = EditorStatus::RUNNING;
 
 		} else if (editorStatus == EditorStatus::RUNNING || editorStatus == EditorStatus::HIDDEN) {
@@ -95,6 +110,7 @@ namespace Editor_clr {
 	void Editor_wrp::update() {
 
 		if (eventWrapper->hideEditor) {
+			GC::Collect();
 			editorStatus = HIDDEN;
 			eventWrapper->hideEditor = false;
 		}
@@ -103,6 +119,9 @@ namespace Editor_clr {
 			stopEditor();
 			eventWrapper->closeEditor = false;
 		}
+
+		//pixelBuffers[0]->resize(w, h);
+		//pixelBuffers[1]->resize(w, h);
 
 		switch (editorStatus) {
 			case UNINITIALIZED:
@@ -133,10 +152,29 @@ namespace Editor_clr {
 		return &editWindow;
 	}
 
-	void Editor_wrp::postPixels(uint32_t width, uint32_t height, void* data) {
-		System::IntPtr^ ptr = gcnew IntPtr(data);
+	void Editor_wrp::postPixels(uint32_t width, uint32_t height) {
 
-		wrapper->window->DrawGameWindowPixels(*ptr, width, height);
+		pboIndex = (pboIndex + 1) % 2;
+		pboNextIndex = (pboIndex + 1) % 2;
+
+		pixelBuffers[pboIndex]->resize(width, height);
+		pixelBuffers[pboIndex]->read(width, height);
+
+		void* data = pixelBuffers[pboNextIndex]->map();
+		if (data) {
+			uint32_t w, h;
+			pixelBuffers[pboNextIndex]->getSize(w, h);
+
+			System::IntPtr^ ptr = gcnew IntPtr(data);
+
+			wrapper->window->DrawGameWindowPixels(*ptr, w, h);
+		}
+		pixelBuffers[pboNextIndex]->unMap();
+
+	}
+
+	void Editor_wrp::setAssetManager(IAssetManager* assetMan) {
+		Extensions::assetMan = assetMan;
 	}
 
 	void EventWrapper::OnClosing(System::Object ^sender, Editor::EventHandler::CloseArgs ^e) {

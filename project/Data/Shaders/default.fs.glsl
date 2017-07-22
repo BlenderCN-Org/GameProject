@@ -13,3 +13,8 @@ void main()
 	fragmentColor = color; //vec4(fragUv.x, fragUv.y, 0, 1);
 //	red = vec4(1.0, 0.0, 0, 1);
 }
+
+void func(out vec3 foo, out vec4 bar)
+{
+	// dostuff();
+}

@@ -22,6 +22,7 @@
 #define OBJECT_TYPE_DECAL		   0x0040
 #define OBJECT_TYPE_AUDIO		   0x0080
 #define OBJECT_TYPE_SCENE		   0x0100
+#define OBJECT_TYPE_RENDERLAYER	   0x0200
 
 struct ExtensionSaveEvent {
 	char* fileName;
@@ -33,6 +34,17 @@ struct SceneStuff {
 	bool hasFog;
 	float fog[8];
 	bool hasWater;
+};
+
+struct RenderLayerData {
+	const char* name;
+	char resolutionType;
+	uint32_t width;
+	uint32_t height;
+	bool depthBuffer;
+	bool stencilBuffer;
+	char nrColorBuffers;
+	uint32_t shaderProgramRef;
 };
 
 class IObject
@@ -61,6 +73,7 @@ struct ExtensionDeleteItemEvent {
 };
 
 struct ExtensionEditItemEvent {
+	uint32_t objectType;
 	IObject* objectData;
 };
 

@@ -79,6 +79,12 @@ namespace Extensions {
 					case Editor::EventHandler::ObjectTypes::SCENE:
 					{
 						GetSceneData(query, queryArgs);
+						break;
+					}
+					case Editor::EventHandler::ObjectTypes::RENDERLAYER:
+					{
+						printf("Getting renderLayer data\n");
+						break;
 					}
 					break;
 					default:

@@ -3,19 +3,26 @@
 
 #include "BaseComponent.hpp"
 
-enum class Components : uint64_t
+enum class Components : uint32_t
 {
 	RENDER_COMPONENT = 1,
+	PHYSICS_COMPONENT,
+	TRANSFORM_COMPONENT,
+	SCRIPT_COMPONENT,
+	STATS_COMPONENT,
+	MOVE_COMPONENT,
+	TRIGGER_COMPONENT,
+	ANIMATION_COMPONENT,
 };
 
-template< typename T>
+template<typename T>
 class IBaseComponent : public BaseComponent
 {
 public:
 
-	static const uint64_t typeID;
+	static const uint32_t typeID;
 
-	inline virtual uint64_t getComponentID() const {
+	inline virtual uint32_t getComponentID() const {
 		return typeID;
 	};
 };

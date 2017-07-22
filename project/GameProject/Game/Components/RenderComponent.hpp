@@ -3,18 +3,19 @@
 
 #include <stdint.h>
 #include "IBaseComponent.hpp"
+#include <RenderEngine/IMesh.hpp>
 
 class RenderComponent : public IBaseComponent<RenderComponent>
 {
 public:
 
 	void init();
-	void setInstanceId(uint64_t instanceId);
-	uint64_t getInstanceId() const;
+	void setInstanceId(uint32_t instanceId);
+	uint32_t getInstanceId() const;
 
 private:
 
-	uint64_t instanceId;
+	uint32_t instanceId;
 };
 
 #endif
