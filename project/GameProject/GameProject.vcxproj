@@ -253,7 +253,9 @@
     <Text Include="ResourceFiles\Todo.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Blender Plugin\export_animation.py" />
     <None Include="Blender Plugin\export_mesh.py" />
+    <None Include="Blender Plugin\export_skeleton.py" />
     <None Include="Blender Plugin\__init__.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

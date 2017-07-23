@@ -22,7 +22,8 @@
 bl_info = {
 "name": "Export Mesh (.mesh)",
 'author': '',
-"version" : (0,1,0),
+"version" : (0, 1, 0),
+"blender" : (2, 78, 0),
 "location": "Import-Export",
 "description": "",
 "category": "Import-Export"
@@ -50,12 +51,47 @@ from bpy_extras.io_utils import (
         axis_conversion,
         )
 
+from bpy.props import (StringProperty,
+                       BoolProperty,
+                       IntProperty,
+                       FloatProperty,
+                       EnumProperty,
+                       PointerProperty,
+                       )
+from bpy.types import (Panel,
+                       Operator,
+                       PropertyGroup,
+                       )
 
-versions = [("VERSION_1_0", "Version 1.0", "File version 1.0"),
-			("VERSION_1_1", "Version 1.1", "File version 1.1")
+versions = [("VERSION_1_0", "Version 1.0 (Basic mesh only)", "File version 1.0 (Export basic mesh data, vertex and normals)"),
+			("VERSION_1_1", "Version 1.1 (Skeleton only)", "File version 1.1 (Export only skeletal information, bone position and parent relation )")
 ]
 
 IOOBJOrientationHelper = orientation_helper_factory("IOOBJOrientationHelper", axis_forward='-Z', axis_up='Y')
+
+class MeshSettings(PropertyGroup):
+	useExistingSkeleton = BoolProperty(name="Export using existing skeleton", description="Allows exporting skeleton without armature modifier", default=False)
+	existingSkeletonName = StringProperty(name="Skeleton", description="Name of an existing skeleton file (wihtout extension)", default="")
+
+class MeshExportSettings(bpy.types.Panel):
+	bl_idname = "OBJECT_PT_Mesh_export_settings"
+	bl_label = "Export Settings"
+	bl_space_type = 'PROPERTIES'
+	bl_region_type = 'WINDOW'
+	bl_context = "object"
+
+	def draw(self, context):
+		layout = self.layout
+		obj = context.active_object
+		meshSettings = obj.mesh_settings
+		
+		if(obj.type != 'ARMATURE'):
+			layout.prop(meshSettings, "useExistingSkeleton")
+			if(meshSettings.useExistingSkeleton == True):
+				layout.prop(meshSettings, "existingSkeletonName")
+		else:
+			layout.label(text="No settings avaible")
+
 
 class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 	'''Export Mesh (.mesh)'''
@@ -107,21 +143,24 @@ class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 
 ## register the operator to call the export script
 def menu_func_exporter(self, context):
-	self.layout.operator(ExportMesh.bl_idname,text="(.mesh)")
+	self.layout.operator(ExportMesh.bl_idname,text="Mesh file (.mesh)")
 		
 ## the register function register all the UI elemets
 def register():
 	bpy.utils.register_module(__name__)
-	
+	bpy.types.Object.mesh_settings = PointerProperty(type=MeshSettings)
+
 	##bpy.types.INFO_MT_file_import.append(menu_func_importer)
 	bpy.types.INFO_MT_file_export.append(menu_func_exporter)
 
 ## if we disable the script we unregister
 def unregister():
 	bpy.utils.unregister_module(__name__)
-	
+	del bpy.types.Object.mesh_settings
+
 	##bpy.types.INFO_MT_file_import.remove(menu_func_importer)
 	bpy.types.INFO_MT_file_export.remove(menu_func_exporter)
+	
 
 if __name__ == "__main__":
 	register()

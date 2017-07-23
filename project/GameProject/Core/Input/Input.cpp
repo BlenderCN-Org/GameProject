@@ -142,20 +142,28 @@ void Input::setupCallbacks(IWindow * wnd) {
 }
 
 bool Input::isKeyBindPressed(KeyBind & keyBind, bool includeMods) {
-	bool pressed = keyMap[InputEvent{ keyBind.code, keyBind.mouse }];
-
-	if (includeMods)
-		pressed &= (keyBind.mod == modkey);
-
+	auto it = keyMap.find(InputEvent{ keyBind.code, keyBind.mouse });
+	bool pressed = false;
+	if (it != keyMap.end()) {
+		pressed = it->second;
+		if (includeMods) {
+			pressed &= (keyBind.mod == modkey);
+		}
+	}
 	return pressed & focus;
 }
 
 bool Input::releasedThisFrame(KeyBind & keyBind, bool includeMods) {
-	bool released = releaseMap[InputEvent{ keyBind.code, keyBind.mouse }];
 
-	if (includeMods)
-		released &= (keyBind.mod == modkey);
+	auto it = releaseMap.find(InputEvent{ keyBind.code, keyBind.mouse });
+	bool released = false;
 
+	if (it != keyMap.end()) {
+		released = it->second;
+		if (includeMods) {
+			released &= (keyBind.mod == modkey);
+		}
+	}
 	return released & focus;
 }
 

@@ -48,9 +48,9 @@ uint8_t		skeletonRef				>	referece to skeleton
 uint8_t		animKeyFrameCount		>	number of animation keyframe references
 
 data<vertexCount>					>	vertex data combined in flags order	(position is first, following vertex_colors, vertex_normal_uv, weights, bones)
-data<triangle count					>	triangle indices for the mesh
+data<triangle count>				>	triangle indices for the mesh
 
-data<animationRef					>	index to animation keyframes in file
+data<animationRef>					>	index to animation keyframes in file
 
 
 

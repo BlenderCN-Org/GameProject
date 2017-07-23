@@ -249,5 +249,11 @@
     <None Include="Blender Plugin\export_mesh.py">
       <Filter>Resource Files\Blender Plugin</Filter>
     </None>
+    <None Include="Blender Plugin\export_skeleton.py">
+      <Filter>Resource Files\Blender Plugin</Filter>
+    </None>
+    <None Include="Blender Plugin\export_animation.py">
+      <Filter>Resource Files\Blender Plugin</Filter>
+    </None>
   </ItemGroup>
 </Project>

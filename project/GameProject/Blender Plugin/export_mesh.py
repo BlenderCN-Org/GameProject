@@ -42,6 +42,17 @@ def createTriangleList(tessfaces):
 
 	return triList
 
+def createBoneList(bones):
+	# list of bones with id, parent index, and pointer to self
+	boneList = [[i ,0, b] for i, b in enumerate(bones) ]
+
+	for b in boneList:
+		for i, p in enumerate(boneList):
+			if(b[2].parent == p[2]):
+				b[1] = i
+				
+	return boneList
+
 def writeVersion_1_0(context, fw, use_selection, matrix):
 	print("Writing version 1.0")
 	
@@ -143,14 +154,18 @@ def writeVersion_1_1(context, fw, use_selection, matrix):
 
 			data = bytearray()
 
-			bones = arm.bones
-			nrBones = len(bones)
+			bones = createBoneList(arm.bones)
+			nrBones = len(arm.bones)
 			print("Nr bones ", nrBones)
 			data.extend(struct.pack("I", nrBones))
 			for b in bones:
-				v = b.tail_local.xyz
-				print(b.name, ", ", v.x, v.y, v.z)
-				data.extend(struct.pack("fff", v.x, v.y, v.z))
+				id = b[0]
+				pInd = b[1]
+				v_tail = b[2].tail_local.xyz
+				v_head = b[2].head_local.xyz
+				print(b[2].name, ", ", v_tail.x, v_tail.y, v_tail.z)
+				data.extend(struct.pack("IIfff", id, pInd, v_head.x, v_head.y, v_head.z))
+				data.extend(struct.pack("fff", v_tail.x, v_tail.y, v_tail.z))
 
 			dataObjectList.append(data)
 			bpy.data.armatures.remove(arm)

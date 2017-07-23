@@ -93,3 +93,4 @@ project/Gameproject.VC.db
 *.iobj
 project/.vs/
 project/build/
+*.pyc
