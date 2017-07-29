@@ -19,6 +19,13 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+if "bpy" in locals():
+	import imp
+	if "export_skeleton" in locals():
+		imp.reload(export_skeleton)
+
+from . import export_skeleton
+
 import bpy
 import struct
 
@@ -42,28 +49,12 @@ def createTriangleList(tessfaces):
 
 	return triList
 
-def createBoneList(bones):
-	# list of bones with id, parent index, and pointer to self
-	boneList = [[i ,0, b] for i, b in enumerate(bones) ]
-
-	for b in boneList:
-		for i, p in enumerate(boneList):
-			if(b[2].parent == p[2]):
-				b[1] = i
-				
-	return boneList
-
-def writeVersion_1_0(context, fw, use_selection, matrix):
+def writeVersion_1_0(context, fw, objects, matrix):
 	print("Writing version 1.0")
 	
 	dataObjectList = []
 
-	objectList = None
-
-	if(use_selection):
-		objectList = context.selected_objects
-	else:
-		objectList = context.scene.objects
+	objectList = objects
 
 	for obj in objectList:
 		if( obj.type == 'MESH'):
@@ -131,72 +122,55 @@ def writeVersion_1_0(context, fw, use_selection, matrix):
 	fw(struct.pack("I", len(dataObjectList)))
 	for data in dataObjectList:
 		fw(data)
-
-def writeVersion_1_1(context, fw, use_selection, matrix):
-	print("Writing version 1.1")
-	
-	dataObjectList = []
-
-	objectList = None
-
-	if(use_selection):
-		objectList = context.selected_objects
-	else:
-		objectList = context.scene.objects
-
-	for obj in objectList:
-		if( obj.type == 'ARMATURE'):
-			print("Armature")
-
-			arm = obj.data.copy()
-
-			arm.transform(matrix * obj.matrix_world)
-
-			data = bytearray()
-
-			bones = createBoneList(arm.bones)
-			nrBones = len(arm.bones)
-			print("Nr bones ", nrBones)
-			data.extend(struct.pack("I", nrBones))
-			for b in bones:
-				id = b[0]
-				pInd = b[1]
-				v_tail = b[2].tail_local.xyz
-				v_head = b[2].head_local.xyz
-				print(b[2].name, ", ", v_tail.x, v_tail.y, v_tail.z)
-				data.extend(struct.pack("IIfff", id, pInd, v_head.x, v_head.y, v_head.z))
-				data.extend(struct.pack("fff", v_tail.x, v_tail.y, v_tail.z))
-
-			dataObjectList.append(data)
-			bpy.data.armatures.remove(arm)
-		else:
-			print("not a mesh")
-
-	print("List: ", len(dataObjectList))
-	fw(struct.pack("I", len(dataObjectList)))
-	for data in dataObjectList:
-		fw(data)
-
-
-def write(context, fw, use_selection, version, matrix):
+		
+def write(context, fw, objects, version, matrix):
 	if(version == "VERSION_1_0"):
-		writeVersion_1_0(context, fw, use_selection, matrix)
+		writeHeader(fw, version)
+		writeVersion_1_0(context, fw, objects, matrix)
 	elif(version == "VERSION_1_1"):
-		writeVersion_1_1(context, fw, use_selection, matrix)
+		print("version 1.1 is animation only, exporting 1.0 mesh version!")
+		print("Version 1.0 does not have vertex weights!")
+		writeHeader(fw, "VERSION_1_0")
+		writeVersion_1_0(context, fw, objects, matrix)
+
+def writeMesh(context, objects, filepath, version, global_matrix):
+	file = open(filepath, "wb")
+	fw = file.write
+
+	write(context, fw, objects, version, global_matrix)
+
+	file.close()
 
 def save(context,
 		filepath,
         *,
 		use_selection=True,
+		export_meshes_flag=True,
+		export_skeleton_flag=True,
+		export_animation_flag=True,
 		version="VERSION_1_0",
 		global_matrix=None):
 	
-	file = open(filepath, "wb")
-	fw = file.write
+	# get list of objects to select
+	objectList = None
 
-	writeHeader(fw, version)
-	write(context, fw, use_selection, version, global_matrix)
+	if(use_selection):
+		objectList = context.selected_objects
+		# if only using selection selected objects might have armature on it
+		for obj in objectList:
+			if obj.type == 'MESH':
+				arm = obj.find_armature() 
+				if arm is not None:
+					objectList.append(arm)
+	else:
+		objectList = context.scene.objects
 
-	file.close()
+		## no objects to export 
+	if len(objectList) == 0:
+		return {'FINISHED'}
+	if(export_meshes_flag):
+		writeMesh(context, objectList, filepath, version, global_matrix)
+	if(export_skeleton_flag):
+		export_skeleton.writeSkeleton(context, objectList, filepath, version, global_matrix)
 
 	return {'FINISHED'}

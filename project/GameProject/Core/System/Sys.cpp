@@ -1,6 +1,7 @@
 // project includes
 #include "Sys.hpp"
-
+#include "../CoreGlobals.hpp"
+#include "Console.hpp"
 // project dependices
 
 // std includes
@@ -23,6 +24,8 @@ PDH_HCOUNTER* cpuCore;
 #endif
 
 void initSys() {
+
+	gConsole->print("Initializing System (Windows OS)\n");
 
 	srand((unsigned int)time(nullptr));
 

@@ -196,6 +196,7 @@
     <ClCompile Include="Core\Extensions\SaveExtension.cpp" />
     <ClCompile Include="Core\Extensions\QueryDataExtension.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\System\Console.cpp" />
     <ClCompile Include="Core\System\LibraryLoader.cpp" />
     <ClCompile Include="Core\System\Sys.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Core\Extensions\SaveExtension.hpp" />
     <ClInclude Include="Core\Extensions\QueryDataExtension.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
+    <ClInclude Include="Core\System\Console.hpp" />
     <ClInclude Include="Core\System\LibraryLoader.hpp" />
     <ClInclude Include="Core\System\Sys.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />

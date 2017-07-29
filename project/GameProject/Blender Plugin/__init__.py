@@ -109,6 +109,24 @@ class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 			default=False,
 			)
 
+	export_meshes_flag = BoolProperty(
+			name="Export meshes",
+			description="Export meshes from scene",
+			default=True,
+			)
+
+	export_skeleton_flag = BoolProperty(
+			name="Export skeleton",
+			description="Export skeleton from scene",
+			default=True,
+			)
+
+	export_animation_flag = BoolProperty(
+			name="Export Animations",
+			description="Export animations from scene",
+			default=True,
+			)
+
 	global_scale = FloatProperty(
             name="Scale",
             min=0.01, max=1000.0,

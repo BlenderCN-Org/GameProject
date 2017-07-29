@@ -123,6 +123,9 @@
     <ClCompile Include="Core\Assets\GameFileEditor.cpp">
       <Filter>Source Files\Core\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Core\System\Console.cpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="FileStructs.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\Console.hpp">
+      <Filter>Source Files\Core\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

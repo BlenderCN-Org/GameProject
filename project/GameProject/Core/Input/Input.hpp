@@ -95,7 +95,6 @@ public:
 	//private:
 
 	Config keyConf;
-	//Console* console;
 	bool consoleActive;
 
 	bool blockInput;

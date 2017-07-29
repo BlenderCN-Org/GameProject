@@ -2,6 +2,7 @@
 #include <Editor_Wrapper\IEditor.hpp>
 
 #include "../CoreGlobals.hpp"
+#include "../System/Console.hpp"
 #include "../AssetManager.hpp"
 
 void AddDataExtension::execute(int nrArgs, ExtensionAddItemEvent * args)
@@ -17,17 +18,17 @@ void AddDataExtension::execute(int nrArgs, ExtensionAddItemEvent * args)
 
 		if (args->objectType == OBJECT_TYPE_SCENE)
 		{
-			printf("Trying to add a scene\n");
+			gConsole->print("Trying to add a scene\n");
 
 			assetMan->createNewEntry(formID, SCENE_TAG);
 		}
 		else if(args->objectType == OBJECT_TYPE_RENDERLAYER) {
-			printf("Trying to add a renderLayer\n");
+			gConsole->print("Trying to add a renderLayer\n");
 
 			assetMan->createNewEntry(formID, RENDERLAYER_TAG);
 		}
 		else {
-			printf("Trying to add a something else\n");
+			gConsole->print("Trying to add a something else\n");
 		}
 	}
 }

@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "CoreGlobals.hpp"
+#include "System\Console.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
@@ -229,12 +230,12 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 	int* meshTag = (int*)"MESH";
 
 	if (*tag != *meshTag) {
-		printf("Invalid mesh file\n");
+		gConsole->print("Invalid mesh file\n");
 		size = 0;
 		return nullptr;
 	}
 
-	printf("Mesh version: %d.%d\n", h->major, h->minor);
+	gConsole->print("Mesh version: %d.%d\n", h->major, h->minor);
 	if (h->major == 1 && h->minor == 0) {
 		BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
 
@@ -259,6 +260,8 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 			verts.push_back(v3);
 		}
 
+		int triCount = (int)bf->triangleCount;
+
 		memBuff.deleteBuffer();
 
 		size = (uint32_t)verts.size() * sizeof(Vertex5);
@@ -266,11 +269,13 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 		Vertex5* v = new Vertex5[verts.size()];
 		memcpy(v, verts.data(), size);
 
+		gConsole->print("NrVerts: %d\nNrTris: %d\n", (int)verts.size(), triCount);
+
 		return v;
 	} else if (h->major == 1 && h->minor == 1) {
 		uint32_t* nrObj = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
 		uint32_t* nrBones = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
-		printf("nrBones: %d\n", (int)*nrBones);
+		gConsole->print("nrBones: %d\n", (int)*nrBones);
 
 		Bone* bones = (Bone*)memBuff.returnBytes(sizeof(Bone) * (*nrBones));
 
@@ -326,19 +331,19 @@ void AssetManager::init() {
 	Entry* e = currentFile->loadEntry(0);
 
 	if (e) {
-		printf("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data);
 	}
 
 	e = currentFile->loadEntry(1);
 
 	if (e) {
-		printf("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data);
 	}
 
 	e = currentFile->loadEntry(2);
 
 	if (e) {
-		printf("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data);
 	}
 
 }

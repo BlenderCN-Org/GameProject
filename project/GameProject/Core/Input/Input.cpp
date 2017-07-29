@@ -1,6 +1,7 @@
 #include "Input.hpp"
 
 #include "../CoreGlobals.hpp"
+#include "../System/Console.hpp"
 
 #include <iostream>
 
@@ -16,9 +17,10 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 	singleton->modkey = mods;
 	if (singleton->consoleActive)
 		if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
-			/*singleton->console->print("\n>");
-			singleton->console->execute();*/
+			//singleton->console->print("\n>");
+			gConsole->execute();
 		} else if (scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2)) {
+			gConsole->removeLastChar();
 			//singleton->console->backSpace();
 		}
 		//printf("Scancode %d with modkey %d\n", scancode, mods);
@@ -62,10 +64,11 @@ void Input::scrollCallback(IWindow * window, int xoffset, int yoffset) {
 }
 
 void Input::characterCallback(IWindow * window, unsigned int codepoint) {
-	//if (singleton->consoleActive && singleton->console) {
-	//	printf("%c", codepoint);
-	//	//singleton->console->keyPress(codepoint);
-	//}
+	if (singleton->consoleActive && gConsole) {
+		//printf("%c", codepoint);
+		gConsole->putChar(codepoint);
+		//singleton->console->keyPress(codepoint);
+	}
 }
 
 void Input::sizeCallback(IWindow * window, int w, int h) {

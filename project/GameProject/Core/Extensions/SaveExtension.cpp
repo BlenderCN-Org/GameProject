@@ -7,6 +7,7 @@
 
 #include "../System/Sys.hpp"
 #include "../CoreGlobals.hpp"
+#include "../System/Console.hpp"
 
 #include "../AssetManager.hpp"
 
@@ -69,13 +70,13 @@ void SaveExtension::saveMasterFile() {
 	gameFile->inFile.close();
 	err = remove(gameFile->fileName);
 	if (err && fileExists(gameFile->fileName)) {
-		perror("Error deleting file\n");
+		gConsole->print("Error deleting file\n");
 	}
 
 	err = rename(tempName.c_str(), gameFile->fileName);
 	if (err) {
-		printf("Error renaming file!\n");
-		printf("Aborting Save!\n");
+		gConsole->print("Error renaming file!\n");
+		gConsole->print("Aborting Save!\n");
 	}
 
 	gameFile->inFile.open(gameFile->fileName, std::ios::binary);
@@ -83,7 +84,7 @@ void SaveExtension::saveMasterFile() {
 }
 
 void SaveExtension::execute(int nrArgs, ExtensionSaveEvent* args) {
-	printf("MasterFileExtension -> Execute!\n");
+	gConsole->print("MasterFileExtension -> Execute!\n");
 	saveMasterFile();
 }
 

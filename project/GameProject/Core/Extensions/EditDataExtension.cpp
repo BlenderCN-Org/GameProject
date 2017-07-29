@@ -5,7 +5,7 @@
 #include <Editor_Wrapper\IEditor.hpp>
 
 void EditDataExtension::execute(int nrArgs, ExtensionEditItemEvent * arg) {
-
+	
 	if (nrArgs == 1 && arg != nullptr) {
 		IObject* obj = arg->objectData;
 

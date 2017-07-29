@@ -4,6 +4,7 @@
 #include "System\Sys.hpp"
 
 #include <AssetLib\AssetLib.hpp>
+#include "System\Console.hpp"
 
 int Core::width = 0;
 int Core::heigth = 0;
@@ -13,18 +14,20 @@ Core::~Core() {
 }
 
 void Core::init() {
+
+	gConsole = new Console();
+
 	initSys();
 
 	running = true;
 	hadReset = false;
 	// Render Engine
 	if (renderEngineLib.loadLibrary("RenderEngine.dll\0"))
-		printf("Loaded RenderEngine.dll\n");
+		gConsole->print("Loaded RenderEngine.dll\n");
 	else {
-		printf("Failed to load Renderer\n");
+		gConsole->print("Failed to load Renderer\n");
 		throw;
 	}
-
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
 	width = 1280;
@@ -49,7 +52,7 @@ void Core::init() {
 	// Editor
 
 	if (editorLib.loadLibrary("Editor_Wrapper.dll\0")) {
-		printf("Loaded Editor_Wrapper.dll\n");
+		gConsole->print("Loaded Editor_Wrapper.dll\n");
 
 		CreateEditorProc eProc = (CreateEditorProc)editorLib.getProcAddress("CreateEditor");
 		if (eProc != nullptr) {
@@ -60,7 +63,7 @@ void Core::init() {
 			}
 		}
 	} else {
-		printf("Failed to load Editor\n");
+		gConsole->print("Failed to load Editor\n");
 		//throw;
 	}
 
@@ -82,6 +85,8 @@ void Core::freeResources() {
 	input->release();
 
 	deinitSys();
+
+	delete gConsole;
 
 	gCore = nullptr;
 	gRenderEngine = nullptr;

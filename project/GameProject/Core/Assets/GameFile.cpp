@@ -1,3 +1,6 @@
+#include "../CoreGlobals.hpp"
+#include "../System/Console.hpp"
+
 #include "GameFile.hpp"
 
 #include <AssetLib/AssetLib.hpp>
@@ -27,7 +30,7 @@ void GameFile::load(const char* name) {
 	if (data) {
 		Version* v = (Version*)data;
 
-		printf("Loading file with version %d\n", v->version);
+		gConsole->print("Loading file with version %d\n", v->version);
 
 		if (v->version == 1) {
 			GameFileHeader_V1* gameFileV1 = (GameFileHeader_V1*)data;
@@ -102,10 +105,11 @@ Entry* GameFile::loadEntry(uint32_t formId) {
 			memcpy(&t, e.tag, sizeof(Tag));
 			tagMap[t].push_back(formId);
 		} else {
-			printf("Faulty entry offset for entry! id %d was supposed to be %d \n", e.formID, formId);
+			gConsole->print("Faulty entry offset for entry! id %d was supposed to be %d \n", e.formID, formId);
 		}
 	} else {
-		printf("Error : form not found\n");
+		//printf("Error : form not found\n");
+		gConsole->print("Error : form not found\n");
 	}
 
 	return entry;

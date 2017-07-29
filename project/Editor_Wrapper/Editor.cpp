@@ -36,13 +36,17 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::releaseEditor() {
-		printf("Releasing editor\n");
-		pixelBuffers[0]->release();
-		pixelBuffers[1]->release();
-		delete this;
-		//GC::Collect();
-		long long mem = GC::GetTotalMemory(true);
-		printf("GC Mem allocated %I64d\n", mem);
+		if (initialized) {
+			printf("Releasing editor\n");
+			pixelBuffers[0]->release();
+			pixelBuffers[1]->release();
+			delete this;
+			//GC::Collect();
+			long long mem = GC::GetTotalMemory(true);
+			printf("GC Mem allocated %I64d\n", mem);
+		} else {
+			delete this;
+		}
 	}
 
 	void Editor_wrp::startEditor() {

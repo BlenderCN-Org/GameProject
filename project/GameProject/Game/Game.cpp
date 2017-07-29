@@ -4,6 +4,7 @@
 
 #include "../Core/CoreGlobals.hpp"
 #include "../Core/Input/Input.hpp"
+#include "../Core/System/Console.hpp"
 #include "../Core/AssetManager.hpp"
 
 #include <AssetLib/AssetLib.hpp>
@@ -38,7 +39,7 @@ std::string readShader(const char *filePath) {
 	std::ifstream fileStream(filePath, std::ios::in);
 
 	if (!fileStream.is_open()) {
-		printf("Could not open file %s", filePath);
+		gConsole->print("Could not open file %s", filePath);
 		return "";
 	}
 
@@ -125,7 +126,7 @@ void Game::init() {
 	shdr->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
 
 	if (!shdr->buildShader()) {
-		printf("shader failed to build\n");
+		gConsole->print("shader failed to build\n");
 		assert(0 && "shader failed to build");
 	}
 
