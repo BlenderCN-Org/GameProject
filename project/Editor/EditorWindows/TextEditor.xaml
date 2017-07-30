@@ -3,48 +3,56 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Editor"		
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Editor.EditorWindows.TextEditor"		
+        xmlns:local="clr-namespace:Editor"
+        xmlns:tab="clr-namespace:Editor.EditorWindows.CloseableTab"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Editor.EditorWindows.TextEditor"
         mc:Ignorable="d"
         Title="TextEditor" Height="900" Width="1200" Background="{DynamicResource DarkBackground}" Closing="TextEditor_closing" WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/DictRes.xaml"/>
+                <ResourceDictionary Source="../Styles/DictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top" x:Name="menu" Grid.Column="1" Height="21" Margin="0" VerticalAlignment="Top" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" Background="{DynamicResource DarkBackground}" Foreground="{DynamicResource DarkForeground}">
-            <MenuItem Header="_File" Style="{DynamicResource MenuItemStyle1}"/>
+            <MenuItem Header="_File" Style="{DynamicResource MenuItemStyle1}">
+                <MenuItem Header="_New" Style="{DynamicResource MenuItemStyle1}" Click="MenuItem_Click" />
+                <MenuItem Header="_Open" Style="{DynamicResource MenuItemStyle1}" />
+            </MenuItem>
             <MenuItem Header="_Edit" Style="{DynamicResource MenuItemStyle1}">
-                <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}"/>
-                <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}"/>
-                <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}"/>
+                <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}" />
+                <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}" />
+                <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}" />
             </MenuItem>
             <MenuItem Header="_Settings" Style="{DynamicResource MenuItemStyle1}">
-                <MenuItem x:Name="HexToggle" Header="ToggleHexView" IsCheckable="True" Style="{DynamicResource MenuItemStyle1}"/>
+                <MenuItem x:Name="HexToggle" Header="ToggleHexView" IsCheckable="True" Style="{DynamicResource MenuItemStyle1}" />
             </MenuItem>
-
         </Menu>
 
         <Grid x:Name="Grid" Background="{DynamicResource DarkBackground}">
             <!--<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="1*" />
 			</Grid.ColumnDefinitions>-->
-            <local:DarkSyntaxHighlightedTextbox x:Name="TextBox" TextWrapping="NoWrap" AcceptsTab="True" AcceptsReturn="True" Margin="10,10,10,10" Style="{DynamicResource DarkTextBox}" >
-                <local:DarkSyntaxHighlightedTextbox.ContextMenu>
-                    <ContextMenu Style="{DynamicResource DarkContextMenuStyle}">
-                        <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}"/>
-                        <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}"/>
-                        <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}"/>
-                    </ContextMenu>
-                </local:DarkSyntaxHighlightedTextbox.ContextMenu>
-            </local:DarkSyntaxHighlightedTextbox>
+            <TabControl x:Name="tabControl" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}" Foreground="{DynamicResource DarkForeground}" SelectedIndex="1">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="AllowDrop" Value="True" />
+                        <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove" />
+                        <EventSetter Event="Drop" Handler="TabItem_Drop" />
+                    </Style>
+                    <Style TargetType="tab:TextEditorTabItem">
+                        <Setter Property="AllowDrop" Value="True" />
+                        <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove" />
+                        <EventSetter Event="Drop" Handler="TabItem_Drop" />
+                    </Style>
+                </TabControl.Resources>
+                <tab:TextEditorTabItem Title="Default" />
+            </TabControl>
         </Grid>
     </DockPanel>
-
 </Window>

@@ -1,0 +1,35 @@
+﻿<TabItem x:Class="Editor.EditorWindows.CloseableTab.TextEditorTabItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:text="clr-namespace:Editor"
+             xmlns:edit="clr-namespace:Editor.EditorWindows.CloseableTab"
+             xmlns:local="clr-namespace:Editor.EditorWindows.CloseableTab"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Template="{DynamicResource TabItemControlTemplate1}"
+             AllowDrop="True">
+
+    <TabItem.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/DictRes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </TabItem.Resources>
+
+    <TabItem.Header>
+        <edit:CloseableHeader Margin="-3,0">
+        </edit:CloseableHeader>
+    </TabItem.Header>
+    <text:DarkSyntaxHighlightedTextbox x:Name="TextBox" TextWrapping="NoWrap" AcceptsTab="True" AcceptsReturn="True" Margin="0" Style="{DynamicResource DarkTextBox}">
+        <text:DarkSyntaxHighlightedTextbox.ContextMenu>
+            <ContextMenu Style="{DynamicResource DarkContextMenuStyle}">
+                <MenuItem Command="Copy" Style="{DynamicResource MenuItemStyle1}" />
+                <MenuItem Command="Cut" Style="{DynamicResource MenuItemStyle1}" />
+                <MenuItem Command="Paste" Style="{DynamicResource MenuItemStyle1}" />
+            </ContextMenu>
+        </text:DarkSyntaxHighlightedTextbox.ContextMenu>
+    </text:DarkSyntaxHighlightedTextbox>
+</TabItem>

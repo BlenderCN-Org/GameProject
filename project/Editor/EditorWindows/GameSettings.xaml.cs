@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Editor.EditorWindows
 {
     /// <summary>
     /// Interaction logic for GameSettings.xaml
     /// </summary>
-    /// 
-    
+    ///
+
     public static class ElementHelper
     {
         public static bool IsUserVisible(this UIElement element)
@@ -36,7 +28,6 @@ namespace Editor.EditorWindows
 
     public partial class GameSettings : Window
     {
-
         private int selectedSceneItem = -1;
         private int selectedRenderLayerItem = -1;
 
@@ -45,7 +36,6 @@ namespace Editor.EditorWindows
             InitializeComponent();
 
             // add loading of general info
-
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -76,7 +66,6 @@ namespace Editor.EditorWindows
             {
                 StartupScriptBox.Text = wnd.SelectedValue.SelectedValue.ToString();
             }
-
         }
 
         private void MainMenuSelect_Click(object sender, RoutedEventArgs e)
@@ -107,7 +96,6 @@ namespace Editor.EditorWindows
         {
             if (e.Source == tabControl)
             {
-
                 // TODO - Make each tab a custom user control so that we can do
                 // tabControl.SelectedItem.executeQuery() or something similar
                 if (tabControl.SelectedItem == SceneTab)
@@ -141,7 +129,6 @@ namespace Editor.EditorWindows
                         if (item.GetType().Equals(typeof(DataSources.MenuItem)))
                             menuList.Items.Add(item);
                     }
-
                 }
 
                 if (tabControl.SelectedItem == RenderLayersTab)
@@ -156,12 +143,10 @@ namespace Editor.EditorWindows
 
                     foreach (var item in args.ReturnList)
                     {
-                        if (item.GetType().Equals(typeof(DataSources.MenuItem)))
+                        if (item.GetType().Equals(typeof(DataSources.RenderLayer)))
                             renderLayerList.Items.Add(item);
                     }
-
                 }
-
             }
         }
 
@@ -186,7 +171,6 @@ namespace Editor.EditorWindows
             {
                 Console.WriteLine("Abort delete");
             }
-
         }
 
         private void addSceneButton_Click(object sender, RoutedEventArgs e)
@@ -214,12 +198,11 @@ namespace Editor.EditorWindows
 
             sceneList.Items.Add(bd);
             sceneList.SelectedIndex = sceneList.Items.Count - 1;
-
         }
 
         private void sceneListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(selectedSceneItem != -1)
+            if (selectedSceneItem != -1)
             {
                 // do Edit Event
                 EventHandler.FormArgs fa = new EventHandler.FormArgs();
@@ -239,23 +222,20 @@ namespace Editor.EditorWindows
 
         private void addMenuButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void deleteMenuButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void addRenderLayerButton_Click(object sender, RoutedEventArgs e)
         {
-
             EventHandler.GetFormIDArgs formIdArgs = new Editor.EventHandler.GetFormIDArgs();
             formIdArgs.FormID = 0;
             EventHandler.EventManager.OnGetFormIDEvent(formIdArgs);
 
             DataSources.RenderLayer bd = new DataSources.RenderLayer(formIdArgs.FormID, "New Renderlayer");
-            
+
             renderLayerList.Items.Add(bd);
             renderLayerList.SelectedItem = bd;
 
@@ -267,7 +247,6 @@ namespace Editor.EditorWindows
             };
 
             EventHandler.EventManager.OnAddObjectEvent(args);
-
         }
 
         private void deleteRenderLayerButton_Click(object sender, RoutedEventArgs e)

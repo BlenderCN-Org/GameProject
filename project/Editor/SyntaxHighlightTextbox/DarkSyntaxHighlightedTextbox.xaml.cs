@@ -1,135 +1,125 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-
-
 namespace Editor
 {
+    /// <summary>
+    /// Interaction logic for DarkSyntaxHighlightedTextbox.xaml
+    /// </summary>
+    public partial class DarkSyntaxHighlightedTextbox : TextBox
+    {
+        private SyntaxHighlightTextbox.DrawControl linenumberContext;
+        private SyntaxHighlightTextbox.DrawControl renderContext;
 
-	/// <summary>
-	/// Interaction logic for DarkSyntaxHighlightedTextbox.xaml
-	/// </summary>
-	public partial class DarkSyntaxHighlightedTextbox : TextBox
-	{
+        private ScrollViewer scrollView;
 
-		private SyntaxHighlightTextbox.DrawControl linenumberContext;
-		private SyntaxHighlightTextbox.DrawControl renderContext;
+        private List<LineBlock> lineblocks;
+        private CultureInfo culture;
+        private Typeface typeface;
 
-		private ScrollViewer scrollView;
+        private int totalLines;
 
-		List<LineBlock> lineblocks;
-		private CultureInfo culture;
-		private Typeface typeface;
+        public DarkSyntaxHighlightedTextbox()
+        {
+            InitializeComponent();
 
-		private int totalLines;
+            totalLines = 1;
+            lineblocks = new List<LineBlock>();
 
-		public DarkSyntaxHighlightedTextbox()
-		{
-			InitializeComponent();
+            culture = CultureInfo.InvariantCulture;
+            typeface = new Typeface(this.FontFamily, this.FontStyle, this.FontWeight, this.FontStretch);
 
-			totalLines = 1;
-			lineblocks = new List<LineBlock>();
+            Loaded += (s, e) =>
+            {
+                bool built = ApplyTemplate();
+                linenumberContext = (SyntaxHighlightTextbox.DrawControl)Template.FindName("LineNumberCanvas", this);
+                renderContext = (SyntaxHighlightTextbox.DrawControl)Template.FindName("RenderCanvas", this);
+                scrollView = (ScrollViewer)Template.FindName("PART_ContentHost", this);
 
-			culture = CultureInfo.InvariantCulture;
-			typeface = new Typeface(this.FontFamily, this.FontStyle, this.FontWeight, this.FontStretch);
+                linenumberContext.Width = getFormattedTextWidth(string.Format("{0:0000}", totalLines)) + 5;
 
-			Loaded += (s, e) =>
-			{
-				linenumberContext = (SyntaxHighlightTextbox.DrawControl)Template.FindName("LineNumberCanvas", this);
-				renderContext = (SyntaxHighlightTextbox.DrawControl)Template.FindName("RenderCanvas", this);
-				scrollView = (ScrollViewer)Template.FindName("PART_ContentHost", this);
+                scrollView.ScrollChanged += ScrollView_ScrollChanged;
+            };
 
-				linenumberContext.Width = getFormattedTextWidth(string.Format("{0:0000}", totalLines)) + 5;
+            TextChanged += DarkSyntaxHighlightedTextbox_TextChanged;
 
-				scrollView.ScrollChanged += ScrollView_ScrollChanged;
+            InvalidateMeasure();
+            UpdateLayout();
+        }
 
-			};
+        private void ScrollView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            InvalidateVisual();
+        }
 
-			TextChanged += DarkSyntaxHighlightedTextbox_TextChanged;
-			
-			InvalidateMeasure();
-			UpdateLayout();
-		}
-		
-		private void ScrollView_ScrollChanged(object sender, ScrollChangedEventArgs e)
-		{
-			InvalidateVisual();
-		}
+        private void DarkSyntaxHighlightedTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IEnumerator<TextChange> it = e.Changes.GetEnumerator();
+            it.MoveNext();
+            if (it.Current == null)
+                return;
 
-		private void DarkSyntaxHighlightedTextbox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			IEnumerator<TextChange> it = e.Changes.GetEnumerator();
-			it.MoveNext();
-			if (it.Current == null)
-				return;
+            //Console.WriteLine("{0}, {1}, {2}", it.Current.AddedLength, it.Current.Offset, it.Current.RemovedLength);
 
-			//Console.WriteLine("{0}, {1}, {2}", it.Current.AddedLength, it.Current.Offset, it.Current.RemovedLength);
+            InvalidateMeasure();
+            UpdateLayout();
+            InvalidateVisual();
+        }
 
-			InvalidateMeasure();
-			UpdateLayout();
-			InvalidateVisual();
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            renderLineBlocks();
 
-		}
+            base.OnRender(drawingContext);
+        }
 
-		protected override void OnRender(DrawingContext drawingContext)
-		{
-			renderLineBlocks();
+        private void renderLineBlocks()
+        {
+            if (linenumberContext == null)
+            {
+                return;
+            }
 
-			base.OnRender(drawingContext);
-		}
+            DrawingContext dc = linenumberContext.getContext();
 
-		private void renderLineBlocks()
-		{
-			if (linenumberContext == null)
-			{
-				return;
-			}
+            int firstLine = GetFirstVisibleLineIndex();
+            int lastLine = GetLastVisibleLineIndex() + 1;
 
-			DrawingContext dc = linenumberContext.getContext();
+            int counter = 0;
+            double h = 0;
 
-			int firstLine = GetFirstVisibleLineIndex();
-			int lastLine = GetLastVisibleLineIndex() + 1;
+            for (int i = firstLine; i < lastLine; i++)
+            {
+                FormattedText number = new FormattedText((i + 1).ToString(), culture, System.Windows.FlowDirection.RightToLeft, typeface, FontSize, Brushes.White);
+                linenumberContext.Width = getFormattedTextWidth(string.Format("{0:00000}", totalLines)) + 5;
+                dc.DrawText(number, new System.Windows.Point(linenumberContext.ActualWidth, 1 + (FontSize * 1.3333 * counter)));
+                h = number.Height;
+                counter++;
+            }
 
-			int counter = 0;
-			double h = 0;
+            dc.Close();
+        }
 
-			for (int i = firstLine; i < lastLine; i++)
-			{
-				FormattedText number = new FormattedText((i + 1).ToString(), culture, System.Windows.FlowDirection.RightToLeft, typeface, FontSize, Brushes.White);
-				linenumberContext.Width = getFormattedTextWidth(string.Format("{0:00000}", totalLines)) + 5;
-				dc.DrawText(number, new System.Windows.Point(linenumberContext.ActualWidth, 1 + (FontSize * 1.3333 * counter)));
-				h = number.Height;
-				counter++;
-			}
+        private double getFormattedTextWidth(string text)
+        {
+            FormattedText ft = new FormattedText(
+                text,
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Windows.FlowDirection.LeftToRight,
+                new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
+                FontSize,
+                Brushes.Black);
 
-			dc.Close();
-			
-		}
+            ft.Trimming = System.Windows.TextTrimming.None;
+            ft.LineHeight = FontSize * 1.3;
 
-		private double getFormattedTextWidth(string text)
-		{
-			FormattedText ft = new FormattedText(
-				text,
-				System.Globalization.CultureInfo.InvariantCulture,
-				System.Windows.FlowDirection.LeftToRight,
-				new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
-				FontSize,
-				Brushes.Black);
+            return ft.Width;
+        }
 
-			ft.Trimming = System.Windows.TextTrimming.None;
-			ft.LineHeight = FontSize * 1.3;
-
-			return ft.Width;
-		}
-
-		class LineBlock
-		{
-			
-		}
-
-
-	}
+        private class LineBlock
+        {
+        }
+    }
 }
