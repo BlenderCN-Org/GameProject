@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Editor.EventHandler
 {
-
     public enum ObjectTypes
     {
         STATIC = 0x0001,
@@ -63,7 +62,6 @@ namespace Editor.EventHandler
 
     public static class EventManager
     {
-
         public static EventHandler<SaveEventArgs> onSaveEvent;
         public static EventHandler<QueryDataArgs> onQueryDataEvent;
 
@@ -101,6 +99,5 @@ namespace Editor.EventHandler
         {
             onGetFormIDEvent?.Invoke(null, args);
         }
-
     }
 }

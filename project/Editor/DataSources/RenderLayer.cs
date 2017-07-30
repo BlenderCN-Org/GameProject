@@ -4,7 +4,8 @@ namespace Editor.DataSources
 {
     public class RenderLayer : BaseData
     {
-        public RenderLayer() : base() {
+        public RenderLayer() : base()
+        {
         }
 
         public RenderLayer(uint eid, string name) : base(eid, name)
@@ -21,10 +22,10 @@ namespace Editor.DataSources
         private byte resolutionType;
         private int resolutionWidth;
         private int resolutionHeight;
-        bool depthBuffer;
-        bool stencilBuffer;
-        byte numColorAttachments;
-        System.UInt32 shaderProgram;
+        private bool depthBuffer;
+        private bool stencilBuffer;
+        private byte numColorAttachments;
+        private System.UInt32 shaderProgram;
 
         public byte ResolutionType
         {
@@ -123,6 +124,5 @@ namespace Editor.DataSources
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
-
     }
 }

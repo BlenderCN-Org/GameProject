@@ -2,9 +2,10 @@
 #include "CoreGlobals.hpp"
 
 #include "System\Sys.hpp"
+#include "System\Console.hpp"
+#include "System\TemporaryStorage.hpp"
 
 #include <AssetLib\AssetLib.hpp>
-#include "System\Console.hpp"
 
 int Core::width = 0;
 int Core::heigth = 0;
@@ -16,7 +17,7 @@ Core::~Core() {
 void Core::init() {
 
 	gConsole = new Console();
-
+	gTemporaryStorage = new TemporaryStorage();
 	initSys();
 
 	running = true;
@@ -86,6 +87,7 @@ void Core::freeResources() {
 
 	deinitSys();
 
+	delete gTemporaryStorage;
 	delete gConsole;
 
 	gCore = nullptr;
@@ -121,6 +123,7 @@ void Core::stopEditor() {
 }
 
 void Core::update(float dt) {
+	gTemporaryStorage->tick();
 	// reset input states, clear for next frame
 	input->reset();
 	window->pollMessages();

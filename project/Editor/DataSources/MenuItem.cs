@@ -13,7 +13,5 @@
         public new string Name { get; set; }
 
         public string Command { get; set; }
-        
-
     }
 }

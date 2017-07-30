@@ -10,16 +10,16 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid Background="{DynamicResource DarkBackground}">
-        <Button x:Name="OK" Content="Yes" HorizontalAlignment="Left" Margin="99,63,0,0" VerticalAlignment="Top" Width="75" Click="OK_Click" IsDefault="True" Template="{DynamicResource ButtonControlTemplate1}"/>
-        <Button x:Name="Cancel" Content="No" HorizontalAlignment="Left" Margin="179,63,0,0" VerticalAlignment="Top" Width="75" Click="Cancel_Click" IsCancel="True" Template="{DynamicResource ButtonControlTemplate1}"/>
+        <Button x:Name="OK" Content="Yes" HorizontalAlignment="Left" Margin="99,63,0,0" VerticalAlignment="Top" Width="75" Click="OK_Click" IsDefault="True" Template="{DynamicResource ButtonControlTemplate1}" />
+        <Button x:Name="Cancel" Content="No" HorizontalAlignment="Left" Margin="179,63,0,0" VerticalAlignment="Top" Width="75" Click="Cancel_Click" IsCancel="True" Template="{DynamicResource ButtonControlTemplate1}" />
         <Label x:Name="label" HorizontalAlignment="Left" Height="48" Margin="10,10,0,0" VerticalAlignment="Top" Width="244" Foreground="{DynamicResource DarkForeground}">
-            <TextBlock TextWrapping="WrapWithOverflow" >
+            <TextBlock TextWrapping="WrapWithOverflow">
                 Are you sure you want to delete the selected item?
             </TextBlock>
         </Label>

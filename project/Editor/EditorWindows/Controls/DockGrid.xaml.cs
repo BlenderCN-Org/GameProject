@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.EditorWindows.Controls
 {
@@ -37,8 +28,9 @@ namespace Editor.EditorWindows.Controls
                 BorderHeight.Height = new GridLength(0);
             }
         }
-        bool tempAllowMove = false;
-        AdornerControls.DropAdorner ad = null;
+
+        private bool tempAllowMove = false;
+        private AdornerControls.DropAdorner ad = null;
 
         // function called when mouse enters Grid
         public new void DragEnter()
@@ -77,7 +69,6 @@ namespace Editor.EditorWindows.Controls
             //ad.Height = ActualHeight;
             //ad.Content = new AdornerControls.AdornerCenterControl();
             //AdornerLayer.GetAdornerLayer(DockingGrid).Add(ad);
-
         }
 
         // function called when we release drag inside Grid
@@ -106,7 +97,6 @@ namespace Editor.EditorWindows.Controls
                     (panel.Parent as Grid).Children.Remove(panel);
                     DockingGrid.Children.Add(panel);
                     wnd.Close();
-
                 }
                 else if (drop.GetDrop() == AdornerControls.AdornerCenterControl.dropLocation.bottom)
                 {

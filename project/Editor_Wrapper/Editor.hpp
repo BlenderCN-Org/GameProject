@@ -3,7 +3,6 @@
 
 #include "IEditor.hpp"
 #include "EditorWindow.hpp"
-#include <Windows.h>
 
 #include "Window\MainWindowWrapper.hpp"
 

@@ -42,12 +42,16 @@ void GameFile::load(const char* name) {
 			}
 
 		} else if (v->version == 2) {
-			GameFileHeader_V2* gameFileV1 = (GameFileHeader_V2*)data;
-			header = *gameFileV1;
-			nrEntries = gameFileV1->nrEntries;
+			GameFileHeader_V2* gameFileV2 = (GameFileHeader_V2*)data;
+			header = *gameFileV2;
+			nrEntries = gameFileV2->nrEntries;
 			EntryOffset* offset = (EntryOffset*)&((char*)data)[sizeof(GameFileHeader_V2)];
 			for (uint32_t i = 0; i < nrEntries; i++) {
 				offsetTable[offset[i].formID] = offset[i].offset;
+				Entry* e = (Entry*)&((char*)data)[offset[i].offset];
+				Tag t;
+				memcpy(&t, e->tag, sizeof(Tag));
+				tagMap[t].push_back(e->formID);
 			}
 		}
 
@@ -164,4 +168,8 @@ void GameFile::loadAllMissingEntries() {
 
 void GameFile::updateEntry(Entry* entry) {
 	loadedEntries[entry->formID] = *entry;
+}
+
+std::vector<uint32_t>& GameFile::getObjectsWithTag(Tag tag) {
+	return tagMap[tag];
 }

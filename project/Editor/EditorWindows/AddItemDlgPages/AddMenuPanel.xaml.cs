@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.EditorWindows.AddItemDlgPages
 {
@@ -29,22 +16,18 @@ namespace Editor.EditorWindows.AddItemDlgPages
 
         private void AddMenuButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void DeleteMenuButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void MoveDown_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void EnableTrigger_Click(object sender, RoutedEventArgs e)
@@ -58,13 +41,12 @@ namespace Editor.EditorWindows.AddItemDlgPages
             cmdDialog.Owner = Window.GetWindow(this);
             cmdDialog.ShowDialog();
 
-            if(cmdDialog.DialogResult == true)
+            if (cmdDialog.DialogResult == true)
             {
                 DataSources.CommandType c = cmdDialog.CommandType.SelectedItem as DataSources.CommandType;
                 CommandData.Type = c.Type;
                 CommandData.Description = c.Description;
             }
-
         }
     }
 }

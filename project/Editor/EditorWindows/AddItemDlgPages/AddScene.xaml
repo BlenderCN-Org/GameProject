@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Editor.EditorWindows.AddItemDlgPages.AddScene"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages"
       mc:Ignorable="d" d:DesignWidth="300"
       Height="150" Width="310">
@@ -10,20 +10,19 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource DarkBackground}" Margin="0">
         <Grid Margin="5">
-            <TextBox x:Name="SceneName" HorizontalAlignment="Left" Height="25" Margin="10,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="280" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled"/>
-            <Label x:Name="label" Content="Scene Name:" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="79" Foreground="{DynamicResource DarkForeground}"/>
+            <TextBox x:Name="SceneName" HorizontalAlignment="Left" Height="25" Margin="10,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="280" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" />
+            <Label x:Name="label" Content="Scene Name:" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="79" Foreground="{DynamicResource DarkForeground}" />
 
-            <TextBox x:Name="FormID" HorizontalAlignment="Left" Height="25" Margin="10,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="216" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False"/>
-            <Label x:Name="label_Copy" Content="Form ID:" HorizontalAlignment="Left" Height="25" Margin="10,70,0,0" VerticalAlignment="Top" Width="79" Foreground="{DynamicResource DarkForeground}"/>
-            <Button x:Name="GetIDButton" Content="Get" HorizontalAlignment="Left" Margin="231,100,0,0" VerticalAlignment="Top" Width="59" Height="25" Template="{DynamicResource ButtonControlTemplate1}" Click="GetIDButton_Click"/>
-
+            <TextBox x:Name="FormID" HorizontalAlignment="Left" Height="25" Margin="10,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="216" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False" />
+            <Label x:Name="label_Copy" Content="Form ID:" HorizontalAlignment="Left" Height="25" Margin="10,70,0,0" VerticalAlignment="Top" Width="79" Foreground="{DynamicResource DarkForeground}" />
+            <Button x:Name="GetIDButton" Content="Get" HorizontalAlignment="Left" Margin="231,100,0,0" VerticalAlignment="Top" Width="59" Height="25" Template="{DynamicResource ButtonControlTemplate1}" Click="GetIDButton_Click" />
         </Grid>
     </Grid>
 </UserControl>

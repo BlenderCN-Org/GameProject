@@ -3,8 +3,12 @@
 
 #include "FileStructs.hpp"
 
+#include <vector>
+
 static const char* RENDERLAYER_TAG = "REND";
 static const char* SCENE_TAG = "SCNE";
+
+typedef uint32_t Tag;
 
 class IAssetManager {
 
@@ -16,6 +20,9 @@ public:
 
 	virtual void setStartupSceneRef(uint32_t ref) = 0;
 	virtual uint32_t getStartupSceneRef() = 0;
+
+	//virtual std::vector<uint32_t>& getObjectsWithTag(Tag tag) = 0;
+	//virtual uint32_t getObjectCountWithTag(Tag tag) = 0;
 
 };
 

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Editor.EventHandler;
+using System;
 using System.Windows.Controls;
-using Editor.EventHandler;
 
 namespace Editor.EditorWindows.AddItemDlgPages
 {
@@ -9,7 +9,6 @@ namespace Editor.EditorWindows.AddItemDlgPages
     /// </summary>
     public partial class AddScene : UserControl, IAddItemBase
     {
-
         private string failMessage = "";
 
         public AddScene()
@@ -30,7 +29,8 @@ namespace Editor.EditorWindows.AddItemDlgPages
             {
                 fID = UInt32.Parse(FormID.Text);
             }
-            catch (Exception){
+            catch (Exception)
+            {
                 fID = 0;
             }
 

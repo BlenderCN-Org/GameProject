@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
 namespace Editor
@@ -12,14 +10,12 @@ namespace Editor
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    /// 
-    
+    ///
+
     public partial class MainWindow : Window, IDisposable
     {
         private EditorWindows.TextEditor textEdit = null;
         private EditorWindows.GameSettings gameSettings = null;
-
-        
 
         public EventHandler<EventHandler.CloseArgs> onCloseEvent;
 
@@ -40,7 +36,6 @@ namespace Editor
             //
             //wnd1.Show();
             //wnd2.Show();
-
         }
 
         ~MainWindow()
@@ -134,7 +129,6 @@ namespace Editor
                     this.DragMove();
                 }
             }
-
         }
 
         private void Btnmin_Click(object sender, RoutedEventArgs e)
@@ -158,9 +152,9 @@ namespace Editor
         {
             EventHandler.CloseArgs close = new EventHandler.CloseArgs();
             close.close = EventHandler.CloseType.CLOSE;
-            
+
             onCloseEvent?.Invoke(null, close);
-            
+
             if (close.close == EventHandler.CloseType.CLOSE)
             {
                 this.Close();
@@ -217,7 +211,7 @@ namespace Editor
             GC.SuppressFinalize(this);
         }
 
-        void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem treeViewItem =
                       VisualUpwardSearch<TreeViewItem>(e.OriginalSource as DependencyObject);
@@ -227,10 +221,9 @@ namespace Editor
                 treeViewItem.IsSelected = true;
                 e.Handled = true;
             }
-
         }
 
-        static T VisualUpwardSearch<T>(DependencyObject source) where T : DependencyObject
+        private static T VisualUpwardSearch<T>(DependencyObject source) where T : DependencyObject
         {
             DependencyObject returnVal = source;
 
@@ -264,7 +257,5 @@ namespace Editor
                                         new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift)
                         }
                 );
-
     }
-
 }

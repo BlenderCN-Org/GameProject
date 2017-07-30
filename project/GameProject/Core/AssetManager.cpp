@@ -421,3 +421,11 @@ void AssetManager::setStartupSceneRef(uint32_t ref) {
 uint32_t AssetManager::getStartupSceneRef() {
 	return 0;
 }
+
+std::vector<uint32_t>& AssetManager::getObjectsWithTag(Tag tag) {
+	return currentFile->getObjectsWithTag(tag);
+}
+
+uint32_t AssetManager::getObjectCountWithTag(Tag tag) {
+	return currentFile->getObjectsWithTag(tag).size();
+}

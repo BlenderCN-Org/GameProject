@@ -11,19 +11,19 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Background="{DynamicResource DarkBackground}" >
+    <Grid Background="{DynamicResource DarkBackground}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="45*"/>
-            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="45*" />
+            <ColumnDefinition Width="53*" />
         </Grid.ColumnDefinitions>
-        <Label Content="Select Item:" Margin="10,10,10,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="SelectedValue" Height="20" Margin="10,41,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Template="{DynamicResource DarkComboBoxTemplate}" MaxDropDownHeight="150"/>
-        <Button Content="Ok" HorizontalAlignment="Left" Margin="34,70,0,0" VerticalAlignment="Top" Width="47" Grid.Column="1" Click="OkButtonClick" IsDefault="True" Template="{DynamicResource ButtonControlTemplate1}"/>
-        <Button Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="86,70,0,0" VerticalAlignment="Top" Width="63" Click="CancelButtonClick" IsCancel="True" Template="{DynamicResource ButtonControlTemplate1}"/>
+        <Label Content="Select Item:" Margin="10,10,10,0" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}" Grid.ColumnSpan="2" />
+        <ComboBox x:Name="SelectedValue" Height="20" Margin="10,41,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Template="{DynamicResource DarkComboBoxTemplate}" MaxDropDownHeight="150" />
+        <Button Content="Ok" HorizontalAlignment="Left" Margin="34,70,0,0" VerticalAlignment="Top" Width="47" Grid.Column="1" Click="OkButtonClick" IsDefault="True" Template="{DynamicResource ButtonControlTemplate1}" />
+        <Button Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="86,70,0,0" VerticalAlignment="Top" Width="63" Click="CancelButtonClick" IsCancel="True" Template="{DynamicResource ButtonControlTemplate1}" />
     </Grid>
 </Window>

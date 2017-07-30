@@ -35,6 +35,8 @@ public:
 	void loadAllMissingEntries();
 	void updateEntry(Entry* e);
 
+	std::vector<uint32_t>& getObjectsWithTag(Tag tag);
+
 protected:
 
 	DependencyInfo dependencies;

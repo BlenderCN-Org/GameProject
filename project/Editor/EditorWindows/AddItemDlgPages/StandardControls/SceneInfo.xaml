@@ -1,51 +1,51 @@
 ﻿<UserControl x:Name="userControl" x:Class="Editor.EditorWindows.AddItemDlgPages.StandardControls.SceneInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
              xmlns:data="clr-namespace:Editor.DataSources"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" Background="{DynamicResource DarkBackground}">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../../../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
         </Grid.ColumnDefinitions>
         <GroupBox Header="Name" Grid.Column="0" Height="51" Margin="10,10,10,0" VerticalAlignment="Top" Style="{DynamicResource DarkGroupBox}">
-            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" Margin="10,0,0,0"/>
+            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" Margin="10,0,0,0" />
         </GroupBox>
         <GroupBox Header="Lighting" Grid.Column="0" Height="82" Margin="10,61,10,0" VerticalAlignment="Top" Style="{DynamicResource DarkGroupBox}">
             <Grid>
-                <Label Content="Sky:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}"/>
+                <Label Content="Sky:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}" />
                 <Button x:Name="SkyButton" HorizontalAlignment="Left" Height="22" Margin="31,4,0,0" VerticalAlignment="Top" Width="55" Click="Button_Click" Template="{DynamicResource ButtonControlTemplate1}">
                     <Rectangle x:Name="skyColor" Stroke="White" Width="{Binding Width, ElementName=SkyButton}" Height="{Binding Height, ElementName=SkyButton}" StrokeThickness="0">
                         <Rectangle.Fill>
-                            <SolidColorBrush Color="{Binding Path=SkyColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <SolidColorBrush Color="{Binding Path=SkyColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <CheckBox x:Name="fogCheck" Content="Fog" Foreground="{DynamicResource DarkForeground}" IsChecked="{Binding Path=HasFog, Mode=TwoWay}" HorizontalAlignment="Left" Margin="91,23,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="fogCheck" Content="Fog" Foreground="{DynamicResource DarkForeground}" IsChecked="{Binding Path=HasFog, Mode=TwoWay}" HorizontalAlignment="Left" Margin="91,23,0,0" VerticalAlignment="Top" />
                 <Button x:Name="FogButton" HorizontalAlignment="Left" Height="22" Margin="136,20,0,0" VerticalAlignment="Top" Width="55" IsEnabled="{Binding IsChecked, ElementName=fogCheck}" Click="Button_Click" Template="{DynamicResource ButtonControlTemplate1}">
                     <Rectangle x:Name="FogColor" Stroke="White" Width="{Binding Width, ElementName=FogButton}" Height="{Binding Height, ElementName=FogButton}" StrokeThickness="0">
                         <Rectangle.Fill>
-                            <SolidColorBrush Color="{Binding Path=FogColorNear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <SolidColorBrush Color="{Binding Path=FogColorNear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Label Content="Near" Foreground="{DynamicResource DarkForeground}" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="136,-6,0,0" VerticalAlignment="Top" Width="55"/>
-                <Label Content="Far" Foreground="{DynamicResource DarkForeground}" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="199,-5,0,0" VerticalAlignment="Top" Width="55"/>
+                <Label Content="Near" Foreground="{DynamicResource DarkForeground}" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="136,-6,0,0" VerticalAlignment="Top" Width="55" />
+                <Label Content="Far" Foreground="{DynamicResource DarkForeground}" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="199,-5,0,0" VerticalAlignment="Top" Width="55" />
                 <Button x:Name="FogButton_Copy" HorizontalAlignment="Left" Height="22" Margin="199,20,0,0" VerticalAlignment="Top" Width="55" IsEnabled="{Binding IsChecked, ElementName=fogCheck}" Click="Button_Click" Template="{DynamicResource ButtonControlTemplate1}">
                     <Rectangle x:Name="FogColor1" Stroke="White" Width="{Binding Width, ElementName=FogButton}" Height="{Binding Height, ElementName=FogButton}" StrokeThickness="0">
                         <Rectangle.Fill>
-                            <SolidColorBrush Color="{Binding Path=FogColorFar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <SolidColorBrush Color="{Binding Path=FogColorFar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
@@ -53,10 +53,8 @@
         </GroupBox>
         <GroupBox Header="Water" Height="63" Margin="10,148,10,0" VerticalAlignment="Top" Style="{DynamicResource DarkGroupBox}">
             <Grid>
-                <CheckBox Content="Enable Water" Foreground="{DynamicResource DarkForeground}" IsChecked="{Binding Path=HasWater, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
-
+                <CheckBox Content="Enable Water" Foreground="{DynamicResource DarkForeground}" IsChecked="{Binding Path=HasWater, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
-
     </Grid>
 </UserControl>

@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
 {
@@ -26,14 +14,14 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
             InitializeComponent();
             DataContext = new DataSources.Scene();
         }
-        
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
 
             System.Windows.Forms.DialogResult res = colorDialog.ShowDialog();
 
-            if(res == System.Windows.Forms.DialogResult.OK)
+            if (res == System.Windows.Forms.DialogResult.OK)
             {
                 if (sender == SkyButton)
                 {
@@ -41,7 +29,8 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
                     ((SolidColorBrush)skyColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
                     //((DataSources.Scene)DataContext).SkyColor = Color.FromArgb(c.A, c.R, c.G, c.B);
                     //int b = 0;
-                } else if(sender == FogButton)
+                }
+                else if (sender == FogButton)
                 {
                     System.Drawing.Color c = colorDialog.Color;
                     ((SolidColorBrush)FogColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
@@ -55,7 +44,6 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
                 }
                 //skyColor.Fill = new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
             }
-
         }
     }
 }

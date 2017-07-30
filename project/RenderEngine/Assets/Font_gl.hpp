@@ -13,7 +13,7 @@
 
 #include <map>
 
-class Font_gl : public IFont {
+class Font_gl : public IReFont {
 public:
 
 	Font_gl(FT_Library &fontLib);

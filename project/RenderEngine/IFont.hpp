@@ -12,7 +12,7 @@ struct Character {
 	unsigned int     advanceY;    // Offset to advance to next glyph
 };
 
-class IFont {
+class IReFont {
 public:
 
 	virtual void init(char* fontName, int size) = 0;

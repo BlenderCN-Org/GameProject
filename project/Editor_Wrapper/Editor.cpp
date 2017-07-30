@@ -1,14 +1,16 @@
 #include "Editor.hpp"
 
 #include "CoreInclude.hpp"
-#include <iostream>
 #include "ExtensionMap.hpp"
+#include <iostream>
+
 
 namespace Editor_clr {
 
 	bool Editor_wrp::initializeEditor(IRenderEngine* re) {
 
 		if (!initialized) {
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 			editorStatus = EditorStatus::STOPPED;
 
 			Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&Extensions::OnSaveEvent);

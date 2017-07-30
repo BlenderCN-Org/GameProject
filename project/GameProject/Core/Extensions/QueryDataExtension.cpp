@@ -4,6 +4,7 @@
 
 #include "../CoreGlobals.hpp"
 #include "../AssetManager.hpp"
+#include "../System/TemporaryStorage.hpp"
 
 class Simple : public IObject {
 public:
@@ -95,6 +96,29 @@ void QueryDataExtension::execute(int nrArgs, ExtensionQueryDataEvent* args) {
 			}
 		}*/
 	} else if (args->objectType == OBJECT_TYPE_RENDERLAYER) {
+		if (args->nrObjects == 0 && args->objectList == nullptr) {
+
+			uint32_t tag = 0;
+			memcpy(&tag, RENDERLAYER_TAG, 4);
+			uint32_t obj_count = gAssetManager->getObjectCountWithTag(tag);
+
+			args->nrObjects = obj_count;
+		} else {
+
+			uint32_t tag = 0;
+			memcpy(&tag, RENDERLAYER_TAG, 4);
+			std::vector<uint32_t> objects = gAssetManager->getObjectsWithTag(tag);
+			
+			for (uint32_t i = 0; i < args->nrObjects; i++) {
+				Simple* s = gTemporaryStorage->allocate<Simple>(5);
+				uint32_t formId = objects[i];
+				s->formID = formId;
+				s->name = "Test";
+			
+				args->objectList[i] = s;
+			}
+		}
+
 	}
 
 }

@@ -93,7 +93,7 @@ public:
 
 	virtual IPixelBuffer* createPixelBuffer() = 0;
 
-	virtual IFont* createFont() = 0;
+	virtual IReFont* createFont() = 0;
 
 	virtual IWindow* getMainWindow() = 0;
 

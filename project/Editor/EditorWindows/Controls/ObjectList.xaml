@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="Editor.EditorWindows.Controls.ObjectList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Editor.EditorWindows"
              xmlns:data="clr-namespace:Editor.DataSources"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
@@ -19,54 +19,54 @@
                 </VisualBrush.Visual>
             </VisualBrush>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Styles/DictRes.xaml"/>
+                <ResourceDictionary Source="../../Styles/DictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource DarkBackground}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*" MinWidth="50"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="10*" MinWidth="50"/>
+            <ColumnDefinition Width="5*" MinWidth="50" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="10*" MinWidth="50" />
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="treeView" Style="{DynamicResource DarkTreeView}" >
+        <TreeView x:Name="treeView" Style="{DynamicResource DarkTreeView}">
             <!--<TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     --><!-- We have to select the item which is right-clicked on --><!--
                     <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown"
-                                Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
+                                Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                 </Style>
             </TreeView.ItemContainerStyle>-->
-            <TreeViewItem x:Name="static" Header="Static objects"/>
-            <TreeViewItem x:Name="anim" Header="Animation objects"/>
-            <TreeViewItem x:Name="weap" Header="Weapons"/>
-            <TreeViewItem x:Name="armor" Header="Armor"/>
-            <TreeViewItem x:Name="ammo" Header="Ammo"/>
-            <TreeViewItem x:Name="dlg" Header="Dialog Assets"/>
-            <TreeViewItem x:Name="script" Header="Scripts"/>
-            <TreeViewItem x:Name="decal" Header="Decals"/>
-            <TreeViewItem x:Name="audio" Header="Audio"/>
-            <TreeViewItem x:Name="menu" Header="Menu"/>
+            <TreeViewItem x:Name="static" Header="Static objects" />
+            <TreeViewItem x:Name="anim" Header="Animation objects" />
+            <TreeViewItem x:Name="weap" Header="Weapons" />
+            <TreeViewItem x:Name="armor" Header="Armor" />
+            <TreeViewItem x:Name="ammo" Header="Ammo" />
+            <TreeViewItem x:Name="dlg" Header="Dialog Assets" />
+            <TreeViewItem x:Name="script" Header="Scripts" />
+            <TreeViewItem x:Name="decal" Header="Decals" />
+            <TreeViewItem x:Name="audio" Header="Audio" />
+            <TreeViewItem x:Name="menu" Header="Menu" />
         </TreeView>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#FF1D1D1D" />
         <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single" SelectionChanged="listSelectionChanged">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="NewItem" Header="New" Click="NewMenuItem_Click"/>
-                    <MenuItem x:Name="EditItem" Header="Edit" Click="EditMenuItem_Click"/>
-                    <MenuItem x:Name="DeleteItem" Header="Delete" Click="DeleteMenuItem_Click" IsEnabled="False"/>
+                    <MenuItem x:Name="NewItem" Header="New" Click="NewMenuItem_Click" />
+                    <MenuItem x:Name="EditItem" Header="Edit" Click="EditMenuItem_Click" />
+                    <MenuItem x:Name="DeleteItem" Header="Delete" Click="DeleteMenuItem_Click" IsEnabled="False" />
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{DynamicResource DarkGridViewColumnHeader}">
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Editor ID" DisplayMemberBinding="{Binding EditorID}"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Editor ID" DisplayMemberBinding="{Binding EditorID}" />
                 </GridView>
             </ListView.View>
             <ListViewItem>
                 <ListViewItem.Content>
-                    <data:BaseData/>
+                    <data:BaseData />
                 </ListViewItem.Content>
             </ListViewItem>
         </ListView>

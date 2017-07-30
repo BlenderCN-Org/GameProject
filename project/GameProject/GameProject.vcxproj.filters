@@ -120,9 +120,6 @@
     <ClCompile Include="Game\Scene.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Assets\GameFileEditor.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="Core\System\Console.cpp">
       <Filter>Source Files\Core\System</Filter>
     </ClCompile>
@@ -215,9 +212,6 @@
     <ClInclude Include="Core\Assets\GVar.hpp">
       <Filter>Source Files\Core\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Assets\GameFileEditor.hpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="IAssetManager.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -225,6 +219,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\System\Console.hpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\TemporaryStorage.hpp">
       <Filter>Source Files\Core\System</Filter>
     </ClInclude>
   </ItemGroup>

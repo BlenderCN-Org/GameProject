@@ -10,19 +10,18 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Background="{DynamicResource DarkBackground}" >
+    <Grid Background="{DynamicResource DarkBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid x:Name="PageArea" Grid.Row="0" />
-        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="75" IsCancel="True" Grid.Row="1" Margin="0,0,10,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Cancel_Click"/>
-        <Button x:Name="Create" Content="Create" HorizontalAlignment="Right" Width="75" Grid.Row="1" Margin="0,0,90,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Create_Click"/>
-
+        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="75" IsCancel="True" Grid.Row="1" Margin="0,0,10,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Cancel_Click" />
+        <Button x:Name="Create" Content="Create" HorizontalAlignment="Right" Width="75" Grid.Row="1" Margin="0,0,90,5" Template="{DynamicResource ButtonControlTemplate1}" Click="Create_Click" />
     </Grid>
 </Window>

@@ -12,18 +12,18 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../../../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid Margin="5" Background="{DynamicResource DarkBackground}">
         <ComboBox x:Name="CommandType" Margin="10,10, 10,0" VerticalAlignment="Top" Template="{DynamicResource DarkComboBoxTemplate}" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
-            <DataSources:CommandType Description="Built In Commands"/>
-            <DataSources:CommandType Description="Script" Type="1"/>
+            <DataSources:CommandType Description="Built In Commands" />
+            <DataSources:CommandType Description="Script" Type="1" />
         </ComboBox>
-        <ComboBox x:Name="Command" Margin="10,37,10,0" VerticalAlignment="Top" Template="{DynamicResource DarkComboBoxTemplate}"/>
-        <Button x:Name="Cancel" Content="Cancel" Margin="121,64,10,0" VerticalAlignment="Top" Template="{DynamicResource ButtonControlTemplate1}" RenderTransformOrigin="0.717,0.525" Click="Cancel_Click" Height="24"/>
-        <Button x:Name="Ok" Content="Ok" Margin="76,64,79,0" VerticalAlignment="Top" Template="{DynamicResource ButtonControlTemplate1}" Click="Ok_Click" Height="24"/>
+        <ComboBox x:Name="Command" Margin="10,37,10,0" VerticalAlignment="Top" Template="{DynamicResource DarkComboBoxTemplate}" />
+        <Button x:Name="Cancel" Content="Cancel" Margin="121,64,10,0" VerticalAlignment="Top" Template="{DynamicResource ButtonControlTemplate1}" RenderTransformOrigin="0.717,0.525" Click="Cancel_Click" Height="24" />
+        <Button x:Name="Ok" Content="Ok" Margin="76,64,79,0" VerticalAlignment="Top" Template="{DynamicResource ButtonControlTemplate1}" Click="Ok_Click" Height="24" />
     </Grid>
 </Window>

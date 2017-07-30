@@ -83,7 +83,27 @@ namespace Extensions {
 					}
 					case Editor::EventHandler::ObjectTypes::RENDERLAYER:
 					{
-						printf("Getting renderLayer data\n");
+						query.objectList = new IObject*[query.nrObjects];
+
+						Extensions::extensionMap[GET_OBJECTS_CALLBACK]->execute(1, &query);
+
+						for (uint32_t i = 0; i < query.nrObjects; i++) {
+
+							IObject* obj = query.objectList[i];
+
+							System::String^ str = gcnew System::String(obj->getName());
+
+							Editor::DataSources::RenderLayer^ data = gcnew Editor::DataSources::RenderLayer();
+							
+							data->Deleted = obj->isDeleted() ? true : false;
+							data->Name = str;
+							data->EditorID = obj->getFormID();
+
+							queryArgs->ReturnList->Add(data);
+						}
+
+						delete[] query.objectList;
+
 						break;
 					}
 					break;

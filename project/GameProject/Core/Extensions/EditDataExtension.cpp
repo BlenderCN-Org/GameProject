@@ -14,7 +14,7 @@ void EditDataExtension::execute(int nrArgs, ExtensionEditItemEvent * arg) {
 		} else if (arg->objectType == OBJECT_TYPE_RENDERLAYER) {
 
 			Entry* e = gAssetManager->getEntry(obj->getFormID());
-			memcpy(e->tag, "REND", 4);
+			memcpy(e->tag, RENDERLAYER_TAG, 4);
 
 			RenderLayerData* rData = (RenderLayerData*)obj->getData();
 			RenderLayerData* cData = new RenderLayerData();

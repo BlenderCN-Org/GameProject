@@ -16,7 +16,7 @@ namespace Editor.EditorWindows.Controls
             InitializeComponent();
         }
 
-        void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem treeViewItem =
                       VisualUpwardSearch<TreeViewItem>(e.OriginalSource as DependencyObject);
@@ -26,10 +26,9 @@ namespace Editor.EditorWindows.Controls
                 treeViewItem.IsSelected = true;
                 e.Handled = true;
             }
-
         }
 
-        static T VisualUpwardSearch<T>(DependencyObject source) where T : DependencyObject
+        private static T VisualUpwardSearch<T>(DependencyObject source) where T : DependencyObject
         {
             DependencyObject returnVal = source;
 
@@ -68,7 +67,6 @@ namespace Editor.EditorWindows.Controls
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            
             DataSources.BaseData data = listView.Items[listView.SelectedIndex] as DataSources.BaseData;
             if (data != null)
             {
@@ -82,7 +80,7 @@ namespace Editor.EditorWindows.Controls
         private void listSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DeleteItem.IsEnabled = false;
-            if(listView.SelectedIndex != -1)
+            if (listView.SelectedIndex != -1)
             {
                 DeleteItem.IsEnabled = true;
             }

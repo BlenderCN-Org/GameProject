@@ -1,40 +1,40 @@
 ﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages"
              xmlns:StandardControls="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
              x:Class="Editor.EditorWindows.AddItemDlgPages.AddGameObject"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="321" d:DesignWidth="300" Background="{DynamicResource DarkBackground}">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Styles/dictRes.xaml"/>
+                <ResourceDictionary Source="../../Styles/dictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Margin="5">
-        <StandardControls:NameAndID x:Name="IdControl" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TabControl HorizontalAlignment="Left" Height="177" Margin="0,135,0,0" VerticalAlignment="Top" Width="290" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}"  >
+        <StandardControls:NameAndID x:Name="IdControl" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TabControl HorizontalAlignment="Left" Height="177" Margin="0,135,0,0" VerticalAlignment="Top" Width="290" Background="{DynamicResource DarkStaticBackground}" BorderBrush="{DynamicResource DarkBorderBrush}">
             <TabItem Header="General" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
-                    <Label Content="Mesh file" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="10,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False"/>
+                    <Label Content="Mesh file" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" />
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="10,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource DarkTextBox}" VerticalScrollBarVisibility="Disabled" IsEnabled="False" />
                     <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="81" Margin="10,58,0,0" VerticalAlignment="Top" Width="152">
                         <Grid>
-                            <RadioButton Content="Use Collsision" Margin="0,0,0,58"/>
-                            <RadioButton Content="Use No Collision" Margin="0,21,0,38"/>
+                            <RadioButton Content="Use Collsision" Margin="0,0,0,58" />
+                            <RadioButton Content="Use No Collision" Margin="0,21,0,38" />
                         </Grid>
                     </Border>
                 </Grid>
             </TabItem>
             <TabItem Header="Lod" Template="{DynamicResource TabItemControlTemplate1}" Visibility="Visible">
                 <Grid Background="{DynamicResource DarkBackground}">
-                    <Label Content="Todo implement lod stuff" HorizontalAlignment="Left" Height="55" Margin="35,29,0,0" VerticalAlignment="Top" Width="158"/>
+                    <Label Content="Todo implement lod stuff" HorizontalAlignment="Left" Height="55" Margin="35,29,0,0" VerticalAlignment="Top" Width="158" />
                 </Grid>
             </TabItem>
         </TabControl>

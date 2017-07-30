@@ -114,6 +114,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,6 +134,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -184,7 +186,6 @@
   <ItemGroup>
     <ClCompile Include="Core\AssetManager.cpp" />
     <ClCompile Include="Core\Assets\GameFile.cpp" />
-    <ClCompile Include="Core\Assets\GameFileEditor.cpp" />
     <ClCompile Include="Core\Assets\RenderLayer.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\CoreGlobals.cpp" />
@@ -214,7 +215,6 @@
   <ItemGroup>
     <ClInclude Include="Core\AssetManager.hpp" />
     <ClInclude Include="Core\Assets\GameFile.hpp" />
-    <ClInclude Include="Core\Assets\GameFileEditor.hpp" />
     <ClInclude Include="Core\Assets\GVar.hpp" />
     <ClInclude Include="Core\Assets\RenderLayer.hpp" />
     <ClInclude Include="Core\Core.hpp" />
@@ -230,6 +230,7 @@
     <ClInclude Include="Core\System\Console.hpp" />
     <ClInclude Include="Core\System\LibraryLoader.hpp" />
     <ClInclude Include="Core\System\Sys.hpp" />
+    <ClInclude Include="Core\System\TemporaryStorage.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
     <ClInclude Include="FileStructs.hpp" />
     <ClInclude Include="Game\Camera.hpp" />

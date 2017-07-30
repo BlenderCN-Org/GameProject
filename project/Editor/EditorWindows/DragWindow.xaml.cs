@@ -7,11 +7,10 @@ using System.Windows.Media;
 
 namespace Editor.EditorWindows
 {
-
     /// <summary>
     /// Interaction logic for DragWindow.xaml
     /// </summary>
-    /// 
+    ///
 
     public partial class DragWindow : Window
     {
@@ -27,14 +26,13 @@ namespace Editor.EditorWindows
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, out System.Drawing.Point lpPoints, uint cPoints);
 
-        const int WM_NCHITTEST = 0x0084;
-        const int HTTRANSPARENT = -1;
+        private const int WM_NCHITTEST = 0x0084;
+        private const int HTTRANSPARENT = -1;
 
-        bool isDraged = false;
+        private bool isDraged = false;
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-
             if (msg == WM_NCHITTEST && isDraged == true)
             {
                 //System.Drawing.Point cursorPos;
@@ -224,7 +222,6 @@ namespace Editor.EditorWindows
                         lastWindow = IntPtr.Zero;
                     }
                 }
-
             }
         }
 
@@ -233,10 +230,10 @@ namespace Editor.EditorWindows
             base.OnMouseMove(e);
 
             if (e.LeftButton == MouseButtonState.Pressed)
-            {   
+            {
                 // Package the data.
                 DataObject data = new DataObject();
-                
+
                 // Inititate the drag-and-drop operation.
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
             }

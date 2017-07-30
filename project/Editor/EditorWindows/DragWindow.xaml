@@ -10,45 +10,45 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/DictRes.xaml"/>
+                <ResourceDictionary Source="../Styles/DictRes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid Background="{DynamicResource DarkBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="BorderHeight" Height="30"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition x:Name="BorderHeight" Height="30" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="#FF5B4C4C" MouseMove="Border_MouseMove" >
+        <Border Grid.Row="0" Background="#FF5B4C4C" MouseMove="Border_MouseMove">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="30" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{Binding Title, ElementName=window}" Foreground="{DynamicResource DarkForeground}"/>
+                <Label Grid.Column="0" Content="{Binding Title, ElementName=window}" Foreground="{DynamicResource DarkForeground}" />
                 <Button Grid.Column="1" Margin="3" Template="{DynamicResource ButtonControlTemplate1}">
                     <Grid Margin="0">
                         <Polygon Fill="{DynamicResource DarkForeground}">
                             <Polygon.Points>
-                                <Point X="1" Y="1"/>
-                                <Point X="3" Y="1"/>
-                                <Point X="14" Y="14"/>
-                                <Point X="12" Y="14"/>
+                                <Point X="1" Y="1" />
+                                <Point X="3" Y="1" />
+                                <Point X="14" Y="14" />
+                                <Point X="12" Y="14" />
                             </Polygon.Points>
                         </Polygon>
                         <Polygon Fill="{DynamicResource DarkForeground}">
                             <Polygon.Points>
-                                <Point X="14" Y="1"/>
-                                <Point X="12" Y="1"/>
-                                <Point X="1" Y="14"/>
-                                <Point X="3" Y="14"/>
+                                <Point X="14" Y="1" />
+                                <Point X="12" Y="1" />
+                                <Point X="1" Y="14" />
+                                <Point X="3" Y="14" />
                             </Polygon.Points>
                         </Polygon>
                     </Grid>
                 </Button>
             </Grid>
         </Border>
-        <Controls:DockGrid Grid.Row="1" x:Name="PanelArea" Margin="0,0,0,0"/>
+        <Controls:DockGrid Grid.Row="1" x:Name="PanelArea" Margin="0,0,0,0" />
     </Grid>
 </Window>

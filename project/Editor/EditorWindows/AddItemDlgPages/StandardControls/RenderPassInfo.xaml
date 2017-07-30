@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Editor.EditorWindows.AddItemDlgPages.StandardControls.RenderPassInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
+             d:DesignHeight="300" d:DesignWidth="429.208" Background="{DynamicResource DarkBackground}" Height="330">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="155">
+            <ListView.View>
+                <GridView>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid HorizontalAlignment="Left" Height="285" Margin="185,18,0,0" VerticalAlignment="Top" Width="234">
+        </Grid>

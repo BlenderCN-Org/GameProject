@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor
 {
@@ -22,19 +13,17 @@ namespace Editor
     /// </summary>
     public partial class GameWindowBitmap : UserControl
     {
-
         [DllImport("user32.dll")]
-        static extern uint MapVirtualKey(uint uCode, uint uMapType);
+        private static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
         public EventHandler.IEditWindow editWindow = null;
 
         public GameWindowBitmap()
         {
             InitializeComponent();
-
         }
 
-        bool resized = false;
+        private bool resized = false;
 
         public bool wasResized()
         {
@@ -64,7 +53,6 @@ namespace Editor
             //Console.Write("Editor resize event\n");
             //
             //Console.Write("Size ({0}, {1})\n", ClientSize.Height, ClientSize.Width);
-
         }*/
 
         private void SetImage(byte[] ptr, UInt32 wid, UInt32 hei)
@@ -80,9 +68,9 @@ namespace Editor
             //Height = hei;
         }
 
-        byte[] buffer = null;
-        UInt32 w = 0;
-        UInt32 h = 0;
+        private byte[] buffer = null;
+        private UInt32 w = 0;
+        private UInt32 h = 0;
 
         public void SetBitMap(IntPtr ptr, UInt32 wid, UInt32 hei)
         {

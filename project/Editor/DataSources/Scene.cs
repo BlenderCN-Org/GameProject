@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Editor.DataSources
 {
     public class Scene : BaseData
     {
-        public Scene() : base() {}
-        public Scene(uint eid, string name) : base(eid, name)
-        {   
+        public Scene() : base()
+        {
         }
-        
+
+        public Scene(uint eid, string name) : base(eid, name)
+        {
+        }
+
         private System.Windows.Media.Color skyColor;
         private bool hasFog = false;
-        System.Windows.Media.Color fogColorFar;
-        System.Windows.Media.Color fogColorNear;
+        private System.Windows.Media.Color fogColorFar;
+        private System.Windows.Media.Color fogColorNear;
         private bool hasWater = false;
 
-        public System.Windows.Media.Color SkyColor {
+        public System.Windows.Media.Color SkyColor
+        {
             get { return skyColor; }
             set
             {
@@ -29,7 +32,8 @@ namespace Editor.DataSources
             }
         }
 
-        public bool HasFog {
+        public bool HasFog
+        {
             get { return hasFog; }
             set
             {
@@ -40,7 +44,9 @@ namespace Editor.DataSources
                 }
             }
         }
-        public System.Windows.Media.Color FogColorFar {
+
+        public System.Windows.Media.Color FogColorFar
+        {
             get { return fogColorFar; }
             set
             {
@@ -51,7 +57,9 @@ namespace Editor.DataSources
                 }
             }
         }
-        public System.Windows.Media.Color FogColorNear {
+
+        public System.Windows.Media.Color FogColorNear
+        {
             get { return fogColorNear; }
             set
             {
@@ -63,7 +71,8 @@ namespace Editor.DataSources
             }
         }
 
-        public bool HasWater {
+        public bool HasWater
+        {
             get { return hasWater; }
             set
             {
@@ -78,11 +87,10 @@ namespace Editor.DataSources
         public List<object> ChildObjects { get; set; }
 
         public new event PropertyChangedEventHandler PropertyChanged;
-        
+
         private void OnPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
-
     }
 }

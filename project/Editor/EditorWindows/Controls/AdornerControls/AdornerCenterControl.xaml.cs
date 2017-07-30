@@ -26,11 +26,10 @@ namespace Editor.EditorWindows.Controls.AdornerControls
             right
         }
 
-        Rectangle rect = null;
+        private Rectangle rect = null;
 
         public dropLocation GetDrop()
         {
-
             if (pRect == center)
             {
                 return dropLocation.center;
@@ -55,7 +54,7 @@ namespace Editor.EditorWindows.Controls.AdornerControls
             return dropLocation.none;
         }
 
-        Rectangle pRect = null;
+        private Rectangle pRect = null;
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -133,7 +132,5 @@ namespace Editor.EditorWindows.Controls.AdornerControls
         {
             //pRect = rect;
         }
-
     }
 }
-

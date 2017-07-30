@@ -72,6 +72,7 @@ extern "C"
 #endif
 
 void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	reci = createInfo;
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		if (reci.createRenderWindow) {
@@ -81,7 +82,6 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 			glWindow.showWindow(true);
 		}
-
 		glewInit();
 
 #ifdef _DEBUG
@@ -292,7 +292,7 @@ IPixelBuffer* RenderEngine::createPixelBuffer() {
 	return nullptr;
 }
 
-IFont * RenderEngine::createFont() {
+IReFont * RenderEngine::createFont() {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		return new Font_gl(fontLibrary);
 	}

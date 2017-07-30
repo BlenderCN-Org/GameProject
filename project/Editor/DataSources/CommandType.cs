@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Editor.DataSources
 {
     public class CommandType : INotifyPropertyChanged
     {
-
         private int type;
         private string description;
 
@@ -21,14 +16,16 @@ namespace Editor.DataSources
             }
             set
             {
-                if(type != value)
+                if (type != value)
                 {
                     type = value;
                     this.OnPropertyChanged("Command");
                 }
             }
         }
-        public string Description {
+
+        public string Description
+        {
             get
             {
                 return description;
@@ -57,6 +54,5 @@ namespace Editor.DataSources
         {
             return Description;
         }
-
     }
 }

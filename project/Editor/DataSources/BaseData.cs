@@ -1,11 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Editor.DataSources
 {
     public class BaseData : INotifyPropertyChanged
     {
-        
         public BaseData()
         {
             Name = "Test";
@@ -26,7 +24,8 @@ namespace Editor.DataSources
         public uint EditorID
         {
             get { return editorID; }
-            set {
+            set
+            {
                 if (editorID != value)
                 {
                     editorID = value;
@@ -59,7 +58,7 @@ namespace Editor.DataSources
             get { return deleted; }
             set
             {
-                if(deleted != value)
+                if (deleted != value)
                 {
                     deleted = value;
                     this.OnPropertyChanged("Deleted");

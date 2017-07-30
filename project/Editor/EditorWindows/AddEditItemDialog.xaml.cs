@@ -9,6 +9,7 @@ namespace Editor.EditorWindows
     public partial class AddEditItemDialog : Window
     {
         private bool editContent = false;
+
         public AddEditItemDialog(bool edit = false)
         {
             InitializeComponent();
@@ -18,9 +19,8 @@ namespace Editor.EditorWindows
             {
                 Create.Content = "Edit";
             }
-
         }
-        
+
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             AddItemDlgPages.IAddItemBase baseType = PageArea.Children.OfType<AddItemDlgPages.IAddItemBase>().First();
@@ -53,12 +53,10 @@ namespace Editor.EditorWindows
             {
                 MessageBox.Show(baseType.GetFailMessage());
             }
-
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-
         }
     }
 }

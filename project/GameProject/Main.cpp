@@ -34,6 +34,6 @@ int main(int argc, char* argv[]) {
 	delete g;
 	
 	ReleaseMemoryManagement();
-
+	
 	return 0;
 }

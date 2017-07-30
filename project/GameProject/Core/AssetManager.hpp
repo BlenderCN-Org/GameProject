@@ -33,6 +33,9 @@ public:
 	virtual void setStartupSceneRef(uint32_t ref);
 	virtual uint32_t getStartupSceneRef();
 
+	virtual std::vector<uint32_t>& getObjectsWithTag(Tag tag);
+	virtual uint32_t getObjectCountWithTag(Tag tag);
+
 private:
 
 	std::map<uint32_t, IMesh*> loadedMeshes;
