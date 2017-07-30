@@ -97,24 +97,13 @@ namespace Editor_clr {
 	void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
 		Extensions::extensionMap[callbackIndex] = ext;
 	}
-
-	//bool Editor_wrp::isRunning() {
-	//	// it needs to be initialized to be runnning, so that is a good start :)
-	//	bool running = initialized;
-	//
-	//	if (wrapper.operator MainWindowWrapper ^ () == nullptr || wrapper->window == nullptr || eventWrapper->closeEditor == true) {
-	//		running = false;
-	//	}
-	//
-	//	return running;
-	//}
-
+	
 	EditorStatus Editor_wrp::getStatus() const {
 		return editorStatus;
 	}
 
 	void Editor_wrp::update() {
-
+		
 		if (eventWrapper->hideEditor) {
 			GC::Collect();
 			editorStatus = HIDDEN;
@@ -125,9 +114,6 @@ namespace Editor_clr {
 			stopEditor();
 			eventWrapper->closeEditor = false;
 		}
-
-		//pixelBuffers[0]->resize(w, h);
-		//pixelBuffers[1]->resize(w, h);
 
 		switch (editorStatus) {
 			case UNINITIALIZED:

@@ -114,9 +114,6 @@
     <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\RenderLayerInfo.xaml.cs">
       <DependentUpon>RenderLayerInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\RenderPassInfo.xaml.cs">
-      <DependentUpon>RenderPassInfo.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\SceneInfo.xaml.cs">
       <DependentUpon>SceneInfo.xaml</DependentUpon>
     </Compile>
@@ -187,10 +184,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\AddItemDlgPages\StandardControls\RenderLayerInfo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\StandardControls\RenderPassInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

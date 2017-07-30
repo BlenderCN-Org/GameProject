@@ -7,7 +7,11 @@ void MainWindowWrapper::DoWork() {
 	window->Show();
 	mre->Set();
 	
-	System::Windows::Threading::Dispatcher::Run();
+	//try {
+		System::Windows::Threading::Dispatcher::Run();
+	//} catch (...) {
+	//	Console::Write("Something happened!");
+	//}
 	
 }
 

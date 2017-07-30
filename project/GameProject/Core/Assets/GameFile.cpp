@@ -105,9 +105,9 @@ Entry* GameFile::loadEntry(uint32_t formId) {
 
 			loadedEntries[formId] = e;
 			entry = &loadedEntries[formId];
-			Tag t;
-			memcpy(&t, e.tag, sizeof(Tag));
-			tagMap[t].push_back(formId);
+			//Tag t;
+			//memcpy(&t, e.tag, sizeof(Tag));
+			//tagMap[t].push_back(formId);
 		} else {
 			gConsole->print("Faulty entry offset for entry! id %d was supposed to be %d \n", e.formID, formId);
 		}

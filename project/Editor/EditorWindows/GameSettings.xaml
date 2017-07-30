@@ -66,10 +66,6 @@
                     <Button x:Name="deleteRenderLayerButton" Content="Delete" HorizontalAlignment="Left" Height="25" Margin="111,308,0,0" VerticalAlignment="Top" Width="97" Template="{StaticResource ButtonControlTemplate1}" IsEnabled="{Binding SelectedItems.Count, ElementName=renderLayerList, Mode=OneWay}" Click="deleteRenderLayerButton_Click" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="RenderPassTab" Header="Default Render Pass" Template="{DynamicResource TabItemControlTemplate1}">
-                <Grid Background="{DynamicResource DarkBackground}">
-                </Grid>
-            </TabItem>
             <TabItem x:Name="SceneTab" Header="Scenes" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
                     <Grid.ColumnDefinitions>
