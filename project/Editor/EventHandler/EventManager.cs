@@ -5,6 +5,7 @@ namespace Editor.EventHandler
 {
     public enum ObjectTypes
     {
+        FAKE = 0x0000,
         STATIC = 0x0001,
         ANIM = 0x0002,
         WEAPON = 0x0004,
@@ -48,6 +49,12 @@ namespace Editor.EventHandler
         public UInt32 FormID { get; set; }
     }
 
+    public class FormView
+    {
+        public int totalEntryCount;
+        public List<DataSources.ViewForm> ReturnList { get; set; }
+    }
+
     public enum CloseType
     {
         CLOSE,
@@ -62,6 +69,8 @@ namespace Editor.EventHandler
 
     public static class EventManager
     {
+        public static bool SendRefresEvent = true;
+
         public static EventHandler<SaveEventArgs> onSaveEvent;
         public static EventHandler<QueryDataArgs> onQueryDataEvent;
 
@@ -69,6 +78,10 @@ namespace Editor.EventHandler
         public static EventHandler<FormArgs> onDeleteFormEvent;
         public static EventHandler<FormArgs> onEditFormEvent;
         public static EventHandler<GetFormIDArgs> onGetFormIDEvent;
+
+        public static EventHandler<FormView> onGetFormView;
+
+        public static EventHandler<bool> onRefreshFormsEvent;
 
         public static void OnSaveEvent(SaveEventArgs saveArgs)
         {
@@ -83,11 +96,13 @@ namespace Editor.EventHandler
         public static void OnAddObjectEvent(AddObjectArgs addArgs)
         {
             onAddObjectEvent?.Invoke(null, addArgs);
+            OnRefreshFormsEvent(SendRefresEvent);
         }
 
         public static void OnDeleteFormEvent(FormArgs args)
         {
             onDeleteFormEvent?.Invoke(null, args);
+            OnRefreshFormsEvent(SendRefresEvent);
         }
 
         public static void OnEditFormEvent(FormArgs args)
@@ -98,6 +113,16 @@ namespace Editor.EventHandler
         public static void OnGetFormIDEvent(GetFormIDArgs args)
         {
             onGetFormIDEvent?.Invoke(null, args);
+        }
+
+        public static void OnGetFormView(FormView args)
+        {
+            onGetFormView?.Invoke(null, args);
+        }
+
+        public static void OnRefreshFormsEvent(bool arg)
+        {
+            onRefreshFormsEvent?.Invoke(null, arg);
         }
     }
 }

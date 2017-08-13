@@ -6,10 +6,11 @@
 
 #include <fstream>
 #include <vector>
-#include <memory>
+#include "System/MemBuffer.hpp"
 
 #include "CoreGlobals.hpp"
-#include "System\Console.hpp"
+#include "System/Console.hpp"
+#include "Assets/DataObjects.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
@@ -43,23 +44,6 @@ struct Vertex5 {
 	glm::vec2 uv;
 };
 
-struct MemoryBuffer {
-
-	void deleteBuffer();
-
-	void setData(void* data, uint32_t dataSize);
-	void setOffset(uint32_t offset);
-
-	void* returnBytes(uint32_t bytesToReturn);
-
-private:
-
-	uint32_t offset;
-	uint32_t totalDataSize;
-	void* memoryData;
-
-};
-
 struct Bone {
 	int32_t id;
 	int32_t parent;
@@ -67,53 +51,17 @@ struct Bone {
 	glm::vec3 tailPos;
 };
 
-void MemoryBuffer::deleteBuffer() {
-	if (memoryData)
-		free(memoryData);
-	memoryData = nullptr;
-	offset = totalDataSize = 0;
-}
 
-void MemoryBuffer::setData(void * data, uint32_t dataSize) {
-	if (dataSize == 0)
-		throw "Data size cannot be 0\n";
-	if (data == nullptr)
-		throw "Data cannot be null\n";
+void makeCube(std::vector<Vertex5> &verts, glm::vec3 pos) {
 
-	memoryData = malloc(dataSize);
-	if (memoryData != NULL) {
-		memcpy(memoryData, data, dataSize);
-	}
-
-	totalDataSize = dataSize;
-	offset = 0;
-}
-
-void MemoryBuffer::setOffset(uint32_t _offset) {
-	if (_offset >= totalDataSize)
-		throw "Cannot set offset to end of buffer\n";
-	offset = _offset;
-}
-
-void * MemoryBuffer::returnBytes(uint32_t bytesToReturn) {
-	if (bytesToReturn > (totalDataSize - offset)) throw "Trying to read more than avaible in the buffer\n";
-
-	char* data = (char*)memoryData + offset;
-	offset += bytesToReturn;
-
-	return data;
-}
-
-void makeCube(std::vector<Vertex5> &verts, glm::vec3 pos) 	{
-
-	glm::vec3 vo1(-0.01f, -0.01f,  0.01f);
-	glm::vec3 vo2(-0.01f,  0.01f,  0.01f);
+	glm::vec3 vo1(-0.01f, -0.01f, 0.01f);
+	glm::vec3 vo2(-0.01f, 0.01f, 0.01f);
 	glm::vec3 vo3(-0.01f, -0.01f, -0.01f);
-	glm::vec3 vo4(-0.01f,  0.01f, -0.01f);
-	glm::vec3 vo5( 0.01f, -0.01f,  0.01f);
-	glm::vec3 vo6( 0.01f,  0.01f,  0.01f);
-	glm::vec3 vo7( 0.01f, -0.01f, -0.01f);
-	glm::vec3 vo8( 0.01f,  0.01f, -0.01f);
+	glm::vec3 vo4(-0.01f, 0.01f, -0.01f);
+	glm::vec3 vo5(0.01f, -0.01f, 0.01f);
+	glm::vec3 vo6(0.01f, 0.01f, 0.01f);
+	glm::vec3 vo7(0.01f, -0.01f, -0.01f);
+	glm::vec3 vo8(0.01f, 0.01f, -0.01f);
 
 	glm::vec3 p = pos;
 
@@ -147,14 +95,14 @@ void makeCube(std::vector<Vertex5> &verts, glm::vec3 pos) 	{
 
 void makeLine(std::vector<Vertex5> &verts, glm::vec3 head, glm::vec3 tail) {
 
-	glm::vec3 vo1(-0.005f, -0.005f,  0.005f);
-	glm::vec3 vo2(-0.005f,  0.005f,  0.005f);
+	glm::vec3 vo1(-0.005f, -0.005f, 0.005f);
+	glm::vec3 vo2(-0.005f, 0.005f, 0.005f);
 	glm::vec3 vo3(-0.005f, -0.005f, -0.005f);
-	glm::vec3 vo4(-0.005f,  0.005f, -0.005f);
-	glm::vec3 vo5( 0.005f, -0.005f,  0.005f);
-	glm::vec3 vo6( 0.005f,  0.005f,  0.005f);
-	glm::vec3 vo7( 0.005f, -0.005f, -0.005f);
-	glm::vec3 vo8( 0.005f,  0.005f, -0.005f);
+	glm::vec3 vo4(-0.005f, 0.005f, -0.005f);
+	glm::vec3 vo5(0.005f, -0.005f, 0.005f);
+	glm::vec3 vo6(0.005f, 0.005f, 0.005f);
+	glm::vec3 vo7(0.005f, -0.005f, -0.005f);
+	glm::vec3 vo8(0.005f, 0.005f, -0.005f);
 
 	glm::vec3 p = head;
 	glm::vec3 p2 = tail;
@@ -198,7 +146,7 @@ void makeLine(std::vector<Vertex5> &verts, glm::vec3 head, glm::vec3 tail) {
 	v6.pos += p;
 	v7.pos += p;
 	v8.pos += p;
-	
+
 	verts.push_back(v2); verts.push_back(v3); verts.push_back(v1);
 	verts.push_back(v4); verts.push_back(v7); verts.push_back(v3);
 
@@ -223,7 +171,7 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 	MemoryBuffer memBuff;
 	memBuff.setData(meshData, size);
 
-	Header* h = (Header*)memBuff.returnBytes(sizeof(Header));
+	Header* h = (Header*)memBuff.returnBytes<Header>(sizeof(Header));
 
 	int* tag = (int*)h->tag;
 
@@ -237,14 +185,14 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 
 	gConsole->print("Mesh version: %d.%d\n", h->major, h->minor);
 	if (h->major == 1 && h->minor == 0) {
-		BoolFlags* bf = (BoolFlags*)memBuff.returnBytes(sizeof(BoolFlags));
+		BoolFlags* bf = (BoolFlags*)memBuff.returnBytes<BoolFlags>(sizeof(BoolFlags));
 
-		glm::vec3* vertices = (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount);
-		glm::vec3* normals = bf->useVNormals ? (glm::vec3*)memBuff.returnBytes(sizeof(glm::vec3) * bf->vertCount) : nullptr;
-		glm::vec4* colors = bf->useVColors ? (glm::vec4*)memBuff.returnBytes(sizeof(glm::vec4) * bf->vertCount) : nullptr;
-		glm::vec2* uv = bf->useVUV ? (glm::vec2*)memBuff.returnBytes(sizeof(glm::vec2) * bf->vertCount) : nullptr;
+		glm::vec3* vertices = (glm::vec3*)memBuff.returnBytes<glm::vec3>(sizeof(glm::vec3) * bf->vertCount);
+		glm::vec3* normals = bf->useVNormals ? (glm::vec3*)memBuff.returnBytes<glm::vec3>(sizeof(glm::vec3) * bf->vertCount) : nullptr;
+		glm::vec4* colors = bf->useVColors ? (glm::vec4*)memBuff.returnBytes<glm::vec3>(sizeof(glm::vec4) * bf->vertCount) : nullptr;
+		glm::vec2* uv = bf->useVUV ? (glm::vec2*)memBuff.returnBytes<glm::vec2>(sizeof(glm::vec2) * bf->vertCount) : nullptr;
 
-		Triangle* triangles = (Triangle*)memBuff.returnBytes(sizeof(Triangle) * bf->triangleCount);
+		Triangle* triangles = (Triangle*)memBuff.returnBytes<Triangle>(sizeof(Triangle) * bf->triangleCount);
 
 		std::vector<Vertex5> verts;
 
@@ -273,18 +221,18 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 
 		return v;
 	} else if (h->major == 1 && h->minor == 1) {
-		uint32_t* nrObj = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
-		uint32_t* nrBones = (uint32_t*)memBuff.returnBytes(sizeof(uint32_t));
+		uint32_t* nrObj = (uint32_t*)memBuff.returnBytes<uint32_t>(sizeof(uint32_t));
+		uint32_t* nrBones = (uint32_t*)memBuff.returnBytes<uint32_t>(sizeof(uint32_t));
 		gConsole->print("nrBones: %d\n", (int)*nrBones);
 
-		Bone* bones = (Bone*)memBuff.returnBytes(sizeof(Bone) * (*nrBones));
+		Bone* bones = (Bone*)memBuff.returnBytes<Bone>(sizeof(Bone) * (*nrBones));
 
 		std::vector<Vertex5> verts;
 
 		for (size_t i = 0; i < (*nrBones); i++) {
 
 			bones[i].headPos *= 1.0f;
-			bones[i].tailPos*= 1.0f;
+			bones[i].tailPos *= 1.0f;
 
 			//printf("b (%f, %f, %f)\n", bones[i].headPos.x, bones[i].headPos.y, bones[i].headPos.z);
 
@@ -314,7 +262,6 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 // @end temporary 
 
 
-
 void AssetManager::init() {
 	gAssetManager = this;
 	renderEngine = gRenderEngine;
@@ -331,19 +278,19 @@ void AssetManager::init() {
 	Entry* e = currentFile->loadEntry(0);
 
 	if (e) {
-		gConsole->print("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data->getData());
 	}
 
 	e = currentFile->loadEntry(1);
 
 	if (e) {
-		gConsole->print("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data->getData());
 	}
 
 	e = currentFile->loadEntry(2);
 
 	if (e) {
-		gConsole->print("%s\n", (char*)e->data);
+		gConsole->print("%s\n", (char*)e->data->getData());
 	}
 
 }
@@ -396,13 +343,25 @@ IMesh * AssetManager::getMeshFromInstanceId(uint32_t instanceId) {
 }
 
 uint32_t AssetManager::getNextFormID() {
-
 	return currentFile->getNextFormID();
+}
+
+uint32_t AssetManager::getNumEntries() {
+	currentFile->loadAllMissingEntries();
+	return currentFile->getNumEntries();
+}
+
+EntryMap &AssetManager::getAllEntries() {
+	return currentFile->getAllEntries();
 }
 
 void AssetManager::createNewEntry(uint32_t formID, const char* tag) {
 	currentFile->createNewEntry(formID, tag);
+}
 
+void AssetManager::createNewEntry(uint32_t formID, const char * tag, void * data, uint32_t dataSize) {
+	currentFile->createNewEntry(formID, tag);
+	updateEntry(formID, data, dataSize);
 }
 
 Entry* AssetManager::getEntry(uint32_t formID) {
@@ -411,6 +370,15 @@ Entry* AssetManager::getEntry(uint32_t formID) {
 
 void AssetManager::updateEntry(Entry* entry) {
 	currentFile->updateEntry(entry);
+}
+
+void AssetManager::updateEntry(uint32_t formID, void * data, uint32_t dataSize) {
+
+	Entry* e = currentFile->loadEntry(formID);
+	if (e->data) {
+		delete e->data;
+	}
+	e->data = new DataObject(data, dataSize);
 }
 
 void AssetManager::setStartupSceneRef(uint32_t ref) {
@@ -428,4 +396,8 @@ std::vector<uint32_t>& AssetManager::getObjectsWithTag(Tag tag) {
 
 uint32_t AssetManager::getObjectCountWithTag(Tag tag) {
 	return currentFile->getObjectsWithTag(tag).size();
+}
+
+IDataObjectConverter* AssetManager::getConverter() const {
+	return (IDataObjectConverter*)&objectConverter;
 }

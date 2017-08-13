@@ -88,9 +88,23 @@ namespace Editor.DataSources
 
         public new event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string info)
+        protected override void OnPropertyChanged(string info)
         {
+            base.OnPropertyChanged(info);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+
+            if (listenToEvents)
+            {
+                // do Edit Event
+                EventHandler.FormArgs fa = new EventHandler.FormArgs()
+                {
+                    FormID = EditorID,
+                    Data = this,
+                    ObjectType = Editor.EventHandler.ObjectTypes.SCENE
+                };
+                EventHandler.EventManager.OnEditFormEvent(fa);
+            }
+
         }
     }
 }

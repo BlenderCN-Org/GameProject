@@ -33,8 +33,6 @@ public:
 
 private:
 
-	const int32_t getStringLength(const char* str) const;
-
 	int32_t objectsInHistory;
 	int32_t currentMessageCount;
 	int32_t messagesStart;

@@ -148,8 +148,8 @@ void Game::updateAndRender(float dt) {
 
 	Input* in = Input::getInput();
 	if (in->sizeChange) {
-		int w = 0, h = 0;
-		in->getWindowSize(w, h);
+		int w = 1657, h = 1029;
+		//in->getWindowSize(w, h);
 		if (w != 0 && h != 0) {
 			*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
 		}

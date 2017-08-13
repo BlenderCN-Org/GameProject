@@ -49,12 +49,12 @@ void Console::print(const char* format, ...) {
 
 void Console::print(Message &msg) {
 
-	if (currentMessageCount == MAX_CONSOLE_LINES - 1) {
+	/*if (currentMessageCount == MAX_CONSOLE_LINES - 1) {
 		consoleMessages[messagesStart++] = msg;
 	}
 	else {
 		consoleMessages[currentMessageCount++] = msg;
-	}
+	}*/
 
 	printf("%s", msg.msg);
 
@@ -65,12 +65,4 @@ void Console::execute() {
 	print(currentCommand.cmd);
 	memset(currentCommand.cmd, 0, currentCharIndex);
 	currentCharIndex = 0;
-}
-
-const int32_t Console::getStringLength(const char* str) const {
-	int32_t len = 0;
-	while (str[len] != '\0') {
-		len++;
-	}
-	return len;
 }

@@ -65,5 +65,8 @@
     <ClCompile Include="EditorWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GetAllFormsEvent.cpp">
+      <Filter>Source Files\Extensions</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,7 +12,6 @@ void MainWindowWrapper::DoWork() {
 	//} catch (...) {
 	//	Console::Write("Something happened!");
 	//}
-	
 }
 
 void MainWindowWrapper::waitForInit() {
@@ -34,7 +33,7 @@ MainWindowWrapper::~MainWindowWrapper() {
 	mre->Close();
 	delete window;
 	//window->Close();
-	thrd->Sleep(100);
+	thrd->Sleep(1000);
 	thrd->Abort();
 
 }

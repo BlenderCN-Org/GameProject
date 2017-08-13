@@ -6,6 +6,7 @@
 // project dependencies
 
 // std includes
+#include <cstdint>
 
 /*
 *	System file
@@ -21,5 +22,7 @@ bool fileExists(const char* fileName);
 int getLogicalProcessorCount();
 
 int getCoreUsage(int coreIndex);
+
+const int32_t getStringLength(const char* str);
 
 #endif

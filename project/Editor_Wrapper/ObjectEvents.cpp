@@ -30,9 +30,11 @@ public:
 
 namespace Extensions {
 	void OnAddEvent(System::Object^ sender, Editor::EventHandler::AddObjectArgs^ addArgs) {
-		std::cout << "AddEvent\n";
+		//std::cout << "AddEvent\n";
 
 		uint32_t type = (uint32_t)addArgs->ObjectType;
+
+		uint32_t formID = addArgs->FormID;
 
 		switch (type) {
 			case OBJECT_TYPE_SCENE:
@@ -46,8 +48,16 @@ namespace Extensions {
 		}
 	}
 
+	void OnDeleteEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ deleteArgs) {
+		//std::cout << "Delete\n";
+		Entry* e = assetMan->getEntry((uint32_t)deleteArgs->FormID);
+		e->deleteFlag = !e->deleteFlag;
+		assetMan->updateEntry(e);
+
+	}
+
 	void OnEditEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ editArgs) {
-		std::cout << "EditEvent\n";
+		//std::cout << "EditEvent\n";
 		if (extensionMap.count(EDIT_OBJECT_CALLBACK) >= 1 && extensionMap[EDIT_OBJECT_CALLBACK]) {
 
 			ExtensionEditItemEvent evnt;
@@ -55,7 +65,14 @@ namespace Extensions {
 			EditObject* obj = new EditObject();
 
 			obj->formID = editArgs->FormID;
+			obj->data = nullptr;
 			evnt.objectType = (uint32_t)editArgs->ObjectType;
+
+			if (evnt.objectType == 0) {
+				evnt.objectData = obj;
+				extensionMap[EDIT_OBJECT_CALLBACK]->execute(1, &evnt);
+			}
+
 			if (editArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCENE) {
 				Editor::DataSources::Scene^ scene = (Editor::DataSources::Scene^)editArgs->Data;
 				SceneStuff* sc = new SceneStuff();
@@ -88,13 +105,13 @@ namespace Extensions {
 
 				Marshal::FreeHGlobal(ptr);
 				delete sc;
-			}
-			else if (editArgs->ObjectType == Editor::EventHandler::ObjectTypes::RENDERLAYER) {
+			} else if (editArgs->ObjectType == Editor::EventHandler::ObjectTypes::RENDERLAYER) {
 				Editor::DataSources::RenderLayer^ renderLayer = (Editor::DataSources::RenderLayer^)editArgs->Data;
 				RenderLayerData* rData = new RenderLayerData();
 				IntPtr ptr = Marshal::StringToHGlobalAnsi(renderLayer->Name);
 				const char* str = static_cast<const char*>(ptr.ToPointer());
 
+				rData->name = str;
 				rData->resolutionType = renderLayer->ResolutionType;
 				rData->height = renderLayer->ResolutionHeight;
 				rData->width = renderLayer->ResolutionWidth;
@@ -115,20 +132,6 @@ namespace Extensions {
 
 			delete obj;
 
-		}
-	}
-
-	void OnDeleteEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ deleteArgs) {
-		std::cout << "Delete\n";
-
-		if (extensionMap.count(DELETE_OBJECT_CALLBACK) >= 1 && extensionMap[DELETE_OBJECT_CALLBACK]) {
-
-			uint32_t deleteForm = (uint32_t)deleteArgs->FormID;
-
-			ExtensionDeleteItemEvent deleteEvent;
-			deleteEvent.formID = deleteForm;
-
-			extensionMap[DELETE_OBJECT_CALLBACK]->execute(1, &deleteEvent);
 		}
 	}
 

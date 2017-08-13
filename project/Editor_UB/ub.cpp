@@ -12,6 +12,7 @@
 #include <Editor_Wrapper\ObjectEvents.cpp>
 #include <Editor_Wrapper\QueryEvent.cpp>
 #include <Editor_Wrapper\SaveEvent.cpp>
+#include <Editor_Wrapper\GetAllFormsEvent.cpp>
 
 #include <Editor_Wrapper\Window\MainWindowWrapper.cpp>
 

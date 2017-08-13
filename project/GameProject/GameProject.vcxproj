@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_UB|Win32">
+      <Configuration>Debug_UB</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_UB|x64">
+      <Configuration>Debug_UB</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -31,6 +39,12 @@
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -39,6 +53,12 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
@@ -59,10 +79,16 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -76,7 +102,21 @@
     <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\Win32;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\Win32;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\x64;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
+    <OutDir>$(SolutionDir)build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\Dependices\include;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependices\lib\GLFW\x64;$(LibraryPath);$(SolutionDir)build\$(Platform)\$(Configuration)\</LibraryPath>
@@ -117,7 +157,47 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>config.lib;AssetLib.lib;memory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>config.lib;AssetLib.lib;memory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_UB|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -185,20 +265,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\AssetManager.cpp" />
+    <ClCompile Include="Core\Assets\DataObjects.cpp" />
     <ClCompile Include="Core\Assets\GameFile.cpp" />
     <ClCompile Include="Core\Assets\RenderLayer.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\CoreGlobals.cpp" />
-    <ClCompile Include="Core\Extensions\AddDataExtension.cpp" />
-    <ClCompile Include="Core\Extensions\DeleteDataExtension.cpp" />
     <ClCompile Include="Core\Extensions\EditDataExtension.cpp" />
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
-    <ClCompile Include="Core\Extensions\GetFormIDExtension.cpp" />
     <ClCompile Include="Core\Extensions\SaveExtension.cpp" />
-    <ClCompile Include="Core\Extensions\QueryDataExtension.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\System\Console.cpp" />
     <ClCompile Include="Core\System\LibraryLoader.cpp" />
+    <ClCompile Include="Core\System\MemBuffer.cpp" />
     <ClCompile Include="Core\System\Sys.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
@@ -214,21 +292,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\AssetManager.hpp" />
+    <ClInclude Include="Core\Assets\DataObjects.hpp" />
     <ClInclude Include="Core\Assets\GameFile.hpp" />
     <ClInclude Include="Core\Assets\GVar.hpp" />
     <ClInclude Include="Core\Assets\RenderLayer.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\CoreGlobals.hpp" />
-    <ClInclude Include="Core\Extensions\AddDataExtension.hpp" />
-    <ClInclude Include="Core\Extensions\DeleteDataExtension.hpp" />
     <ClInclude Include="Core\Extensions\EditDataExtension.hpp" />
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
-    <ClInclude Include="Core\Extensions\GetFormIDExtension.hpp" />
     <ClInclude Include="Core\Extensions\SaveExtension.hpp" />
-    <ClInclude Include="Core\Extensions\QueryDataExtension.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
     <ClInclude Include="Core\System\Console.hpp" />
     <ClInclude Include="Core\System\LibraryLoader.hpp" />
+    <ClInclude Include="Core\System\MemBuffer.hpp" />
     <ClInclude Include="Core\System\Sys.hpp" />
     <ClInclude Include="Core\System\TemporaryStorage.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />

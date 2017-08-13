@@ -39,5 +39,7 @@ namespace Extensions
 
 	void OnGetFormIDEvent(System::Object^ sender, Editor::EventHandler::GetFormIDArgs^ idArgs);
 
+	void OnGetFormView(System::Object^ sender, Editor::EventHandler::FormView^ view);
+
 }
 #endif

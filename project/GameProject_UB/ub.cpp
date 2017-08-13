@@ -12,15 +12,13 @@
 #include <GameProject\Core\System\Console.cpp>
 #include <GameProject\Core\System\LibraryLoader.cpp>
 #include <GameProject\Core\System\Sys.cpp>
+#include <GameProject\Core\System\MemBuffer.cpp>
 
+#include <GameProject\Core\Assets\DataObjects.cpp>
 #include <GameProject\Core\Assets\GameFile.cpp>
 #include <GameProject\Core\Assets\RenderLayer.cpp>
 
-#include <GameProject\Core\Extensions\AddDataExtension.cpp>
-#include <GameProject\Core\Extensions\DeleteDataExtension.cpp>
 #include <GameProject\Core\Extensions\EditDataExtension.cpp>
-#include <GameProject\Core\Extensions\GetFormIDExtension.cpp>
-#include <GameProject\Core\Extensions\QueryDataExtension.cpp>
 #include <GameProject\Core\Extensions\SaveExtension.cpp>
 #include <GameProject\Core\Extensions\ExtensionHandler.cpp>
 

@@ -4,6 +4,7 @@
 #include "GameFile.hpp"
 
 #include <AssetLib/AssetLib.hpp>
+#include "DataObjects.hpp"
 
 GameFile::~GameFile() {
 
@@ -11,7 +12,7 @@ GameFile::~GameFile() {
 	EntryMap::const_iterator eit = loadedEntries.end();
 
 	for (it; it != eit; it++) {
-		delete[] it->second.data;
+		delete it->second.data;
 	}
 
 }
@@ -97,8 +98,10 @@ Entry* GameFile::loadEntry(uint32_t formId) {
 
 			uint32_t dataSize = e.entrySize - sizeof(EntrySave);
 			if (dataSize) {
-				e.data = new char[dataSize];
-				inFile.read((char*)e.data, dataSize);
+				char* data = new char[dataSize];
+				inFile.read((char*)data, dataSize);
+				e.data = new DataObject(data, dataSize);
+				delete data;
 			} else {
 				e.data = nullptr;
 			}
@@ -136,6 +139,14 @@ uint32_t GameFile::getNextFormID() {
 	return id;
 }
 
+uint32_t GameFile::getNumEntries() {
+	return loadedEntries.size();
+}
+
+EntryMap &GameFile::getAllEntries() {
+	return loadedEntries;
+}
+
 void GameFile::createNewEntry(uint32_t formID, const char* tag) {
 
 	Entry e{};
@@ -146,6 +157,9 @@ void GameFile::createNewEntry(uint32_t formID, const char* tag) {
 
 	loadedEntries[e.formID] = e;
 	offsetTable[e.formID] = 0;
+	Tag t;
+	memcpy(&t, tag, sizeof(Tag));
+	tagMap[t].push_back(e.formID);
 
 	nrEntries++;
 }

@@ -3,6 +3,23 @@
 
 #include <cstdint>
 
+class IDataObject {
+public:
+
+	enum Type {
+		GENERIC,
+		SCENE,
+		RENDERLAYER
+	};
+
+	virtual ~IDataObject() {};
+	virtual void* getData() const = 0;
+	virtual uint32_t getDataSize() const = 0;
+
+	virtual Type getType() const = 0;
+
+};
+
 struct Version {
 	uint32_t version;
 };
@@ -27,7 +44,8 @@ struct EntrySave {
 };
 
 struct Entry : EntrySave {
-	void* data;		//dataSize = entrySize - sizeof(Entry);
+	IDataObject* data;		//dataSize = entrySize - sizeof(Entry);
+	bool deleteFlag;
 };
 
 struct EntryOffset {
@@ -52,6 +70,49 @@ struct GameFileHeader_V2 {
 	DependencyInfoSave depInfo;
 	uint32_t nrEntries;
 	uint32_t startupSceneRef;
+};
+
+/*
+* Storable structs
+*/
+
+// struct for render layer data
+struct RenderLayerSaveData {
+	//uint32_t nameLength;
+	const char* name;
+	char resolutionType;
+	uint32_t width;
+	uint32_t height;
+	bool depthBuffer;
+	bool stencilBuffer;
+	char nrColorBuffers;
+	uint32_t shaderProgramRef;
+};
+
+struct SceneSaveData {
+	uint32_t sceneNameIdPtr;
+};
+
+class IRenderLayerDataObject : public IDataObject {
+public:
+	virtual ~IRenderLayerDataObject() {};
+
+	virtual RenderLayerSaveData* getRenderLayerData() = 0;
+	virtual void setRenderLayerData(RenderLayerSaveData* data) = 0;
+
+	// IDataObject
+	virtual void* getData() const = 0;
+	virtual uint32_t getDataSize() const = 0;
+	
+};
+
+class IDataObjectConverter {
+
+public:
+	virtual ~IDataObjectConverter() {};
+
+	virtual IRenderLayerDataObject* asRenderLayer(IDataObject*& dataObject) = 0;
+
 };
 
 #endif

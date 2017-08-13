@@ -69,20 +69,8 @@
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Extensions\QueryDataExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Extensions\AddDataExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClCompile>
     <ClCompile Include="Core\CoreGlobals.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Extensions\GetFormIDExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Extensions\DeleteDataExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
     <ClCompile Include="Core\Extensions\EditDataExtension.cpp">
       <Filter>Source Files\Core\Extensions</Filter>
@@ -123,6 +111,12 @@
     <ClCompile Include="Core\System\Console.cpp">
       <Filter>Source Files\Core\System</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Assets\DataObjects.cpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\MemBuffer.cpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -155,20 +149,8 @@
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Extensions\QueryDataExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Extensions\AddDataExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClInclude>
     <ClInclude Include="Core\CoreGlobals.hpp">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Extensions\GetFormIDExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Extensions\DeleteDataExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
     <ClInclude Include="Core\Extensions\EditDataExtension.hpp">
       <Filter>Source Files\Core\Extensions</Filter>
@@ -222,6 +204,12 @@
       <Filter>Source Files\Core\System</Filter>
     </ClInclude>
     <ClInclude Include="Core\System\TemporaryStorage.hpp">
+      <Filter>Source Files\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\DataObjects.hpp">
+      <Filter>Source Files\Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\MemBuffer.hpp">
       <Filter>Source Files\Core\System</Filter>
     </ClInclude>
   </ItemGroup>

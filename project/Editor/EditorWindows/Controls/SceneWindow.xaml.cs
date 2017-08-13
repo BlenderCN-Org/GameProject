@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace Editor.EditorWindows.Controls
 {
@@ -10,6 +11,26 @@ namespace Editor.EditorWindows.Controls
         public SceneWindow()
         {
             InitializeComponent();
+
+            EventHandler.EventManager.onRefreshFormsEvent += new System.EventHandler<bool>(refreshEvent);
+            refreshEvent(null, true);
+        }
+
+        public void refreshEvent(object sender, bool refresh)
+        {
+            EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+
+            SceneList.Items.Clear();
+
+            args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+            args.ReturnList = new List<DataSources.BaseData>();
+            EventHandler.EventManager.OnQueryDataEvent(args);
+
+            foreach (var item in args.ReturnList)
+            {
+                SceneList.Items.Add(item);
+            }
+
         }
     }
 }

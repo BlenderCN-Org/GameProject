@@ -26,6 +26,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:MainWindowCommands.SaveAndPack" Executed="SaveAndPack_Executed" />
         <CommandBinding x:Name="SaveCommand" Command="ApplicationCommands.Save" Executed="SaveCommand_Executed" />
+        <CommandBinding Command="local:MainWindowCommands.ObjectBrowser" Executed="ObjectBrowser" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="ApplicationCommands.Save" />
@@ -55,6 +56,7 @@
                     <MenuItem Command="local:MainWindowCommands.SaveAndPack" Style="{DynamicResource MenuItemStyle1}" />
                 </MenuItem>
                 <MenuItem Header="_Edit" Style="{DynamicResource MenuItemStyle1}">
+                    <MenuItem Command="local:MainWindowCommands.ObjectBrowser" Style="{DynamicResource MenuItemStyle1}" />
                 </MenuItem>
                 <MenuItem Header="_Game" Style="{DynamicResource MenuItemStyle1}">
                     <MenuItem Header="Game _Settings" Click="GameSettingsButton_Click" Style="{DynamicResource MenuItemStyle1}" />

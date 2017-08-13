@@ -44,7 +44,7 @@
             </TabItem>
             <TabItem x:Name="RenderLayersTab" Header="Render Layers" Template="{DynamicResource TabItemControlTemplate1}">
                 <Grid Background="{DynamicResource DarkBackground}">
-                    <ListView x:Name="renderLayerList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="198" Style="{DynamicResource DarkListViewWithGridView}" SelectionChanged="renderLayerList_SelectionChanged">
+                    <ListView x:Name="renderLayerList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="198" Style="{DynamicResource DarkListViewWithGridView}" SelectionChanged="renderLayerList_SelectionChanged" SelectionMode="Single">
                         <ListView.Resources>
                             <c:RenderLayer x:Key="renderLayerDataSource" />
                         </ListView.Resources>
@@ -73,7 +73,7 @@
                         <ColumnDefinition Width="113*" />
                     </Grid.ColumnDefinitions>
                     <ListView x:Name="sceneList" HorizontalAlignment="Left" Height="293" Margin="10,10,0,0" VerticalAlignment="Top" Width="196" Style="{DynamicResource DarkListViewWithGridView}"
-                              SelectionChanged="sceneListSelectionChanged" Grid.ColumnSpan="2">
+                              SelectionChanged="sceneListSelectionChanged" Grid.ColumnSpan="2" SelectionMode="Single">
                         <ListView.Resources>
                             <c:Scene x:Key="sceneDataSource" />
                         </ListView.Resources>

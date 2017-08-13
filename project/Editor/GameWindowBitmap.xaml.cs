@@ -61,7 +61,7 @@ namespace Editor
             var bpp = (pixelFormat.BitsPerPixel + 7) / 8;
             if (wid * hei * bpp == ptr.Length)
             {
-                var bitmap = BitmapSource.Create((int)wid, (int)hei, 0, 0, pixelFormat, null, ptr, (int)wid * bpp);
+                var bitmap = BitmapSource.Create((int)wid, (int)hei, 0, 0, pixelFormat, null, ptr, (int)(wid * bpp));
                 RenderedBitmap.Source = bitmap;
             }
             //Width = wid;

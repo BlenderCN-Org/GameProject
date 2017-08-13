@@ -9,6 +9,7 @@ namespace Editor_clr {
 
 	bool Editor_wrp::initializeEditor(IRenderEngine* re) {
 
+		GC::WaitForFullGCComplete();
 		if (!initialized) {
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 			editorStatus = EditorStatus::STOPPED;
@@ -19,6 +20,7 @@ namespace Editor_clr {
 			Editor::EventHandler::EventManager::onEditFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnEditEvent);
 			Editor::EventHandler::EventManager::onDeleteFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnDeleteEvent);
 			Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
+			Editor::EventHandler::EventManager::onGetFormView += gcnew System::EventHandler<Editor::EventHandler::FormView^>(&Extensions::OnGetFormView);
 
 			initialized = true;
 
@@ -154,6 +156,7 @@ namespace Editor_clr {
 
 		void* data = pixelBuffers[pboNextIndex]->map();
 		if (data) {
+
 			uint32_t w, h;
 			pixelBuffers[pboNextIndex]->getSize(w, h);
 

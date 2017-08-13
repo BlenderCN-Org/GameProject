@@ -36,6 +36,15 @@ namespace Editor.EditorWindows
             InitializeComponent();
 
             // add loading of general info
+            EventHandler.EventManager.onRefreshFormsEvent += new EventHandler<bool>(RefreshEvent);
+        }
+
+        public void RefreshEvent(object sender, bool refresh)
+        {
+            if (refresh)
+            {
+                RefreshSelectedList(true);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -96,55 +105,79 @@ namespace Editor.EditorWindows
         {
             if (e.Source == tabControl)
             {
-                // TODO - Make each tab a custom user control so that we can do
-                // tabControl.SelectedItem.executeQuery() or something similar
-                if (tabControl.SelectedItem == SceneTab)
+                RefreshSelectedList();
+            }
+        }
+
+        private void RefreshSelectedList(bool keepSelected = false)
+        {
+            // TODO - Make each tab a custom user control so that we can do
+            // tabControl.SelectedItem.executeQuery() or something similar
+            if (tabControl.SelectedItem == SceneTab)
+            {
+                int selected = selectedSceneItem = -1;
+                Console.WriteLine(keepSelected);
+                Console.WriteLine(selectedSceneItem);
+                sceneList.Items.Clear();
+
+                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+
+                args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+                args.ReturnList = new List<DataSources.BaseData>();
+                EventHandler.EventManager.OnQueryDataEvent(args);
+
+                foreach (var item in args.ReturnList)
                 {
-                    selectedSceneItem = -1;
-                    sceneList.Items.Clear();
-
-                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
-
-                    args.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
-                    args.ReturnList = new List<DataSources.BaseData>();
-                    EventHandler.EventManager.OnQueryDataEvent(args);
-
-                    foreach (var item in args.ReturnList)
-                    {
-                        sceneList.Items.Add(item);
-                    }
+                    sceneList.Items.Add(item);
                 }
 
-                if (tabControl.SelectedItem == MenuTab)
+                if (keepSelected && selected != -1)
                 {
-                    menuList.Items.Clear();
-
-                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
-                    args.ObjectType = Editor.EventHandler.ObjectTypes.DIALOG;
-                    args.ReturnList = new List<DataSources.BaseData>();
-                    EventHandler.EventManager.OnQueryDataEvent(args);
-
-                    foreach (var item in args.ReturnList)
+                    if (selected < sceneList.Items.Count)
                     {
-                        if (item.GetType().Equals(typeof(DataSources.MenuItem)))
-                            menuList.Items.Add(item);
+                        sceneList.SelectedItem = sceneList.Items[selected];
                     }
                 }
+            }
 
-                if (tabControl.SelectedItem == RenderLayersTab)
+            if (tabControl.SelectedItem == MenuTab)
+            {
+                menuList.Items.Clear();
+
+                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+                args.ObjectType = Editor.EventHandler.ObjectTypes.DIALOG;
+                args.ReturnList = new List<DataSources.BaseData>();
+                EventHandler.EventManager.OnQueryDataEvent(args);
+
+                foreach (var item in args.ReturnList)
                 {
-                    selectedRenderLayerItem = -1;
-                    renderLayerList.Items.Clear();
+                    if (item.GetType().Equals(typeof(DataSources.MenuItem)))
+                        menuList.Items.Add(item);
+                }
+            }
 
-                    EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
-                    args.ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER;
-                    args.ReturnList = new List<DataSources.BaseData>();
-                    EventHandler.EventManager.OnQueryDataEvent(args);
+            if (tabControl.SelectedItem == RenderLayersTab)
+            {
+                int selected = selectedRenderLayerItem;
+                selectedRenderLayerItem = -1;
+                renderLayerList.Items.Clear();
 
-                    foreach (var item in args.ReturnList)
+                EventHandler.QueryDataArgs args = new Editor.EventHandler.QueryDataArgs();
+                args.ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER;
+                args.ReturnList = new List<DataSources.BaseData>();
+                EventHandler.EventManager.OnQueryDataEvent(args);
+
+                foreach (var item in args.ReturnList)
+                {
+                    if (item.GetType().Equals(typeof(DataSources.RenderLayer)))
+                        renderLayerList.Items.Add(item);
+                }
+
+                if (keepSelected && selected != -1)
+                {
+                    if (selected < renderLayerList.Items.Count)
                     {
-                        if (item.GetType().Equals(typeof(DataSources.RenderLayer)))
-                            renderLayerList.Items.Add(item);
+                        renderLayerList.SelectedItem = renderLayerList.Items[selected];
                     }
                 }
             }
@@ -160,11 +193,10 @@ namespace Editor.EditorWindows
             {
                 FormID = (sceneList.SelectedItem as DataSources.BaseData).EditorID
             };
-
-            (sceneList.SelectedItem as DataSources.BaseData).Deleted = true;
-
+            
             if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
             {
+                (sceneList.SelectedItem as DataSources.BaseData).Deleted = true;
                 EventHandler.EventManager.OnDeleteFormEvent(fa);
             }
             else
@@ -189,27 +221,30 @@ namespace Editor.EditorWindows
             addDlg.InvalidateMeasure();
             addDlg.InvalidateArrange();
 
-            addDlg.ShowDialog();
+            if (addDlg.ShowDialog().Value)
+            {
 
-            DataSources.Scene bd = new DataSources.Scene();
+                DataSources.Scene bd = new DataSources.Scene();
 
-            bd.EditorID = newScenePage.GetFormId();
-            bd.Name = newScenePage.GetName();
+                bd.EditorID = newScenePage.GetFormId();
+                bd.Name = newScenePage.GetName();
 
-            sceneList.Items.Add(bd);
-            sceneList.SelectedIndex = sceneList.Items.Count - 1;
+                sceneList.Items.Add(bd);
+                sceneList.SelectedIndex = sceneList.Items.Count - 1;
+            }
         }
 
         private void sceneListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selectedSceneItem != -1)
             {
+                ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = false;
                 // do Edit Event
-                EventHandler.FormArgs fa = new EventHandler.FormArgs();
-                fa.FormID = ((DataSources.Scene)sceneList.Items[selectedSceneItem]).EditorID;
-                fa.Data = ((DataSources.Scene)sceneList.Items[selectedSceneItem]);
-                fa.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
-                EventHandler.EventManager.OnEditFormEvent(fa);
+                //EventHandler.FormArgs fa = new EventHandler.FormArgs();
+                //fa.FormID = ((DataSources.Scene)sceneList.Items[selectedSceneItem]).EditorID;
+                //fa.Data = ((DataSources.Scene)sceneList.Items[selectedSceneItem]);
+                //fa.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
+                //EventHandler.EventManager.OnEditFormEvent(fa);
             }
 
             DeleteSceneItem.IsEnabled = false;
@@ -217,6 +252,7 @@ namespace Editor.EditorWindows
             {
                 DeleteSceneItem.IsEnabled = true;
                 selectedSceneItem = sceneList.SelectedIndex;
+                ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = true;
             }
         }
 
@@ -247,6 +283,7 @@ namespace Editor.EditorWindows
             };
 
             EventHandler.EventManager.OnAddObjectEvent(args);
+            bd.Name = "RenderLayer";
         }
 
         private void deleteRenderLayerButton_Click(object sender, RoutedEventArgs e)
@@ -259,12 +296,10 @@ namespace Editor.EditorWindows
             {
                 FormID = (renderLayerList.SelectedItem as DataSources.BaseData).EditorID
             };
-
-            (renderLayerList.SelectedItem as DataSources.BaseData).Deleted = true;
-
-            if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
+            
+            if ((cfDlg.DialogResult.HasValue == true) && (cfDlg.DialogResult.Value == true))
             {
-                renderLayerList.Items.Remove(renderLayerList.SelectedItem);
+                (renderLayerList.SelectedItem as DataSources.BaseData).Deleted = true;
                 EventHandler.EventManager.OnDeleteFormEvent(fa);
             }
             else
@@ -277,12 +312,7 @@ namespace Editor.EditorWindows
         {
             if (selectedRenderLayerItem != -1)
             {
-                // do Edit Event
-                EventHandler.FormArgs fa = new EventHandler.FormArgs();
-                fa.FormID = ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).EditorID;
-                fa.Data = ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]);
-                fa.ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER;
-                EventHandler.EventManager.OnEditFormEvent(fa);
+                ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = false;
             }
 
             DeleteRenderLayerItem.IsEnabled = false;
@@ -290,6 +320,7 @@ namespace Editor.EditorWindows
             {
                 DeleteRenderLayerItem.IsEnabled = true;
                 selectedRenderLayerItem = renderLayerList.SelectedIndex;
+                ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = true;
             }
         }
     }

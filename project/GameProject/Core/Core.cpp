@@ -76,6 +76,12 @@ void Core::init() {
 void Core::freeResources() {
 
 	if (editor) {
+		EditorStatus editorStatus = editor->getStatus();
+		while (editorStatus != EditorStatus::STOPPED) {
+			editor->update();
+			EditorStatus editorStatus = editor->getStatus();
+		}
+		
 		extHandler->unloadExtension(editor);
 		delete extHandler;
 		editor->releaseEditor();
@@ -170,6 +176,7 @@ void Core::update(float dt) {
 		input->getWindowSize(w, h);
 
 		renderEngine->updateViewPort(w, h);
+		window->setWindowSize(w, h);
 		width = w;
 		heigth = h;
 	}

@@ -13,6 +13,7 @@ typedef std::map<uint32_t, Entry> EntryMap;
 typedef uint32_t Tag;
 typedef std::map<Tag, std::vector<uint32_t>> TagMap;
 
+
 class GameFile {
 
 	friend class SaveExtension;
@@ -27,6 +28,9 @@ public:
 	Entry* loadEntry(uint32_t formID);
 
 	uint32_t getNextFormID();
+
+	uint32_t getNumEntries();
+	EntryMap &getAllEntries();
 
 	void createNewEntry(uint32_t formID, const char* tag);
 

@@ -34,7 +34,7 @@ void initSys() {
 	PdhOpenQuery(NULL, NULL, &cpuQuery);
 	PdhAddCounter(cpuQuery, L"\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal);
 
-	for ( int i = 0; i < getLogicalProcessorCount(); i++ ) {
+	for (int i = 0; i < getLogicalProcessorCount(); i++) {
 		const int size = 256;
 		WCHAR *temp = L"\\Processor(%d)\\%s Processor Time";
 		WCHAR c[size];
@@ -47,7 +47,7 @@ void initSys() {
 
 void deinitSys() {
 	PdhRemoveCounter(cpuTotal);
-	for ( int i = 0; i < getLogicalProcessorCount(); i++ ) {
+	for (int i = 0; i < getLogicalProcessorCount(); i++) {
 		PdhRemoveCounter(cpuCore[i]);
 	}
 	PdhCloseQuery(cpuQuery);
@@ -67,8 +67,7 @@ void pollCpuUsage() {
 	PdhCollectQueryData(cpuQuery);
 }
 
-bool fileExists(const char * fileName)
-{
+bool fileExists(const char * fileName) {
 	std::ifstream infile(fileName);
 	return infile.good();
 }
@@ -76,12 +75,22 @@ bool fileExists(const char * fileName)
 int getCoreUsage(int coreIndex = -1) {
 	PDH_FMT_COUNTERVALUE counterVal;
 
-	if ( coreIndex == -1 || coreIndex >= getLogicalProcessorCount() ) {
+	if (coreIndex == -1 || coreIndex >= getLogicalProcessorCount()) {
 		PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_LARGE, NULL, &counterVal);
 	} else {
 		PdhGetFormattedCounterValue(cpuCore[coreIndex], PDH_FMT_LARGE, NULL, &counterVal);
 	}
 	return (int)counterVal.largeValue;
+}
+
+const int32_t getStringLength(const char* str) {
+	int32_t len = 0;
+	if (str != nullptr) {
+		while (str[len] != '\0') {
+			len++;
+		}
+	}
+	return len + 1;
 }
 
 #endif

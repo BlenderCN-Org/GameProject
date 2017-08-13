@@ -17,6 +17,7 @@ namespace Editor
     {
         private EditorWindows.TextEditor textEdit = null;
         private EditorWindows.GameSettings gameSettings = null;
+        private EditorWindows.BrowseAllForms formBrowser = null;
 
         public EventHandler<EventHandler.CloseArgs> onCloseEvent;
 
@@ -43,6 +44,7 @@ namespace Editor
         {
             textEdit.Close();
             gameSettings.Close();
+            formBrowser.Close();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -250,6 +252,16 @@ namespace Editor
 
             return returnVal as T;
         }
+
+        private void ObjectBrowser(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (formBrowser == null)
+            {
+                formBrowser = new EditorWindows.BrowseAllForms();
+                formBrowser.Owner = this;
+            }
+            formBrowser.Show();
+        }
     }
 
     public static class MainWindowCommands
@@ -264,5 +276,16 @@ namespace Editor
                                         new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift)
                         }
                 );
+
+        public static readonly RoutedUICommand ObjectBrowser = new RoutedUICommand
+                (
+                        "ObjectBrowser",
+                        "ObjectBrowser",
+                        typeof(MainWindowCommands),
+                        new InputGestureCollection()
+                        {
+                        }
+                );
+        
     }
 }

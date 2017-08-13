@@ -6,8 +6,8 @@ namespace Editor.DataSources
     {
         public BaseData()
         {
-            Name = "Test";
-            EditorID = 123;
+            Name = "";
+            EditorID = 0;
             deleted = false;
         }
 
@@ -16,6 +16,8 @@ namespace Editor.DataSources
             EditorID = eid;
             Name = name;
         }
+
+        public bool listenToEvents = false;
 
         private uint editorID;
         private string name;
@@ -74,7 +76,7 @@ namespace Editor.DataSources
             return Name + " ( " + EditorID + " )" + (deleted ? " D" : "");
         }
 
-        private void OnPropertyChanged(string info)
+        protected virtual void OnPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
