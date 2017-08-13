@@ -91,6 +91,7 @@ namespace Editor.DataSources
         protected override void OnPropertyChanged(string info)
         {
             base.OnPropertyChanged(info);
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
 
             if (listenToEvents)

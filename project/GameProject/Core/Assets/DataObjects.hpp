@@ -8,6 +8,7 @@ public:
 	virtual ~DataObjectConverter() {};
 
 	virtual IRenderLayerDataObject* asRenderLayer(IDataObject*& dataObject);
+	virtual ISceneDataObject* asSceneData(IDataObject*& dataObject);
 };
 
 class DataObject : public IDataObject {
@@ -47,6 +48,29 @@ private:
 	void* rawData;
 	uint32_t rawDataSize;
 
+};
+
+class SceneDataObject : public ISceneDataObject {
+
+public:
+
+	SceneDataObject(void* data, uint32_t dataSize);
+	virtual ~SceneDataObject();
+
+	virtual SceneSaveData* getSceneData();
+	virtual void setSceneData(SceneSaveData* data);
+
+	// IDataObject
+	virtual void* getData() const;
+	virtual uint32_t getDataSize() const;
+
+	Type getType() const;
+
+private:
+
+	SceneSaveData* rData;
+	void* rawData;
+	uint32_t rawDataSize;
 };
 
 #endif

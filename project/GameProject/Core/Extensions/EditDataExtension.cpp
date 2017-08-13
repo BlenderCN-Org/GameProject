@@ -25,6 +25,16 @@ void EditDataExtension::execute(int nrArgs, ExtensionEditItemEvent * arg) {
 
 		if (arg->objectType == OBJECT_TYPE_SCENE) {
 
+			Entry* e = gAssetManager->getEntry(obj->getFormID());
+			if (e == nullptr) {
+				return;
+			}
+			if (strncmp(e->tag, SCENE_TAG, 4) == 0) {
+				memcpy(e->tag, SCENE_TAG, 4);
+
+			}
+
+
 		} else if (arg->objectType == OBJECT_TYPE_RENDERLAYER) {
 
 			Entry* e = gAssetManager->getEntry(obj->getFormID());
@@ -34,13 +44,13 @@ void EditDataExtension::execute(int nrArgs, ExtensionEditItemEvent * arg) {
 			if (strncmp(e->tag, RENDERLAYER_TAG, 4) == 0) {
 				memcpy(e->tag, RENDERLAYER_TAG, 4);
 
-				RenderLayerData empty{};
+				RenderLayerSaveData empty{};
 
-				RenderLayerData* rData = (RenderLayerData*)obj->getData();
+				RenderLayerSaveData* rData = (RenderLayerSaveData*)obj->getData();
 				if(rData == nullptr)
 				{
 					if (e->data) {
-						rData = (RenderLayerData*)e->data->getData();
+						rData = (RenderLayerSaveData*)e->data->getData();
 						//rData = (RenderLayerData*)((IRenderLayerData*)e->data)->getRenderLayerData();
 					}
 					else {
@@ -50,11 +60,11 @@ void EditDataExtension::execute(int nrArgs, ExtensionEditItemEvent * arg) {
 				}
 				const char* name = rData->name;
 				const int32_t nameLength = getStringLength(name);
-				void* data = malloc(sizeof(RenderLayerData) + nameLength);
-				RenderLayerData* cData = (RenderLayerData*)data;
-				memcpy(cData, rData, sizeof(RenderLayerData));
+				void* data = malloc(sizeof(RenderLayerSaveData) + nameLength);
+				RenderLayerSaveData* cData = (RenderLayerSaveData*)data;
+				memcpy(cData, rData, sizeof(RenderLayerSaveData));
 				if (nameLength) {
-					cData->name = (char*)cData + sizeof(RenderLayerData);
+					cData->name = (char*)cData + sizeof(RenderLayerSaveData);
 					memcpy((void*)cData->name, name, nameLength);
 				}
 				else {

@@ -128,6 +128,7 @@ namespace Editor.DataSources
 
             if (listenToEvents)
             {
+                // do Edit Event
                 EventHandler.FormArgs fa = new EventHandler.FormArgs()
                 {
                     FormID = EditorID,
@@ -136,6 +137,7 @@ namespace Editor.DataSources
                 };
                 EventHandler.EventManager.OnEditFormEvent(fa);
             }
+
         }
     }
 }

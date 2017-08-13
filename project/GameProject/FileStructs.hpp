@@ -90,7 +90,11 @@ struct RenderLayerSaveData {
 };
 
 struct SceneSaveData {
-	uint32_t sceneNameIdPtr;
+	const char* name;
+	float skyColor[4];
+	bool hasFog;
+	float fog[8];
+	bool hasWater;
 };
 
 class IRenderLayerDataObject : public IDataObject {
@@ -106,12 +110,25 @@ public:
 	
 };
 
+class ISceneDataObject : public IDataObject 	{
+public:
+	virtual ~ISceneDataObject() {};
+
+	virtual SceneSaveData* getSceneData() = 0;
+	virtual void setSceneData(SceneSaveData* data) = 0;
+
+	// IDataObject
+	virtual void* getData() const = 0;
+	virtual uint32_t getDataSize() const = 0;
+};
+
 class IDataObjectConverter {
 
 public:
 	virtual ~IDataObjectConverter() {};
 
 	virtual IRenderLayerDataObject* asRenderLayer(IDataObject*& dataObject) = 0;
+	virtual ISceneDataObject* asSceneData(IDataObject*& dataObject) = 0;
 
 };
 

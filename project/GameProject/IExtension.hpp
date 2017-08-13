@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include "FileStructs.hpp"
+
 // callback defines
 #define SAVE_CALLBACK              0x00000001
 
@@ -28,23 +30,23 @@ struct ExtensionSaveEvent {
 	bool pack;
 };
 
-struct SceneStuff {
-	float skyColor[4];
-	bool hasFog;
-	float fog[8];
-	bool hasWater;
-};
-
-struct RenderLayerData {
-	const char* name;
-	char resolutionType;
-	uint32_t width;
-	uint32_t height;
-	bool depthBuffer;
-	bool stencilBuffer;
-	char nrColorBuffers;
-	uint32_t shaderProgramRef;
-};
+//struct SceneStuff {
+//	float skyColor[4];
+//	bool hasFog;
+//	float fog[8];
+//	bool hasWater;
+//};
+//
+//struct RenderLayerData {
+//	const char* name;
+//	char resolutionType;
+//	uint32_t width;
+//	uint32_t height;
+//	bool depthBuffer;
+//	bool stencilBuffer;
+//	char nrColorBuffers;
+//	uint32_t shaderProgramRef;
+//};
 
 class IObject
 {

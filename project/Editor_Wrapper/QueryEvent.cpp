@@ -29,21 +29,30 @@ namespace Extensions {
 
 			Entry* e = assetMan->getEntry(objects[i]);
 
-			SceneStuff* sData = nullptr;
+			ISceneDataObject* sceneDataObj = nullptr;
+			SceneSaveData* sData = nullptr;
+
 			Editor::DataSources::Scene^ data = gcnew Editor::DataSources::Scene();
 			System::String^ str = nullptr;
 
 			if (e->data) {
-				int32_t length = (e->data->getDataSize() - sizeof(SceneStuff));
-				
-				length = length > 0 ? length : 0;
+				sceneDataObj = assetMan->getConverter()->asSceneData(e->data);
 
-				//sData->name = (char*)rData + sizeof(RenderLayerData);
-				//str = gcnew System::String(rData->name, 0, length);
-
+				sData = sceneDataObj->getSceneData();
 			}
 
-			
+			if (sData) {
+
+				uint32_t length = sceneDataObj->getDataSize() - sizeof(SceneSaveData);
+
+				str = gcnew System::String(sData->name, 0, length - 1); // -1 cus C# is derpy and does not ignore \0
+
+				data->SkyColor = *toColor(sData->skyColor[0], sData->skyColor[1], sData->skyColor[2], sData->skyColor[3]);
+				data->HasFog = sData->hasFog ? true : false;
+				data->FogColorNear = *toColor(sData->fog[0], sData->fog[1], sData->fog[2], sData->fog[3]);
+				data->FogColorFar = *toColor(sData->fog[4], sData->fog[5], sData->fog[6], sData->fog[7]);
+				data->HasWater = sData->hasWater ? true : false;
+			}
 
 			if (str == nullptr) {
 				str = gcnew System::String("Empty");
@@ -97,17 +106,17 @@ namespace Extensions {
 
 			IRenderLayerDataObject* rDataObj = nullptr;
 
-			RenderLayerData* rData = nullptr;
+			RenderLayerSaveData* rData = nullptr;
 			if (e->data) {
 				rDataObj = assetMan->getConverter()->asRenderLayer(e->data);
-				rData = (RenderLayerData*)rDataObj->getRenderLayerData();
+				rData = rDataObj->getRenderLayerData();
 
 			}
 			System::String^ str = nullptr;
 			Editor::DataSources::RenderLayer^ data = gcnew Editor::DataSources::RenderLayer();
 			if (rData) {
 
-				uint32_t length = rDataObj->getDataSize() - sizeof(RenderLayerData);
+				uint32_t length = rDataObj->getDataSize() - sizeof(RenderLayerSaveData);
 
 				str = gcnew System::String(rData->name, 0, length - 1); // -1 cus C# is derpy and does not ignore \0
 

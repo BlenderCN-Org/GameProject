@@ -103,9 +103,13 @@ namespace Editor.EditorWindows
 
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source == tabControl)
+            if (sender.GetType() == typeof(TabControl))
             {
-                RefreshSelectedList();
+                e.Handled = true;
+                if (e.Source == tabControl)
+                {
+                    RefreshSelectedList();
+                }
             }
         }
 
@@ -193,7 +197,7 @@ namespace Editor.EditorWindows
             {
                 FormID = (sceneList.SelectedItem as DataSources.BaseData).EditorID
             };
-            
+
             if (cfDlg.DialogResult.HasValue && cfDlg.DialogResult.Value)
             {
                 (sceneList.SelectedItem as DataSources.BaseData).Deleted = true;
@@ -207,52 +211,66 @@ namespace Editor.EditorWindows
 
         private void addSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            AddEditItemDialog addDlg = new AddEditItemDialog();
+            //AddEditItemDialog addDlg = new AddEditItemDialog();
+            //
+            //addDlg.Owner = this;
+            //
+            //AddItemDlgPages.AddScene newScenePage = new AddItemDlgPages.AddScene();
+            //
+            //addDlg.PageArea.Children.Add(newScenePage);
+            //
+            //addDlg.PageArea.Height = newScenePage.Height;
+            //addDlg.PageArea.Width = newScenePage.Width;
+            //
+            //addDlg.InvalidateMeasure();
+            //addDlg.InvalidateArrange();
 
-            addDlg.Owner = this;
+            //if (addDlg.ShowDialog().Value)
+            //{
+            EventHandler.GetFormIDArgs formIdArgs = new Editor.EventHandler.GetFormIDArgs();
+            formIdArgs.FormID = 0;
+            EventHandler.EventManager.OnGetFormIDEvent(formIdArgs);
 
-            AddItemDlgPages.AddScene newScenePage = new AddItemDlgPages.AddScene();
+            DataSources.Scene bd = new DataSources.Scene();
 
-            addDlg.PageArea.Children.Add(newScenePage);
-
-            addDlg.PageArea.Height = newScenePage.Height;
-            addDlg.PageArea.Width = newScenePage.Width;
-
-            addDlg.InvalidateMeasure();
-            addDlg.InvalidateArrange();
-
-            if (addDlg.ShowDialog().Value)
+            bd.EditorID = formIdArgs.FormID;
+            
+            EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
             {
+                Name = bd.Name,
+                FormID = formIdArgs.FormID,
+                ObjectType = Editor.EventHandler.ObjectTypes.SCENE
+            };
 
-                DataSources.Scene bd = new DataSources.Scene();
+            EventHandler.EventManager.OnAddObjectEvent(args);
+            bd.listenToEvents = true;
 
-                bd.EditorID = newScenePage.GetFormId();
-                bd.Name = newScenePage.GetName();
+            //sceneList.Items.Add(bd);
+            sceneList.SelectedIndex = sceneList.Items.Count - 1;
+            sceneList.ScrollIntoView(sceneList.SelectedItem);
 
-                sceneList.Items.Add(bd);
-                sceneList.SelectedIndex = sceneList.Items.Count - 1;
-            }
+            (sceneList.SelectedItem as DataSources.Scene).Name = "New Scene";
+            //}
         }
 
         private void sceneListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (selectedSceneItem != -1)
+            if (sender.GetType() == typeof(ListView))
             {
-                ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = false;
-                // do Edit Event
-                //EventHandler.FormArgs fa = new EventHandler.FormArgs();
-                //fa.FormID = ((DataSources.Scene)sceneList.Items[selectedSceneItem]).EditorID;
-                //fa.Data = ((DataSources.Scene)sceneList.Items[selectedSceneItem]);
-                //fa.ObjectType = Editor.EventHandler.ObjectTypes.SCENE;
-                //EventHandler.EventManager.OnEditFormEvent(fa);
-            }
+                e.Handled = true;
 
-            DeleteSceneItem.IsEnabled = false;
-            if (sceneList.SelectedIndex != -1)
-            {
-                DeleteSceneItem.IsEnabled = true;
-                selectedSceneItem = sceneList.SelectedIndex;
-                ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = true;
+                if (selectedSceneItem != -1)
+                {
+                    ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = false;
+                }
+
+                DeleteSceneItem.IsEnabled = false;
+                if (sceneList.SelectedIndex != -1)
+                {
+                    DeleteSceneItem.IsEnabled = true;
+                    selectedSceneItem = sceneList.SelectedIndex;
+                    ((DataSources.Scene)sceneList.Items[selectedSceneItem]).listenToEvents = true;
+                }
             }
         }
 
@@ -270,20 +288,25 @@ namespace Editor.EditorWindows
             formIdArgs.FormID = 0;
             EventHandler.EventManager.OnGetFormIDEvent(formIdArgs);
 
-            DataSources.RenderLayer bd = new DataSources.RenderLayer(formIdArgs.FormID, "New Renderlayer");
+            DataSources.RenderLayer bd = new DataSources.RenderLayer();
 
-            renderLayerList.Items.Add(bd);
-            renderLayerList.SelectedItem = bd;
+            bd.EditorID = formIdArgs.FormID;
 
             EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
             {
                 Name = bd.Name,
-                FormID = bd.EditorID,
+                FormID = formIdArgs.FormID,
                 ObjectType = Editor.EventHandler.ObjectTypes.RENDERLAYER
             };
 
             EventHandler.EventManager.OnAddObjectEvent(args);
-            bd.Name = "RenderLayer";
+            bd.listenToEvents = true;
+
+            //sceneList.Items.Add(bd);
+            renderLayerList.SelectedIndex = renderLayerList.Items.Count - 1;
+            renderLayerList.ScrollIntoView(renderLayerList.SelectedItem);
+
+            (renderLayerList.SelectedItem as DataSources.RenderLayer).Name = "New Renderlayer";
         }
 
         private void deleteRenderLayerButton_Click(object sender, RoutedEventArgs e)
@@ -296,7 +319,7 @@ namespace Editor.EditorWindows
             {
                 FormID = (renderLayerList.SelectedItem as DataSources.BaseData).EditorID
             };
-            
+
             if ((cfDlg.DialogResult.HasValue == true) && (cfDlg.DialogResult.Value == true))
             {
                 (renderLayerList.SelectedItem as DataSources.BaseData).Deleted = true;
@@ -310,17 +333,22 @@ namespace Editor.EditorWindows
 
         private void renderLayerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (selectedRenderLayerItem != -1)
+            if (sender.GetType() == typeof(ListView))
             {
-                ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = false;
-            }
+                e.Handled = true;
 
-            DeleteRenderLayerItem.IsEnabled = false;
-            if (renderLayerList.SelectedIndex != -1)
-            {
-                DeleteRenderLayerItem.IsEnabled = true;
-                selectedRenderLayerItem = renderLayerList.SelectedIndex;
-                ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = true;
+                if (selectedRenderLayerItem != -1)
+                {
+                    ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = false;
+                }
+
+                DeleteRenderLayerItem.IsEnabled = false;
+                if (renderLayerList.SelectedIndex != -1)
+                {
+                    DeleteRenderLayerItem.IsEnabled = true;
+                    selectedRenderLayerItem = renderLayerList.SelectedIndex;
+                    ((DataSources.RenderLayer)renderLayerList.Items[selectedRenderLayerItem]).listenToEvents = true;
+                }
             }
         }
     }

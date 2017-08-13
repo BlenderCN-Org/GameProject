@@ -75,60 +75,101 @@ namespace Extensions {
 
 			if (editArgs->ObjectType == Editor::EventHandler::ObjectTypes::SCENE) {
 				Editor::DataSources::Scene^ scene = (Editor::DataSources::Scene^)editArgs->Data;
-				SceneStuff* sc = new SceneStuff();
 				IntPtr ptr = Marshal::StringToHGlobalAnsi(scene->Name);
 				const char* str = static_cast<const char*>(ptr.ToPointer());
-				obj->name = str;
 
-				sc->skyColor[0] = float(scene->SkyColor.R) / 255.0f;
-				sc->skyColor[1] = float(scene->SkyColor.G) / 255.0f;
-				sc->skyColor[2] = float(scene->SkyColor.B) / 255.0f;
-				sc->skyColor[3] = float(scene->SkyColor.A) / 255.0f;
-				sc->hasFog = scene->HasFog ? true : false;
+				uint32_t formID = editArgs->FormID;
+				Entry* e = assetMan->getEntry(formID);
 
-				sc->fog[0] = float(scene->FogColorNear.R) / 255.0f;
-				sc->fog[1] = float(scene->FogColorNear.G) / 255.0f;
-				sc->fog[2] = float(scene->FogColorNear.B) / 255.0f;
-				sc->fog[3] = float(scene->FogColorNear.A) / 255.0f;
+				if (e != nullptr) {
+					ISceneDataObject* dataObj = assetMan->getConverter()->asSceneData(e->data);
 
-				sc->fog[4] = float(scene->FogColorFar.R) / 255.0f;
-				sc->fog[5] = float(scene->FogColorFar.G) / 255.0f;
-				sc->fog[6] = float(scene->FogColorFar.B) / 255.0f;
-				sc->fog[7] = float(scene->FogColorFar.A) / 255.0f;
+					if (dataObj) {
+						SceneSaveData sData = {};
 
-				sc->hasWater = scene->HasWater ? true : false;
+						sData.name = str;
+						sData.skyColor[0] = float(scene->SkyColor.R) / 255.0f;
+						sData.skyColor[1] = float(scene->SkyColor.G) / 255.0f;
+						sData.skyColor[2] = float(scene->SkyColor.B) / 255.0f;
+						sData.skyColor[3] = float(scene->SkyColor.A) / 255.0f;
 
-				obj->data = sc;
-				evnt.objectData = obj;
+						sData.hasFog = scene->HasFog ? true : false;
 
-				extensionMap[EDIT_OBJECT_CALLBACK]->execute(1, &evnt);
+						sData.fog[0] = float(scene->FogColorNear.R) / 255.0f;
+						sData.fog[1] = float(scene->FogColorNear.G) / 255.0f;
+						sData.fog[2] = float(scene->FogColorNear.B) / 255.0f;
+						sData.fog[3] = float(scene->FogColorNear.A) / 255.0f;
 
+						sData.fog[4] = float(scene->FogColorFar.R) / 255.0f;
+						sData.fog[5] = float(scene->FogColorFar.G) / 255.0f;
+						sData.fog[6] = float(scene->FogColorFar.B) / 255.0f;
+						sData.fog[7] = float(scene->FogColorFar.A) / 255.0f;
+
+						sData.hasWater = scene->HasWater ? true : false;
+
+						dataObj->setSceneData(&sData);
+
+						e->entrySize = sizeof(EntrySave) + dataObj->getDataSize();
+
+					}
+				}
 				Marshal::FreeHGlobal(ptr);
-				delete sc;
+
 			} else if (editArgs->ObjectType == Editor::EventHandler::ObjectTypes::RENDERLAYER) {
+				//Editor::DataSources::RenderLayer^ renderLayer = (Editor::DataSources::RenderLayer^)editArgs->Data;
+				//RenderLayerSaveData* rData = new RenderLayerSaveData();
+				//IntPtr ptr = Marshal::StringToHGlobalAnsi(renderLayer->Name);
+				//const char* str = static_cast<const char*>(ptr.ToPointer());
+				//
+				//rData->name = str;
+				//rData->resolutionType = renderLayer->ResolutionType;
+				//rData->height = renderLayer->ResolutionHeight;
+				//rData->width = renderLayer->ResolutionWidth;
+				//rData->depthBuffer = renderLayer->DepthBuffer;
+				//rData->stencilBuffer = renderLayer->StencilBuffer;
+				//rData->nrColorBuffers = renderLayer->NumColorAttachments;
+				//rData->shaderProgramRef = renderLayer->ShaderProgram;
+				//
+				//obj->data = rData;
+				//evnt.objectData = obj;
+				//
+				//extensionMap[EDIT_OBJECT_CALLBACK]->execute(1, &evnt);
+				//
+				//Marshal::FreeHGlobal(ptr);
+				//delete rData;
+
 				Editor::DataSources::RenderLayer^ renderLayer = (Editor::DataSources::RenderLayer^)editArgs->Data;
-				RenderLayerData* rData = new RenderLayerData();
 				IntPtr ptr = Marshal::StringToHGlobalAnsi(renderLayer->Name);
 				const char* str = static_cast<const char*>(ptr.ToPointer());
 
-				rData->name = str;
-				rData->resolutionType = renderLayer->ResolutionType;
-				rData->height = renderLayer->ResolutionHeight;
-				rData->width = renderLayer->ResolutionWidth;
-				rData->depthBuffer = renderLayer->DepthBuffer;
-				rData->stencilBuffer = renderLayer->StencilBuffer;
-				rData->nrColorBuffers = renderLayer->NumColorAttachments;
-				rData->shaderProgramRef = renderLayer->ShaderProgram;
+				uint32_t formID = editArgs->FormID;
+				Entry* e = assetMan->getEntry(formID);
 
-				obj->data = rData;
-				evnt.objectData = obj;
+				if (e != nullptr) {
+					IRenderLayerDataObject* dataObj = assetMan->getConverter()->asRenderLayer(e->data);
 
-				extensionMap[EDIT_OBJECT_CALLBACK]->execute(1, &evnt);
+					if (dataObj) {
+						RenderLayerSaveData sData = {};
+
+						sData.name = str;
+						sData.resolutionType = renderLayer->ResolutionType;
+						sData.width = renderLayer->ResolutionWidth;
+						sData.height = renderLayer->ResolutionWidth;
+						sData.depthBuffer = renderLayer->DepthBuffer;
+						sData.stencilBuffer = renderLayer->StencilBuffer;
+						sData.nrColorBuffers = renderLayer->NumColorAttachments;
+						sData.shaderProgramRef = renderLayer->ShaderProgram;
+
+						dataObj->setRenderLayerData(&sData);
+
+						e->entrySize = sizeof(EntrySave) + dataObj->getDataSize();
+						printf("Edit\n");
+					}
+				}
 
 				Marshal::FreeHGlobal(ptr);
-				delete rData;
-			}
 
+			}
 
 			delete obj;
 

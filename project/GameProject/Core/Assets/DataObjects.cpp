@@ -11,17 +11,45 @@ IRenderLayerDataObject* DataObjectConverter::asRenderLayer(IDataObject*& dataObj
 
 	IRenderLayerDataObject* obj = nullptr;
 
-	if (dataObject->getType() == IDataObject::RENDERLAYER) { // already of type IRenderLayerDataObject
-		obj = (IRenderLayerDataObject*)dataObject;
-	} else if (dataObject->getType() == IDataObject::GENERIC) { // Generic can be convertable
-		uint32_t size = dataObject->getDataSize();
-		obj = new RenderLayerDataObject(dataObject->getData(), size);
-		delete dataObject;
-		dataObject = obj;
+	if (dataObject != nullptr) {
+
+		if (dataObject->getType() == IDataObject::RENDERLAYER) { // already of type IRenderLayerDataObject
+			obj = (IRenderLayerDataObject*)dataObject;
+		} else if (dataObject->getType() == IDataObject::GENERIC) { // Generic can be convertable
+			uint32_t size = dataObject->getDataSize();
+			obj = new RenderLayerDataObject(dataObject->getData(), size);
+			delete dataObject;
+			dataObject = obj;
+		} else {
+			// no convert possible
+		}
 	} else {
-		// no convert possible
+		obj = new RenderLayerDataObject(nullptr, 0);
+		dataObject = obj;
 	}
 
+	return obj;
+}
+
+ISceneDataObject* DataObjectConverter::asSceneData(IDataObject*& dataObject) {
+
+	ISceneDataObject* obj = nullptr;
+
+	if (dataObject != nullptr) {
+		if (dataObject->getType() == IDataObject::SCENE) { // already of type IRenderLayerDataObject
+			obj = (ISceneDataObject*)dataObject;
+		} else if (dataObject->getType() == IDataObject::GENERIC) { // Generic can be convertable
+			uint32_t size = dataObject->getDataSize();
+			obj = new SceneDataObject(dataObject->getData(), size);
+			delete dataObject;
+			dataObject = obj;
+		} else {
+			// no convert possible
+		}
+	} else {
+		obj = new SceneDataObject(nullptr, 0);
+		dataObject = obj;
+	}
 	return obj;
 }
 
@@ -64,7 +92,6 @@ IDataObject::Type DataObject::getType() const {
 Render Layer Data Object
 */
 /*
-uint32_t nameLength;
 const char* name;
 char resolutionType;
 uint32_t width;
@@ -84,11 +111,14 @@ RenderLayerDataObject::RenderLayerDataObject(void * data, uint32_t dataSize) {
 		rawData = nullptr;
 		rawDataSize = 0U;
 	}
+
+	const uint32_t saveDataSize = sizeof(RenderLayerSaveData);
+
 	rData = new RenderLayerSaveData();
-	memset(rData, 0, sizeof(RenderLayerSaveData));
+	memset(rData, 0, saveDataSize);
 	if (rawData) {
 		// we can asume that the data in buffer is ok for RenderLayerSaveData
-		if (rawDataSize >= sizeof(RenderLayerSaveData)) {
+		if (rawDataSize >= saveDataSize) {
 			MemoryBuffer mBuff;
 
 			mBuff.setData(rawData, rawDataSize);
@@ -97,7 +127,7 @@ RenderLayerDataObject::RenderLayerDataObject(void * data, uint32_t dataSize) {
 			rData->name = new char[nameLength];
 
 			// check so that rawData is large enough to also store the name
-			if (rawDataSize >= (sizeof(RenderLayerSaveData) + nameLength)) {
+			if (rawDataSize >= (saveDataSize + nameLength)) {
 				memcpy((void*)rData->name, mBuff.returnBytes<char>(nameLength), nameLength);
 			}
 			// copy rest of data
@@ -168,4 +198,106 @@ uint32_t RenderLayerDataObject::getDataSize() const {
 
 IDataObject::Type RenderLayerDataObject::getType() const {
 	return Type::RENDERLAYER;
+}
+
+/*
+Scene Data Object
+*/
+/*
+const char* name;
+float skyColor[4];
+bool hasFog;
+float fog[8];
+bool hasWater;
+*/
+
+SceneDataObject::SceneDataObject(void * data, uint32_t dataSize) {
+	if (dataSize > 0) {
+		rawData = malloc(dataSize);
+		rawDataSize = dataSize;
+		memcpy(rawData, data, dataSize);
+	} else {
+		rawData = nullptr;
+		rawDataSize = 0U;
+	}
+
+	const uint32_t saveDataSize = sizeof(SceneSaveData);
+
+	rData = new SceneSaveData();
+	memset(rData, 0, saveDataSize);
+	if (rawData) {
+		// we can asume that the data in buffer is ok for RenderLayerSaveData
+		if (rawDataSize >= saveDataSize) {
+			MemoryBuffer mBuff;
+
+			mBuff.setData(rawData, rawDataSize);
+
+			uint32_t nameLength = *mBuff.returnBytes<uint32_t>(sizeof(uint32_t));
+			rData->name = new char[nameLength];
+
+			// check so that rawData is large enough to also store the name
+			if (rawDataSize >= (saveDataSize + nameLength)) {
+				memcpy((void*)rData->name, mBuff.returnBytes<char>(nameLength), nameLength);
+			}
+			// copy rest of data
+			memcpy(rData->skyColor, mBuff.returnBytes<float>(sizeof(float) * 4), sizeof(float) * 4);
+			rData->hasFog = *mBuff.returnBytes<bool>(sizeof(bool));
+			memcpy(rData->fog, mBuff.returnBytes<float>(sizeof(float) * 8), sizeof(float) * 8);
+			rData->hasWater = *mBuff.returnBytes<bool>(sizeof(bool));
+
+			// delete buffer
+			mBuff.deleteBuffer();
+		}
+	}
+}
+
+SceneDataObject::~SceneDataObject() {
+	free(rawData);
+	delete rData->name;
+	delete rData;
+}
+
+SceneSaveData * SceneDataObject::getSceneData() {
+	return rData;
+}
+
+void SceneDataObject::setSceneData(SceneSaveData * data) {
+
+	delete rData->name;
+	memcpy(rData, data, sizeof(SceneSaveData));
+	rData->name = nullptr;
+
+	uint32_t nameLength = getStringLength(data->name);
+	if (nameLength) {
+		rData->name = new char[nameLength];
+		memcpy((void*)rData->name, (void*)data->name, nameLength);
+	}
+	// dont store the pointer
+	uint32_t newSize = sizeof(SceneSaveData) + nameLength;
+
+	free(rawData);
+	rawData = malloc(newSize);
+	rawDataSize = newSize;
+
+	MemoryPusher memPush;
+	memPush.setBuffer(rawData, rawDataSize);
+
+	memPush.pushData(&nameLength, sizeof(uint32_t));
+	memPush.pushData((void*)rData->name, nameLength);
+	memPush.pushData(rData->skyColor, sizeof(float) * 4);
+	memPush.pushData(&rData->hasFog, sizeof(bool));
+	memPush.pushData(rData->fog, sizeof(float) * 8);
+	memPush.pushData(&rData->hasWater, sizeof(bool));
+}
+
+void * SceneDataObject::getData() const {
+	return rawData;
+}
+
+uint32_t SceneDataObject::getDataSize() const {
+	return rawDataSize;
+}
+
+IDataObject::Type SceneDataObject::getType() const {
+	return Type::SCENE;
 }
