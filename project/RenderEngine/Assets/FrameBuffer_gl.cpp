@@ -22,16 +22,16 @@ bool FrameBuffer_gl::init(FrameBufferCreateInfo *createInfo) {
 }
 
 void FrameBuffer_gl::release() {
-	if ( created ) {
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
-			if ( usingRenderBuffers ) {
+	if (created) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
+			if (usingRenderBuffers) {
 				glDeleteRenderbuffers(1, &colorAttachments[i]);
 			} else {
 				glDeleteTextures(1, &colorAttachments[i]);
 			}
 		}
-		if ( depth ) {
-			if ( usingRenderBuffers ) {
+		if (depth) {
+			if (usingRenderBuffers) {
 				glDeleteRenderbuffers(1, &depthAttachment);
 			} else {
 				glDeleteTextures(1, &depthAttachment);
@@ -60,17 +60,17 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 
 	GLenum* drawBuffers = new GLenum[colorAttachmentCount];
 
-	if ( usingRenderBuffers ) {
-		if ( depth )
+	if (usingRenderBuffers) {
+		if (depth)
 			depthAttachment = createDepthRenderBuffer(width, height, stencil);
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
 			colorAttachments[i] = createColorRenderBuffer(width, height, GL_RGBA, GL_COLOR_ATTACHMENT0 + i);
 			drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
 		}
 	} else {
-		if ( depth )
+		if (depth)
 			depthAttachment = createDepthTexture(width, height, stencil);
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
 			colorAttachments[i] = createColorTexture(width, height, GL_RGBA, GL_COLOR_ATTACHMENT0 + i);
 			drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
 		}
@@ -78,32 +78,32 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 
 	glDrawBuffers(colorAttachmentCount, drawBuffers);
 
-	delete [] drawBuffers;
+	delete[] drawBuffers;
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
-	if ( status != GL_FRAMEBUFFER_COMPLETE ) {
+	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		char* msg = "Failed to create framebuffer";
 
 		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, status, GL_DEBUG_SEVERITY_HIGH, sizeof(msg), msg);
 
 		success = false;
 
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
-			if ( usingRenderBuffers ) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
+			if (usingRenderBuffers) {
 				glDeleteRenderbuffers(1, &colorAttachments[i]);
 			} else {
 				glDeleteTextures(1, &colorAttachments[i]);
 			}
 		}
-		if ( depth ) {
-			if ( usingRenderBuffers ) {
+		if (depth) {
+			if (usingRenderBuffers) {
 				glDeleteRenderbuffers(1, &depthAttachment);
 			} else {
 				glDeleteTextures(1, &depthAttachment);
 			}
 		}
-		delete [] colorAttachments;
+		delete[] colorAttachments;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -125,18 +125,18 @@ void FrameBuffer_gl::resize(int _width, int _height) {
 	width = _width;
 	height = _height;
 
-	if ( usingRenderBuffers ) {
-		if ( depth ) {
+	if (usingRenderBuffers) {
+		if (depth) {
 			glBindRenderbuffer(GL_RENDERBUFFER, depthAttachment);
-			if ( stencil ) {
-				if ( multiSample )
+			if (stencil) {
+				if (multiSample)
 					glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH24_STENCIL8, width, height);
 				else
 					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthAttachment);
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthAttachment);
 			} else {
-				if ( multiSample )
+				if (multiSample)
 					glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, width, height);
 				else
 					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
@@ -144,10 +144,10 @@ void FrameBuffer_gl::resize(int _width, int _height) {
 			}
 		}
 
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
 			glBindRenderbuffer(GL_RENDERBUFFER, colorAttachments[i]);
 
-			if ( multiSample )
+			if (multiSample)
 				glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_RGBA8, width, height);
 			else
 				glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
@@ -155,9 +155,9 @@ void FrameBuffer_gl::resize(int _width, int _height) {
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_RENDERBUFFER, colorAttachments[i]);
 		}
 	} else {
-		if ( depth ) {
+		if (depth) {
 			glBindTexture(GL_TEXTURE_2D, depthAttachment);
-			if ( stencil ) {
+			if (stencil) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment, 0);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthAttachment, 0);
@@ -167,7 +167,7 @@ void FrameBuffer_gl::resize(int _width, int _height) {
 			}
 		}
 
-		for ( int i = 0; i < colorAttachmentCount; i++ ) {
+		for (int i = 0; i < colorAttachmentCount; i++) {
 			glBindTexture(GL_TEXTURE_2D, colorAttachments[i]);
 
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
@@ -185,7 +185,7 @@ void FrameBuffer_gl::resolveToScreen(int bufferIndex) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	if ( bufferIndex < colorAttachmentCount ) {
+	if (bufferIndex < colorAttachmentCount) {
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + bufferIndex);
 	} else {
 		glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -209,7 +209,7 @@ GLuint FrameBuffer_gl::createDepthTexture(int width, int height, bool stencil) {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	if ( stencil )
+	if (stencil)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 	else
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
@@ -219,7 +219,7 @@ GLuint FrameBuffer_gl::createDepthTexture(int width, int height, bool stencil) {
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
-	if ( stencil ) {
+	if (stencil) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 	} else
@@ -232,8 +232,8 @@ GLuint FrameBuffer_gl::createDepthRenderBuffer(int width, int height, bool stenc
 	GLuint renderBuffer;
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	if ( stencil ) {
-		if ( multiSample )
+	if (stencil) {
+		if (multiSample)
 			glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH24_STENCIL8, width, height);
 		else
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
@@ -241,7 +241,7 @@ GLuint FrameBuffer_gl::createDepthRenderBuffer(int width, int height, bool stenc
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 	} else {
-		if ( multiSample )
+		if (multiSample)
 			glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH_COMPONENT24, width, height);
 		else
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
@@ -273,7 +273,7 @@ GLuint FrameBuffer_gl::createColorRenderBuffer(int width, int height, int format
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 
-	if ( multiSample )
+	if (multiSample)
 		glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, format, width, height);
 	else
 		glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);

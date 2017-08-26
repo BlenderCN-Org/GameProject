@@ -18,8 +18,7 @@
 #pragma comment(lib, "vulkan-1.lib")
 #endif
 
-class BaseWindow : public IWindow
-{
+class BaseWindow : public IWindow {
 public:
 	virtual void getCursorPos(int &x, int &y);
 
@@ -84,8 +83,7 @@ protected:
 	bool visible;
 };
 
-class GLWindow : public BaseWindow
-{
+class GLWindow : public BaseWindow {
 public:
 
 	void init();
@@ -110,8 +108,7 @@ private:
 
 #if SUPPORT_VULKAN_WINDOW
 
-class VKWindow : public BaseWindow
-{
+class VKWindow : public BaseWindow {
 public:
 
 	void init();
@@ -156,8 +153,7 @@ private:
 #endif
 
 #if defined(SUPPORT_D3D12_WINDOW) && defined(_WIN32)
-class D3D12Window : IWindow
-{
+class D3D12Window : IWindow {
 public:
 
 private:

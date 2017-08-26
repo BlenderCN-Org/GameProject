@@ -8,8 +8,7 @@ Console::Console()
 	, currentCommand()
 	, currentCharIndex(0)
 	, cmdHistory(nullptr)
-	, consoleMessages(nullptr)
-{
+	, consoleMessages(nullptr) {
 	memset(currentCommand.cmd, 0, COMMAND_LENGTH);
 	cmdHistory = new Command[HISTORY_LENGTH];
 	consoleMessages = new Message[MAX_CONSOLE_LINES];
@@ -42,13 +41,12 @@ void Console::print(const char* format, ...) {
 	va_start(vl, format);
 	Message msg;
 	memset(msg.msg, 0, MESSAGE_LENGTH);
-	vsnprintf_s(msg.msg, MESSAGE_LENGTH, MESSAGE_LENGTH-1, format, vl);
+	vsnprintf_s(msg.msg, MESSAGE_LENGTH, MESSAGE_LENGTH - 1, format, vl);
 	va_end(vl);
 	print(msg);
 }
 
 void Console::print(Message &msg) {
-
 	/*if (currentMessageCount == MAX_CONSOLE_LINES - 1) {
 		consoleMessages[messagesStart++] = msg;
 	}
@@ -57,7 +55,6 @@ void Console::print(Message &msg) {
 	}*/
 
 	printf("%s", msg.msg);
-
 }
 
 void Console::execute() {

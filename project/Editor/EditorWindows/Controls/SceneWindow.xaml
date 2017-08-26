@@ -20,7 +20,7 @@
             <RowDefinition Height="5" />
             <RowDefinition Height="5*" />
         </Grid.RowDefinitions>
-        <ComboBox x:Name="SceneList" Grid.Row="0" HorizontalAlignment="Left" Height="21" Margin="5" Width="186" Template="{DynamicResource DarkComboBoxTemplate}" IsTextSearchEnabled="True" />
+        <ComboBox x:Name="SceneList" Grid.Row="0" HorizontalAlignment="Left" Height="21" Margin="5" Width="186" Template="{DynamicResource DarkComboBoxTemplate}" IsTextSearchEnabled="True" SelectionChanged="SceneList_SelectionChanged" />
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />

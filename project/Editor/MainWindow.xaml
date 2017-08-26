@@ -118,7 +118,7 @@
                                 <RowDefinition Height="5*" />
                             </Grid.RowDefinitions>
                             <local:GameWindowBitmap x:Name="gameBitMap" Width="auto" Height="auto"></local:GameWindowBitmap>
-                            <GridSplitter Grid.Row="1" Background="#FF1D1D1D" HorizontalAlignment="Stretch" Height="5" Grid.RowSpan="1" />
+                            <GridSplitter Grid.Row="1" Background="#FF1D1D1D" HorizontalAlignment="Stretch" Height="5" Grid.RowSpan="1" Focusable="False" />
                             <Grid Grid.Row="2" Background="#FF646464" />
                         </Grid>
                     </Grid>

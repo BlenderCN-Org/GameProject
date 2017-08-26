@@ -19,7 +19,7 @@ void VKWindow::vulkanInitialize() {
 	fvkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkCreateDebugReportCallbackEXT");
 	fvkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instanceData.instance, "vkDestroyDebugReportCallbackEXT");
 
-	if ( fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT ) {
+	if (fvkCreateDebugReportCallbackEXT && fvkDestroyDebugReportCallbackEXT) {
 		fvkCreateDebugReportCallbackEXT(instanceData.instance, &debugReportCreateInfo, nullptr, &debugReportCallback);
 	}
 
@@ -28,15 +28,15 @@ void VKWindow::vulkanInitialize() {
 	VkPhysicalDevice* gpus = new VkPhysicalDevice[count];
 	r = vkEnumeratePhysicalDevices(instanceData.instance, &count, gpus);
 
-	if ( count == 1 ) {
+	if (count == 1) {
 		// if only one gpu is avaible select it
 		instanceData.gpu = gpus[0];
 	} else {
 		// else look for the first avaible discrete gpu
 		VkPhysicalDeviceProperties prop{};
-		for ( size_t i = 0; i < count; i++ ) {
+		for (size_t i = 0; i < count; i++) {
 			vkGetPhysicalDeviceProperties(gpus[i], &prop);
-			if ( prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ) {
+			if (prop.deviceType == VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
 				instanceData.gpu = gpus[i];
 				break;
 			}
@@ -49,12 +49,12 @@ void VKWindow::vulkanInitialize() {
 
 	vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, nullptr);
 
-	if ( count >= 1 ) {
+	if (count >= 1) {
 		VkQueueFamilyProperties* props = new VkQueueFamilyProperties[count];
 		vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, props);
 
-		for ( size_t i = 0; i < count; i++ ) {
-			if ( props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT ) {
+		for (size_t i = 0; i < count; i++) {
+			if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
 				instanceData.queueFamilyIndex = (uint32_t)i;
 				break;
 			}
@@ -128,7 +128,7 @@ void VKWindow::createVkSwapchain() {
 
 	vkCreateFence(instanceData.device, &fenceCreateInfo, nullptr, &waitFence);
 
-	for ( uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i ) {
+	for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
 		VkImageMemoryBarrier barrier_from_present_to_clear = {
 			VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
 			nullptr,                                    // const void                            *pNext

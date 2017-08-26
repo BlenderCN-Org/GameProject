@@ -7,8 +7,7 @@
 #if SUPPORT_VULKAN_WINDOW
 #include <vulkan\vulkan.h>
 #endif
-class Mesh_vk : public IMesh
-{
+class Mesh_vk : public IMesh {
 public:
 
 	virtual void init(MeshPrimitiveType p);

@@ -13,9 +13,7 @@ typedef std::map<uint32_t, Entry> EntryMap;
 typedef uint32_t Tag;
 typedef std::map<Tag, std::vector<uint32_t>> TagMap;
 
-
 class GameFile {
-
 	friend class SaveExtension;
 
 public:
@@ -24,7 +22,7 @@ public:
 
 	virtual void init();
 	virtual void load(const char* name);
-	
+
 	Entry* loadEntry(uint32_t formID);
 
 	uint32_t getNextFormID();
@@ -45,7 +43,7 @@ protected:
 
 	DependencyInfo dependencies;
 	uint32_t nrEntries;
-	
+
 	OffsetTable offsetTable;
 	EntryMap loadedEntries;
 
@@ -56,7 +54,6 @@ protected:
 	GameFileHeader_V2 header;
 
 	TagMap tagMap;
-
 };
 
 #endif

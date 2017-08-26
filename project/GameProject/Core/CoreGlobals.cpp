@@ -5,3 +5,4 @@ IRenderEngine* gRenderEngine = nullptr;
 AssetManager* gAssetManager = nullptr;
 Console* gConsole = nullptr;
 TemporaryStorage* gTemporaryStorage = nullptr;
+Gui* gGui = nullptr;

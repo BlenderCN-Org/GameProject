@@ -5,9 +5,7 @@
 
 #include <map>
 
-
 class GameObject {
-
 public:
 
 	virtual ~GameObject();
@@ -22,7 +20,6 @@ public:
 private:
 
 	std::map<uint64_t, BaseComponent*> components;
-
 };
 
 template<typename T>

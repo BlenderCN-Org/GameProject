@@ -4,8 +4,7 @@
 #include <RenderEngine\IWindow.hpp>
 #include <map>
 
-class EditorWindow : public IWindow{
-
+class EditorWindow : public IWindow {
 public:
 	// Inherited via IWindow
 	virtual void getCursorPos(int & x, int & y) override;
@@ -45,11 +44,9 @@ public:
 	WindowFocus_t* focusCallback = 0;
 
 	WindowMouseDeltaCallback_t* mouseDeltaCallback = 0;
-
 };
 
 ref class EditorWindowWrapper sealed : public Editor::EventHandler::IEditWindow {
-
 public:
 	virtual ~EditorWindowWrapper();
 
@@ -68,13 +65,11 @@ public:
 private:
 	EditorWindow* editWindow;
 
-
 	int width, height;
 	int sizeX, sizeY;
 
 	std::map<int, bool>* mousePress;
 	std::map<int, bool>* keyPress;
-
 };
 
 #endif

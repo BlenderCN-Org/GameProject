@@ -19,6 +19,8 @@ namespace Editor.DataSources
         private System.Windows.Media.Color fogColorNear;
         private bool hasWater = false;
 
+        private List<Cell> cells;
+
         public System.Windows.Media.Color SkyColor
         {
             get { return skyColor; }
@@ -84,6 +86,19 @@ namespace Editor.DataSources
             }
         }
 
+        public List<Cell> Cells
+        {
+            get { return cells; }
+            set
+            {
+                if (cells != value)
+                {
+                    cells = value;
+                    this.OnPropertyChanged("Cells");
+                }
+            }
+        }
+
         public List<object> ChildObjects { get; set; }
 
         public new event PropertyChangedEventHandler PropertyChanged;
@@ -105,7 +120,6 @@ namespace Editor.DataSources
                 };
                 EventHandler.EventManager.OnEditFormEvent(fa);
             }
-
         }
     }
 }

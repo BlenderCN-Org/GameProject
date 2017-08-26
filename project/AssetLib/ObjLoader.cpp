@@ -5,10 +5,8 @@
 #include <string>
 #include <sstream>
 
-namespace AssetLib
-{
-	struct Vert_t
-	{
+namespace AssetLib {
+	struct Vert_t {
 		float x, y, z;
 		float u, v;
 	};
@@ -29,21 +27,21 @@ namespace AssetLib
 
 		int state = 1;
 
-		if ( !inFile.is_open() ) {
+		if (!inFile.is_open()) {
 			dataSize = 0;
 			return nullptr;
 		}
 
-		while ( ok ) {
+		while (ok) {
 			std::getline(inFile, line);
 			ok = !inFile.eof();
 
-			if ( !ok )
+			if (!ok)
 				break;
 
-			if ( line[0] == 'v' && line[1] == ' ' ) // vertex pos
+			if (line[0] == 'v' && line[1] == ' ') // vertex pos
 			{
-				if ( state == 1 ) {
+				if (state == 1) {
 					state = 0;
 					//vertex.clear();
 					//count = 0;
@@ -61,7 +59,7 @@ namespace AssetLib
 				vertex[count].z = std::stof(sub);
 				count++;
 			}
-			if ( line[0] == 'v' && line[1] == 't' ) // vertex pos
+			if (line[0] == 'v' && line[1] == 't') // vertex pos
 			{
 				useuv = true;
 				uv.push_back(Vert_t());
@@ -74,8 +72,8 @@ namespace AssetLib
 				iss >> sub;
 				uv[uvCount].v = std::stof(sub);
 				uvCount++;
-			} else if ( line[0] == 'f' ) {
-				if ( state == 0 ) {
+			} else if (line[0] == 'f') {
+				if (state == 0) {
 					state = 1;
 				}
 				std::istringstream iss(line);
@@ -87,21 +85,21 @@ namespace AssetLib
 				int n = 0;
 				int t = 0;
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					v = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					t = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, ' ');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					n = std::stoi(sub) - 1;
 					sub = "";
 				}
-				if ( useuv ) {
+				if (useuv) {
 					vertex[v].u = uv[t].u;
 					vertex[v].v = 1.0f - uv[t].v;
 				} else {
@@ -114,22 +112,22 @@ namespace AssetLib
 				n = 0;
 				t = 0;
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					v = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					t = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, ' ');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					n = std::stoi(sub) - 1;
 					sub = "";
 				}
 
-				if ( useuv ) {
+				if (useuv) {
 					vertex[v].u = uv[t].u;
 					vertex[v].v = 1.0f - uv[t].v;
 				} else {
@@ -142,22 +140,22 @@ namespace AssetLib
 				n = 0;
 				t = 0;
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					v = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, '/');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					t = std::stoi(sub) - 1;
 					sub = "";
 				}
 				std::getline(iss, sub, ' ');
-				if ( sub.size() ) {
+				if (sub.size()) {
 					n = std::stoi(sub) - 1;
 					sub = "";
 				}
 
-				if ( useuv ) {
+				if (useuv) {
 					vertex[v].u = uv[t].u;
 					vertex[v].v = 1.0f - uv[t].v;
 				} else {
@@ -170,7 +168,7 @@ namespace AssetLib
 
 		size_t size = vertex_ret.size();
 
-		if ( size ) {
+		if (size) {
 			Vert_t* v = new Vert_t[size];
 			dataSize = sizeof(Vert_t) * (unsigned int)size;
 

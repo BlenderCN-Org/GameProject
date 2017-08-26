@@ -1,10 +1,8 @@
 #include "ExtensionMap.hpp"
 #include <iostream>
 
-namespace Extensions
-{
+namespace Extensions {
 	void OnSaveEvent(System::Object^ sender, Editor::EventHandler::SaveEventArgs^ saveArgs) {
-
 		std::cout << "SaveEvent\n";
 		Console::Write(": ");
 		Console::WriteLine(saveArgs->PackData);

@@ -3,7 +3,7 @@
 #include <iostream>
 
 GLenum getShaderFromEnum(ShaderStages type) {
-	switch ( type ) {
+	switch (type) {
 		case ShaderStages::VERTEX_STAGE:
 			return GL_VERTEX_SHADER;
 			break;
@@ -27,13 +27,13 @@ void ShaderObject_gl::init() {
 }
 
 void ShaderObject_gl::release() {
-	if ( shaderCreated )
+	if (shaderCreated)
 		glDeleteProgram(shaderProgram);
 
 	delete this;
 }
 
-void ShaderObject_gl::setShaderCode(ShaderStages stage, char * code) {
+void ShaderObject_gl::setShaderCode(ShaderStages stage, const char * code) {
 	shaderCode[(size_t)stage] = code;
 }
 
@@ -46,8 +46,8 @@ bool ShaderObject_gl::buildShader() {
 
 	program = glCreateProgram();
 
-	for ( size_t i = 0; i < (size_t)ShaderStages::SIZE; i++ ) {
-		if ( shaderCode[i] ) {
+	for (size_t i = 0; i < (size_t)ShaderStages::SIZE; i++) {
+		if (shaderCode[i]) {
 			shaders[i] = glCreateShader(getShaderFromEnum(ShaderStages(i)));
 
 			glShaderSource(shaders[i], 1, &shaderCode[i], nullptr);
@@ -55,7 +55,7 @@ bool ShaderObject_gl::buildShader() {
 
 			GLint isCompiled = 0;
 			glGetShaderiv(shaders[i], GL_COMPILE_STATUS, &isCompiled);
-			if ( isCompiled == GL_FALSE ) {
+			if (isCompiled == GL_FALSE) {
 				success = false;
 				//printf("Failed to compile shader %s\n", shadernames[i].c_str());
 
@@ -74,8 +74,8 @@ bool ShaderObject_gl::buildShader() {
 
 	glLinkProgram(program);
 
-	for ( size_t i = 0; i < (size_t)ShaderStages::SIZE; i++ ) {
-		if ( shaderCode[i] ) {
+	for (size_t i = 0; i < (size_t)ShaderStages::SIZE; i++) {
+		if (shaderCode[i]) {
 			glDetachShader(program, shaders[i]);
 			glDeleteShader(shaders[i]);
 		}
@@ -83,7 +83,7 @@ bool ShaderObject_gl::buildShader() {
 
 	GLint linked;
 	glGetProgramiv(program, GL_LINK_STATUS, &linked);
-	if ( linked != GL_TRUE ) {
+	if (linked != GL_TRUE) {
 		success = false;
 		printf("Failed to link shader program %d\n", program);
 		char* msg = "Failed to link shader program";
@@ -96,8 +96,8 @@ bool ShaderObject_gl::buildShader() {
 		glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_ERROR, 0, GL_DEBUG_SEVERITY_HIGH, length, log);
 	}
 
-	if ( success ) {
-		if ( shaderCreated )
+	if (success) {
+		if (shaderCreated)
 			glDeleteProgram(shaderProgram);
 		shaderProgram = program;
 		shaderCreated = true;
@@ -109,7 +109,7 @@ bool ShaderObject_gl::buildShader() {
 }
 
 void ShaderObject_gl::useShader() {
-	if ( shaderCreated )
+	if (shaderCreated)
 		glUseProgram(shaderProgram);
 }
 
@@ -120,7 +120,7 @@ int ShaderObject_gl::getShaderUniform(char * uniformName) {
 void ShaderObject_gl::bindData(int location, UniformDataType type, void* data) {
 	float* d = (float*)data;
 
-	switch ( type ) {
+	switch (type) {
 		case UniformDataType::UNI_INT:
 			glProgramUniform1iv(shaderProgram, location, 1, (int*)d);
 			break;

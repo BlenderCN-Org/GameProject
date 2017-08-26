@@ -4,7 +4,6 @@
 #include <cstdint>
 
 class IPixelBuffer {
-
 public:
 	virtual bool init() = 0;
 	virtual void release() = 0;
@@ -16,7 +15,6 @@ public:
 
 	virtual void* map() = 0;
 	virtual void unMap() = 0;
-
 };
 
 #endif

@@ -2,7 +2,6 @@
 #define GVAR_HPP
 
 struct GVar {
-
 	enum class VarType {
 		BYTE,
 		UBYTE,
@@ -27,8 +26,6 @@ struct GVar {
 
 		float flt;
 	};
-
-
 };
 
 #endif

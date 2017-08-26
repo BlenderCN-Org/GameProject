@@ -8,6 +8,7 @@
 #endif
 
 #include "../GameProject/IAssetManager.hpp"
+#include "../GameProject/IEditorAccess.hpp"
 #include "../GameProject/IExtension.hpp"
 #include <RenderEngine/IRenderEngine.hpp>
 #include <RenderEngine/IWindow.hpp>
@@ -21,9 +22,7 @@ enum EditorStatus {
 	STOPPING,		// no operations allowed, editor is closing
 };
 
-
 class IEditor {
-
 public:
 
 	virtual bool initializeEditor(IRenderEngine* re) = 0;
@@ -43,9 +42,9 @@ public:
 	virtual void postPixels(uint32_t width, uint32_t height) = 0;
 
 	virtual void setAssetManager(IAssetManager* assetMan) = 0;
+	virtual void setEditorAccess(IEditorAccess* editAccess) = 0;
 
 private:
-
 };
 
 extern "C" EDITOR_API IEditor* CreateEditor();

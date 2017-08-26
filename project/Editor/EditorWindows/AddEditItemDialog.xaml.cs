@@ -29,23 +29,42 @@ namespace Editor.EditorWindows
             {
                 if (editContent)
                 {
-                    EventHandler.FormArgs args = new EventHandler.FormArgs()
+                    DataSources.BaseData data = baseType.GetItemData() as DataSources.BaseData;
+                    if (data != null)
                     {
-                        FormID = baseType.GetFormId(),
-                        Data = baseType.GetItemData()
-                    };
-                    EventHandler.EventManager.OnEditFormEvent(args);
+                        EventHandler.FormArgs arg = new EventHandler.FormArgs();
+                        arg.Data = data;
+                        arg.FormID = data.EditorID;
+                        arg.ObjectType = baseType.GetAddType();
+
+                        EventHandler.EventManager.OnEditFormEvent(arg);
+                        EventHandler.EventManager.OnRefreshFormsEvent(true);
+                    }
                 }
                 else
                 {
+                    EventHandler.GetFormIDArgs formArg = new EventHandler.GetFormIDArgs();
+                    formArg.FormID = 0;
+
+                    EventHandler.EventManager.OnGetFormIDEvent(formArg);
+
                     EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
                     {
                         Name = baseType.GetName(),
-                        FormID = baseType.GetFormId(),
+                        FormID = formArg.FormID,
                         ObjectType = baseType.GetAddType()
                     };
 
                     EventHandler.EventManager.OnAddObjectEvent(args);
+
+                    DataSources.BaseData staticObject = baseType.GetItemData() as DataSources.BaseData;
+                    if (staticObject != null)
+                    {
+                        staticObject.listenToEvents = true;
+                        staticObject.EditorID = formArg.FormID;
+                    }
+
+                    EventHandler.EventManager.OnRefreshFormsEvent(true);
                 }
                 Close();
             }

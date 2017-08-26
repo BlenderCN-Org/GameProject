@@ -5,8 +5,7 @@
 
 #include <glm\glm.hpp>
 
-class Camera
-{
+class Camera {
 public:
 
 	Camera();
@@ -17,6 +16,8 @@ public:
 	virtual float* getOrthoMatrix();
 
 	glm::vec3 calculateMouseRay(float x, float y, IRenderEngine* renderEngine);
+
+	// @todo optimize to a calc inverse that runs at start of frame
 	glm::vec3 getPos() const;
 
 	//private:

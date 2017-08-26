@@ -5,8 +5,7 @@
 
 class GameObject;
 
-class BaseComponent
-{
+class BaseComponent {
 public:
 
 	virtual uint32_t getComponentID() const = 0;

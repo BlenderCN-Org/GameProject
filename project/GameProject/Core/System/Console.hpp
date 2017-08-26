@@ -17,9 +17,8 @@ struct Command {
 };
 
 class Console {
-
 public:
-	
+
 	Console();
 	virtual ~Console();
 
@@ -42,7 +41,6 @@ private:
 
 	Command* cmdHistory;
 	Message* consoleMessages;
-
 };
 
 #endif

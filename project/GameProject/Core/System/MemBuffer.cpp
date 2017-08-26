@@ -56,3 +56,7 @@ void MemoryPusher::pushData(void * ptr, uint32_t pushSize) {
 
 	offset += pushSize;
 }
+
+uint32_t MemoryPusher::getOffset() const {
+	return offset;
+}

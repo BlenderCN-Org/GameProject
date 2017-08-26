@@ -18,16 +18,16 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250*"/>
-            <ColumnDefinition Width="250*"/>
+            <ColumnDefinition Width="250*" />
+            <ColumnDefinition Width="250*" />
         </Grid.ColumnDefinitions>
-        <Grid Margin="10" Grid.Column="1"/>
+        <Grid Margin="10" Grid.Column="1" />
         <Grid Margin="10" Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="30" />
+                <RowDefinition />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <ListView x:Name="FormList" Style="{DynamicResource DarkListViewWithGridView}" Grid.Row="1">
                 <ListView.Resources>
@@ -41,10 +41,10 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button Content="Delete Form" Margin="5" Template="{DynamicResource ButtonControlTemplate1}" Grid.Row="2" Click="Button_Click"/>
-            <Button Content="Fake Edit" Margin="5" Template="{DynamicResource ButtonControlTemplate1}" Grid.Row="3" Click="FakeEdit_Click"/>
-            <Label Content="Search" HorizontalAlignment="Left" Margin="10,0,0,0" Width="57" Foreground="{DynamicResource DarkForeground}" Grid.Row="0"/>
-            <TextBox x:Name="searchBox" HorizontalAlignment="Left" Height="23" Margin="72,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="148" Style="{DynamicResource DarkTextBox}" TextChanged="searchBox_TextChanged" Grid.Row="0"/>
+            <Button Content="Delete Form" Margin="5" Template="{DynamicResource ButtonControlTemplate1}" Grid.Row="2" Click="Button_Click" />
+            <Button Content="Fake Edit" Margin="5" Template="{DynamicResource ButtonControlTemplate1}" Grid.Row="3" Click="FakeEdit_Click" />
+            <Label Content="Search" HorizontalAlignment="Left" Margin="10,0,0,0" Width="57" Foreground="{DynamicResource DarkForeground}" Grid.Row="0" />
+            <TextBox x:Name="searchBox" HorizontalAlignment="Left" Height="23" Margin="72,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="148" Style="{DynamicResource DarkTextBox}" TextChanged="searchBox_TextChanged" Grid.Row="0" />
         </Grid>
     </Grid>
 </Window>

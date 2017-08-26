@@ -22,7 +22,6 @@
     </UserControl.DataContext>
 
     <Grid Margin="5">
-        <StandardControls:NameAndID x:Name="IdControl" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <ListView x:Name="menuItemList" HorizontalAlignment="Left" Height="275" Margin="0,125,0,0" VerticalAlignment="Top" Width="200"
                   Style="{DynamicResource DarkListViewWithGridView}">
             <ListView.View>

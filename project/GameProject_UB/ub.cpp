@@ -18,7 +18,6 @@
 #include <GameProject\Core\Assets\GameFile.cpp>
 #include <GameProject\Core\Assets\RenderLayer.cpp>
 
-#include <GameProject\Core\Extensions\EditDataExtension.cpp>
 #include <GameProject\Core\Extensions\SaveExtension.cpp>
 #include <GameProject\Core\Extensions\ExtensionHandler.cpp>
 
@@ -34,9 +33,14 @@
 #include <GameProject\Game\Components\RenderComponent.cpp>
 #include <GameProject\Game\Components\TransformComponent.cpp>
 
+#include <GameProject/Game/GUI/Gui.cpp>
+#include <GameProject/Game/GUI/Text.cpp>
+
 #include <GameProject\Game\Camera.cpp>
 #include <GameProject\Game\GameObject.cpp>
 #include <GameProject\Game\Scene.cpp>
+#include <GameProject\Game\EditorAccess.cpp>
+#include <GameProject\Game\Menu.cpp>
 #include <GameProject\Game\Game.cpp>
 
 #include <GameProject\ExceptionHandling.cpp>

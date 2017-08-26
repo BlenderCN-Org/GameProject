@@ -5,7 +5,6 @@
 #include "../Utils/MemoryManager.hpp"
 #include <memory>
 
-
 struct Vertex5 {
 	Vertex5(float _x, float _y, float _z, float _u, float _v) {
 		x = _x;
@@ -42,15 +41,15 @@ void Mesh_gl::release() {
 }
 
 void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
-	if ( primitiveType == MeshPrimitiveType::TRIANGLE )
+	if (primitiveType == MeshPrimitiveType::TRIANGLE)
 		meshPrimitive = GL_TRIANGLES;
-	else if ( primitiveType == MeshPrimitiveType::TRIANGLE_STRIP )
+	else if (primitiveType == MeshPrimitiveType::TRIANGLE_STRIP)
 		meshPrimitive = GL_TRIANGLE_STRIP;
-	else if ( primitiveType == MeshPrimitiveType::QUAD )
+	else if (primitiveType == MeshPrimitiveType::QUAD)
 		meshPrimitive = GL_QUADS;
 
 	dataLayout = layout;
-	if ( layout == VERT_UV ) {
+	if (layout == VERT_UV) {
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -73,7 +72,6 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 			glm::vec3 v2 = glm::vec3(v.x, v.y, v.z);
 			radius = glm::max(radius, glm::distance(v2, glm::vec3(0.0f)));
 		}
-
 	}
 }
 
@@ -87,7 +85,7 @@ void Mesh_gl::bind() {
 }
 
 void Mesh_gl::render() {
-	if ( usesIndexBuffer ) {
+	if (usesIndexBuffer) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
@@ -99,8 +97,8 @@ void Mesh_gl::render() {
 void * Mesh_gl::map(size_t & dataSize) {
 	void* dataPtr = nullptr;
 
-	if ( !isMapped ) {
-		if ( dataLayout == VERT_UV ) {
+	if (!isMapped) {
+		if (dataLayout == VERT_UV) {
 			dataSize = vertexCount * sizeof(Vertex5);
 		}
 
@@ -122,7 +120,7 @@ void * Mesh_gl::map(size_t & dataSize) {
 }
 
 void Mesh_gl::unmap() {
-	if ( isMapped ) {
+	if (isMapped) {
 		flush();
 		delete mapPtr;
 		mapPtr = nullptr;

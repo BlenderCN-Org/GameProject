@@ -6,7 +6,6 @@
 #include <cstdint>
 
 class RenderLayer {
-
 public:
 
 	void init(IRenderEngine* re);
@@ -23,7 +22,6 @@ private:
 	int32_t nrShaderInputs;
 
 	IShaderObject* renderLayerShader;
-
 };
 
 #endif

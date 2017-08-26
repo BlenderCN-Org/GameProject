@@ -14,6 +14,17 @@ namespace Editor.EditorWindows.Controls
         public ObjectList()
         {
             InitializeComponent();
+
+            EventHandler.EventManager.onRefreshFormsEvent += new System.EventHandler<bool>(refreshEvent);
+            refreshEvent(null, true);
+        }
+
+        public void refreshEvent(object sender, bool refresh)
+        {
+            if (refresh)
+            {
+                updateList();
+            }
         }
 
         private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -53,7 +64,9 @@ namespace Editor.EditorWindows.Controls
         {
             bool edit = false;
             AddEditItemDialog dlg = new AddEditItemDialog(edit);
-            dlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
+            EditorWindows.AddItemDlgPages.AddStaticObject add = new EditorWindows.AddItemDlgPages.AddStaticObject();
+            dlg.PageArea.Children.Add(add);
+            dlg.Owner = Window.GetWindow(this);
             dlg.Show();
         }
 
@@ -61,7 +74,14 @@ namespace Editor.EditorWindows.Controls
         {
             bool edit = true;
             AddEditItemDialog dlg = new AddEditItemDialog(edit);
-            dlg.PageArea.Children.Add(new EditorWindows.AddItemDlgPages.AddGameObject());
+            EditorWindows.AddItemDlgPages.AddStaticObject add = new EditorWindows.AddItemDlgPages.AddStaticObject();
+            DataSources.BaseData obj = listView.SelectedItem as DataSources.BaseData;
+            if (obj != null)
+            {
+                add.DataContext = obj.Clone();
+            }
+            dlg.PageArea.Children.Add(add);
+            dlg.Owner = Window.GetWindow(this);
             dlg.Show();
         }
 
@@ -84,6 +104,83 @@ namespace Editor.EditorWindows.Controls
             {
                 DeleteItem.IsEnabled = true;
             }
+        }
+
+        private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            updateList();
+        }
+
+        private void updateList()
+        {
+            listView.SelectedIndex = -1;
+            listView.Items.Clear();
+
+            EventHandler.QueryDataArgs args = new EventHandler.QueryDataArgs();
+            args.ReturnList = new System.Collections.Generic.List<DataSources.BaseData>();
+
+            if (treeView.SelectedItem == @static)
+            {
+                System.Console.Write("Static\n");
+                args.ObjectType = EventHandler.ObjectTypes.STATIC;
+            }
+            else if (treeView.SelectedItem == anim)
+            {
+                System.Console.Write("AnimObj\n");
+                args.ObjectType = EventHandler.ObjectTypes.ANIM;
+            }
+            else if (treeView.SelectedItem == weap)
+            {
+                System.Console.Write("Weapon\n");
+                args.ObjectType = EventHandler.ObjectTypes.WEAPON;
+            }
+            else if (treeView.SelectedItem == armor)
+            {
+                System.Console.Write("Armor\n");
+                args.ObjectType = EventHandler.ObjectTypes.ARMOR;
+            }
+            else if (treeView.SelectedItem == ammo)
+            {
+                System.Console.Write("Ammo\n");
+                args.ObjectType = EventHandler.ObjectTypes.AMMO;
+            }
+            else if (treeView.SelectedItem == dlg)
+            {
+                System.Console.Write("Dialog\n");
+                args.ObjectType = EventHandler.ObjectTypes.DIALOG;
+            }
+            else if (treeView.SelectedItem == script)
+            {
+                System.Console.Write("Script\n");
+                args.ObjectType = EventHandler.ObjectTypes.SCRIPT;
+            }
+            else if (treeView.SelectedItem == decal)
+            {
+                System.Console.Write("Decal\n");
+                args.ObjectType = EventHandler.ObjectTypes.DECAL;
+            }
+            else if (treeView.SelectedItem == audio)
+            {
+                System.Console.Write("Audio\n");
+                args.ObjectType = EventHandler.ObjectTypes.AUDIO;
+            }
+            else if (treeView.SelectedItem == menu)
+            {
+                System.Console.Write("Menu\n");
+                //args.ObjectType = EventHandler.ObjectTypes.MENU;
+            }
+
+            EventHandler.EventManager.OnQueryDataEvent(args);
+
+            foreach (DataSources.BaseData item in args.ReturnList)
+            {
+                listView.Items.Add(item);
+            }
+        }
+
+        private void treeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            EditMenuItem_Click(sender, null);
         }
     }
 }

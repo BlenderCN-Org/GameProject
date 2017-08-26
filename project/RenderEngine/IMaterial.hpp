@@ -3,8 +3,7 @@
 
 #include "ITexture.hpp"
 
-class IMaterial
-{
+class IMaterial {
 public:
 
 	virtual void init(unsigned int nrTextures) = 0;

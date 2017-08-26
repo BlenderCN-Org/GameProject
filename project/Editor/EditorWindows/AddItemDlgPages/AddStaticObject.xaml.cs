@@ -1,5 +1,4 @@
 ﻿using Editor.EventHandler;
-using System;
 using System.Windows.Controls;
 
 namespace Editor.EditorWindows.AddItemDlgPages
@@ -7,41 +6,44 @@ namespace Editor.EditorWindows.AddItemDlgPages
     /// <summary>
     /// Interaction logic for AddStatic.xaml
     /// </summary>
-    public partial class AddGameObject : UserControl, IAddItemBase
+    public partial class AddStaticObject : UserControl, IAddItemBase
     {
-        public AddGameObject()
+        public AddStaticObject()
         {
             InitializeComponent();
+            DataSources.StaticObject obj = new DataSources.StaticObject();
+            obj.listenToEvents = false;
+            DataContext = obj;
         }
 
         public ObjectTypes GetAddType()
         {
-            throw new NotImplementedException();
+            return ObjectTypes.STATIC;
         }
 
         public string GetFailMessage()
         {
-            throw new NotImplementedException();
+            return "";
         }
 
         public uint GetFormId()
         {
-            return UInt32.Parse(IdControl.ObjectID.Text);
+            return 0;
         }
 
         public object GetItemData()
         {
-            throw new NotImplementedException();
+            return DataContext;
         }
 
         public string GetName()
         {
-            return IdControl.ObjectName.Text;
+            return "";
         }
 
         public bool IsValidData()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

@@ -3,21 +3,21 @@
 
 #include <cstdint>
 
-class IDataObject {
+class IGameDataObject {
 public:
 
 	enum Type {
 		GENERIC,
 		SCENE,
-		RENDERLAYER
+		RENDERLAYER,
+		STATICOBJECT
 	};
 
-	virtual ~IDataObject() {};
+	virtual ~IGameDataObject() {};
 	virtual void* getData() const = 0;
 	virtual uint32_t getDataSize() const = 0;
 
 	virtual Type getType() const = 0;
-
 };
 
 struct Version {
@@ -44,7 +44,7 @@ struct EntrySave {
 };
 
 struct Entry : EntrySave {
-	IDataObject* data;		//dataSize = entrySize - sizeof(Entry);
+	IGameDataObject* data;		//dataSize = entrySize - sizeof(Entry);
 	bool deleteFlag;
 };
 
@@ -95,41 +95,58 @@ struct SceneSaveData {
 	bool hasFog;
 	float fog[8];
 	bool hasWater;
+	uint32_t numGroups;
 };
 
-class IRenderLayerDataObject : public IDataObject {
+struct StaticObjectSaveData {
+	const char* name;
+	const char* meshFile;
+	bool useCollision;
+};
+
+class IRenderLayerDataObject : public IGameDataObject {
 public:
 	virtual ~IRenderLayerDataObject() {};
 
 	virtual RenderLayerSaveData* getRenderLayerData() = 0;
 	virtual void setRenderLayerData(RenderLayerSaveData* data) = 0;
 
-	// IDataObject
+	// IGameDataObject
 	virtual void* getData() const = 0;
 	virtual uint32_t getDataSize() const = 0;
-	
 };
 
-class ISceneDataObject : public IDataObject 	{
+class ISceneDataObject : public IGameDataObject {
 public:
 	virtual ~ISceneDataObject() {};
 
 	virtual SceneSaveData* getSceneData() = 0;
 	virtual void setSceneData(SceneSaveData* data) = 0;
 
-	// IDataObject
+	// IGameDataObject
+	virtual void* getData() const = 0;
+	virtual uint32_t getDataSize() const = 0;
+};
+
+class IStaticObjectDataObject : public IGameDataObject {
+public:
+	virtual ~IStaticObjectDataObject() {};
+
+	virtual StaticObjectSaveData* getStaticObjectData() = 0;
+	virtual void setStaticObjectData(StaticObjectSaveData* data) = 0;
+
+	// IGameDataObject
 	virtual void* getData() const = 0;
 	virtual uint32_t getDataSize() const = 0;
 };
 
 class IDataObjectConverter {
-
 public:
 	virtual ~IDataObjectConverter() {};
 
-	virtual IRenderLayerDataObject* asRenderLayer(IDataObject*& dataObject) = 0;
-	virtual ISceneDataObject* asSceneData(IDataObject*& dataObject) = 0;
-
+	virtual IRenderLayerDataObject* asRenderLayer(IGameDataObject*& dataObject) = 0;
+	virtual ISceneDataObject* asSceneData(IGameDataObject*& dataObject) = 0;
+	virtual IStaticObjectDataObject* asStaticObjectData(IGameDataObject*& dataObject) = 0;
 };
 
 #endif

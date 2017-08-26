@@ -12,7 +12,6 @@
 #include "../AssetManager.hpp"
 
 void SaveExtension::saveMasterFile() {
-
 	GameFile* gameFile = gAssetManager->currentFile;
 
 	const char* fileName = gameFile->fileName;
@@ -27,7 +26,7 @@ void SaveExtension::saveMasterFile() {
 	hdr.headerLength = sizeof(GameFileHeader_V2);
 	hdr.nrEntries = gameFile->nrEntries;
 	hdr.startupSceneRef = gAssetManager->getStartupSceneRef();
-	
+
 	gameFile->loadAllMissingEntries();
 
 	EntryMap::const_iterator it = gameFile->loadedEntries.begin();
@@ -40,8 +39,7 @@ void SaveExtension::saveMasterFile() {
 	for (it; it != eit; it++) {
 		if (it->second.deleteFlag) {
 			hdr.nrEntries--;
-		}
-		else {
+		} else {
 			of[it->first] = offset;
 			offset += it->second.entrySize;
 		}
@@ -71,7 +69,6 @@ void SaveExtension::saveMasterFile() {
 				tempFile.write((char*)e->data->getData(), e->entrySize - sizeof(EntrySave));
 			}
 		}
-
 	}
 
 	tempFile.close();
@@ -92,7 +89,6 @@ void SaveExtension::saveMasterFile() {
 	}
 
 	gameFile->inFile.open(gameFile->fileName, std::ios::binary);
-
 }
 
 void SaveExtension::execute(int nrArgs, ExtensionSaveEvent* args) {

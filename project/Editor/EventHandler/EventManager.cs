@@ -15,7 +15,9 @@ namespace Editor.EventHandler
         DECAL = 0x0040,
         AUDIO = 0x0080,
         SCENE = 0x0100,
-        RENDERLAYER = 0x0200
+        RENDERLAYER = 0x0200,
+        STARTUPSCENE = 0x0400,
+        ARMOR = 0x0800,
     }
 
     public class SaveEventArgs
@@ -83,46 +85,53 @@ namespace Editor.EventHandler
 
         public static EventHandler<bool> onRefreshFormsEvent;
 
-        public static void OnSaveEvent(SaveEventArgs saveArgs)
+        public static EventHandler<FormArgs> onSceneChangeEvent;
+
+        public static void OnSaveEvent(SaveEventArgs saveArg)
         {
-            onSaveEvent?.Invoke(null, saveArgs);
+            onSaveEvent?.Invoke(null, saveArg);
         }
 
-        public static void OnQueryDataEvent(QueryDataArgs queryArgs)
+        public static void OnQueryDataEvent(QueryDataArgs queryArg)
         {
-            onQueryDataEvent?.Invoke(null, queryArgs);
+            onQueryDataEvent?.Invoke(null, queryArg);
         }
 
-        public static void OnAddObjectEvent(AddObjectArgs addArgs)
+        public static void OnAddObjectEvent(AddObjectArgs addArg)
         {
-            onAddObjectEvent?.Invoke(null, addArgs);
+            onAddObjectEvent?.Invoke(null, addArg);
             OnRefreshFormsEvent(SendRefresEvent);
         }
 
-        public static void OnDeleteFormEvent(FormArgs args)
+        public static void OnDeleteFormEvent(FormArgs arg)
         {
-            onDeleteFormEvent?.Invoke(null, args);
+            onDeleteFormEvent?.Invoke(null, arg);
             OnRefreshFormsEvent(SendRefresEvent);
         }
 
-        public static void OnEditFormEvent(FormArgs args)
+        public static void OnEditFormEvent(FormArgs arg)
         {
-            onEditFormEvent?.Invoke(null, args);
+            onEditFormEvent?.Invoke(null, arg);
         }
 
-        public static void OnGetFormIDEvent(GetFormIDArgs args)
+        public static void OnGetFormIDEvent(GetFormIDArgs arg)
         {
-            onGetFormIDEvent?.Invoke(null, args);
+            onGetFormIDEvent?.Invoke(null, arg);
         }
 
-        public static void OnGetFormView(FormView args)
+        public static void OnGetFormView(FormView arg)
         {
-            onGetFormView?.Invoke(null, args);
+            onGetFormView?.Invoke(null, arg);
         }
 
         public static void OnRefreshFormsEvent(bool arg)
         {
             onRefreshFormsEvent?.Invoke(null, arg);
+        }
+
+        public static void OnSceneChangeEvent(FormArgs arg)
+        {
+            onSceneChangeEvent?.Invoke(null, arg);
         }
     }
 }

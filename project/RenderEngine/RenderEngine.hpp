@@ -53,6 +53,7 @@ public:
 	virtual void stencilClear(int mask);
 	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass);
 	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask);
+	virtual void setClearColor(float r, float g, float b, float a);
 
 	virtual void setBlending(bool enable);
 

@@ -1,8 +1,7 @@
 #ifndef ISHADEROBJECT_HPP
 #define ISHADEROBJECT_HPP
 
-enum class ShaderStages
-{
+enum class ShaderStages {
 	VERTEX_STAGE,
 	GEOMETRY_STAGE,
 	FRAGMENT_STAGE,
@@ -10,8 +9,7 @@ enum class ShaderStages
 	SIZE,
 };
 
-enum class UniformDataType
-{
+enum class UniformDataType {
 	UNI_INT,
 	UNI_FLOAT,
 	UNI_FLOAT2,
@@ -20,14 +18,13 @@ enum class UniformDataType
 	UNI_MATRIX4X4,
 };
 
-class IShaderObject
-{
+class IShaderObject {
 public:
 
 	virtual void init() = 0;
 	virtual void release() = 0;
 
-	virtual void setShaderCode(ShaderStages stage, char* code) = 0;
+	virtual void setShaderCode(ShaderStages stage, const char* code) = 0;
 
 	/*
 		@return The completion of the shader compiling. True means success.

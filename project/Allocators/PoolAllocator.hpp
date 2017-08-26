@@ -6,8 +6,7 @@
 #include <iostream>
 
 template <typename T>
-class PoolAllocator
-{
+class PoolAllocator {
 public:
 
 	PoolAllocator() {
@@ -20,7 +19,7 @@ public:
 	};
 
 	virtual ~PoolAllocator() {
-		if ( heapSpace ) {
+		if (heapSpace) {
 			//printf("Delete pool heap %d\n", (int)heapSpace);
 			free(heapSpace);
 		}
@@ -29,7 +28,7 @@ public:
 
 	PoolAllocator& operator=(PoolAllocator &newObj) {
 		//printf("Copy pool %d to %d\n", (int)&newObj, (int)this);
-		if ( this != &newObj ) {
+		if (this != &newObj) {
 			size_t t = usedSize;
 			usedSize = newObj.usedSize;
 			newObj.usedSize = t;
@@ -55,7 +54,7 @@ public:
 		maxObjectCount = objectCount;
 		usedSize = 0;
 
-		if ( maxSize )
+		if (maxSize)
 			heapSpace = malloc(maxSize);
 	}
 

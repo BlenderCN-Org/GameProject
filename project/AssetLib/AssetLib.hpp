@@ -3,8 +3,7 @@
 
 #include <cstdint>
 
-namespace AssetLib
-{
+namespace AssetLib {
 	// loads an obj file
 	void* loadWavefrontOBJ(const char* fileName, uint32_t &dataSize);
 

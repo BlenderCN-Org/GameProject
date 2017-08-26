@@ -4,11 +4,7 @@
 #include "IBaseComponent.hpp"
 
 class PhysicsComponent : IBaseComponent<PhysicsComponent> {
-
 public:
-
-
-
 };
 
 #endif

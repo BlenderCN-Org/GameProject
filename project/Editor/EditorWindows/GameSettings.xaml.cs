@@ -37,6 +37,17 @@ namespace Editor.EditorWindows
 
             // add loading of general info
             EventHandler.EventManager.onRefreshFormsEvent += new EventHandler<bool>(RefreshEvent);
+
+            EventHandler.QueryDataArgs query = new Editor.EventHandler.QueryDataArgs();
+            query.ObjectType = Editor.EventHandler.ObjectTypes.STARTUPSCENE;
+            query.ReturnList = new List<DataSources.BaseData>();
+
+            EventHandler.EventManager.OnQueryDataEvent(query);
+
+            if (query.ReturnList.Count == 1)
+            {
+                MainMenuSceneBox.Text = query.ReturnList[0].ToString();
+            }
         }
 
         public void RefreshEvent(object sender, bool refresh)
@@ -98,6 +109,11 @@ namespace Editor.EditorWindows
             if (wnd.DialogResult.HasValue && wnd.DialogResult.Value && wnd.SelectedValue.SelectedValue != null)
             {
                 MainMenuSceneBox.Text = wnd.SelectedValue.SelectedValue.ToString();
+
+                EventHandler.FormArgs fa = new Editor.EventHandler.FormArgs();
+                fa.FormID = (wnd.SelectedValue.SelectedValue as DataSources.BaseData).EditorID;
+                fa.ObjectType = Editor.EventHandler.ObjectTypes.STARTUPSCENE;
+                EventHandler.EventManager.OnEditFormEvent(fa);
             }
         }
 
@@ -234,7 +250,7 @@ namespace Editor.EditorWindows
             DataSources.Scene bd = new DataSources.Scene();
 
             bd.EditorID = formIdArgs.FormID;
-            
+
             EventHandler.AddObjectArgs args = new EventHandler.AddObjectArgs()
             {
                 Name = bd.Name,

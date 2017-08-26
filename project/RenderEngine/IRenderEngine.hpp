@@ -76,6 +76,7 @@ public:
 	virtual void stencilClear(int mask) = 0;
 	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass) = 0;
 	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask) = 0;
+	virtual void setClearColor(float r, float g, float b, float a) = 0;
 
 	virtual void setBlending(bool enable) = 0;
 
@@ -101,7 +102,6 @@ public:
 	virtual size_t getMaxMemory() const = 0;
 
 	virtual void toNormalizedDeviceSpace(float &x, float &y) = 0;
-
 };
 
 extern "C" RENDERENGINE_API IRenderEngine* CreateRenderEngine();

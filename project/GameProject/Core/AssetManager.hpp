@@ -11,8 +11,7 @@
 class IMesh;
 class IRenderEngine;
 
-class AssetManager : public IAssetManager{
-
+class AssetManager : public IAssetManager {
 	friend class SaveExtension;
 
 public:
@@ -54,7 +53,6 @@ private:
 	uint32_t startupSceneRefId;
 
 	DataObjectConverter objectConverter;
-
 };
 
 #endif

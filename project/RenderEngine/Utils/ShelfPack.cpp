@@ -11,7 +11,7 @@ ShelfPack::ShelfPack(int x, int y) {
 
 ShelfPack::~ShelfPack() {
 	size_t l = nodes.size();
-	for ( size_t i = 0; i < l; i++ ) {
+	for (size_t i = 0; i < l; i++) {
 		delete nodes[i];
 	}
 }
@@ -27,7 +27,7 @@ bool ShelfPack::addData(int w, int h, int id) {
 
 	bool added = addNode(n);
 
-	if ( added ) {
+	if (added) {
 		counter++;
 		nodes.push_back(n);
 	}
@@ -40,13 +40,13 @@ size_t ShelfPack::length() {
 }
 
 int ShelfPack::getPackedWidth() {
-	if ( root )
+	if (root)
 		return root->getWidth();
 	return 0;
 }
 
 int ShelfPack::getPackedHeight() {
-	if ( root )
+	if (root)
 		return root->getHeight();
 	return 0;
 }
@@ -68,7 +68,7 @@ PackRect ShelfPack::operator[](int id) {
 
 bool ShelfPack::addNode(Node * n) {
 	bool ret = false;
-	if ( root ) {
+	if (root) {
 		ret = root->insert(n, width, height);
 	} else {
 		root = n;
@@ -86,12 +86,12 @@ bool ShelfPack::Node::insert(Node * n, int maxX, int maxY) {
 	// space avaible below me
 	int hLeft = maxY - height;
 
-	if ( side ) {
+	if (side) {
 		// I can only tell the node next to me how much I know is left, and how tall I am, this limits the rect space
 		inserted = side->insert(n, wLeft, height);
 	} else {
 		// nothing was left of us, so check if we can place the character next to us, they cannot be larger since the input is sorted largest first but in case a check is done
-		if ( (n->width <= wLeft) && (n->height <= height) ) {
+		if ((n->width <= wLeft) && (n->height <= height)) {
 			inserted = true;
 			side = n;
 			side->x = x + width; // offset in x
@@ -99,13 +99,13 @@ bool ShelfPack::Node::insert(Node * n, int maxX, int maxY) {
 		}
 	}
 	//could not place node next to us so we try below
-	if ( !inserted )
-		if ( below ) {
+	if (!inserted)
+		if (below) {
 			// the node below us start at the same with that I had, but the height it can place on is what I know is left
 			inserted = below->insert(n, maxX, hLeft);
 		} else {
 			// make sure the height is enough
-			if ( (n->width <= wLeft) && (n->height <= hLeft) ) {
+			if ((n->width <= wLeft) && (n->height <= hLeft)) {
 				inserted = true;
 				below = n;
 				below->x = x;
@@ -117,7 +117,7 @@ bool ShelfPack::Node::insert(Node * n, int maxX, int maxY) {
 }
 
 int ShelfPack::Node::getHeight() {
-	if ( below )
+	if (below)
 		return below->getHeight();
 	return y + height;
 }
@@ -125,16 +125,16 @@ int ShelfPack::Node::getHeight() {
 int ShelfPack::Node::getWidth() {
 	int ws = 0;
 	int wb = 0;
-	if ( side )
+	if (side)
 		ws = side->getWidth();
-	if ( below )
+	if (below)
 		wb = below->getWidth();
 
-	if ( ws > wb )
+	if (ws > wb)
 		return ws;
-	else if ( wb > ws )
+	else if (wb > ws)
 		return wb;
-	else if ( ws == wb && ws != 0 )
+	else if (ws == wb && ws != 0)
 		return ws;
 	else
 		return x + width;

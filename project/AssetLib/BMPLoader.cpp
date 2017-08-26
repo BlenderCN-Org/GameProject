@@ -3,8 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb\stb_image.h>
 
-namespace AssetLib
-{
+namespace AssetLib {
 	void* loadBMP(const char* fileName, int32_t &width, int32_t &height) {
 		int comp = 0;
 

@@ -19,7 +19,7 @@ void CameraInput::init(glm::mat4 * view) {
 }
 
 void CameraInput::update(float dt) {
-	if ( input->consoleIsActive() )
+	if (input->consoleIsActive())
 		return;
 	float x = 0.0f;
 	float y = 0.0f;
@@ -30,7 +30,7 @@ void CameraInput::update(float dt) {
 	kb.code = 0;
 	kb.mod = 0;
 	kb.mouse = 1;
-	if ( input->isKeyBindPressed(kb, false) ) {
+	if (input->isKeyBindPressed(kb, false)) {
 		//printf("Mouse pan\n");
 		mousepan(x, y);
 	}
@@ -44,9 +44,9 @@ void CameraInput::update(float dt) {
 void CameraInput::mousepan(float x, float y) {
 	angleH -= x * (mouseSpeed / 5.0f * playbackSpeed);
 	angleV -= y * (mouseSpeed / 5.0f * playbackSpeed);
-	if ( angleV > 89 )
+	if (angleV > 89)
 		angleV = 89;
-	if ( angleV < -89 )
+	if (angleV < -89)
 		angleV = -89;
 
 	/*printf("(%f, %f)\n", x, y);
@@ -58,16 +58,16 @@ void CameraInput::mousepan(float x, float y) {
 	rotateRad = toRADIAN * angleV;
 
 	rotV = mat3(cos(rotateRad), -sin(rotateRad), 0.0f,
-				sin(rotateRad), cos(rotateRad), 0.0f,
-				0.0f, 0.0f, 1.0f);
+		sin(rotateRad), cos(rotateRad), 0.0f,
+		0.0f, 0.0f, 1.0f);
 	view = rotV * view;
 	view = normalize(view);
 
 	//rotate horizontally around y
 	rotateRad = toRADIAN * angleH;
 	rotH = mat3(cos(rotateRad), 0.0f, -sin(rotateRad),
-				0.0f, 1.0f, 0.0f,
-				sin(rotateRad), 0.0f, cos(rotateRad));
+		0.0f, 1.0f, 0.0f,
+		sin(rotateRad), 0.0f, cos(rotateRad));
 	view = rotH * view;
 	dir = normalize(view);
 }
@@ -80,18 +80,18 @@ void CameraInput::keypan(float dt) {
 	//	camSpeed *= 9;
 	camSpeed *= dt * 0.1f;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false) )
+	if (input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false))
 		pos += dir * camSpeed;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD], false) )
+	if (input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD], false))
 		pos -= dir * camSpeed;
 
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT], false) ) {
+	if (input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT], false)) {
 		vec3 left = cross(vec3(0, 1, 0), dir);
 		left = normalize(left);
 		pos += left * camSpeed;
 	}
-	if ( input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT], false) ) {
+	if (input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT], false)) {
 		vec3 left = cross(dir, vec3(0, 1, 0));
 		left = normalize(left);
 		pos += left * camSpeed;

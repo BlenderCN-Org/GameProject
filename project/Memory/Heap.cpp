@@ -20,7 +20,6 @@ Heap::Heap() {
 }
 
 Heap::~Heap() {
-
 	Block* hd = (Block*)heap;
 
 	hd = hd->next;
@@ -40,7 +39,6 @@ Heap::~Heap() {
 	//if (leak)
 	//	_CrtDbgBreak();
 	free(heap);
-
 }
 
 void Heap::tryFree() {
@@ -70,7 +68,6 @@ bool Heap::canAllocate(size_t size) const {
 }
 
 void * Heap::findNextFreeBlock(size_t size) {
-
 	void* ptr = heap;
 
 	Block* headerBlock = (Block*)ptr;
@@ -126,7 +123,6 @@ void * Heap::findNextFreeBlock(size_t size) {
 		}
 		// could not allocate so return nullptr
 		return nullptr;
-
 	}
 	// next was nullptr so the next free block is right after the header
 	else {
@@ -140,12 +136,10 @@ void * Heap::findNextFreeBlock(size_t size) {
 		headerBlock->next = b;
 	}
 
-
 	return ptr;
 }
 
 void* Heap::allocate(size_t size) {
-
 	size_t allocSize = size + sizeof(Block);
 
 	void* ptr = nullptr;
@@ -188,7 +182,6 @@ void Heap::deallocate(void* ptr) {
 	}
 
 	tryFree();
-
 }
 
 void Heap::markForDelete() {

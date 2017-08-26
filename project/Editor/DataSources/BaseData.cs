@@ -2,7 +2,7 @@
 
 namespace Editor.DataSources
 {
-    public class BaseData : INotifyPropertyChanged
+    public class BaseData : INotifyPropertyChanged, ICloneable
     {
         public BaseData()
         {
@@ -15,6 +15,14 @@ namespace Editor.DataSources
         {
             EditorID = eid;
             Name = name;
+        }
+
+        public BaseData(BaseData org)
+        {
+            name = org.name;
+            editorID = org.editorID;
+            listenToEvents = org.listenToEvents;
+            deleted = org.deleted;
         }
 
         public bool listenToEvents = false;
@@ -79,6 +87,11 @@ namespace Editor.DataSources
         protected virtual void OnPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
+        public virtual object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

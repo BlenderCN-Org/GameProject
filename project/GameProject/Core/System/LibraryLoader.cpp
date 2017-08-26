@@ -2,14 +2,14 @@
 
 bool Lib::loadLibrary(const char * libraryName) {
 	lib = LoadLibraryA(libraryName);
-	if ( lib )
+	if (lib)
 		return true;
 	return false;
 }
 
 bool Lib::loadLibrary(const wchar_t * libraryName) {
 	lib = LoadLibraryW(libraryName);
-	if ( lib )
+	if (lib)
 		return true;
 	return false;
 }

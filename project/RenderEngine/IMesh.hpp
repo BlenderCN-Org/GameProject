@@ -5,8 +5,7 @@
 The layout specify what components are in the dataset
 */
 
-enum class MeshPrimitiveType
-{
+enum class MeshPrimitiveType {
 	POINT,
 	LINE,
 	TRIANGLE,

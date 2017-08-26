@@ -1,8 +1,7 @@
 #ifndef COLORS_HPP
 #define COLORS_HPP
 
-struct HSV
-{
+struct HSV {
 	float h;
 	float s;
 	float v;
@@ -10,8 +9,7 @@ struct HSV
 	HSV() {};
 };
 
-struct RGB
-{
+struct RGB {
 	float r;
 	float g;
 	float b;

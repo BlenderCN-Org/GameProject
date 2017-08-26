@@ -5,8 +5,7 @@
 #include <fstream>
 #include <map>
 
-class Section
-{
+class Section {
 public:
 	Section();
 	Section(std::string name);
@@ -28,8 +27,7 @@ private:
 	std::map<std::string, std::string> settingsMap;
 };
 
-class Config
-{
+class Config {
 public:
 
 	Config();

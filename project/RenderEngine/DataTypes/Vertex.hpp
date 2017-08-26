@@ -1,8 +1,7 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-struct Vertex3f
-{
+struct Vertex3f {
 	float x;
 	float y;
 	float z;
@@ -12,8 +11,7 @@ struct Vertex3f
 	Vertex3f(float x, float y, float z);
 };
 
-struct Vertex2f
-{
+struct Vertex2f {
 	float x;
 	float y;
 

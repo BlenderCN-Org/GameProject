@@ -9,7 +9,6 @@
 #include <vcclr.h>
 
 namespace Editor_clr {
-
 	ref class EventWrapper {
 	public:
 		void* windowPtr = nullptr;
@@ -17,11 +16,9 @@ namespace Editor_clr {
 
 		bool closeEditor = false;
 		bool hideEditor = false;
-
 	};
 
 	class Editor_wrp : public IEditor {
-
 	public:
 
 		Editor_wrp() {
@@ -45,6 +42,7 @@ namespace Editor_clr {
 		virtual void postPixels(uint32_t width, uint32_t height);
 
 		virtual void setAssetManager(IAssetManager* assetMan);
+		virtual void setEditorAccess(IEditorAccess* editAccess);
 
 	private:
 
@@ -56,7 +54,6 @@ namespace Editor_clr {
 		gcroot<EventWrapper^> eventWrapper;
 		gcroot<EditorWindowWrapper^> editorWindowWrapper;
 
-
 		EditorWindow editWindow;
 
 		EditorStatus editorStatus;
@@ -66,8 +63,6 @@ namespace Editor_clr {
 		IPixelBuffer* pixelBuffers[2];
 		int pboIndex = 0;
 		int pboNextIndex = 0;
-
 	};
-
 }
 #endif

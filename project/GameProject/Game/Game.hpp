@@ -2,17 +2,19 @@
 #define GAME_HPP
 
 #include "Camera.hpp"
+#include "EditorAccess.hpp"
 #include "GameState.hpp"
 #include "GameObject.hpp"
 #include "Input/CameraInput.hpp"
+#include "GUI/Gui.hpp"
+#include "Menu.hpp"
 
 #include "../Core/Core.hpp"
 #include "../Core/AssetManager.hpp"
 
 #include <vector>
 
-class Game
-{
+class Game {
 public:
 
 	Game();
@@ -38,7 +40,18 @@ private:
 	Core* core = nullptr;
 	Camera* cam = nullptr;
 	AssetManager* assetManager = nullptr;
+	Gui* gui = nullptr;
+	EditorAccess editAccess;
 	CameraInput camInput;
+
+	Scene currentGameScene;
+
+	Scene* sceneThisFrame;
+
+	Menu* menu;
+
+	uint8_t editorEntry;
+	uint8_t testEntry;
 
 	bool running;
 	float timepass;
@@ -55,7 +68,6 @@ private:
 
 	// @todo not use vector
 	std::vector<GameObject*> gameObjects;
-
 };
 
 #endif

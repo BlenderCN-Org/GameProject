@@ -1,4 +1,3 @@
-
 // project includes
 #include "InputHandling.hpp"
 #include "InputHelper.hpp"
@@ -24,68 +23,68 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 		int action = 0;
 		int mods = wnd->modkeys;
 		switch (mouseEvents.usButtonFlags) {
-		case(RI_MOUSE_BUTTON_1_DOWN):
-		{
-			button = 0;
-			action = ACTION_BUTTON_DOWN;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_1_UP):
-		{
-			button = 0;
-			action = ACTION_BUTTON_UP;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_2_DOWN):
-		{
-			button = 1;
-			action = ACTION_BUTTON_DOWN;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_2_UP):
-		{
-			button = 1;
-			action = ACTION_BUTTON_UP;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_3_DOWN):
-		{
-			button = 2;
-			action = ACTION_BUTTON_DOWN;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_3_UP):
-		{
-			button = 2;
-			action = ACTION_BUTTON_UP;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_4_DOWN):
-		{
-			button = 3;
-			action = ACTION_BUTTON_DOWN;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_4_UP):
-		{
-			button = 3;
-			action = ACTION_BUTTON_UP;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_5_DOWN):
-		{
-			button = 4;
-			action = ACTION_BUTTON_DOWN;
-			break;
-		}
-		case(RI_MOUSE_BUTTON_5_UP):
-		{
-			button = 4;
-			action = ACTION_BUTTON_UP;
-			break;
-		}
-		default:
-			break;
+			case(RI_MOUSE_BUTTON_1_DOWN):
+			{
+				button = 0;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_1_UP):
+			{
+				button = 0;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_2_DOWN):
+			{
+				button = 1;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_2_UP):
+			{
+				button = 1;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_3_DOWN):
+			{
+				button = 2;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_3_UP):
+			{
+				button = 2;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_4_DOWN):
+			{
+				button = 3;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_4_UP):
+			{
+				button = 3;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_5_DOWN):
+			{
+				button = 4;
+				action = ACTION_BUTTON_DOWN;
+				break;
+			}
+			case(RI_MOUSE_BUTTON_5_UP):
+			{
+				button = 4;
+				action = ACTION_BUTTON_UP;
+				break;
+			}
+			default:
+				break;
 		}
 		if (button != -1)
 			wnd->mouseButtonCallback(wnd, button, action, mods);
@@ -146,28 +145,21 @@ void processRawKeyboardEvents(BaseWindow * wnd, RAWKEYBOARD keyBoardEvents) {
 	if (keyBoardEvents.Flags == RI_KEY_MAKE) {
 		if (keyBoardEvents.VKey == VK_SHIFT) {
 			wnd->modkeys |= MODKEY_SHIFT;
-		}
-		else if (keyBoardEvents.VKey == VK_CONTROL) {
+		} else if (keyBoardEvents.VKey == VK_CONTROL) {
 			wnd->modkeys |= MODKEY_CTRL;
-		}
-		else if (keyBoardEvents.VKey == VK_MENU) {
+		} else if (keyBoardEvents.VKey == VK_MENU) {
 			wnd->modkeys |= MODKEY_ALT;
-		}
-		else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
+		} else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
 			wnd->modkeys |= MODKEY_SUPER;
 		}
-	}
-	else {
+	} else {
 		if (keyBoardEvents.VKey == VK_SHIFT) {
 			wnd->modkeys &= ~MODKEY_SHIFT;
-		}
-		else if (keyBoardEvents.VKey == VK_CONTROL) {
+		} else if (keyBoardEvents.VKey == VK_CONTROL) {
 			wnd->modkeys &= ~MODKEY_CTRL;
-		}
-		else if (keyBoardEvents.VKey == VK_MENU) {
+		} else if (keyBoardEvents.VKey == VK_MENU) {
 			wnd->modkeys &= ~MODKEY_ALT;
-		}
-		else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
+		} else if (keyBoardEvents.VKey == VK_LWIN || keyBoardEvents.VKey == VK_RWIN) {
 			wnd->modkeys &= ~MODKEY_SUPER;
 		}
 	}
@@ -181,7 +173,6 @@ void processRawKeyboardEvents(BaseWindow * wnd, RAWKEYBOARD keyBoardEvents) {
 		//printf("keyCallback\n");
 	}
 }
-
 
 // this is probably not the way to do controllers using XInput and DirectInputInstead
 void processRawHidEvents(BaseWindow* wnd, PRAWINPUT raw) {
@@ -221,7 +212,6 @@ BOOL _stdcall DIEnumDevicesCallback(
 	return DIENUM_STOP;
 }
 void setupDirectInput(BaseWindow * wnd) {
-
 	HRESULT res = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8W, (LPVOID*)&wnd->dinput8dev, NULL);
 
 	wnd->dinput8dev->EnumDevices(DI8DEVCLASS_GAMECTRL, DIEnumDevicesCallback, nullptr, DIEDFL_ALLDEVICES);
@@ -232,7 +222,6 @@ void setupDirectInput(BaseWindow * wnd) {
 		wnd->inputDevice->SetDataFormat(&c_dfDIJoystick2);
 		wnd->inputDevice->SetCooperativeLevel(wnd->getWindowHandle(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	}
-
 }
 
 void enableXinput(bool enable) {
@@ -240,7 +229,6 @@ void enableXinput(bool enable) {
 }
 
 void processXInput(BaseWindow * wnd) {
-
 	wnd->inputProcessedByControllers = false;
 
 	//XINPUT_CAPABILITIES caps;
@@ -248,14 +236,10 @@ void processXInput(BaseWindow * wnd) {
 	//XInputGetCapabilities(0, 0, &caps);
 
 	// makes sure xinput device is always priority
-	if ( true || wnd->controllerAxisCallback && wnd->controllerButtonCallback) {
-
-
+	if (true || wnd->controllerAxisCallback && wnd->controllerButtonCallback) {
 		XINPUT_STATE state;
 		if (XInputGetState(0, &state) == ERROR_SUCCESS) {
-
-			if (XInputStateChangedThisFrame(&wnd->lastState, &state))
-			{
+			if (XInputStateChangedThisFrame(&wnd->lastState, &state)) {
 				std::cout << "State changed!" << std::endl;
 				wnd->inputProcessedByControllers = true;
 
@@ -266,7 +250,6 @@ void processXInput(BaseWindow * wnd) {
 				std::cout << "R Thumb Y: " << (float)(state.Gamepad.sThumbRY) / 32767.0 << std::endl;
 				std::cout << "L Thumb X: " << (float)(state.Gamepad.sThumbLX) / 32767.0 << std::endl;
 				std::cout << "L Thumb Y: " << (float)(state.Gamepad.sThumbLY) / 32767.0 << std::endl;
-
 			}
 
 			// return to prevent double controller processing
@@ -318,5 +301,4 @@ void processXInput(BaseWindow * wnd) {
 	//if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 	//	std::cout << "A button pressed" << std::endl;
 	//}
-
 }

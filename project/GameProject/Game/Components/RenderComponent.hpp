@@ -5,8 +5,7 @@
 #include "IBaseComponent.hpp"
 #include <RenderEngine/IMesh.hpp>
 
-class RenderComponent : public IBaseComponent<RenderComponent>
-{
+class RenderComponent : public IBaseComponent<RenderComponent> {
 public:
 
 	void init();

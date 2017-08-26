@@ -8,7 +8,6 @@ struct Block {
 };
 
 class Heap {
-
 public:
 
 	Heap();
@@ -18,7 +17,7 @@ public:
 
 	size_t getHeapSize() const;
 	size_t getUsedHeap() const;
-	
+
 	bool canAllocate(size_t size) const;
 	void* findNextFreeBlock(size_t size);
 

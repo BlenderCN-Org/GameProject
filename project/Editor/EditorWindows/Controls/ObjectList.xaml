@@ -30,7 +30,13 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="10*" MinWidth="50" />
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="treeView" Style="{DynamicResource DarkTreeView}">
+        <TreeView x:Name="treeView" Style="{DynamicResource DarkTreeView}" SelectedItemChanged="treeView_SelectedItemChanged">
+            <!--<TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="Foreground" Value="White" />
+                    <EventSetter Event="MouseDoubleClick" Handler="treeView_MouseDoubleClick" />
+                </Style>
+            </TreeView.ItemContainerStyle>-->
             <!--<TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     --><!-- We have to select the item which is right-clicked on --><!--
@@ -50,7 +56,7 @@
             <TreeViewItem x:Name="menu" Header="Menu" />
         </TreeView>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#FF1D1D1D" />
-        <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single" SelectionChanged="listSelectionChanged">
+        <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single" SelectionChanged="listSelectionChanged" MouseDoubleClick="treeView_MouseDoubleClick">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="NewItem" Header="New" Click="NewMenuItem_Click" />
@@ -64,11 +70,6 @@
                     <GridViewColumn Header="Editor ID" DisplayMemberBinding="{Binding EditorID}" />
                 </GridView>
             </ListView.View>
-            <ListViewItem>
-                <ListViewItem.Content>
-                    <data:BaseData />
-                </ListViewItem.Content>
-            </ListViewItem>
         </ListView>
     </Grid>
 </UserControl>

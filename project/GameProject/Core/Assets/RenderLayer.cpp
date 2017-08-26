@@ -5,7 +5,7 @@ void RenderLayer::init(IRenderEngine* re) {
 	renderBuffer = re->createFrameBuffer();
 	renderLayerShader = re->createShaderObject();
 
-	FrameBufferCreateInfo fbci{0};
+	FrameBufferCreateInfo fbci{ 0 };
 
 	fbci.height = 100;
 	fbci.width = 100;
@@ -13,11 +13,9 @@ void RenderLayer::init(IRenderEngine* re) {
 
 	renderBuffer->init(&fbci);
 	renderLayerShader->init();
-
 }
 
 void RenderLayer::release() {
-	
 	if (renderBuffer) {
 		renderBuffer->release();
 		renderBuffer = nullptr;

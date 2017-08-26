@@ -9,12 +9,12 @@
 static const char* RENDERLAYER_TAG = "REND";
 static const char* SCENE_TAG = "SCNE";
 static const char* STRING_TAG = "STR ";
+static const char* STATICOBJECT_TAG = "SOBJ";
 
 typedef uint32_t Tag;
 typedef std::map<uint32_t, Entry> EntryMap;
 
 class IAssetManager {
-
 public:
 
 	virtual uint32_t getNextFormID() = 0;
@@ -35,7 +35,6 @@ public:
 	virtual uint32_t getObjectCountWithTag(Tag tag) = 0;
 
 	virtual IDataObjectConverter* getConverter() const = 0;
-
 };
 
 #endif

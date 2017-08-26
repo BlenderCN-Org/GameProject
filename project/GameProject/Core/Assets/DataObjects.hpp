@@ -7,11 +7,12 @@ class DataObjectConverter : public IDataObjectConverter {
 public:
 	virtual ~DataObjectConverter() {};
 
-	virtual IRenderLayerDataObject* asRenderLayer(IDataObject*& dataObject);
-	virtual ISceneDataObject* asSceneData(IDataObject*& dataObject);
+	virtual IRenderLayerDataObject* asRenderLayer(IGameDataObject*& dataObject);
+	virtual ISceneDataObject* asSceneData(IGameDataObject*& dataObject);
+	virtual IStaticObjectDataObject* asStaticObjectData(IGameDataObject*& dataObject);
 };
 
-class DataObject : public IDataObject {
+class DataObject : public IGameDataObject {
 public:
 	DataObject(void* data, uint32_t dataSize);
 	virtual ~DataObject();
@@ -27,7 +28,6 @@ private:
 };
 
 class RenderLayerDataObject : public IRenderLayerDataObject {
-
 public:
 
 	RenderLayerDataObject(void* data, uint32_t dataSize);
@@ -36,7 +36,7 @@ public:
 	virtual RenderLayerSaveData* getRenderLayerData();
 	virtual void setRenderLayerData(RenderLayerSaveData* data);
 
-	// IDataObject
+	// IGameDataObject
 	virtual void* getData() const;
 	virtual uint32_t getDataSize() const;
 
@@ -47,11 +47,9 @@ private:
 	RenderLayerSaveData* rData;
 	void* rawData;
 	uint32_t rawDataSize;
-
 };
 
 class SceneDataObject : public ISceneDataObject {
-
 public:
 
 	SceneDataObject(void* data, uint32_t dataSize);
@@ -60,7 +58,7 @@ public:
 	virtual SceneSaveData* getSceneData();
 	virtual void setSceneData(SceneSaveData* data);
 
-	// IDataObject
+	// IGameDataObject
 	virtual void* getData() const;
 	virtual uint32_t getDataSize() const;
 
@@ -69,6 +67,28 @@ public:
 private:
 
 	SceneSaveData* rData;
+	void* rawData;
+	uint32_t rawDataSize;
+};
+
+class StaticObjectDataObject : public IStaticObjectDataObject {
+public:
+
+	StaticObjectDataObject(void* data, uint32_t dataSize);
+	virtual ~StaticObjectDataObject();
+
+	virtual StaticObjectSaveData* getStaticObjectData();
+	virtual void setStaticObjectData(StaticObjectSaveData* data);
+
+	// IGameDataObject
+	virtual void* getData() const;
+	virtual uint32_t getDataSize() const;
+
+	Type getType() const;
+
+private:
+
+	StaticObjectSaveData* rData;
 	void* rawData;
 	uint32_t rawDataSize;
 };

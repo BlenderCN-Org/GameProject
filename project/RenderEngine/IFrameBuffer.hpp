@@ -1,8 +1,7 @@
 #ifndef IFRAMEBUFFER_HPP
 #define IFRAMEBUFFER_HPP
 
-struct FrameBufferCreateInfo
-{
+struct FrameBufferCreateInfo {
 	int width;
 	int height;
 	int nrColorBuffers;
@@ -13,8 +12,7 @@ struct FrameBufferCreateInfo
 	bool useStencil;
 };
 
-class IFrameBuffer
-{
+class IFrameBuffer {
 public:
 
 	virtual bool init(FrameBufferCreateInfo *createInfo) = 0;

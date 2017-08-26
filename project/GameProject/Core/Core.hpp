@@ -3,14 +3,14 @@
 
 // project includes
 #include "RenderEngine/IRenderEngine.hpp"
+#include "../IEditorAccess.hpp"
 #include "Input/Input.hpp"
 #include "System/LibraryLoader.hpp"
 
 #include <Editor_Wrapper\IEditor.hpp>
 #include "Extensions\ExtensionHandler.hpp"
 
-class Core
-{
+class Core {
 public:
 
 	~Core();
@@ -24,7 +24,7 @@ public:
 	bool editorAvaible() const;
 	bool isInEditor() const;
 
-	void startEditor();
+	void startEditor(IEditorAccess* editAccess);
 	void stopEditor();
 
 	void update(float dt);
@@ -33,7 +33,7 @@ public:
 	void swap();
 
 	IRenderEngine* getRenderEngine();
-		
+
 	static int width;
 	static int heigth;
 

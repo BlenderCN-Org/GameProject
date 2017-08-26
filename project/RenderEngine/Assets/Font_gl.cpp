@@ -37,7 +37,7 @@ void Font_gl::setFontSize(int size) {
 }
 
 void Font_gl::setFont(char * font) {
-	if ( face )
+	if (face)
 		FT_Done_Face(face);
 	FT_New_Face(fontLib, font, 0, &face);
 	genFontTexture();
@@ -76,9 +76,9 @@ void Font_gl::genFontTexture() {
 
 	std::list<Character> l;
 	characters.clear();
-	for ( GLubyte c = 0; c < 255; c++ ) {
+	for (GLubyte c = 0; c < 255; c++) {
 		imageArray[c] = nullptr;
-		if ( FT_Load_Char(face, c, FT_LOAD_RENDER) ) {
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 			//std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 			continue;
 		}
@@ -105,7 +105,7 @@ void Font_gl::genFontTexture() {
 
 	ShelfPack sp(256, 512);
 
-	for ( std::list<Character>::const_iterator iterator = l.begin(), end = l.end(); iterator != end; ++iterator ) {
+	for (std::list<Character>::const_iterator iterator = l.begin(), end = l.end(); iterator != end; ++iterator) {
 		int w = iterator->size.x;
 		int h = iterator->size.y;
 
@@ -144,7 +144,7 @@ void Font_gl::genFontTexture() {
 
 	GLubyte id = 0;
 
-	for ( size_t i = 0; i < length; i++ ) {
+	for (size_t i = 0; i < length; i++) {
 		int index = int(i);
 		offsetX = sp[index].x;
 		offsetY = sp[index].y;
@@ -163,15 +163,15 @@ void Font_gl::genFontTexture() {
 
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, data);
 
-	for ( GLubyte c = 0; c < 255; c++ ) {
+	for (GLubyte c = 0; c < 255; c++) {
 		delete imageArray[c];
 		imageArray[c] = nullptr;
 	}
 
-//	std::ofstream out;
-//	out.open("asd.data", std::ios::binary);
-//	out.write(data, w*h);
-//	out.close();
+	//	std::ofstream out;
+	//	out.open("asd.data", std::ios::binary);
+	//	out.write(data, w*h);
+	//	out.close();
 
-	delete [] data;
+	delete[] data;
 }

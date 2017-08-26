@@ -14,5 +14,4 @@ void setupDirectInput(BaseWindow* wnd);
 void enableXinput(bool enable);
 void processXInput(BaseWindow* wnd);
 
-
 #endif

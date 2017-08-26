@@ -4,7 +4,6 @@
 #include <RenderEngine/IWindow.hpp>
 #include <Config\Config.hpp>
 
-
 #include <map>
 #include <sstream>
 
@@ -143,6 +142,7 @@ enum KEYBINDS_NAME {
 	KEYBIND_BACKWARD,
 	KEYBIND_LEFT,
 	KEYBIND_RIGHT,
+	KEYBIND_ENTER,
 
 	KEYBINDS_LENGTH
 };
@@ -151,14 +151,16 @@ static const char* KeyBindsStrings[] =
 { "KeyAction_Forward",
 	"KeyAction_Backward",
 	"KeyAction_Left",
-	"KeyAction_Right"
+	"KeyAction_Right",
+	"KeyAction_Enter"
 };
 
 static const char* KeyBindsDefault[] =
 { "17:0:0",
 "31:0:0",
 "30:0:0",
-"32:0:0"
+"32:0:0",
+"28:0:0"
 };
 
 extern KeyBind KeyBindings[];

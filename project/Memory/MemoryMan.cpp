@@ -29,7 +29,6 @@ void InitMemoryManagement() {
 }
 
 void ReleaseMemoryManagement() {
-
 	// heap is allowed to delete itself after all allocations have been released
 	h->markForDelete();
 	// try to free memory if this fails there are some objects remaining on the heap
@@ -76,8 +75,7 @@ void operator delete(void* ptr) {
 		ptr = (char*)ptr - sizeof(void*);
 		if (*(void**)ptr != nullptr) {
 			h->deallocate(ptr);
-		}
-		else {
+		} else {
 			free(ptr);
 			//printf("Err\n");
 		}

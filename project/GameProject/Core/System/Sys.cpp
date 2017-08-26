@@ -24,7 +24,6 @@ PDH_HCOUNTER* cpuCore;
 #endif
 
 void initSys() {
-
 	gConsole->print("Initializing System (Windows OS)\n");
 
 	srand((unsigned int)time(nullptr));
@@ -89,8 +88,9 @@ const int32_t getStringLength(const char* str) {
 		while (str[len] != '\0') {
 			len++;
 		}
+		len++;
 	}
-	return len + 1;
+	return len;
 }
 
 #endif

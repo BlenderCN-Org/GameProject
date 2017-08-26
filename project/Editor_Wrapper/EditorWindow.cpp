@@ -81,7 +81,6 @@ EditorWindowWrapper::EditorWindowWrapper(EditorWindow * window) : editWindow(win
 }
 
 void EditorWindowWrapper::WindowResizeCallback(System::Int32 w, System::Int32 h) {
-
 	width = w;
 	height = h;
 	//if (editWindow != nullptr && editWindow->resizeCallback != nullptr) {
@@ -120,7 +119,7 @@ void EditorWindowWrapper::WindowScrollCallback(System::Int32 scrollX, System::In
 void EditorWindowWrapper::WindowKeyboardCallback(System::Int32 key, System::Boolean pressed, System::Int32 modkeys) {
 	bool pr = (pressed == true ? true : false);
 	int btn = key;
-	
+
 	if (System::Threading::Monitor::TryEnter(this)) {
 		(*keyPress)[btn] = pr;
 		System::Threading::Monitor::Exit(this);

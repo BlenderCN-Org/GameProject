@@ -7,8 +7,7 @@
 
 #define LIBRARY HMODULE
 
-class Lib
-{
+class Lib {
 public:
 
 	bool loadLibrary(const char* libraryName);

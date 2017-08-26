@@ -12,7 +12,6 @@ namespace Extensions {
 		EntryMap::iterator eit = entries.end();
 
 		for (it; it != eit; it++) {
-
 			uint32_t formID = it->second.formID;
 			bool deleteFlag = it->second.deleteFlag;
 
@@ -20,6 +19,5 @@ namespace Extensions {
 			vf->Deleted = deleteFlag;
 			view->ReturnList->Add(vf);
 		}
-
 	}
 }

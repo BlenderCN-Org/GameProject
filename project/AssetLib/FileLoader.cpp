@@ -9,7 +9,7 @@ namespace AssetLib {
 
 		std::ifstream inFile;
 		inFile.open(fileName, std::ios::binary | std::ios::ate);
-		if ( inFile.is_open() ) {
+		if (inFile.is_open()) {
 			std::streamoff fileSize = inFile.tellg();
 			inFile.seekg(0, inFile.beg);
 			data = new char[(size_t)fileSize];

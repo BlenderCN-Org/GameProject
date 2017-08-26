@@ -1,17 +1,16 @@
 #include "MainWindowWrapper.hpp"
 
-
 void MainWindowWrapper::DoWork() {
 	window = gcnew Editor::MainWindow();
-	
+
 	window->Show();
 	mre->Set();
-	
-	//try {
+
+	try {
 		System::Windows::Threading::Dispatcher::Run();
-	//} catch (...) {
-	//	Console::Write("Something happened!");
-	//}
+	} catch (System::UnhandledExceptionEventArgs^) {
+		Console::Write("Something happened!");
+	}
 }
 
 void MainWindowWrapper::waitForInit() {
@@ -19,14 +18,12 @@ void MainWindowWrapper::waitForInit() {
 }
 
 MainWindowWrapper::MainWindowWrapper() {
-	
 	mre = gcnew Threading::ManualResetEvent(false);
 	thrd = gcnew Threading::Thread(gcnew Threading::ThreadStart(this, &MainWindowWrapper::DoWork));
-	
+
 	thrd->SetApartmentState(Threading::ApartmentState::STA);
 	thrd->IsBackground = true;
 	thrd->Start();
-	
 }
 
 MainWindowWrapper::~MainWindowWrapper() {
@@ -35,5 +32,4 @@ MainWindowWrapper::~MainWindowWrapper() {
 	//window->Close();
 	thrd->Sleep(1000);
 	thrd->Abort();
-
 }

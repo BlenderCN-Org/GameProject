@@ -8,8 +8,7 @@
 
 #include <mutex>
 
-struct UpdateInfo
-{
+struct UpdateInfo {
 	void* textureData;
 	int w, h;
 	int component;

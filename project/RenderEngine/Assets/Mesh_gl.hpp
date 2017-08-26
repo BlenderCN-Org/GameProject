@@ -6,8 +6,7 @@
 #include <GL\glew.h>
 #include <GL\GL.h>
 
-class Mesh_gl : public IMesh
-{
+class Mesh_gl : public IMesh {
 public:
 
 	virtual void init(MeshPrimitiveType p);

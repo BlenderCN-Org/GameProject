@@ -17,7 +17,6 @@ void PixelBuffer_gl::resize(uint32_t width, uint32_t height) {
 }
 
 void PixelBuffer_gl::read(uint32_t width, uint32_t height) {
-
 	savedW = width;
 	savedH = height;
 	glReadBuffer(GL_FRONT);

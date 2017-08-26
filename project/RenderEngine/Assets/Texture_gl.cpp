@@ -18,8 +18,8 @@ void Texture_gl::init(int _internalComponents, bool compress) {
 	compressChange = false;
 
 	int format = 0;
-	if ( compressTexture ) {
-		switch ( internalComponents ) {
+	if (compressTexture) {
+		switch (internalComponents) {
 			case 1:
 				internalFormat = GL_COMPRESSED_RED;
 				break;
@@ -36,7 +36,7 @@ void Texture_gl::init(int _internalComponents, bool compress) {
 				break;
 		}
 	} else {
-		switch ( internalComponents ) {
+		switch (internalComponents) {
 			case 1:
 				internalFormat = GL_RED;
 				break;
@@ -58,7 +58,7 @@ void Texture_gl::init(int _internalComponents, bool compress) {
 void Texture_gl::release() {
 	glDeleteTextures(1, &textureID);
 
-	if ( textureData ) {
+	if (textureData) {
 		delete textureData;
 		textureData = nullptr;
 	}
@@ -67,12 +67,12 @@ void Texture_gl::release() {
 }
 
 void Texture_gl::setCompressed(bool compression) {
-	if ( compressTexture == compression ) return;
+	if (compressTexture == compression) return;
 
 	compressTexture = compression;
 
-	if ( compressTexture ) {
-		switch ( internalComponents ) {
+	if (compressTexture) {
+		switch (internalComponents) {
 			case 1:
 				internalFormat = GL_COMPRESSED_RED;
 				break;
@@ -89,7 +89,7 @@ void Texture_gl::setCompressed(bool compression) {
 				break;
 		}
 	} else {
-		switch ( internalComponents ) {
+		switch (internalComponents) {
 			case 1:
 				internalFormat = GL_RED;
 				break;
@@ -116,8 +116,8 @@ void Texture_gl::setTextureData(int _width, int _height, int _components, void *
 
 	size_t size = width*height*components;
 
-	if ( textureData ) {
-		if ( update )
+	if (textureData) {
+		if (update)
 			return;
 		else
 			update = true;
@@ -126,7 +126,7 @@ void Texture_gl::setTextureData(int _width, int _height, int _components, void *
 
 	void* d = new char[size];
 
-	if ( d ) {
+	if (d) {
 		memcpy(d, _data, size);
 
 		// maybe unsafe idk
@@ -138,9 +138,9 @@ void Texture_gl::setTextureData(int _width, int _height, int _components, void *
 void Texture_gl::bind() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	if ( update ) {
+	if (update) {
 		int format = 0;
-		switch ( components ) {
+		switch (components) {
 			case 1:
 				format = GL_RED;
 				break;
@@ -168,7 +168,7 @@ void Texture_gl::bind() {
 
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &comp);
 
-		if ( comp ) {
+		if (comp) {
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &size);
 		} else {
 			//glGetTexLevelParameteriv(target, level, GL_TEXTURE_WIDTH, &oldW);
@@ -196,9 +196,9 @@ void Texture_gl::bind() {
 		printf("Size: %d\n", size);
 		update = false;
 		compressChange = false;
-	} else if ( compressChange ) {
+	} else if (compressChange) {
 		int format = 0;
-		switch ( components ) {
+		switch (components) {
 			case 1:
 				format = GL_RED;
 				break;
@@ -251,7 +251,7 @@ void Texture_gl::bind() {
 
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &comp);
 
-		if ( comp ) {
+		if (comp) {
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &size);
 		} else {
 			//glGetTexLevelParameteriv(target, level, GL_TEXTURE_WIDTH, &oldW);

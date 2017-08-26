@@ -42,11 +42,9 @@ struct TemporaryObject {
 };
 
 class TemporaryStorage {
-
 public:
 	inline TemporaryStorage() :tempList() {}
 	inline virtual ~TemporaryStorage() {
-
 		std::vector<TemporaryObject>::iterator it = tempList.begin();
 		std::vector<TemporaryObject>::iterator eit = tempList.end();
 
@@ -56,7 +54,6 @@ public:
 		}
 
 		tempList.clear();
-
 	}
 
 	template<typename T>
@@ -77,7 +74,6 @@ public:
 				//std::string name = type_name<decltype(t)>();
 				//gConsole->print("%s\n", name.c_str());
 				delete t;
-
 			};
 
 			tempList.push_back(to);
@@ -115,27 +111,22 @@ public:
 	}
 
 	inline void tick() {
-
 		if (lock.try_lock()) {
 			if (tempList.size() != 0) {
 				uint32_t start = tempList.size() - 1;
 				for (uint32_t i = start; i > 0; i--) {
-
 					TemporaryObject& to = tempList[i];
 
 					if (to.ftl == 0) {
-
 						if (to.tempObjPtr) {
 							to.destruct(to.tempObjPtr);
 							to.tempObjPtr = nullptr;
 						}
 
 						tempList.erase(tempList.begin() + i);
-
 					} else {
 						to.ftl--;
 					}
-
 				}
 			}
 			lock.unlock();
@@ -147,6 +138,5 @@ private:
 	std::vector<TemporaryObject> tempList;
 	std::mutex lock;
 };
-
 
 #endif

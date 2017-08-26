@@ -30,7 +30,19 @@ namespace Editor.EditorWindows.Controls
             {
                 SceneList.Items.Add(item);
             }
+        }
 
+        private void SceneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataSources.Scene item = SceneList.SelectedItem as DataSources.Scene;
+            if (item != null)
+            {
+                EventHandler.FormArgs fa = new EventHandler.FormArgs();
+                fa.FormID = item.EditorID;
+                fa.ObjectType = EventHandler.ObjectTypes.SCENE;
+
+                EventHandler.EventManager.OnSceneChangeEvent(fa);
+            }
         }
     }
 }

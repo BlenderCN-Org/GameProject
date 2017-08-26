@@ -1,29 +1,11 @@
 #include "ExtensionMap.hpp"
 
-#include <iostream>
-
 std::map<int, IExtension<void>*> Extensions::extensionMap;
 IAssetManager* Extensions::assetMan;
+IEditorAccess* Extensions::editAccess;
 
-namespace Extensions
-{
-	const char * AddObject::getName()
-	{
-		return name;
-	}
-	const uint32_t AddObject::getFormID()
-	{
-		return formID;
-	}
-	void * AddObject::getData()
-	{
-		return data;
-	}
-	uint32_t AddObject::dataSize()
-	{
-		return sizeize;
-	}
-	bool AddObject::isDeleted() {
-		return false;
+namespace Extensions {
+	void OnSceneChangeEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ formArg) {
+		editAccess->setActiveScene(formArg->FormID);
 	}
 }

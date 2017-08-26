@@ -7,14 +7,12 @@
 #include "DataObjects.hpp"
 
 GameFile::~GameFile() {
-
 	EntryMap::const_iterator it = loadedEntries.begin();
 	EntryMap::const_iterator eit = loadedEntries.end();
 
 	for (it; it != eit; it++) {
 		delete it->second.data;
 	}
-
 }
 
 void GameFile::init() {
@@ -22,7 +20,6 @@ void GameFile::init() {
 }
 
 void GameFile::load(const char* name) {
-
 	fileName = name;
 
 	uint32_t dataSize = 0;
@@ -41,7 +38,6 @@ void GameFile::load(const char* name) {
 			for (uint32_t i = 0; i < nrEntries; i++) {
 				offsetTable[offset[i].formID] = offset[i].offset;
 			}
-
 		} else if (v->version == 2) {
 			GameFileHeader_V2* gameFileV2 = (GameFileHeader_V2*)data;
 			header = *gameFileV2;
@@ -72,15 +68,12 @@ void GameFile::load(const char* name) {
 		//loadedEntries[e.formID] = e;
 		//
 		//nrEntries++;
-
 	} else {
 		// failed to read file
 	}
-
 }
 
 Entry* GameFile::loadEntry(uint32_t formId) {
-
 	Entry* entry = nullptr;
 
 	// already loaded
@@ -95,7 +88,6 @@ Entry* GameFile::loadEntry(uint32_t formId) {
 		inFile.read((char*)&e, sizeof(EntrySave));
 
 		if (formId == e.formID) {
-
 			uint32_t dataSize = e.entrySize - sizeof(EntrySave);
 			if (dataSize) {
 				char* data = new char[dataSize];
@@ -123,17 +115,16 @@ Entry* GameFile::loadEntry(uint32_t formId) {
 }
 
 uint32_t GameFile::getNextFormID() {
-
 	uint32_t id = 0;
 	for (uint32_t i = 0; i < nrEntries; i++) {
-		if (offsetTable.count(i) == 0) {
-			id = i;
+		if (offsetTable.count(i + 1) == 0) {
+			id = i + 1;
 			break;
 		}
 	}
 
 	if (id == 0) {
-		id = nrEntries;
+		id = nrEntries + 1;
 	}
 
 	return id;
@@ -148,7 +139,6 @@ EntryMap &GameFile::getAllEntries() {
 }
 
 void GameFile::createNewEntry(uint32_t formID, const char* tag) {
-
 	Entry e{};
 	e.formID = formID;
 	memcpy(e.tag, tag, 4);
@@ -169,7 +159,6 @@ GameFileHeader_V2 GameFile::getHeaderDataV2() const {
 }
 
 void GameFile::loadAllMissingEntries() {
-
 	OffsetTable::const_iterator it = offsetTable.begin();
 	OffsetTable::const_iterator eit = offsetTable.end();
 

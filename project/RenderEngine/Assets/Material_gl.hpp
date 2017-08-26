@@ -3,8 +3,7 @@
 
 #include "Texture_gl.hpp"
 
-class Material_gl
-{
+class Material_gl {
 public:
 
 	virtual void init(unsigned int nrTextures);

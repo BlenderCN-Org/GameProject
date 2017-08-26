@@ -1,17 +1,9 @@
 ﻿using Editor.DataSources;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Editor.EditorWindows
 {
@@ -35,10 +27,9 @@ namespace Editor.EditorWindows
             view.Filter = FormFilter;
 
             EventHandler.EventManager.onRefreshFormsEvent += new EventHandler<bool>(RefreshEvent);
-
         }
 
-        bool refreshOk = true;
+        private bool refreshOk = true;
 
         public void RefreshEvent(object sender, bool refresh)
         {
@@ -95,7 +86,7 @@ namespace Editor.EditorWindows
                 {
                     refreshOk = false;
                     EventHandler.EventManager.SendRefresEvent = false;
-                    foreach (DataSources.BaseData itm in FormList.SelectedItems )
+                    foreach (DataSources.BaseData itm in FormList.SelectedItems)
                     {
                         EventHandler.FormArgs fa = new EventHandler.FormArgs()
                         {
@@ -122,7 +113,6 @@ namespace Editor.EditorWindows
             {
                 Console.WriteLine("Abort delete");
             }
-
         }
 
         private void FakeEdit_Click(object sender, RoutedEventArgs e)
@@ -163,10 +153,7 @@ namespace Editor.EditorWindows
             }
             else
             {
-                
             }
-
         }
     }
-
 }

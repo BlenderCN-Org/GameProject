@@ -137,7 +137,6 @@ namespace Editor.DataSources
                 };
                 EventHandler.EventManager.OnEditFormEvent(fa);
             }
-
         }
     }
 }

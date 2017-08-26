@@ -1,11 +1,10 @@
 #include "Scene.hpp"
 
 void Scene::init() {
-
+	sceneDataObj = nullptr;
 }
 
 void Scene::release() {
-
 	std::vector<GameObject*>::const_iterator git = gameObjects.begin();
 	std::vector<GameObject*>::const_iterator geit = gameObjects.end();
 
@@ -36,6 +35,22 @@ void Scene::release() {
 	delete this;
 }
 
+void Scene::setSceneDataObj(SceneDataObject* dataObj) {
+	sceneDataObj = dataObj;
+}
+
+glm::vec4 Scene::getSkyColor() {
+	if (sceneDataObj) {
+		SceneSaveData* sdata = sceneDataObj->getSceneData();
+		return glm::vec4(sdata->skyColor[0], sdata->skyColor[1], sdata->skyColor[2], sdata->skyColor[3]);
+	}
+	return glm::vec4(0, 0, 0, 1);
+}
+
 uint32_t Scene::getGameObjectCount() {
 	return (uint32_t)gameObjects.size();
+}
+
+uint32_t Scene::getSceneID() {
+	return 0;
 }

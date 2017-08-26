@@ -11,7 +11,6 @@ namespace Editor.EditorWindows.AddItemDlgPages
         public AddMenuPanel()
         {
             InitializeComponent();
-            IdControl.ObjectLabel.Content = "Menu:";
         }
 
         private void AddMenuButton_Click(object sender, RoutedEventArgs e)

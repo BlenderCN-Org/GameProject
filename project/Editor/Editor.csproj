@@ -104,32 +104,26 @@
       <DependentUpon>CloseEditorMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\BaseData.cs" />
+    <Compile Include="DataSources\Cell.cs" />
     <Compile Include="DataSources\CommandType.cs" />
+    <Compile Include="DataSources\ICloneable.cs" />
     <Compile Include="DataSources\MenuItem.cs" />
     <Compile Include="DataSources\RenderLayer.cs" />
     <Compile Include="DataSources\Scene.cs" />
+    <Compile Include="DataSources\StaticObject.cs" />
     <Compile Include="DataSources\ViewForm.cs" />
     <Compile Include="EditorWindows\AddEditItemDialog.xaml.cs">
       <DependentUpon>AddEditItemDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddGameDialog.xaml.cs">
-      <DependentUpon>AddGameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\AddItemBase.cs" />
     <Compile Include="EditorWindows\AddItemDlgPages\AddMenuPanel.xaml.cs">
       <DependentUpon>AddMenuPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddScene.xaml.cs">
-      <DependentUpon>AddScene.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml.cs">
-      <DependentUpon>AddGameObject.xaml</DependentUpon>
+    <Compile Include="EditorWindows\AddItemDlgPages\AddStaticObject.xaml.cs">
+      <DependentUpon>AddStaticObject.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml.cs">
-      <DependentUpon>NameAndID.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorWindows\AddItemDlgPages\StandardControls\RenderLayerInfo.xaml.cs">
       <DependentUpon>RenderLayerInfo.xaml</DependentUpon>
@@ -186,11 +180,7 @@
     <Compile Include="EditorWindows\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
-    <Page Include="EditorWindows\AddItemDlgPages\AddGameDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddGameObject.xaml">
+    <Page Include="EditorWindows\AddItemDlgPages\AddStaticObject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,10 +189,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\AddItemDlgPages\StandardControls\ColorPicker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\StandardControls\NameAndID.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,10 +265,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="EditorWindows\AddEditItemDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EditorWindows\AddItemDlgPages\AddScene.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

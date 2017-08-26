@@ -11,13 +11,13 @@ inline std::string readShader(const char *filePath) {
 	std::string content;
 	std::ifstream fileStream(filePath, std::ios::in);
 
-	if ( !fileStream.is_open() ) {
+	if (!fileStream.is_open()) {
 		printf("Could not open file %s\n", filePath);
 		return "";
 	}
 
 	std::string line = "";
-	while ( !fileStream.eof() ) {
+	while (!fileStream.eof()) {
 		std::getline(fileStream, line);
 		content.append(line + "\n");
 	}
@@ -31,7 +31,7 @@ inline bool CreateProgram(GLuint &programID, std::string shadernames[], GLenum s
 
 	bool success = true;
 
-	for ( int i = 0; i < numberOfShaders && success; i++ ) {
+	for (int i = 0; i < numberOfShaders && success; i++) {
 		std::string shaderStr = readShader(shadernames[i].c_str());
 		const char *shaderChar = shaderStr.c_str();
 		GLuint shader = glCreateShader(shaderType[i]);
@@ -40,7 +40,7 @@ inline bool CreateProgram(GLuint &programID, std::string shadernames[], GLenum s
 
 		GLint isCompiled = 0;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
-		if ( isCompiled == GL_FALSE ) {
+		if (isCompiled == GL_FALSE) {
 			success = false;
 			printf("Failed to compile shader %s\n", shadernames[i].c_str());
 
@@ -58,7 +58,7 @@ inline bool CreateProgram(GLuint &programID, std::string shadernames[], GLenum s
 
 	GLint linked;
 	glGetProgramiv(programID, GL_LINK_STATUS, &linked);
-	if ( linked != GL_TRUE ) {
+	if (linked != GL_TRUE) {
 		success = false;
 		printf("Failed to link shader program %d\n", programID);
 
@@ -68,7 +68,7 @@ inline bool CreateProgram(GLuint &programID, std::string shadernames[], GLenum s
 		printf("Compiler log:\n%s\n", log);
 	}
 
-	if ( success ) {
+	if (success) {
 		return true;
 	} else {
 		glDeleteProgram(programID);

@@ -270,7 +270,6 @@
     <ClCompile Include="Core\Assets\RenderLayer.cpp" />
     <ClCompile Include="Core\Core.cpp" />
     <ClCompile Include="Core\CoreGlobals.cpp" />
-    <ClCompile Include="Core\Extensions\EditDataExtension.cpp" />
     <ClCompile Include="Core\Extensions\ExtensionHandler.cpp" />
     <ClCompile Include="Core\Extensions\SaveExtension.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
@@ -298,7 +297,6 @@
     <ClInclude Include="Core\Assets\RenderLayer.hpp" />
     <ClInclude Include="Core\Core.hpp" />
     <ClInclude Include="Core\CoreGlobals.hpp" />
-    <ClInclude Include="Core\Extensions\EditDataExtension.hpp" />
     <ClInclude Include="Core\Extensions\ExtensionHandler.hpp" />
     <ClInclude Include="Core\Extensions\SaveExtension.hpp" />
     <ClInclude Include="Core\Input\Input.hpp" />
@@ -336,6 +334,16 @@
     <None Include="Blender Plugin\export_mesh.py" />
     <None Include="Blender Plugin\export_skeleton.py" />
     <None Include="Blender Plugin\__init__.py" />
+    <None Include="Game\EditorAccess.cpp" />
+    <None Include="Game\EditorAccess.hpp" />
+    <None Include="Game\GUI\DefaultTextShader.hpp" />
+    <None Include="Game\GUI\Gui.cpp" />
+    <None Include="Game\GUI\Gui.hpp" />
+    <None Include="Game\GUI\Text.cpp" />
+    <None Include="Game\GUI\Text.hpp" />
+    <None Include="Game\Menu.cpp" />
+    <None Include="Game\Menu.hpp" />
+    <None Include="IEditorAccess.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

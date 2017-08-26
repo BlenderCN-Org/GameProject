@@ -210,6 +210,12 @@ void RenderEngine::stencilFunc(unsigned int func, int ref, unsigned int mask) {
 	}
 }
 
+void RenderEngine::setClearColor(float r, float g, float b, float a) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glClearColor(r, g, b, a);
+	}
+}
+
 void RenderEngine::setBlending(bool enable) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		GLenum cap = GL_BLEND;
@@ -326,7 +332,6 @@ void RenderEngine::toNormalizedDeviceSpace(float & x, float & y) {
 		x = lx;
 		y = -ly;
 	} else if (reci.renderEngineType == RenderEngineType::eRenderVulkan) {
-
 	}
 }
 
@@ -335,6 +340,5 @@ void RenderEngine::printInfo(GLinfo info) {
 }
 
 IRenderEngine* CreateRenderEngine() {
-
 	return new RenderEngine();
 }

@@ -51,7 +51,7 @@ void setupRID(HWND windowHandle) {
 	rid[2].dwFlags = 0;   // add gamepad
 	rid[2].hwndTarget = windowHandle;
 
-	if ( RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE ) {
+	if (RegisterRawInputDevices(rid, 2, sizeof(rid[0])) == FALSE) {
 		//registration failed. Call GetLastError for the cause of the error
 		std::cerr << "register RID failed\n";
 		std::cerr << GetLastError() << std::endl;
@@ -61,17 +61,17 @@ void setupRID(HWND windowHandle) {
 BOOL characterCallback(BaseWindow* wnd, UINT msg, WPARAM wParam) {
 	const bool plain = (msg != WM_SYSCHAR);
 
-	if ( msg == WM_UNICHAR && wParam == UNICODE_NOCHAR ) {
+	if (msg == WM_UNICHAR && wParam == UNICODE_NOCHAR) {
 		// WM_UNICHAR is not sent by Windows, but is sent by some
 		// third-party input method engine
 		// Returning TRUE here announces support for this message
 		return TRUE;
 	}
 	unsigned int codepoint = (unsigned int)wParam;
-	if ( codepoint < 32 || (codepoint > 126 && codepoint < 160) )
+	if (codepoint < 32 || (codepoint > 126 && codepoint < 160))
 		return 0;
 
-	if ( wnd->characterCallback )
+	if (wnd->characterCallback)
 		wnd->characterCallback(wnd, codepoint);
 	return 0;
 }
@@ -80,27 +80,27 @@ void inputCallback(BaseWindow* wnd, LPARAM lParam) {
 	UINT dwSize = 0;
 
 	GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
-					sizeof(RAWINPUTHEADER));
+		sizeof(RAWINPUTHEADER));
 	LPBYTE lpb = new BYTE[dwSize];
-	if ( lpb == NULL ) {
+	if (lpb == NULL) {
 		return;
 	}
 
-	if ( GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize,
-						 sizeof(RAWINPUTHEADER)) != dwSize ) {
+	if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize,
+		sizeof(RAWINPUTHEADER)) != dwSize) {
 		//OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
 		std::cerr << "GetRawInputData does not return correct size !\n";
 	}
 
 	RAWINPUT* raw = (RAWINPUT*)lpb;
-	if ( raw->header.dwType == RIM_TYPEKEYBOARD ) {
+	if (raw->header.dwType == RIM_TYPEKEYBOARD) {
 		processRawKeyboardEvents(wnd, raw->data.keyboard);
 		//printf("key event\n");
-	} else if ( raw->header.dwType == RIM_TYPEMOUSE ) {
+	} else if (raw->header.dwType == RIM_TYPEMOUSE) {
 		processRawMouseEvents(wnd, raw->data.mouse);
 		//printf("\nmouse event\n");
 	} else {
-	processRawHidEvents(wnd, raw);
+		processRawHidEvents(wnd, raw);
 	}
 	delete[] lpb;
 }
@@ -108,32 +108,33 @@ void inputCallback(BaseWindow* wnd, LPARAM lParam) {
 LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
-	switch ( msg ) {
+	switch (msg) {
 		break;
 		case WM_SETFOCUS:
-			if ( wnd->focusCallback )
+			if (wnd->focusCallback)
 				wnd->focusCallback(wnd, true);
 			enableXinput(true);
 			return 1;
 			break;
 		case WM_KILLFOCUS:
-			if ( wnd->focusCallback )
+			if (wnd->focusCallback)
 				wnd->focusCallback(wnd, false);
 			enableXinput(false);
 			return 1;
 			break;
 
-		case RESTORE_FROM_EDIT: {
+		case RESTORE_FROM_EDIT:
+		{
 			wnd->setWindowBorderless(false);
 			SetParent(hWnd, NULL);
 			break;
 		}
 		case WM_SIZE:
 		{
-			if ( wnd ) {
+			if (wnd) {
 				int width = LOWORD(lParam);
 				int height = HIWORD(lParam);
-				if ( wnd->resizeCallback )
+				if (wnd->resizeCallback)
 					wnd->resizeCallback(wnd, width, height);
 
 				wnd->setWindowSize(width, height);
@@ -150,8 +151,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			// g_bWindowActive is used to control if the Windows key is filtered by the keyboard hook or not.
 			if (wParam == TRUE) {
 				g_bWindowActive = true;
-			}
-			else {
+			} else {
 				g_bWindowActive = false;
 			}
 			break;
@@ -165,7 +165,7 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 		case WM_INPUT:
 		{
-			if ( wnd ) {
+			if (wnd) {
 				inputCallback(wnd, lParam);
 				DefWindowProc(hWnd, msg, wParam, lParam);
 				return 1;
@@ -204,7 +204,7 @@ void setPixelFormatOGL(HDC windowDC) {
 		0, 0, 0                // layer masks ignored
 	};
 
-	if ( !openglInitialized ) {
+	if (!openglInitialized) {
 		// todo create tempContext and init ogl extensions
 		HWND window = setupWindow();
 		HDC dc = GetDC(window);
@@ -240,7 +240,7 @@ void setPixelFormatOGL(HDC windowDC) {
 
 	selectedPixelFormat = 0;
 
-	if ( wglChoosePixelFormatARB ) {
+	if (wglChoosePixelFormatARB) {
 		wglChoosePixelFormatARB(windowDC, intAttributes, floatAttributes, 1, &selectedPixelFormat, &foundPixelFormats);
 	} else {
 		selectedPixelFormat = ChoosePixelFormat(windowDC, &pfd);
@@ -250,7 +250,7 @@ void setPixelFormatOGL(HDC windowDC) {
 }
 
 int registerWindowClass() {
-	if ( windowClassInitialized )
+	if (windowClassInitialized)
 		return windowClassInitialized;
 	WNDCLASS wc{};
 
@@ -266,17 +266,17 @@ int registerWindowClass() {
 
 HWND setupWindow() {
 	HWND windowHandle = NULL;
-	if ( windowClassInitialized ) {
+	if (windowClassInitialized) {
 		windowHandle = CreateWindowEx(0,
-									  windowClassName,
-									  _T("Window"),
-									  WS_OVERLAPPEDWINDOW,
-									  CW_USEDEFAULT, CW_USEDEFAULT,
-									  CW_USEDEFAULT, CW_USEDEFAULT,
-									  NULL,
-									  NULL,
-									  GetModuleHandle(NULL),
-									  NULL);
+			windowClassName,
+			_T("Window"),
+			WS_OVERLAPPEDWINDOW,
+			CW_USEDEFAULT, CW_USEDEFAULT,
+			CW_USEDEFAULT, CW_USEDEFAULT,
+			NULL,
+			NULL,
+			GetModuleHandle(NULL),
+			NULL);
 	}
 
 	return windowHandle;
@@ -286,7 +286,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 	setPixelFormatOGL(windowDC);
 
 	HGLRC renderingContext = 0;
-	if ( wglCreateContextAttribsARB ) {
+	if (wglCreateContextAttribsARB) {
 		int contextAttributes[] = {
 			WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
 			WGL_CONTEXT_MINOR_VERSION_ARB, 5,
@@ -336,7 +336,7 @@ void BaseWindow::setWindowSize(int x, int y) {
 bool BaseWindow::isVisible() {
 	LONG_PTR style = GetWindowLongPtr(windowHandle, GWL_STYLE);
 
-	if ( style & WS_VISIBLE )
+	if (style & WS_VISIBLE)
 		return true;
 	return false;
 }
@@ -376,19 +376,19 @@ void GLWindow::init() {
 
 	setupRID(windowHandle);
 
-	if ( windowHandle ) {
+	if (windowHandle) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
 		setupDirectInput(this);
 		deviceContext = GetDC(windowHandle);
 		openglRenderContext = createOpenGLContext(deviceContext);
 
-		if ( !openglRenderContext )
+		if (!openglRenderContext)
 			printf("something went wrong");
-		if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
+		if (wglMakeCurrent(deviceContext, openglRenderContext) == FALSE) {
 			printf("making current failed\n");
 		}
 
-		if ( wglSwapIntervalEXT )
+		if (wglSwapIntervalEXT)
 			wglSwapIntervalEXT(1);
 	}
 
@@ -413,14 +413,14 @@ void GLWindow::pollMessages() {
 
 	processXInput(this);
 
-	while ( PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE) ) {
+	while (PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 }
 
 void GLWindow::makeCurrent() {
-	if ( wglMakeCurrent(deviceContext, openglRenderContext) == FALSE ) {
+	if (wglMakeCurrent(deviceContext, openglRenderContext) == FALSE) {
 		printf("making current failed\n");
 	}
 }
@@ -436,7 +436,7 @@ void VKWindow::init() {
 
 	setupRID(windowHandle);
 
-	if ( windowHandle ) {
+	if (windowHandle) {
 		SetWindowLongPtr(windowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
 		vulkanInitialize();
@@ -463,7 +463,7 @@ void VKWindow::init() {
 		instanceData.surfaceFormat = VkFormat::VK_FORMAT_UNDEFINED;
 		instanceData.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 
-		if ( surfaceFormats[0].format == VkFormat::VK_FORMAT_UNDEFINED ) {
+		if (surfaceFormats[0].format == VkFormat::VK_FORMAT_UNDEFINED) {
 			instanceData.surfaceFormat = VkFormat::VK_FORMAT_B8G8R8A8_UNORM;
 			instanceData.colorSpace = VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 		} else {
@@ -489,7 +489,7 @@ void VKWindow::setVsync(bool vsync) {}
 
 void VKWindow::pollMessages() {
 	MSG msg;
-	while ( PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE) ) {
+	while (PeekMessage(&msg, windowHandle, NULL, NULL, PM_REMOVE)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
@@ -507,7 +507,7 @@ void VKWindow::swapBuffers() {
 	VkResult r = VkResult::VK_SUCCESS;
 
 	r = vkAcquireNextImageKHR(instanceData.device, swapchainData.swapchain, UINT64_MAX, imageAvaible, waitFence, &currentImage);
-	if ( r == VkResult::VK_SUBOPTIMAL_KHR ) {
+	if (r == VkResult::VK_SUBOPTIMAL_KHR) {
 		std::cout << "Suboptimal swapchain\n";
 	}
 
@@ -537,13 +537,13 @@ void VKWindow::swapBuffers() {
 	presentInfo.pWaitSemaphores = &renderingFinished;
 
 	r = vkQueuePresentKHR(queue, &presentInfo);
-	if ( r == VkResult::VK_SUBOPTIMAL_KHR ) {
+	if (r == VkResult::VK_SUBOPTIMAL_KHR) {
 		std::cout << "Suboptimal swapchain\n";
-	} else if ( r == VkResult::VK_ERROR_OUT_OF_DATE_KHR ) {
+	} else if (r == VkResult::VK_ERROR_OUT_OF_DATE_KHR) {
 		std::cout << "Swapchain out of date\n";
 	}
 
-	if ( recreateSwapchain ) {
+	if (recreateSwapchain) {
 		createSwapchain(instanceData, swapchainData);
 		recreateSwapchain = false;
 
@@ -584,7 +584,7 @@ void VKWindow::swapBuffers() {
 		subresourceRange.baseArrayLayer = 0;
 		subresourceRange.layerCount = 1;
 
-		for ( uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i ) {
+		for (uint32_t i = 0; i < swapchainData.swapchainImageCount; ++i) {
 			VkImageMemoryBarrier barrier_from_present_to_clear = {
 				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,     // VkStructureType                        sType
 				nullptr,                                    // const void                            *pNext
@@ -618,7 +618,7 @@ void VKWindow::swapBuffers() {
 
 			vkCmdPipelineBarrier(presentBuffers[i], VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier_from_clear_to_present);
 			vkEndCommandBuffer(presentBuffers[i]);
-}
+		}
 	}
 }
 

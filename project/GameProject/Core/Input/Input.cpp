@@ -9,13 +9,14 @@ Input* Input::singleton = nullptr;
 KeyBind KeyBindings[KEYBINDS_NAME::KEYBINDS_LENGTH];
 
 void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
-	if (!singleton->consoleActive && action == 2)
+	if (!singleton->consoleActive && action == 2) {
 		return;
+	}
 
 	singleton->keyMap[InputEvent{ scancode, false }] = (action == ACTION_BUTTON_DOWN);
 
 	singleton->modkey = mods;
-	if (singleton->consoleActive)
+	if (singleton->consoleActive) {
 		if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
 			//singleton->console->print("\n>");
 			gConsole->execute();
@@ -23,15 +24,18 @@ void Input::keyCallback(IWindow* window, int scancode, int action, int mods) {
 			gConsole->removeLastChar();
 			//singleton->console->backSpace();
 		}
-		//printf("Scancode %d with modkey %d\n", scancode, mods);
+		printf("Scancode %d with modkey %d\n", scancode, mods);
+	}
 
-		if (action == ACTION_BUTTON_UP)
-			singleton->releaseMap[InputEvent{ scancode, false }] = true;
+	if (action == ACTION_BUTTON_UP) {
+		singleton->releaseMap[InputEvent{ scancode, false }] = true;
+	}
 }
 
 void Input::mouseButtonCallback(IWindow* window, int button, int action, int mods) {
-	if (!singleton->consoleActive && action == 2)
+	if (!singleton->consoleActive && action == 2) {
 		return;
+	}
 
 	//printf("Mouse callback\n");
 
@@ -43,8 +47,9 @@ void Input::mouseButtonCallback(IWindow* window, int button, int action, int mod
 }
 
 void Input::cursorPosCallback(IWindow * window, int x, int y) {
-	if (singleton->blockInput)
+	if (singleton->blockInput) {
 		return;
+	}
 	singleton->xDelta = float(x) - float(singleton->oldX);
 	singleton->yDelta = float(y) - float(singleton->oldY);
 
@@ -157,11 +162,10 @@ bool Input::isKeyBindPressed(KeyBind & keyBind, bool includeMods) {
 }
 
 bool Input::releasedThisFrame(KeyBind & keyBind, bool includeMods) {
-
 	auto it = releaseMap.find(InputEvent{ keyBind.code, keyBind.mouse });
 	bool released = false;
 
-	if (it != keyMap.end()) {
+	if (it != releaseMap.end()) {
 		released = it->second;
 		if (includeMods) {
 			released &= (keyBind.mod == modkey);
@@ -176,8 +180,13 @@ void Input::getCursorDelta(float & x, float & y) {
 }
 
 bool Input::consoleKeyWasPressed() {
-	bool pressed = keyMap[InputEvent{ 41, false }];
-	keyMap[InputEvent{ 41, false }] = false;
+	auto& it = keyMap.find(InputEvent{ 41, false });
+	//keyMap[InputEvent{ 41, false }] = false;
+	bool pressed = false;
+	if (it != keyMap.end()) {
+		pressed = it->second;
+		it->second = false;
+	}
 	return pressed;
 }
 
@@ -195,7 +204,6 @@ bool Input::consoleIsActive() {
 }
 
 void Input::reset() {
-
 	//printf("Pos (%d,%d)\n", int(xPos), int(yPos));
 	//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
 	blockInput = false;

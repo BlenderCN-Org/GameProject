@@ -7,8 +7,7 @@
 #define toDEGREE 57.2957795f
 #define toRADIAN 0.0174532925f
 
-class CameraInput
-{
+class CameraInput {
 public:
 
 	void init(glm::mat4* viewMat);

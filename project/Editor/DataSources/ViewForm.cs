@@ -6,7 +6,6 @@ namespace Editor.DataSources
     {
         public ViewForm()
         {
-
         }
 
         public ViewForm(uint eid, string name) : base(eid, name)
@@ -39,6 +38,5 @@ namespace Editor.DataSources
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
-
     }
 }

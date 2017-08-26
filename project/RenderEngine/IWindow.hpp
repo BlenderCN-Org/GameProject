@@ -44,8 +44,7 @@ typedef void WindowControllerAxisCallback_t(IWindow* window, unsigned int axis, 
 typedef void WindowControllerButtonCallback_t(IWindow* window, unsigned int button, int action);
 typedef void WindowFocus_t(IWindow* window, bool focus);
 
-class IWindow
-{
+class IWindow {
 public:
 
 	virtual void getCursorPos(int &x, int &y) = 0;
@@ -84,7 +83,6 @@ public:
 	virtual void setTitle(const char* title) = 0;
 
 	virtual void* getNativeWindowHandle() = 0;
-
 };
 
 #endif

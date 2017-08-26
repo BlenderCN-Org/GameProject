@@ -11,7 +11,6 @@ void SafeRealease(T** p) {
 	*p = 0;
 }
 
-
 BOOL IsXInputDevice(const GUID * pGuidProductFromDirectInput) {
 	IWbemLocator*           pIWbemLocator = NULL;
 	IEnumWbemClassObject*   pEnumDevices = NULL;
@@ -43,13 +42,13 @@ BOOL IsXInputDevice(const GUID * pGuidProductFromDirectInput) {
 	bstrClassName = SysAllocString(L"Win32_PNPEntity");   if (bstrClassName == NULL) goto LCleanup;
 	bstrDeviceID = SysAllocString(L"DeviceID");          if (bstrDeviceID == NULL)  goto LCleanup;
 
-	// Connect to WMI 
+	// Connect to WMI
 	hr = pIWbemLocator->ConnectServer(bstrNamespace, NULL, NULL, 0L,
 		0L, NULL, NULL, &pIWbemServices);
 	if (FAILED(hr) || pIWbemServices == NULL)
 		goto LCleanup;
 
-	// Switch security level to IMPERSONATE. 
+	// Switch security level to IMPERSONATE.
 	CoSetProxyBlanket(pIWbemServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
 		RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
 
@@ -66,12 +65,12 @@ BOOL IsXInputDevice(const GUID * pGuidProductFromDirectInput) {
 		if (uReturned == 0)
 			break;
 
-		for (iDevice = 0; iDevice<uReturned; iDevice++) {
+		for (iDevice = 0; iDevice < uReturned; iDevice++) {
 			// For each device, get its device ID
 			hr = pDevices[iDevice]->Get(bstrDeviceID, 0L, &var, NULL, NULL);
 			if (SUCCEEDED(hr) && var.vt == VT_BSTR && var.bstrVal != NULL) {
 				// Check if the device ID contains "IG_".  If it does, then it's an XInput device
-				// This information can not be found from DirectInput 
+				// This information can not be found from DirectInput
 				if (wcsstr(var.bstrVal, L"IG_")) {
 					// If it does, then get the VID/PID from var.bstrVal
 					DWORD dwPid = 0, dwVid = 0;
@@ -102,7 +101,7 @@ LCleanup:
 		SysFreeString(bstrDeviceID);
 	if (bstrClassName)
 		SysFreeString(bstrClassName);
-	for (iDevice = 0; iDevice<20; iDevice++)
+	for (iDevice = 0; iDevice < 20; iDevice++)
 		SafeRealease(&pDevices[iDevice]);
 	SafeRealease(&pEnumDevices);
 	SafeRealease(&pIWbemLocator);
@@ -115,7 +114,6 @@ LCleanup:
 }
 
 bool OutsideDeadZoneCompare(SHORT oldValue, SHORT &newValue, SHORT deadzone) {
-
 	SHORT oldAbs = abs(oldValue);
 	SHORT newAbs = abs(newValue);
 
@@ -127,14 +125,13 @@ bool OutsideDeadZoneCompare(SHORT oldValue, SHORT &newValue, SHORT deadzone) {
 		newValue = 0;
 		return true;
 	}
-	
+
 	newValue = 0;
 	// no change
 	return false;
 }
 
-bool XInputStateChangedThisFrame(PXINPUT_STATE oldState, PXINPUT_STATE newState)
-{
+bool XInputStateChangedThisFrame(PXINPUT_STATE oldState, PXINPUT_STATE newState) {
 	bool buttonStateChange = false;
 	bool axisStateChange = false;
 
@@ -151,14 +148,14 @@ bool XInputStateChangedThisFrame(PXINPUT_STATE oldState, PXINPUT_STATE newState)
 	if (oState.bRightTrigger != nState.bRightTrigger) {
 		axisStateChange = true;
 	}
-	
-	if (OutsideDeadZoneCompare(oState.sThumbLX, nState.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) ) {
+
+	if (OutsideDeadZoneCompare(oState.sThumbLX, nState.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
 		axisStateChange = true;
 	}
 	if (OutsideDeadZoneCompare(oState.sThumbLY, nState.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
 		axisStateChange = true;
 	}
-	
+
 	if (OutsideDeadZoneCompare(oState.sThumbRX, nState.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
 		axisStateChange = true;
 	}

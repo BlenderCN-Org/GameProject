@@ -12,34 +12,34 @@ std::vector<const char*> vulkanInstanceNames = { "VK_LAYER_LUNARG_standard_valid
 // vulkan debug callback
 
 VKAPI_ATTR VkBool32 VKAPI_CALL vulkanDebugCallback(VkDebugReportFlagsEXT flags,
-												   VkDebugReportObjectTypeEXT objType,
-												   uint64_t sourcObj,
-												   size_t location,
-												   int32_t msgCode,
-												   const char* layerPrefix,
-												   const char* msg,
-												   void* userData) {
+	VkDebugReportObjectTypeEXT objType,
+	uint64_t sourcObj,
+	size_t location,
+	int32_t msgCode,
+	const char* layerPrefix,
+	const char* msg,
+	void* userData) {
 	std::ostringstream stream;
 
-	if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) {
+	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_INFORMATION_BIT_EXT) {
 		stream << "INFO: ";
-	} else if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_WARNING_BIT_EXT ) {
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_WARNING_BIT_EXT) {
 		stream << "WARNING: ";
-	} else if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) {
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
 		stream << "PERF: ";
-	} else if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_DEBUG_BIT_EXT ) {
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
 		stream << "DEBUG: ";
-	} else if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT ) {
+	} else if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
 		stream << "ERROR: ";
 	}
 	stream << "@[" << layerPrefix << "]: ";
 	stream << msg << std::endl;
 
-	if ( strcmp(layerPrefix, "MEM") != 0 ) {
+	if (strcmp(layerPrefix, "MEM") != 0) {
 		std::cout << stream.str();
 	}
 
-	if ( flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT ) {
+	if (flags & VkDebugReportFlagBitsEXT::VK_DEBUG_REPORT_ERROR_BIT_EXT) {
 		system("pause");
 		//	MessageBoxA(NULL, stream.str().c_str(), "Vulkan Error!", MB_OK);
 	}
@@ -84,8 +84,8 @@ VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surf
 		VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
 		vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, supportedPresentModes);
 
-		for ( size_t i = 0; i < presentModeCount; i++ ) {
-			if ( supportedPresentModes[i] == VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR ) {
+		for (size_t i = 0; i < presentModeCount; i++) {
+			if (supportedPresentModes[i] == VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR) {
 				presentMode = supportedPresentModes[i];
 				break;
 			}
@@ -113,7 +113,7 @@ VkSwapchainKHR createSwapchain(const VulkanInstance &instanceData, uint32_t surf
 
 	VkResult r = vkCreateSwapchainKHR(instanceData.device, &swapchainCreateInfo, nullptr, &swapchain);
 
-	if ( oldSwapchain != VK_NULL_HANDLE ) {
+	if (oldSwapchain != VK_NULL_HANDLE) {
 		vkDestroySwapchainKHR(instanceData.device, oldSwapchain, nullptr);
 	}
 
@@ -128,8 +128,8 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 		VkPresentModeKHR* supportedPresentModes = new VkPresentModeKHR[presentModeCount];
 		vkGetPhysicalDeviceSurfacePresentModesKHR(instanceData.gpu, instanceData.surface, &presentModeCount, supportedPresentModes);
 
-		for ( size_t i = 0; i < presentModeCount; i++ ) {
-			if ( supportedPresentModes[i] == VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR ) {
+		for (size_t i = 0; i < presentModeCount; i++) {
+			if (supportedPresentModes[i] == VkPresentModeKHR::VK_PRESENT_MODE_FIFO_KHR) {
 				presentMode = supportedPresentModes[i];
 				break;
 			}
@@ -142,7 +142,7 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(instanceData.gpu, instanceData.surface, &surfaceCapabilities);
 
-	if ( surfaceCapabilities.currentExtent.width < UINT32_MAX ) {
+	if (surfaceCapabilities.currentExtent.width < UINT32_MAX) {
 		swapchain.surfaceWidth = surfaceCapabilities.currentExtent.width;
 		swapchain.surfaceHeight = surfaceCapabilities.currentExtent.height;
 	}
@@ -168,7 +168,7 @@ void createSwapchain(const VulkanInstance &instanceData, VulkanSwapchain & swapc
 
 	VkResult r = vkCreateSwapchainKHR(instanceData.device, &swapchainCreateInfo, nullptr, &swapchain.swapchain);
 
-	if ( oldSwapchain != VK_NULL_HANDLE ) {
+	if (oldSwapchain != VK_NULL_HANDLE) {
 		vkDestroySwapchainKHR(instanceData.device, oldSwapchain, nullptr);
 	}
 }

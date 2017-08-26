@@ -3,8 +3,7 @@
 
 #include "../CoreInclude.hpp"
 
-ref class MainWindowWrapper
-{
+ref class MainWindowWrapper {
 public:
 
 	Editor::MainWindow ^window;
@@ -18,7 +17,6 @@ public:
 
 	MainWindowWrapper();
 	~MainWindowWrapper();
-
 };
 
 #endif

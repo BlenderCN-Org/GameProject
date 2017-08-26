@@ -15,7 +15,6 @@ Core::~Core() {
 }
 
 void Core::init() {
-
 	gConsole = new Console();
 	gTemporaryStorage = new TemporaryStorage();
 	initSys();
@@ -70,18 +69,16 @@ void Core::init() {
 
 	gCore = this;
 	gRenderEngine = renderEngine;
-
 }
 
 void Core::freeResources() {
-
 	if (editor) {
 		EditorStatus editorStatus = editor->getStatus();
 		while (editorStatus != EditorStatus::STOPPED) {
 			editor->update();
 			EditorStatus editorStatus = editor->getStatus();
 		}
-		
+
 		extHandler->unloadExtension(editor);
 		delete extHandler;
 		editor->releaseEditor();
@@ -96,9 +93,11 @@ void Core::freeResources() {
 	delete gTemporaryStorage;
 	delete gConsole;
 
+	gTemporaryStorage = nullptr;
+	gConsole = nullptr;
+
 	gCore = nullptr;
 	gRenderEngine = nullptr;
-
 }
 
 bool Core::isRunning() {
@@ -117,9 +116,10 @@ bool Core::isInEditor() const {
 	return editor->getStatus() == EditorStatus::RUNNING;
 }
 
-void Core::startEditor() {
+void Core::startEditor(IEditorAccess* editAccess) {
 	if (editorAvaible() && editor->initializeEditor(renderEngine)) {
 		editor->setAssetManager((IAssetManager*)gAssetManager);
+		editor->setEditorAccess(editAccess);
 		editor->startEditor();
 	}
 }
@@ -142,7 +142,6 @@ void Core::update(float dt) {
 
 	// we are changing status
 	if (currentEditorStatus != status) {
-
 		switch (status) {
 			case STARTING:
 				break;
@@ -190,7 +189,6 @@ void Core::update(float dt) {
 }
 
 void Core::render(glm::mat4 viewMat) {
-
 	renderEngine->renderDebugFrame();
 	hadReset = renderEngine->getGraphicsReset();
 	if (hadReset) return;
@@ -198,7 +196,6 @@ void Core::render(glm::mat4 viewMat) {
 	if (isInEditor()) {
 		editor->postPixels(width, heigth);
 	}
-
 }
 
 void Core::swap() {

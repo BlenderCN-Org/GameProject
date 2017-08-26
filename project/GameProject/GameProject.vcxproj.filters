@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Core\Assets">
       <UniqueIdentifier>{52f36dc9-2702-4571-8347-fc3f17be79b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\GUI">
+      <UniqueIdentifier>{603287a4-0669-4397-8224-a09678fe15b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -71,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="Core\CoreGlobals.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Extensions\EditDataExtension.cpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClCompile>
     <ClCompile Include="Core\System\LibraryLoader.cpp">
       <Filter>Source Files\Core\System</Filter>
@@ -151,9 +151,6 @@
     </ClInclude>
     <ClInclude Include="Core\CoreGlobals.hpp">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Extensions\EditDataExtension.hpp">
-      <Filter>Source Files\Core\Extensions</Filter>
     </ClInclude>
     <ClInclude Include="Core\System\LibraryLoader.hpp">
       <Filter>Source Files\Core\System</Filter>
@@ -245,6 +242,36 @@
     </None>
     <None Include="Blender Plugin\export_animation.py">
       <Filter>Resource Files\Blender Plugin</Filter>
+    </None>
+    <None Include="IEditorAccess.hpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Game\EditorAccess.hpp">
+      <Filter>Source Files\Game</Filter>
+    </None>
+    <None Include="Game\EditorAccess.cpp">
+      <Filter>Source Files\Game</Filter>
+    </None>
+    <None Include="Game\Menu.hpp">
+      <Filter>Source Files\Game</Filter>
+    </None>
+    <None Include="Game\Menu.cpp">
+      <Filter>Source Files\Game</Filter>
+    </None>
+    <None Include="Game\GUI\Gui.hpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </None>
+    <None Include="Game\GUI\Gui.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </None>
+    <None Include="Game\GUI\Text.hpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </None>
+    <None Include="Game\GUI\Text.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </None>
+    <None Include="Game\GUI\DefaultTextShader.hpp">
+      <Filter>Source Files\Game\GUI</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -7,7 +7,6 @@
 #include <GL\GL.h>
 
 class PixelBuffer_gl : public IPixelBuffer {
-
 public:
 	virtual bool init();
 	virtual void release();
@@ -25,6 +24,5 @@ private:
 	void* mappedPtr;
 	uint32_t savedW;
 	uint32_t savedH;
-
 };
 #endif

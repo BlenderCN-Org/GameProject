@@ -51,9 +51,7 @@ struct Bone {
 	glm::vec3 tailPos;
 };
 
-
 void makeCube(std::vector<Vertex5> &verts, glm::vec3 pos) {
-
 	glm::vec3 vo1(-0.01f, -0.01f, 0.01f);
 	glm::vec3 vo2(-0.01f, 0.01f, 0.01f);
 	glm::vec3 vo3(-0.01f, -0.01f, -0.01f);
@@ -94,7 +92,6 @@ void makeCube(std::vector<Vertex5> &verts, glm::vec3 pos) {
 }
 
 void makeLine(std::vector<Vertex5> &verts, glm::vec3 head, glm::vec3 tail) {
-
 	glm::vec3 vo1(-0.005f, -0.005f, 0.005f);
 	glm::vec3 vo2(-0.005f, 0.005f, 0.005f);
 	glm::vec3 vo3(-0.005f, -0.005f, -0.005f);
@@ -167,7 +164,6 @@ void makeLine(std::vector<Vertex5> &verts, glm::vec3 head, glm::vec3 tail) {
 }
 
 void* createVertUVData(void* meshData, uint32_t &size) {
-
 	MemoryBuffer memBuff;
 	memBuff.setData(meshData, size);
 
@@ -230,7 +226,6 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 		std::vector<Vertex5> verts;
 
 		for (size_t i = 0; i < (*nrBones); i++) {
-
 			bones[i].headPos *= 1.0f;
 			bones[i].tailPos *= 1.0f;
 
@@ -244,7 +239,6 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 			}
 			makeCube(verts, bones[i].tailPos);
 			makeLine(verts, bones[i].headPos, bones[i].tailPos);
-
 		}
 
 		memBuff.deleteBuffer();
@@ -258,9 +252,7 @@ void* createVertUVData(void* meshData, uint32_t &size) {
 	return nullptr;
 }
 
-
-// @end temporary 
-
+// @end temporary
 
 void AssetManager::init() {
 	gAssetManager = this;
@@ -275,13 +267,7 @@ void AssetManager::init() {
 
 	startupSceneRefId = currentFile->getHeaderDataV2().startupSceneRef;
 
-	Entry* e = currentFile->loadEntry(0);
-
-	if (e) {
-		gConsole->print("%s\n", (char*)e->data->getData());
-	}
-
-	e = currentFile->loadEntry(1);
+	Entry* e = currentFile->loadEntry(1);
 
 	if (e) {
 		gConsole->print("%s\n", (char*)e->data->getData());
@@ -293,6 +279,11 @@ void AssetManager::init() {
 		gConsole->print("%s\n", (char*)e->data->getData());
 	}
 
+	e = currentFile->loadEntry(3);
+
+	if (e) {
+		gConsole->print("%s\n", (char*)e->data->getData());
+	}
 }
 
 void AssetManager::freeResources() {
@@ -306,18 +297,15 @@ void AssetManager::freeResources() {
 	}
 
 	delete currentFile;
-
 }
 
 uint32_t AssetManager::loadMesh(char * meshName) {
-
 	uint32_t id = nrMeshesLoaded;
 
 	uint32_t dataSize = 0;
 	void * data = AssetLib::fileToMemory(meshName, dataSize);
 
 	if (data) {
-
 		void* meshData = createVertUVData(data, dataSize);
 
 		IMesh* mesh = renderEngine->createMesh();
@@ -373,7 +361,6 @@ void AssetManager::updateEntry(Entry* entry) {
 }
 
 void AssetManager::updateEntry(uint32_t formID, void * data, uint32_t dataSize) {
-
 	Entry* e = currentFile->loadEntry(formID);
 	if (e->data) {
 		delete e->data;
@@ -385,9 +372,8 @@ void AssetManager::setStartupSceneRef(uint32_t ref) {
 	startupSceneRefId = ref;
 }
 
-
 uint32_t AssetManager::getStartupSceneRef() {
-	return 0;
+	return startupSceneRefId;
 }
 
 std::vector<uint32_t>& AssetManager::getObjectsWithTag(Tag tag) {

@@ -6,8 +6,7 @@
 #include <GL\glew.h>
 #include <GL\GL.h>
 
-class FrameBuffer_gl : public IFrameBuffer
-{
+class FrameBuffer_gl : public IFrameBuffer {
 public:
 
 	FrameBuffer_gl() : created(false) {};

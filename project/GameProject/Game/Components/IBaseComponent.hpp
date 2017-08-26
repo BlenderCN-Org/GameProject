@@ -3,8 +3,7 @@
 
 #include "BaseComponent.hpp"
 
-enum class Components : uint32_t
-{
+enum class Components : uint32_t {
 	RENDER_COMPONENT = 1,
 	PHYSICS_COMPONENT,
 	TRANSFORM_COMPONENT,
@@ -16,8 +15,7 @@ enum class Components : uint32_t
 };
 
 template<typename T>
-class IBaseComponent : public BaseComponent
-{
+class IBaseComponent : public BaseComponent {
 public:
 
 	static const uint32_t typeID;

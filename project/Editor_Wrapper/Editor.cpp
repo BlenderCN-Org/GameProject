@@ -4,11 +4,8 @@
 #include "ExtensionMap.hpp"
 #include <iostream>
 
-
 namespace Editor_clr {
-
 	bool Editor_wrp::initializeEditor(IRenderEngine* re) {
-
 		GC::WaitForFullGCComplete();
 		if (!initialized) {
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -21,6 +18,7 @@ namespace Editor_clr {
 			Editor::EventHandler::EventManager::onDeleteFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnDeleteEvent);
 			Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
 			Editor::EventHandler::EventManager::onGetFormView += gcnew System::EventHandler<Editor::EventHandler::FormView^>(&Extensions::OnGetFormView);
+			Editor::EventHandler::EventManager::onSceneChangeEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnSceneChangeEvent);
 
 			initialized = true;
 
@@ -54,7 +52,6 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::startEditor() {
-
 		if (editorStatus == EditorStatus::STOPPED) {
 			editorStatus = EditorStatus::STARTING;
 			initialized = true;
@@ -72,7 +69,6 @@ namespace Editor_clr {
 			wrapper->window->onCloseEvent += gcnew System::EventHandler<Editor::EventHandler::CloseArgs^>(eventWrapper, &EventWrapper::OnClosing);
 
 			editorStatus = EditorStatus::RUNNING;
-
 		} else if (editorStatus == EditorStatus::RUNNING || editorStatus == EditorStatus::HIDDEN) {
 			if (editorStatus == HIDDEN) {
 				wrapper->window->invokeShow();
@@ -99,13 +95,12 @@ namespace Editor_clr {
 	void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
 		Extensions::extensionMap[callbackIndex] = ext;
 	}
-	
+
 	EditorStatus Editor_wrp::getStatus() const {
 		return editorStatus;
 	}
 
 	void Editor_wrp::update() {
-		
 		if (eventWrapper->hideEditor) {
 			GC::Collect();
 			editorStatus = HIDDEN;
@@ -133,7 +128,6 @@ namespace Editor_clr {
 			default:
 				break;
 		}
-
 	}
 
 	void Editor_wrp::poll() {
@@ -147,7 +141,6 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::postPixels(uint32_t width, uint32_t height) {
-
 		pboIndex = (pboIndex + 1) % 2;
 		pboNextIndex = (pboIndex + 1) % 2;
 
@@ -156,7 +149,6 @@ namespace Editor_clr {
 
 		void* data = pixelBuffers[pboNextIndex]->map();
 		if (data) {
-
 			uint32_t w, h;
 			pixelBuffers[pboNextIndex]->getSize(w, h);
 
@@ -165,15 +157,17 @@ namespace Editor_clr {
 			wrapper->window->DrawGameWindowPixels(*ptr, w, h);
 		}
 		pixelBuffers[pboNextIndex]->unMap();
-
 	}
 
 	void Editor_wrp::setAssetManager(IAssetManager* assetMan) {
 		Extensions::assetMan = assetMan;
 	}
 
-	void EventWrapper::OnClosing(System::Object ^sender, Editor::EventHandler::CloseArgs ^e) {
+	void Editor_wrp::setEditorAccess(IEditorAccess * editAccess) {
+		Extensions::editAccess = editAccess;
+	}
 
+	void EventWrapper::OnClosing(System::Object ^sender, Editor::EventHandler::CloseArgs ^e) {
 		System::String^ message = "Are you sure you want to close the editor";
 		System::String^ capiton = "Close Editor?";
 
