@@ -38,6 +38,11 @@ namespace Editor
             //
             //wnd1.Show();
             //wnd2.Show();
+
+            //EditorWindows.AddEditItemDialog dlg = new EditorWindows.AddEditItemDialog();
+            //EditorWindows.AddItemDlgPages.StandardControls.ColorPicker colorPicker = new EditorWindows.AddItemDlgPages.StandardControls.ColorPicker();
+            //dlg.PageArea.Children.Add(colorPicker);
+            //dlg.Show();
         }
 
         ~MainWindow()

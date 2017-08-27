@@ -17,33 +17,61 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
 
-            System.Windows.Forms.DialogResult res = colorDialog.ShowDialog();
+            
+            ColorPicker colorPick = new ColorPicker();
 
-            if (res == System.Windows.Forms.DialogResult.OK)
+            colorPick.Owner = Window.GetWindow(this);
+
+            if (sender == SkyButton)
             {
-                if (sender == SkyButton)
-                {
-                    System.Drawing.Color c = colorDialog.Color;
-                    ((SolidColorBrush)skyColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
-                    //((DataSources.Scene)DataContext).SkyColor = Color.FromArgb(c.A, c.R, c.G, c.B);
-                    //int b = 0;
-                }
-                else if (sender == FogButton)
-                {
-                    System.Drawing.Color c = colorDialog.Color;
-                    ((SolidColorBrush)FogColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
-                    //((DataSources.Scene)DataContext).FogColorNear = Color.FromArgb(c.A, c.R, c.G, c.B);
-                }
-                else if (sender == FogButton_Copy)
-                {
-                    System.Drawing.Color c = colorDialog.Color;
-                    ((SolidColorBrush)FogColor1.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
-                    //((DataSources.Scene)DataContext).FogColorFar = Color.FromArgb(c.A, c.R, c.G, c.B);
-                }
-                //skyColor.Fill = new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
+                colorPick.DataContext = ((SolidColorBrush)skyColor.Fill);
             }
+            else if (sender == FogButton)
+            {
+                colorPick.DataContext = ((SolidColorBrush)FogColor.Fill);
+            }
+            else if (sender == FogButton_Copy)
+            {
+                colorPick.DataContext = ((SolidColorBrush)FogColor1.Fill);
+            }
+
+            colorPick.Loaded += (s, e2) =>
+                {
+                    colorPick.updateColorFromDataContext();
+                };
+
+
+            colorPick.Show();
+
+            //System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+
+            //System.Windows.Forms.DialogResult res = colorDialog.ShowDialog();
+
+            //if (res == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    if (sender == SkyButton)
+            //    {
+            //        System.Drawing.Color c = colorDialog.Color;
+            //        ((SolidColorBrush)skyColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //        //((DataSources.Scene)DataContext).SkyColor = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //        //int b = 0;
+            //    }
+            //    else if (sender == FogButton)
+            //    {
+            //        System.Drawing.Color c = colorDialog.Color;
+            //        ((SolidColorBrush)FogColor.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //        //((DataSources.Scene)DataContext).FogColorNear = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //    }
+            //    else if (sender == FogButton_Copy)
+            //    {
+            //        System.Drawing.Color c = colorDialog.Color;
+            //        ((SolidColorBrush)FogColor1.Fill).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //        //((DataSources.Scene)DataContext).FogColorFar = Color.FromArgb(c.A, c.R, c.G, c.B);
+            //    }
+            //    //skyColor.Fill = new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
+            //}
         }
+        
     }
 }
