@@ -36,6 +36,9 @@
 #include <GameProject/Game/GUI/Gui.cpp>
 #include <GameProject/Game/GUI/Text.cpp>
 
+#include <GameProject/Game/GUI/GuiComponents/GuiItem.cpp>
+#include <GameProject/Game/GUI/GuiComponents/GuiPanel.cpp>
+
 #include <GameProject\Game\Camera.cpp>
 #include <GameProject\Game\GameObject.cpp>
 #include <GameProject\Game\Scene.cpp>

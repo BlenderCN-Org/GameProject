@@ -15,6 +15,10 @@ public:
 
 	void setCam(glm::vec3 _pos, glm::vec3 _dir);
 
+	void setCamSpeed(float speed);
+
+	void setDefaultSpeed();
+
 private:
 
 	Input* input;
@@ -33,7 +37,7 @@ private:
 	float angleV;
 
 	float mouseSpeed; //higher val = faster
-	float camSpeed = 10.0f; // higher val = faster
+	float camSpeed = 1.0F; // higher val = faster
 
 	glm::mat3 rotH;
 	glm::mat3 rotV;

@@ -1,5 +1,6 @@
 #include "FrameBuffer_gl.hpp"
 #include "../Utils/MemoryManager.hpp"
+#include "../ReGlobal.hpp"
 
 bool FrameBuffer_gl::init(FrameBufferCreateInfo *createInfo) {
 	glGenFramebuffers(1, &framebuffer);
@@ -45,6 +46,10 @@ void FrameBuffer_gl::release() {
 	glDeleteFramebuffers(1, &framebuffer);
 
 	delete this;
+}
+
+void FrameBuffer_gl::clear() {
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 bool FrameBuffer_gl::setupFrameBuffer() {
@@ -182,18 +187,20 @@ void FrameBuffer_gl::setWindowSize(int _windowWidth, int _windowHeight) {
 }
 
 void FrameBuffer_gl::resolveToScreen(int bufferIndex) {
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	if (lockdown == false) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	if (bufferIndex < colorAttachmentCount) {
-		glReadBuffer(GL_COLOR_ATTACHMENT0 + bufferIndex);
-	} else {
-		glReadBuffer(GL_COLOR_ATTACHMENT0);
+		if (bufferIndex < colorAttachmentCount) {
+			glReadBuffer(GL_COLOR_ATTACHMENT0 + bufferIndex);
+		} else {
+			glReadBuffer(GL_COLOR_ATTACHMENT0);
+		}
+		//glDrawBuffer(GL_BACK);
+		glBlitFramebuffer(0, 0, width, height, 0, 0, windowWidth, windowHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	//glDrawBuffer(GL_BACK);
-	glBlitFramebuffer(0, 0, width, height, 0, 0, windowWidth, windowHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void FrameBuffer_gl::bind() {

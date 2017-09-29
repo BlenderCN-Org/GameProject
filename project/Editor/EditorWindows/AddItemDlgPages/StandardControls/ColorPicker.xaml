@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Editor.EditorWindows.AddItemDlgPages.StandardControls"
              mc:Ignorable="d"
-             d:DesignHeight="364" d:DesignWidth="329.667" Background="{DynamicResource DarkBackground}" WindowStyle="ToolWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Closing="Window_Closing">
+             d:DesignHeight="364" d:DesignWidth="329.667" Background="{DynamicResource DarkBackground}" WindowStyle="ToolWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Closing="Window_Closing" MouseMove="Window_MouseMove">
 
     <Window.Resources>
         <ResourceDictionary>

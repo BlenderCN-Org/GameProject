@@ -9,13 +9,11 @@
 #include <Windows.h>
 #include <dinput.h>
 #include <Xinput.h>
-#define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
 #if SUPPORT_VULKAN_WINDOW
 #include <vulkan\vulkan.hpp>
 #include "VulkanWindowHelper.hpp"
-#pragma comment(lib, "vulkan-1.lib")
 #endif
 
 class BaseWindow : public IWindow {

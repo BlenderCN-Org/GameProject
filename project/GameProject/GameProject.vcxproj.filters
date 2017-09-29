@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Game\GUI">
       <UniqueIdentifier>{603287a4-0669-4397-8224-a09678fe15b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\GUI\GuiComponents">
+      <UniqueIdentifier>{96ba6e9b-64cc-4960-adf7-71fdadfeece4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -116,6 +119,24 @@
     </ClCompile>
     <ClCompile Include="Core\System\MemBuffer.cpp">
       <Filter>Source Files\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EditorAccess.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Menu.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\Gui.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\Text.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\GuiComponents\GuiItem.cpp">
+      <Filter>Source Files\Game\GUI\GuiComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GUI\GuiComponents\GuiPanel.cpp">
+      <Filter>Source Files\Game\GUI\GuiComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +230,15 @@
     <ClInclude Include="Core\System\MemBuffer.hpp">
       <Filter>Source Files\Core\System</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GUI\GuiComponents\GuiPanel.hpp">
+      <Filter>Source Files\Game\GUI\GuiComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\GuiComponents\GuiAnchorPoint.hpp">
+      <Filter>Source Files\Game\GUI\GuiComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GUI\GuiComponents\GuiItem.hpp">
+      <Filter>Source Files\Game\GUI\GuiComponents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ResourceFiles\Script.txt">
@@ -249,25 +279,13 @@
     <None Include="Game\EditorAccess.hpp">
       <Filter>Source Files\Game</Filter>
     </None>
-    <None Include="Game\EditorAccess.cpp">
-      <Filter>Source Files\Game</Filter>
-    </None>
     <None Include="Game\Menu.hpp">
-      <Filter>Source Files\Game</Filter>
-    </None>
-    <None Include="Game\Menu.cpp">
       <Filter>Source Files\Game</Filter>
     </None>
     <None Include="Game\GUI\Gui.hpp">
       <Filter>Source Files\Game\GUI</Filter>
     </None>
-    <None Include="Game\GUI\Gui.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </None>
     <None Include="Game\GUI\Text.hpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </None>
-    <None Include="Game\GUI\Text.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </None>
     <None Include="Game\GUI\DefaultTextShader.hpp">

@@ -2,6 +2,8 @@
 
 #include "../../Core/CoreGlobals.hpp"
 #include "Gui.hpp"
+#undef max
+#include <glm/glm.hpp>
 
 Text::Text() {
 	IRenderEngine* re = gRenderEngine;

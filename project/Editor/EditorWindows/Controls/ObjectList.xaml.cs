@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -182,5 +183,57 @@ namespace Editor.EditorWindows.Controls
         {
             EditMenuItem_Click(sender, null);
         }
+
+        private Point startPoint;
+
+        private void listView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            startPoint = e.GetPosition(null);
+        }
+
+        private void listView_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point position = e.GetPosition(null);
+                if (Math.Abs(position.X - startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                    Math.Abs(position.Y - startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
+                {
+                    // Get the dragged ListViewItem
+                    ListView listView = sender as ListView;
+                    ListViewItem listViewItem = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+
+                    if (listViewItem != null)
+                    {
+                        // Find the data behind the ListViewItem
+                        object obj = listView.ItemContainerGenerator.
+                            ItemFromContainer(listViewItem);
+                        if (obj != null)
+                        {
+                            // Initialize the drag & drop operation
+                            DataObject dragData = new DataObject("myFormat", obj);
+                            DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Helper to search up the VisualTree
+        private static T FindAncestor<T>(DependencyObject current)
+            where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
     }
 }

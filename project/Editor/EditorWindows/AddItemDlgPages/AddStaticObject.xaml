@@ -27,7 +27,7 @@
                             <TextBox HorizontalAlignment="Left" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="54,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="164" Style="{DynamicResource DarkTextBox}" />
                             <Label Content="Mesh:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource DarkForeground}" Margin="10,40,0,0" />
                             <TextBox HorizontalAlignment="Left" Height="23" Margin="54,43,0,0" TextWrapping="Wrap" Text="{Binding Path=MeshFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="164" Style="{DynamicResource DarkTextBox}" IsEnabled="False" />
-                            <Button x:Name="BrowseMesh" Content="..." HorizontalAlignment="Left" Margin="223,46,0,0" VerticalAlignment="Top" Width="19" Template="{DynamicResource ButtonControlTemplate1}" />
+                            <Button x:Name="BrowseMesh" Content="..." HorizontalAlignment="Left" Margin="223,46,0,0" VerticalAlignment="Top" Width="19" Template="{DynamicResource ButtonControlTemplate1}" Click="BrowseMesh_Click" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Mesh Settings" HorizontalAlignment="Left" Height="168" Margin="10,115,0,0" VerticalAlignment="Top" Width="264" Style="{DynamicResource DarkGroupBox}">

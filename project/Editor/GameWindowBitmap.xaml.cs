@@ -188,6 +188,39 @@ namespace Editor
                 editWindow.WindowKeyboardCallback(key, down, modkey);
             }
         }
+
+        private void UserControl_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void UserControl_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("myFormat"))
+            {
+                DataSources.BaseData data = e.Data.GetData("myFormat") as DataSources.BaseData;
+                if (data != null)
+                {
+                    Console.Write("Data: {0}, {1} \n", data.NameWState, data.EditorID);
+                    EventHandler.EventManager.OnAddToSceneEvent(data.EditorID);
+                }
+            }
+        }
+
+        private void UserControl_DragOver(object sender, DragEventArgs e)
+        {
+            DataSources.BaseData data = e.Data.GetData("myFormat") as DataSources.BaseData;
+            if (data != null)
+            {
+                Point p = e.GetPosition(this);
+
+                // todo preview place location
+
+            }
+        }
     }
 }
 

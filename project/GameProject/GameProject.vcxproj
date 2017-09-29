@@ -283,9 +283,15 @@
     <ClCompile Include="Game\Components\PhysicsComponent.cpp" />
     <ClCompile Include="Game\Components\RenderComponent.cpp" />
     <ClCompile Include="Game\Components\TransformComponent.cpp" />
+    <ClCompile Include="Game\EditorAccess.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
+    <ClCompile Include="Game\GUI\Gui.cpp" />
+    <ClCompile Include="Game\GUI\GuiComponents\GuiItem.cpp" />
+    <ClCompile Include="Game\GUI\GuiComponents\GuiPanel.cpp" />
+    <ClCompile Include="Game\GUI\Text.cpp" />
     <ClCompile Include="Game\Input\CameraInput.cpp" />
+    <ClCompile Include="Game\Menu.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -316,6 +322,9 @@
     <ClInclude Include="Game\Game.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
     <ClInclude Include="Game\GameState.hpp" />
+    <ClInclude Include="Game\GUI\GuiComponents\GuiAnchorPoint.hpp" />
+    <ClInclude Include="Game\GUI\GuiComponents\GuiItem.hpp" />
+    <ClInclude Include="Game\GUI\GuiComponents\GuiPanel.hpp" />
     <ClInclude Include="Game\Input\CameraInput.hpp" />
     <ClInclude Include="Game\Scene.hpp" />
     <ClInclude Include="IAssetManager.hpp" />
@@ -334,14 +343,10 @@
     <None Include="Blender Plugin\export_mesh.py" />
     <None Include="Blender Plugin\export_skeleton.py" />
     <None Include="Blender Plugin\__init__.py" />
-    <None Include="Game\EditorAccess.cpp" />
     <None Include="Game\EditorAccess.hpp" />
     <None Include="Game\GUI\DefaultTextShader.hpp" />
-    <None Include="Game\GUI\Gui.cpp" />
     <None Include="Game\GUI\Gui.hpp" />
-    <None Include="Game\GUI\Text.cpp" />
     <None Include="Game\GUI\Text.hpp" />
-    <None Include="Game\Menu.cpp" />
     <None Include="Game\Menu.hpp" />
     <None Include="IEditorAccess.hpp" />
   </ItemGroup>

@@ -162,4 +162,10 @@ namespace Extensions {
 			assetMan->setStartupSceneRef(editArgs->FormID);
 		}
 	}
+
+	void OnAddToSceneEvent(System::Object^ sender, System::UInt32 id) {
+		if (editAccess) {
+			editAccess->placeObject(id);
+		}
+	}
 }

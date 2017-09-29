@@ -6,6 +6,8 @@ IEditorAccess* Extensions::editAccess;
 
 namespace Extensions {
 	void OnSceneChangeEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ formArg) {
-		editAccess->setActiveScene(formArg->FormID);
+		if (editAccess) {
+			editAccess->setActiveScene(formArg->FormID);
+		}
 	}
 }

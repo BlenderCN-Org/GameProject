@@ -365,18 +365,20 @@ StaticObjectDataObject::StaticObjectDataObject(void * data, uint32_t dataSize) {
 		mBuff.setData(rawData, rawDataSize);
 
 		uint32_t nameLength = *mBuff.returnBytes<uint32_t>(sizeof(uint32_t));
-		rData->name = new char[nameLength];
-
+		
 		// check so that rawData is large enough to also store the name
+		if(nameLength)
 		{
+			rData->name = new char[nameLength];
 			char* ret = mBuff.returnBytes<char>(nameLength);
 			if (ret) {
 				memcpy((void*)rData->name, ret, nameLength);
 			}
 		}
 		uint32_t meshNameLength = *mBuff.returnBytes<uint32_t>(sizeof(uint32_t));
-		rData->meshFile = new char[meshNameLength];
+		if(meshNameLength)
 		{
+			rData->meshFile = new char[meshNameLength];
 			char* ret = mBuff.returnBytes<char>(meshNameLength);
 			if (ret) {
 				memcpy((void*)rData->meshFile, ret, meshNameLength);

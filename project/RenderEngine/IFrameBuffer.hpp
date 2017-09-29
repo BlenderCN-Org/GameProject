@@ -22,6 +22,8 @@ public:
 
 	virtual void resolveToScreen(int bufferIndex = 0) = 0;
 
+	virtual void clear() = 0;
+
 	virtual void bind() = 0;
 
 	virtual void resize(int width, int height) = 0;

@@ -3,6 +3,7 @@
 
 #include "../IAssetManager.hpp"
 #include "Assets/GameFile.hpp"
+#include "Assets/DataObjects.hpp"
 
 #include <cstdint>
 

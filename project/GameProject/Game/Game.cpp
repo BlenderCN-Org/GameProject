@@ -1,6 +1,8 @@
 #include "Game.hpp"
 #include "Components/RenderComponent.hpp"
 #include "Components/TransformComponent.hpp"
+#include "Scene.hpp"
+#include "EditorAccess.hpp"
 
 #include "../Core/CoreGlobals.hpp"
 #include "../Core/Input/Input.hpp"
@@ -33,96 +35,72 @@ bool sphereInRay(glm::vec3 const & rayStart, glm::vec3 const & rayDir, float con
 	return true;
 }
 
-std::string readShader(const char *filePath) {
-	std::string content;
-	std::ifstream fileStream(filePath, std::ios::in);
-
-	if (!fileStream.is_open()) {
-		gConsole->print("Could not open file %s", filePath);
-		return "";
-	}
-
-	std::string line = "";
-	while (!fileStream.eof()) {
-		std::getline(fileStream, line);
-		content.append(line + "\n");
-	}
-
-	fileStream.close();
-	return content;
-}
-
-GameObject* createGo(AssetManager* assetManager, std::string meshName, float x, float y, float z) {
-	GameObject* go = new GameObject();
-	uint32_t instanceID = assetManager->loadMesh((char*)meshName.c_str());
-	RenderComponent* rc = new RenderComponent();
-	rc->init();
-	rc->setInstanceId(instanceID);
-	go->addComponent(rc);
-
-	TransformComponent* tc = new TransformComponent();
-	tc->init();
-	tc->setPosition(glm::vec3(x, y, z));
-	go->addComponent(tc);
-
-	return go;
-}
-
 //@EndTemporary
 
-Game::Game() : running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu), editorEntry(0) {}
+Game::Game() : running(true), core(nullptr), timepass(0.0f), fps(0), gstate(GameState::eGameStage_MainMenu) {}
 
 Game::~Game() {
-	std::vector<GameObject*>::const_iterator it = gameObjects.begin();
-	std::vector<GameObject*>::const_iterator eit = gameObjects.end();
-
-	for (it; it != eit; it++) {
-		if (*it) {
-			delete *it;
-		}
-	}
-
-	shdr->release();
-	assetManager->freeResources();
+	//shdr->release();
+	delete guiPanel;
+	gBuffer->release();
 	gui->freeResources();
 
-	delete menu;
+	currentScene->release();
+	delete currentScene;
+
 	delete gui;
-	delete assetManager;
 	delete cam;
 	delete core;
 }
 
 void Game::init() {
 	core = new Core();
-	core->init();
+	if (!core->init()) {
+		assert(0 && "Failed to initialize!");
+	}
 
 	cam = new Camera();
-
-	assetManager = new AssetManager();
-	assetManager->init();
 
 	gui = new Gui();
 	gui->init();
 
 	editAccess.setGameInstance(this);
-	sceneThisFrame = nullptr;
+	currentScene = nullptr;
+	currentScene = new Scene();
+	currentScene->init(gAssetManager->getStartupSceneRef());
 
 	camInput.init((glm::mat4*)cam->getViewMatrix());
+	//camInput.setCamSpeed(2.0F);
 	*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(1280), float(720), 0.0001f, 100.0f);
 	*(glm::mat4*)(cam->getOrthoMatrix()) = glm::ortho(0.0F, 1280.0F, 720.0F, 0.0F);
 
-	gstate = GameState::eGameStage_MainMenu;
+	gstate = GameState::eGameState_PlayMode;
 
-	//gstate = GameState::eGameState_PlayMode;
+	gBuffer = gRenderEngine->createFrameBuffer();
+	FrameBufferCreateInfo fbci;
+	fbci.height = 720;
+	fbci.width = 1280;
+	fbci.useDepth = true;
+	fbci.useStencil = false;
+	fbci.nrColorBuffers = 2;
+	fbci.useMultisample = false;
 
-	//gameObjects.push_back(createGo(assetManager, "data/meshes/test.mesh", 0, 0, 0));
+	if (!gBuffer->init(&fbci)) {
+		gConsole->print("Failed to create gBuffer");
+	}
 
-	std::string vs = readShader("data/shaders/default.vs.glsl");
-	std::string gs = readShader("data/shaders/default.gs.glsl");
-	std::string fs = readShader("data/shaders/default.fs.glsl");
+	guiPanel = new GuiPanel();
+	guiPanel->setPosition(0, 0);
+	guiPanel->setSize(100, 100);
+	guiPanel->setAnchorPoint(GuiAnchor::TOP);
 
-	shdr = core->getRenderEngine()->createShaderObject();
+	//gameObjects.push_back(createGo2(gAssetManager, "data/meshes/test.mesh", 0, 0, 0));
+
+	//std::string vs = readShader("data/shaders/default.vs.glsl");
+	//std::string gs = readShader("data/shaders/default.gs.glsl");
+	//std::string fs = readShader("data/shaders/default.fs.glsl");
+
+	/*shdr = core->getRenderEngine()->createShaderObject();
 	shdr->init();
 
 	shdr->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
@@ -136,101 +114,94 @@ void Game::init() {
 
 	vpLocation = shdr->getShaderUniform("viewProjMatrix");
 	matLocation = shdr->getShaderUniform("worldMat");
-	selectedLoc = shdr->getShaderUniform("selectedColor");
+	selectedLoc = shdr->getShaderUniform("selectedColor");*/
 
-	menu = new Menu();
-	menu->setOrthoMatrix((glm::mat4*)cam->getOrthoMatrix());
-	menu->addItem(50, 50, "New");
-	menu->addItem(50, 80, "Load");
-	editorEntry = menu->addItem(50, 110, "Editor");
-	testEntry = menu->addItem(50, 140, "Test");
-
-	currentGameScene.init();
-
-	SceneDataObject* scData = (SceneDataObject*)assetManager->getConverter()->asSceneData(assetManager->getEntry(assetManager->getStartupSceneRef())->data);
-	currentGameScene.setSceneDataObj(scData);
-
-	sceneThisFrame = &currentGameScene;
+	// force update window to correct size
+	// @todo load from config
+	Input::getInput()->window->setWindowSize(1280, 720);
 }
 
 bool Game::isRunning() const {
 	return running;
 }
 
-void Game::updateAndRender(float dt) {
-	core->update(dt);
-	tickFPS(dt);
-	running = core->isRunning();
+bool Game::updateAndRender(float dt) {
 
-	Input* in = Input::getInput();
-	if (in->sizeChange) {
-		int w = 0, h = 0;
-		in->getWindowSize(w, h);
-		if (w != 0 && h != 0) {
-			*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
-			*(glm::mat4*)(cam->getOrthoMatrix()) = glm::ortho(0.0f, float(w), float(h), 0.0f);
+	__try {
+
+		core->update(dt);
+		if (core->hadGraphicsReset()) {
+			return false;
 		}
+		tickFPS(dt);
+		running = core->isRunning();
+
+		Input* in = Input::getInput();
+		if (in->sizeChange) {
+			int w = 0, h = 0;
+			in->getWindowSize(w, h);
+			if (w != 0 && h != 0) {
+				*(glm::mat4*)(cam->getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0f), float(w), float(h), 0.0001f, 100.0f);
+				*(glm::mat4*)(cam->getOrthoMatrix()) = glm::ortho(0.0f, float(w), float(h), 0.0f);
+				gBuffer->resize(w, h);
+				gBuffer->setWindowSize(w, h);
+			}
+		}
+
+		switch (gstate) {
+			case GameState::eGameStage_MainMenu:
+				updateMenu(dt);
+				break;
+			case GameState::eGameState_EditorMode:
+				updateEditor(dt);
+				break;
+			case GameState::eGameState_PlayMode:
+				updateGame(dt);
+				break;
+			case GameState::eGameState_loading:
+				updateLoading(dt);
+				break;
+			case GameState::eGameState_Undefined:
+			default:
+				break;
+		}
+
+		//core->syncThreads();
+
+		render();
+
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		gConsole->print("Serious error has occured!\n");
+		return false;
 	}
 
-	switch (gstate) {
-		case GameState::eGameStage_MainMenu:
-			updateMenu(dt);
-			break;
-		case GameState::eGameState_EditorMode:
-			updateEditor(dt);
-			break;
-		case GameState::eGameState_PlayMode:
-			updateGame(dt);
-			break;
-		case GameState::eGameState_loading:
-			updateLoading(dt);
-			break;
-		case GameState::eGameState_Undefined:
-		default:
-			break;
-	}
-
-	//core->syncThreads();
-
-	render();
+	return true;
 }
 
 void Game::render() {
 	glm::mat4 vp = *(glm::mat4*)cam->getPerspectiveMatrix() * *(glm::mat4*)cam->getViewMatrix();
 
-	if (sceneThisFrame) {
-		glm::vec4 col = sceneThisFrame->getSkyColor();
-		core->getRenderEngine()->setClearColor(col.r, col.g, col.b, col.a);
-	}
-
 	core->render(vp);
 
-	std::vector<GameObject*>::const_iterator it = gameObjects.begin();
-	std::vector<GameObject*>::const_iterator eit = gameObjects.end();
+	gBuffer->bind();
+	gBuffer->clear();
 
-	shdr->useShader();
-	shdr->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
-	shdr->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f));
-
-	for (it; it != eit; it++) {
-		if (*it) {
-			RenderComponent* rc = (RenderComponent*)(*it)->getComponent<RenderComponent>();
-			TransformComponent* tc = (TransformComponent*)(*it)->getComponent<TransformComponent>();
-
-			if (rc != nullptr) {
-				IMesh* mesh = assetManager->getMeshFromInstanceId(rc->getInstanceId());
-				if (mesh != nullptr) {
-					glm::mat4 mdl = tc->getModelMatrix();
-					shdr->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &mdl);
-					mesh->bind();
-					mesh->render();
-				}
-			}
-		}
+	if (currentScene != nullptr) {
+		currentScene->render(vp);
 	}
+
+	//shdr->useShader();
+	//shdr->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vp);
+	//shdr->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(1.0f));
+
 	if (gstate == GameState::eGameStage_MainMenu) {
-		menu->render();
+		// todo figure out menu stuff
 	}
+
+	gBuffer->resolveToScreen();
+	gRenderEngine->bindDefaultFrameBuffer();
+
+	guiPanel->render(*(glm::mat4*)cam->getOrthoMatrix());
 
 	core->swap();
 }
@@ -239,37 +210,35 @@ void Game::updateMenu(float dt) {
 	Input* in = Input::getInput();
 
 	if (in->releasedThisFrame(KeyBindings[KEYBIND_FORWARD], false)) {
-		menu->selectPrev();
+		// todo figure out menu stuff
 	}
 
 	if (in->releasedThisFrame(KeyBindings[KEYBIND_BACKWARD], false)) {
-		menu->selectNext();
+		// todo figure out menu stuff
 	}
 
 	if (in->releasedThisFrame(KeyBindings[KEYBIND_ENTER], false)) {
-		uint32_t selectedItem = menu->getSelectedMenuItem();
-		if (selectedItem == editorEntry) {
-			core->startEditor(&editAccess);
-			gstate = GameState::eGameState_EditorMode;
-		} else if (selectedItem == testEntry) {
-			running = false;
-			core->stopEditor();
-		}
+		// todo figure out menu stuff
 	}
 }
 
 void Game::updateEditor(float dt) {
 	camInput.update(dt);
-	sceneThisFrame = editAccess.getCurrentScene();
+	currentScene = editAccess.getCurrentScene();
 
 	if (core->currentEditorStatus == EditorStatus::HIDDEN || core->currentEditorStatus == EditorStatus::STOPPED) {
 		gstate = GameState::eGameStage_MainMenu;
-		sceneThisFrame = &currentGameScene;
+		//sceneThisFrame = &currentGameScene;
 	}
 }
 
 void Game::updateGame(float dt) {
 	camInput.update(dt);
+
+	if (currentScene != nullptr) {
+		currentScene->update(dt);
+	}
+
 }
 
 void Game::updateLoading(float dt) {

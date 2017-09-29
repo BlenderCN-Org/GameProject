@@ -2,6 +2,9 @@
 #include <memory>
 #include <stdarg.h>
 
+#include "../CoreGlobals.hpp"
+#include "../Core.hpp"
+
 Console::Console()
 	: objectsInHistory(0)
 	, currentMessageCount(0)
@@ -60,6 +63,13 @@ void Console::print(Message &msg) {
 void Console::execute() {
 	printf("Execute\n");
 	print(currentCommand.cmd);
+
+	if (_strcmpi(currentCommand.cmd, "Editor") == 0) {
+		gCore->startEditor(nullptr);
+	}
+	//else if (strcmp(currentCommand.cmd, "SHADER_CRASH") == 0) {
+	//	shaderCrash = true;
+	//}
 	memset(currentCommand.cmd, 0, currentCharIndex);
 	currentCharIndex = 0;
 }

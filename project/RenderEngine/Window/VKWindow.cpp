@@ -54,7 +54,7 @@ void VKWindow::vulkanInitialize() {
 		vkGetPhysicalDeviceQueueFamilyProperties(instanceData.gpu, &count, props);
 
 		for (size_t i = 0; i < count; i++) {
-			if (props[i].queueFlags == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
+			if ((props[i].queueFlags & VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) == VkQueueFlagBits::VK_QUEUE_GRAPHICS_BIT) {
 				instanceData.queueFamilyIndex = (uint32_t)i;
 				break;
 			}

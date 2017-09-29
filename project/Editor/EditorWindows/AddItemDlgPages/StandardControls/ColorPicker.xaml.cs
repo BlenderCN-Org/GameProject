@@ -280,5 +280,27 @@ namespace Editor.EditorWindows.AddItemDlgPages.StandardControls
         {
             Close();
         }
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (allowBarMove)
+                {
+                    updateDefiningColor();
+                    calculateColor();
+                }
+                if (allowGridMove)
+                {
+                    updateGridLines();
+                    calculateColor();
+                }
+            }
+            else
+            {
+                allowGridMove = false;
+                allowBarMove = false;
+            }
+        }
     }
 }

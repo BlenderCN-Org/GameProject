@@ -6,6 +6,12 @@
 #include <GL\glew.h>
 #include <GL\GL.h>
 
+struct TransferInfo {
+	void* data;
+	size_t size;
+	bool reallocated;
+};
+
 class Mesh_gl : public IMesh {
 public:
 
@@ -43,6 +49,8 @@ private:
 	bool isMapped;
 	void* mapPtr;
 	size_t mappedSize;
+
+	TransferInfo tInfo;
 };
 
 #endif

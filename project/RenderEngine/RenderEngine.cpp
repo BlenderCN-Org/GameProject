@@ -1,13 +1,15 @@
 #include "RenderEngine.hpp"
 
-#include <gl\glew.h>
-#include "Assets\Mesh_gl.hpp"
-#include "Assets\AnimatedMesh_gl.hpp"
-#include "Assets\Font_gl.hpp"
-#include "Assets\ShaderObject_gl.hpp"
-#include "Assets\FrameBuffer_gl.hpp"
-#include "Assets\PixelBuffer_gl.hpp"
-#include "Assets\Texture_gl.hpp"
+#include <gl/glew.h>
+#include "Assets/Mesh_gl.hpp"
+#include "Assets/AnimatedMesh_gl.hpp"
+#include "Assets/Font_gl.hpp"
+#include "Assets/ShaderObject_gl.hpp"
+#include "Assets/FrameBuffer_gl.hpp"
+#include "Assets/PixelBuffer_gl.hpp"
+#include "Assets/Texture_gl.hpp"
+
+#include "ReGlobal.hpp"
 
 #include "Shader.h"
 
@@ -122,6 +124,7 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 	FT_Init_FreeType(&fontLibrary);
 	counter = 1;
+	lockdown = false;
 }
 
 void RenderEngine::release() {
@@ -150,10 +153,23 @@ void RenderEngine::renderDebugFrame() {
 	c.v = 0.5f;
 	c.s = 1.0f;
 	clearColor = HSV2RGB(c);
-	glDrawBuffer(GL_BACK);
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		processGlRequests();
+		processGlFunctions();
+		glDrawBuffer(GL_BACK);
 		//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
+}
+void RenderEngine::clear() {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
+}
+
+void RenderEngine::bindDefaultFrameBuffer() {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 }
 
@@ -236,7 +252,10 @@ bool RenderEngine::getGraphicsReset() const {
 		if (status == GL_NO_ERROR)
 			return false;
 		while (glGetGraphicsResetStatus() != GL_NO_ERROR);
-
+		wglMakeCurrent(NULL, NULL);
+		printf("Graphics reset!\n");
+		printf("Locking down function calls");
+		lockdown = true;
 		return true;
 	}
 	return false;

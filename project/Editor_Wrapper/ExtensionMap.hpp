@@ -25,5 +25,7 @@ namespace Extensions {
 	void OnGetFormView(System::Object^ sender, Editor::EventHandler::FormView^ view);
 
 	void OnSceneChangeEvent(System::Object^ sender, Editor::EventHandler::FormArgs^ view);
+
+	void OnAddToSceneEvent(System::Object^ sender, System::UInt32 id);
 }
 #endif

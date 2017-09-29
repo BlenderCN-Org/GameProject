@@ -28,7 +28,7 @@ namespace Extensions {
 		memcpy(&tag, SCENE_TAG, 4);
 		std::vector<uint32_t> objects = assetMan->getObjectsWithTag(tag);
 
-		uint32_t nrObjects = objects.size();
+		size_t nrObjects = objects.size();
 
 		for (size_t i = 0; i < nrObjects; i++) {
 			Entry* e = assetMan->getEntry(objects[i]);
@@ -46,9 +46,9 @@ namespace Extensions {
 			}
 
 			if (sData) {
-				uint32_t length = safe_strlen(sData->name);
+				size_t length = safe_strlen(sData->name);
 				if (length) {
-					str = gcnew System::String(sData->name, 0, length);
+					str = gcnew System::String(sData->name, 0, (int)length);
 				}
 
 				data->SkyColor = *toColor(sData->skyColor[0], sData->skyColor[1], sData->skyColor[2], sData->skyColor[3]);
@@ -75,7 +75,7 @@ namespace Extensions {
 		memcpy(&tag, RENDERLAYER_TAG, 4);
 		std::vector<uint32_t> objects = assetMan->getObjectsWithTag(tag);
 
-		uint32_t nrObjects = objects.size();
+		size_t nrObjects = objects.size();
 
 		for (size_t i = 0; i < nrObjects; i++) {
 			Entry* e = assetMan->getEntry(objects[i]);
@@ -90,9 +90,9 @@ namespace Extensions {
 			System::String^ str = nullptr;
 			Editor::DataSources::RenderLayer^ data = gcnew Editor::DataSources::RenderLayer();
 			if (rData) {
-				uint32_t length = safe_strlen(rData->name);
+				size_t length = safe_strlen(rData->name);
 				if (length) {
-					str = gcnew System::String(rData->name, 0, length);
+					str = gcnew System::String(rData->name, 0, (int)length);
 				}
 
 				data->DepthBuffer = rData->depthBuffer ? true : false;
@@ -121,7 +121,7 @@ namespace Extensions {
 		memcpy(&tag, STATICOBJECT_TAG, 4);
 		std::vector<uint32_t> objects = assetMan->getObjectsWithTag(tag);
 
-		uint32_t nrObjects = objects.size();
+		size_t nrObjects = objects.size();
 
 		for (size_t i = 0; i < nrObjects; i++) {
 			Entry* e = assetMan->getEntry(objects[i]);
@@ -134,14 +134,23 @@ namespace Extensions {
 				sdata = dataObj->getStaticObjectData();
 			}
 			System::String^ str = nullptr;
+			System::String^ str2 = nullptr;
 			Editor::DataSources::StaticObject^ data = gcnew Editor::DataSources::StaticObject();
 			if (sdata) {
-				uint32_t length = safe_strlen(sdata->name);
+				size_t length = safe_strlen(sdata->name);
 				if (length) {
-					str = gcnew System::String(sdata->name, 0, length);
+					str = gcnew System::String(sdata->name, 0, (int)length);
+				}
+				length = safe_strlen(sdata->meshFile);
+				if (length) {
+					str2 = gcnew System::String(sdata->meshFile, 0, (int)length);
+				}
+				if (str2 == nullptr) {
+					str2 = "";
 				}
 				// copy rest of data
 				data->UseCollision = sdata->useCollision;
+				data->MeshFile = str2;
 			}
 
 			if (str == nullptr) {
@@ -185,9 +194,9 @@ namespace Extensions {
 					}
 
 					if (sData) {
-						uint32_t length = safe_strlen(sData->name);
+						size_t length = safe_strlen(sData->name);
 						if (length) {
-							str = gcnew System::String(sData->name, 0, length);
+							str = gcnew System::String(sData->name, 0, (int)length);
 						}
 					}
 

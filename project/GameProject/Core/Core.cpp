@@ -4,6 +4,7 @@
 #include "System\Sys.hpp"
 #include "System\Console.hpp"
 #include "System\TemporaryStorage.hpp"
+#include "AssetManager.hpp"
 
 #include <AssetLib\AssetLib.hpp>
 
@@ -14,7 +15,7 @@ Core::~Core() {
 	freeResources();
 }
 
-void Core::init() {
+bool Core::init() {
 	gConsole = new Console();
 	gTemporaryStorage = new TemporaryStorage();
 	initSys();
@@ -69,9 +70,18 @@ void Core::init() {
 
 	gCore = this;
 	gRenderEngine = renderEngine;
+
+	gAssetManager = new AssetManager();
+	gAssetManager->init();
+
+	return true;
 }
 
 void Core::freeResources() {
+
+	gAssetManager->freeResources();
+	delete gAssetManager;
+
 	if (editor) {
 		EditorStatus editorStatus = editor->getStatus();
 		while (editorStatus != EditorStatus::STOPPED) {
@@ -86,12 +96,15 @@ void Core::freeResources() {
 	renderEngine->release();
 
 	renderEngineLib.unloadLibrary();
+	editorLib.unloadLibrary();
 	input->release();
 
 	deinitSys();
 
 	delete gTemporaryStorage;
 	delete gConsole;
+
+	gAssetManager = nullptr;
 
 	gTemporaryStorage = nullptr;
 	gConsole = nullptr;
@@ -105,7 +118,7 @@ bool Core::isRunning() {
 }
 
 bool Core::hadGraphicsReset() const {
-	return renderEngine->getGraphicsReset();
+	return hadReset;
 }
 
 bool Core::editorAvaible() const {
@@ -113,7 +126,10 @@ bool Core::editorAvaible() const {
 }
 
 bool Core::isInEditor() const {
-	return editor->getStatus() == EditorStatus::RUNNING;
+	if (editor) {
+		return editor->getStatus() == EditorStatus::RUNNING;
+	}
+	return false;
 }
 
 void Core::startEditor(IEditorAccess* editAccess) {
@@ -125,7 +141,9 @@ void Core::startEditor(IEditorAccess* editAccess) {
 }
 
 void Core::stopEditor() {
-	editor->stopEditor();
+	if (editor) {
+		editor->stopEditor();
+	}
 }
 
 void Core::update(float dt) {
@@ -133,9 +151,12 @@ void Core::update(float dt) {
 	// reset input states, clear for next frame
 	input->reset();
 	window->pollMessages();
-	EditorStatus status = editor->getStatus();
-	if (editor && status == EditorStatus::RUNNING || status == EditorStatus::HIDDEN) {
-		editor->update();
+	EditorStatus status = EditorStatus::UNINITIALIZED;
+	if (editor) {
+		status = editor->getStatus();
+		if (editor && status == EditorStatus::RUNNING || status == EditorStatus::HIDDEN) {
+			editor->update();
+		}
 	}
 	// poll messages and update camera
 	running = window->isVisible() || status == EditorStatus::RUNNING || status == EditorStatus::HIDDEN;
@@ -184,14 +205,21 @@ void Core::update(float dt) {
 		input->toggleConsole();
 	}
 
-	hadReset = renderEngine->getGraphicsReset();
-	if (hadReset) return;
+	bool reset = renderEngine->getGraphicsReset();
+	if (reset) {
+		hadReset = true;
+		return;
+	}
 }
 
 void Core::render(glm::mat4 viewMat) {
+	renderEngine->bindDefaultFrameBuffer();
 	renderEngine->renderDebugFrame();
-	hadReset = renderEngine->getGraphicsReset();
-	if (hadReset) return;
+	bool reset = renderEngine->getGraphicsReset();
+	if (reset) {
+		hadReset = true;
+		return;
+	}
 
 	if (isInEditor()) {
 		editor->postPixels(width, heigth);

@@ -15,7 +15,7 @@ public:
 
 	~Core();
 
-	void init();
+	bool init();
 	void freeResources();
 
 	bool isRunning();

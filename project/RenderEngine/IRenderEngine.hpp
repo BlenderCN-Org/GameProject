@@ -66,7 +66,10 @@ public:
 	virtual void init(RenderEngineCreateInfo &createInfo) = 0;
 	virtual void release() = 0;
 	virtual void renderDebugFrame() = 0;
-
+	virtual void clear() = 0;
+	
+	virtual void bindDefaultFrameBuffer() = 0;
+	
 	virtual void setDepthTest(bool enable) = 0;
 
 	virtual void clearStencil() = 0;

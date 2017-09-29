@@ -123,6 +123,18 @@
     <ClInclude Include="Assets\PixelBuffer_gl.hpp">
       <Filter>Source Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="ReGlobal.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IBuffer.hpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\Buffer_gl.hpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\ThreadLock.hpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">
@@ -183,6 +195,15 @@
       <Filter>Source Files\Window</Filter>
     </ClCompile>
     <ClCompile Include="Assets\PixelBuffer_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="ReGlobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\Buffer_gl.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets\ThreadLock.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
   </ItemGroup>

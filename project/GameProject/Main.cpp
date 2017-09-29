@@ -9,6 +9,14 @@
 
 //#include <vld.h>
 
+void reset(Game*& g) {
+	Sleep(5000);
+	delete g;
+	Sleep(5000);
+	g = new Game();
+	g->init();
+}
+
 int main(int argc, char* argv[]) {
 	InitMemoryManagement();
 
@@ -23,7 +31,9 @@ int main(int argc, char* argv[]) {
 	g->init();
 
 	while (g->isRunning()) {
-		g->updateAndRender(dt);
+		if (g->updateAndRender(dt) == false) {
+			reset(g);
+		}
 
 		unsigned int temp = clock();
 		dt = unsigned int(temp - start) / 1000.0f;

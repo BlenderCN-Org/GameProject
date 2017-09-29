@@ -113,8 +113,8 @@ public:
 	inline void tick() {
 		if (lock.try_lock()) {
 			if (tempList.size() != 0) {
-				uint32_t start = tempList.size() - 1;
-				for (uint32_t i = start; i > 0; i--) {
+				size_t start = tempList.size() - 1;
+				for (size_t i = start; i > 0; i--) {
 					TemporaryObject& to = tempList[i];
 
 					if (to.ftl == 0) {

@@ -43,6 +43,8 @@ public:
 	virtual void init(RenderEngineCreateInfo &createInfo);
 	virtual void release();
 	virtual void renderDebugFrame();
+	virtual void clear();
+	virtual void bindDefaultFrameBuffer();
 
 	virtual void setDepthTest(bool enable);
 

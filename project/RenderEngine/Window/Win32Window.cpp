@@ -5,6 +5,7 @@
 #include "WindowSystem.hpp"
 #include "VulkanWindowHelper.hpp"
 #include "InputHandling.hpp"
+#include "../ReGlobal.hpp"
 
 // global includes
 #include <GL\glew.h>
@@ -17,6 +18,7 @@
 #include <tchar.h>
 #include <strsafe.h>
 #include <sstream>
+#include <thread>
 
 #define RESTORE_FROM_EDIT WM_USER+123
 
@@ -290,8 +292,10 @@ HGLRC createOpenGLContext(HDC windowDC) {
 		int contextAttributes[] = {
 			WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
 			WGL_CONTEXT_MINOR_VERSION_ARB, 5,
-			WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
+			WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB | WGL_CONTEXT_ROBUST_ACCESS_BIT_ARB,
 			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+			WGL_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB, GL_LOSE_CONTEXT_ON_RESET,
+			WGL_CONTEXT_RELEASE_BEHAVIOR_ARB, WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB,
 			0
 		};
 
@@ -386,6 +390,9 @@ void GLWindow::init() {
 			printf("something went wrong");
 		if (wglMakeCurrent(deviceContext, openglRenderContext) == FALSE) {
 			printf("making current failed\n");
+		} else {
+			activeThread = getThreadId();
+			printf("Making current on thread: %d\n", activeThread);
 		}
 
 		if (wglSwapIntervalEXT)
@@ -422,6 +429,9 @@ void GLWindow::pollMessages() {
 void GLWindow::makeCurrent() {
 	if (wglMakeCurrent(deviceContext, openglRenderContext) == FALSE) {
 		printf("making current failed\n");
+	} else {
+		activeThread = getThreadId();
+		printf("Making current on thread: %d\n", activeThread);
 	}
 }
 

@@ -87,6 +87,8 @@ namespace Editor.EventHandler
 
         public static EventHandler<FormArgs> onSceneChangeEvent;
 
+        public static EventHandler<UInt32> onAddToSceneEvent;
+
         public static void OnSaveEvent(SaveEventArgs saveArg)
         {
             onSaveEvent?.Invoke(null, saveArg);
@@ -132,6 +134,11 @@ namespace Editor.EventHandler
         public static void OnSceneChangeEvent(FormArgs arg)
         {
             onSceneChangeEvent?.Invoke(null, arg);
+        }
+
+        public static void OnAddToSceneEvent(UInt32 id)
+        {
+            onAddToSceneEvent?.Invoke(null, id);
         }
     }
 }

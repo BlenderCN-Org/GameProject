@@ -15,7 +15,7 @@ void CameraInput::init(glm::mat4 * view) {
 	start = vec3(-1, 0, 0);
 	dir = start;
 
-	setCam(vec3(0, 0, 5), vec3(0, 0, -1));
+	setCam(vec3(0, 2, 5), vec3(0, 0, -1));
 }
 
 void CameraInput::update(float dt) {
@@ -76,9 +76,14 @@ void CameraInput::keypan(float dt) {
 	float speedorig = camSpeed;
 	camSpeed /= playbackSpeed;
 
-	//if (i->getKeyInfo(GLFW_KEY_LEFT_SHIFT))
-	//	camSpeed *= 9;
-	camSpeed *= dt * 0.1f;
+	KeyBind kb;
+	kb.code = 42;
+	kb.mod = 0;
+	kb.mouse = 0;
+	if (input->isKeyBindPressed(kb, false)) {
+		camSpeed *= 9;
+	}
+	camSpeed *= dt;
 
 	if (input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false))
 		pos += dir * camSpeed;
@@ -123,4 +128,12 @@ void CameraInput::setCam(vec3 _pos, vec3 _dir) {
 	dir = _dir;
 
 	*viewMat = lookAt(pos, pos + dir, vec3(0, 1, 0));
+}
+
+void CameraInput::setCamSpeed(float speed) {
+	camSpeed = speed;
+}
+
+void CameraInput::setDefaultSpeed() {
+	camSpeed = 1.0F;
 }

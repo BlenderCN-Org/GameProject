@@ -1,6 +1,8 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
+#include <RenderEngine/IRenderEngine.hpp>
+
 #include "GameObject.hpp"
 #include "Components/RenderComponent.hpp"
 #include "Components/TransformComponent.hpp"
@@ -9,29 +11,51 @@
 
 #include <vector>
 
+#define CELL_SIZE 16.0F
+
+struct Cell {
+
+	glm::vec3 position;
+	float size;
+
+	uint32_t gameObjectCount;
+	GameObject** gameObjects;
+};
+
+struct UniformList {
+	uint32_t numUniforms;
+	int32_t* uniforms;
+};
+
 class Scene {
 public:
+	Scene();
 
-	void init();
+	void init(uint32_t formId);
 
 	void release();
 
-	void setSceneDataObj(SceneDataObject* dataObj);
+	glm::vec4 skyColor;
+	glm::vec4 fogNear;
+	glm::vec4 fogFar;
 
-	glm::vec4 getSkyColor();
+	uint32_t nCellsX;
+	uint32_t nCellsY;
+	Cell** cells;
 
-	uint32_t getGameObjectCount();
-	uint32_t getSceneID();
+	uint32_t shaderCount;
+	IShaderObject* shaders;
+	UniformList* uniforms;
+
+	int32_t vpLocation;
+	int32_t matLocation;
+	int32_t selectedLoc;
+
+	void update(float dt);
+	void render(const glm::mat4 &vp);
 
 private:
 
-	SceneDataObject* sceneDataObj;
-
-	// @todo not use vector
-	std::vector<GameObject*> gameObjects;
-
-	std::vector<RenderComponent*> renderComponents;
-	std::vector<TransformComponent*> transformComponents;
 };
 
 #endif

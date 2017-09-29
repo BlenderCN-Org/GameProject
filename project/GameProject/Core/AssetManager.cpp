@@ -381,7 +381,7 @@ std::vector<uint32_t>& AssetManager::getObjectsWithTag(Tag tag) {
 }
 
 uint32_t AssetManager::getObjectCountWithTag(Tag tag) {
-	return currentFile->getObjectsWithTag(tag).size();
+	return (uint32_t)currentFile->getObjectsWithTag(tag).size();
 }
 
 IDataObjectConverter* AssetManager::getConverter() const {

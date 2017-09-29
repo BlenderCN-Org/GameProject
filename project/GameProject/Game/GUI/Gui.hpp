@@ -11,11 +11,16 @@ public:
 
 	IReFont* getDefaultFont();
 	IShaderObject* getDefaultTextShader();
+	
+	// lazy testing
+	IShaderObject* pointQuadShader;
+	IMesh* defaultQuad;
 
 private:
 
 	IReFont* font;
 	IShaderObject* textShader;
+	
 };
 
 #endif

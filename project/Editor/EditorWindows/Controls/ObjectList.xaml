@@ -56,7 +56,7 @@
             <TreeViewItem x:Name="menu" Header="Menu" />
         </TreeView>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#FF1D1D1D" />
-        <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single" SelectionChanged="listSelectionChanged" MouseDoubleClick="treeView_MouseDoubleClick">
+        <ListView x:Name="listView" Grid.Column="2" Margin="5" Style="{DynamicResource DarkListViewWithGridView}"  SelectionMode="Single" SelectionChanged="listSelectionChanged" MouseDoubleClick="treeView_MouseDoubleClick" MouseLeftButtonDown="listView_MouseLeftButtonDown" PreviewMouseMove="listView_PreviewMouseMove">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="NewItem" Header="New" Click="NewMenuItem_Click" />

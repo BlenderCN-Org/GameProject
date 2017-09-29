@@ -131,7 +131,7 @@ uint32_t GameFile::getNextFormID() {
 }
 
 uint32_t GameFile::getNumEntries() {
-	return loadedEntries.size();
+	return (uint32_t)loadedEntries.size();
 }
 
 EntryMap &GameFile::getAllEntries() {

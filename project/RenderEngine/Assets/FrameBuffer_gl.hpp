@@ -14,6 +14,8 @@ public:
 	virtual bool init(FrameBufferCreateInfo *createInfo);
 	virtual void release();
 
+	virtual void clear();
+
 	virtual void resize(int width, int height);
 	virtual void setWindowSize(int windowWidth, int windowHeight);
 

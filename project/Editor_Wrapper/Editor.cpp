@@ -19,6 +19,7 @@ namespace Editor_clr {
 			Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
 			Editor::EventHandler::EventManager::onGetFormView += gcnew System::EventHandler<Editor::EventHandler::FormView^>(&Extensions::OnGetFormView);
 			Editor::EventHandler::EventManager::onSceneChangeEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnSceneChangeEvent);
+			Editor::EventHandler::EventManager::onAddToSceneEvent += gcnew System::EventHandler<System::UInt32>(&Extensions::OnAddToSceneEvent);
 
 			initialized = true;
 
@@ -39,6 +40,17 @@ namespace Editor_clr {
 
 	void Editor_wrp::releaseEditor() {
 		if (initialized) {
+
+			Editor::EventHandler::EventManager::onSaveEvent = nullptr;
+			Editor::EventHandler::EventManager::onQueryDataEvent = nullptr;
+			Editor::EventHandler::EventManager::onAddObjectEvent = nullptr;
+			Editor::EventHandler::EventManager::onEditFormEvent = nullptr;
+			Editor::EventHandler::EventManager::onDeleteFormEvent = nullptr;
+			Editor::EventHandler::EventManager::onGetFormIDEvent = nullptr;
+			Editor::EventHandler::EventManager::onGetFormView = nullptr;
+			Editor::EventHandler::EventManager::onSceneChangeEvent = nullptr;
+			Editor::EventHandler::EventManager::onAddToSceneEvent = nullptr;
+
 			printf("Releasing editor\n");
 			pixelBuffers[0]->release();
 			pixelBuffers[1]->release();
