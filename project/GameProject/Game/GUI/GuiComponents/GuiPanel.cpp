@@ -21,41 +21,9 @@ void GuiPanel::setPanelMaterial(IMaterial * material) {
 
 void GuiPanel::render(glm::mat4 &vpMatRef) {
 	
-	int x = 0;
-	int y = 0;
-
 	glm::mat4 positionMatrix;
 
-	if (anchorPoint == GuiAnchor::CENTER) {
-		Input::getInput()->getWindowSize(x, y);
-		x /= 2;
-		y /= 2;
-
-		glm::vec4 p0 = glm::vec4(x - size.x, y - size.y, 0, 0);
-		glm::vec4 p1 = glm::vec4(x - size.x, y + size.y, 0, 0);
-		glm::vec4 p2 = glm::vec4(x + size.x, y + size.y, 0, 0);
-		glm::vec4 p3 = glm::vec4(x + size.x, y - size.y, 0, 0);
-
-		positionMatrix[0] = p0;
-		positionMatrix[1] = p1;
-		positionMatrix[2] = p2;
-		positionMatrix[3] = p3;
-	}
-	else if (anchorPoint == GuiAnchor::TOP) {
-		Input::getInput()->getWindowSize(x, y);
-		x /= 2;
-		y = 0;
-
-		glm::vec4 p0 = glm::vec4(x - size.x, y             , 0, 0);
-		glm::vec4 p1 = glm::vec4(x - size.x, y + 2 * size.y, 0, 0);
-		glm::vec4 p2 = glm::vec4(x + size.x, y + 2 * size.y, 0, 0);
-		glm::vec4 p3 = glm::vec4(x + size.x, y             , 0, 0);
-
-		positionMatrix[0] = p0;
-		positionMatrix[1] = p1;
-		positionMatrix[2] = p2;
-		positionMatrix[3] = p3;
-	}
+	calculatePoints(positionMatrix);
 
 	gGui->pointQuadShader->useShader();
 	gGui->pointQuadShader->bindData(VPMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);

@@ -92,7 +92,7 @@ void Game::init() {
 	guiPanel = new GuiPanel();
 	guiPanel->setPosition(0, 0);
 	guiPanel->setSize(100, 100);
-	guiPanel->setAnchorPoint(GuiAnchor::TOP);
+	guiPanel->setAnchorPoint(GuiAnchor::BOTTOM_LEFT);
 
 	//gameObjects.push_back(createGo2(gAssetManager, "data/meshes/test.mesh", 0, 0, 0));
 

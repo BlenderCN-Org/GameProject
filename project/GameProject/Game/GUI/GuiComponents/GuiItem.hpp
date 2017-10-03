@@ -19,6 +19,8 @@ public:
 
 protected:
 
+	void calculatePoints(glm::mat4 &positionMatrix);
+
 	glm::ivec2 position;
 	glm::ivec2 size;
 
