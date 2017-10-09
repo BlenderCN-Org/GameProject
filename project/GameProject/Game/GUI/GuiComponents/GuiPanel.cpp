@@ -11,7 +11,7 @@ GuiPanel::GuiPanel() : GuiItem() {
 
 GuiPanel::~GuiPanel() {}
 
-void GuiPanel::addGuiItem(GuiItem item) {
+void GuiPanel::addGuiItem(GuiItem* item) {
 	subItems.push_back(item);
 }
 
@@ -32,11 +32,11 @@ void GuiPanel::render(glm::mat4 &vpMatRef) {
 	gGui->defaultQuad->bind();
 	gGui->defaultQuad->render();
 
-	std::vector<GuiItem>::iterator it = subItems.begin();
-	std::vector<GuiItem>::iterator eit = subItems.end();
+	std::vector<GuiItem*>::iterator it = subItems.begin();
+	std::vector<GuiItem*>::iterator eit = subItems.end();
 
 	// render all subitems
 	for (it; it != eit; it++) {
-		it->render(vpMatRef);
+		(*it)->render(vpMatRef);
 	}
 }

@@ -8,6 +8,7 @@
 #include "Input/CameraInput.hpp"
 #include "GUI/Gui.hpp"
 #include "GUI/GuiComponents/GuiPanel.hpp"
+#include "GUI/GuiComponents/GuiLabel.hpp"
 #include "Menu.hpp"
 
 #include "../Core/Core.hpp"
@@ -43,6 +44,7 @@ private:
 	Camera* cam = nullptr;
 
 	GuiPanel* guiPanel;
+	GuiLabel* guiLabel;
 
 	CameraInput camInput;
 

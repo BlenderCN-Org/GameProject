@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 #include <RenderEngine/IRenderEngine.hpp>
+#include "../Camera.hpp"
 
 class Gui {
 public:
@@ -16,11 +17,13 @@ public:
 	IShaderObject* pointQuadShader;
 	IMesh* defaultQuad;
 
+	Camera* cam;
+
 private:
 
 	IReFont* font;
 	IShaderObject* textShader;
-	
+
 };
 
 #endif

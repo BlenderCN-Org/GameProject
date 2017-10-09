@@ -6,6 +6,7 @@
 #include "../../Core/System/Console.hpp"
 
 void Gui::init() {
+	cam = nullptr;
 	gGui = this;
 
 	font = gRenderEngine->createFont();

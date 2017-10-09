@@ -145,3 +145,12 @@ void GuiItem::calculatePoints(glm::mat4 & positionMatrix) {
 		positionMatrix[3] = p3;
 	}
 }
+
+
+void GuiItem::calculatePoints(glm::mat4 & positionMatrix, const glm::mat4 &vpMatRef) {
+	calculatePoints(positionMatrix);
+
+	// adjust to refMat
+
+
+}

@@ -42,6 +42,7 @@ Game::Game() : running(true), core(nullptr), timepass(0.0f), fps(0), gstate(Game
 Game::~Game() {
 	//shdr->release();
 	delete guiPanel;
+	delete guiLabel;
 	gBuffer->release();
 	gui->freeResources();
 
@@ -63,6 +64,8 @@ void Game::init() {
 
 	gui = new Gui();
 	gui->init();
+
+	gui->cam = cam;
 
 	editAccess.setGameInstance(this);
 	currentScene = nullptr;
@@ -93,6 +96,15 @@ void Game::init() {
 	guiPanel->setPosition(0, 0);
 	guiPanel->setSize(100, 100);
 	guiPanel->setAnchorPoint(GuiAnchor::BOTTOM_LEFT);
+
+
+	guiLabel = new GuiLabel();
+	guiLabel->setPosition(0, 0);
+	guiLabel->setSize(100, 50);
+	guiLabel->setAnchorPoint(GuiAnchor::TOP);
+	guiLabel->setText("Test");
+
+	guiPanel->addGuiItem(guiLabel);
 
 	//gameObjects.push_back(createGo2(gAssetManager, "data/meshes/test.mesh", 0, 0, 0));
 

@@ -288,6 +288,7 @@
     <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\GUI\Gui.cpp" />
     <ClCompile Include="Game\GUI\GuiComponents\GuiItem.cpp" />
+    <ClCompile Include="Game\GUI\GuiComponents\GuiLabel.cpp" />
     <ClCompile Include="Game\GUI\GuiComponents\GuiPanel.cpp" />
     <ClCompile Include="Game\GUI\Text.cpp" />
     <ClCompile Include="Game\Input\CameraInput.cpp" />
@@ -325,6 +326,7 @@
     <ClInclude Include="Game\GUI\GuiComponents\GuiAnchorPoint.hpp" />
     <ClInclude Include="Game\GUI\GuiComponents\GuiItem.hpp" />
     <ClInclude Include="Game\GUI\GuiComponents\GuiPanel.hpp" />
+    <ClInclude Include="Game\GUI\GuiComponents\GuiLabel.hpp" />
     <ClInclude Include="Game\Input\CameraInput.hpp" />
     <ClInclude Include="Game\Scene.hpp" />
     <ClInclude Include="IAssetManager.hpp" />

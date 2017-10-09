@@ -20,6 +20,7 @@ public:
 protected:
 
 	void calculatePoints(glm::mat4 &positionMatrix);
+	void calculatePoints(glm::mat4 & positionMatrix, const glm::mat4 &vpMatRef);
 
 	glm::ivec2 position;
 	glm::ivec2 size;

@@ -14,14 +14,14 @@ public:
 	GuiPanel();
 	virtual ~GuiPanel();
 
-	void addGuiItem(GuiItem item);
+	void addGuiItem(GuiItem* item);
 	void setPanelMaterial(IMaterial* material);
 
 	virtual void render(glm::mat4 &vpMatRef) override;
 
 private:
 
-	std::vector<GuiItem> subItems;
+	std::vector<GuiItem*> subItems;
 
 	IMaterial* panelMaterial;
 
