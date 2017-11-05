@@ -157,7 +157,7 @@ void RenderEngine::renderDebugFrame() {
 		processGlRequests();
 		processGlFunctions();
 		glDrawBuffer(GL_BACK);
-		//glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
+		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 }
@@ -181,6 +181,23 @@ void RenderEngine::setDepthTest(bool enable) {
 		} else {
 			glDisable(cap);
 		}
+	}
+}
+
+void RenderEngine::setScissorTest(bool enable) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		GLenum cap = GL_SCISSOR_TEST;
+		if (enable) {
+			glEnable(cap);
+		} else {
+			glDisable(cap);
+		}
+	}
+}
+
+void RenderEngine::setScissorRegion(int x, int y, int width, int height) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glScissor(x, y, width, height);
 	}
 }
 

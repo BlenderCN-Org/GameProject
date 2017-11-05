@@ -71,6 +71,8 @@ public:
 	virtual void bindDefaultFrameBuffer() = 0;
 	
 	virtual void setDepthTest(bool enable) = 0;
+	virtual void setScissorTest(bool enable) = 0;
+	virtual void setScissorRegion(int x, int y, int width, int height) = 0 ;
 
 	virtual void clearStencil() = 0;
 
