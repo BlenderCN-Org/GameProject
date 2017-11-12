@@ -44,6 +44,11 @@ namespace Engine {
 			int ox = (int)positionMatrix[0].x;
 			int oy = (int)positionMatrix[0].y;
 
+			if (size.x > xSize)
+				size.x = xSize;
+			if (size.y > ySize)
+				size.y = ySize;
+
 			int x = xSize;
 			int y = ySize;
 
@@ -59,132 +64,135 @@ namespace Engine {
 			const float uv4x = 0.0F;
 			const float uv4y = 1.0F;
 
+			glm::vec4 p0;
+			glm::vec4 p1;
+			glm::vec4 p2;
+			glm::vec4 p3;
 
 			if (anchorPoint == GuiAnchor::CENTER) {
 				x /= 2;
 				y /= 2;
 
-				glm::vec4 p0 = glm::vec4(x - size.x, y - size.y, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - size.x, y + size.y, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + size.x, y + size.y, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + size.x, y - size.y, uv4x, uv4y);
+				p0 = glm::vec4(x - size.x, y - size.y, uv1x, uv1y);
+				p1 = glm::vec4(x - size.x, y + size.y, uv2x, uv2y);
+				p2 = glm::vec4(x + size.x, y + size.y, uv3x, uv3y);
+				p3 = glm::vec4(x + size.x, y - size.y, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::TOP) {
 				x /= 2;
 				y = 0;
 
-				glm::vec4 p0 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - size.x, y + 2 * size.y, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + size.x, y + 2 * size.y, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x - size.x, y + 2 * size.y, uv2x, uv2y);
+				p2 = glm::vec4(x + size.x, y + 2 * size.y, uv3x, uv3y);
+				p3 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::BOTTOM) {
 				x /= 2;
 
-				glm::vec4 p0 = glm::vec4(x - size.x, y - 2 * size.y, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + size.x, y - 2 * size.y, uv4x, uv4y);
+				p0 = glm::vec4(x - size.x, y - 2 * size.y, uv1x, uv1y);
+				p1 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x + size.x, y - 2 * size.y, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::LEFT) {
 				x = 0;
 				y /= 2;
 
-				glm::vec4 p0 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + 2 * size.x, y + size.y, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + 2 * size.x, y - size.y, uv4x, uv4y);
+				p0 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * size.x, y + size.y, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * size.x, y - size.y, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::RIGHT) {
 				y /= 2;
 
-				glm::vec4 p0 = glm::vec4(x - 2 * size.x, y - size.y, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - 2 * size.x, y + size.y, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * size.x, y - size.y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * size.x, y + size.y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::TOP_LEFT) {
 				x = 0;
 				y = 0;
 
-				glm::vec4 p0 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + 2 * size.x, y + 2 * size.y, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * size.x, y + 2 * size.y, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::TOP_RIGHT) {
 				y = 0;
 
-				glm::vec4 p0 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - 2 * size.x, y + 2 * size.y, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * size.x, y + 2 * size.y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::BOTTOM_RIGHT) {
 
-				glm::vec4 p0 = glm::vec4(x - 2 * size.x, y - 2 * size.y, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * size.x, y - 2 * size.y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv4x, uv4y);
 
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
 			} else if (anchorPoint == GuiAnchor::BOTTOM_LEFT) {
 				x = 0;
 
-				glm::vec4 p0 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv1x, uv1y);
-				glm::vec4 p1 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv2x, uv2y);
-				glm::vec4 p2 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv3x, uv3y);
-				glm::vec4 p3 = glm::vec4(x + 2 * size.x, y - 2 * size.y, uv4x, uv4y);
-
-				positionMatrix[0] = p0;
-				positionMatrix[1] = p1;
-				positionMatrix[2] = p2;
-				positionMatrix[3] = p3;
+				p0 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * size.x, y - 2 * size.y, uv4x, uv4y);
 			}
 
-			positionMatrix[0].x += ox;
-			positionMatrix[0].y += oy;
-								   
-			positionMatrix[1].x += ox;
-			positionMatrix[1].y += oy;
-								   
-			positionMatrix[2].x += ox;
-			positionMatrix[2].y += oy;
-								   
-			positionMatrix[3].x += ox;
-			positionMatrix[3].y += oy;
+			positionMatrix[0] = p0;
+			positionMatrix[1] = p1;
+			positionMatrix[2] = p2;
+			positionMatrix[3] = p3;
 
+			int mx = ox + position.x;
+			int my = oy + position.y;
+
+			positionMatrix[0].x += mx;
+			positionMatrix[0].y += my;
+
+			positionMatrix[1].x += mx;
+			positionMatrix[1].y += my;
+
+			positionMatrix[2].x += mx;
+			positionMatrix[2].y += my;
+
+			positionMatrix[3].x += mx;
+			positionMatrix[3].y += my;
+
+			if (positionMatrix[0].x < ox) {
+				positionMatrix[0].x = float(ox);
+				positionMatrix[1].x = float(ox);
+			}
+
+			if (positionMatrix[0].y < oy) {
+				positionMatrix[0].y = float(oy);
+				positionMatrix[1].y = float(oy);
+			}
+
+			// @todo clip to regions
+
+		}
+
+		glm::vec4 GuiItem::clipRegion(glm::vec4 element, glm::vec4 region) {
+
+			glm::vec4 newPos = element;
+
+			if (element[0] < region[0])
+				newPos[0] = region[0];
+			if (element[1] < region[1])
+				newPos[1] = region[1];
+			if (element[2] > region[2])
+				newPos[2] = region[2];
+			if (element[3] > region[3])
+				newPos[3] = region[3];
+
+			return newPos;
 		}
 
 		glm::vec4 GuiItem::positionAndSizeFromMatrix(const glm::mat4 &positionMatrix) {

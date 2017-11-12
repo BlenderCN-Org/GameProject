@@ -10,6 +10,7 @@ public:
 	virtual void getCursorPos(int & x, int & y) override;
 	virtual void setWindowPos(int x, int y) override;
 	virtual void setWindowSize(int x, int y) override;
+	virtual void getWindowSize(int &x, int &y) override;
 	virtual bool isVisible() override;
 	virtual void showWindow(bool visible) override;
 	virtual void setWindowBorderless(bool borderless) override;

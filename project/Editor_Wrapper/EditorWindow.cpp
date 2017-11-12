@@ -6,6 +6,10 @@ void EditorWindow::setWindowPos(int x, int y) {}
 
 void EditorWindow::setWindowSize(int x, int y) {}
 
+void EditorWindow::getWindowSize(int &x, int &y) {
+	x = y = 0;
+}
+
 bool EditorWindow::isVisible() {
 	return true;
 }

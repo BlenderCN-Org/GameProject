@@ -22,6 +22,7 @@ public:
 
 	virtual void setWindowPos(int x, int y);
 	virtual void setWindowSize(int x, int y);
+	virtual void getWindowSize(int &x, int &y);
 
 	virtual bool isVisible();
 
@@ -75,6 +76,9 @@ public:
 	bool cursorLock = false;
 	int modkeys = 0;
 	bool inputProcessedByControllers = false;
+
+	int width = 0;
+	int height = 0;
 
 protected:
 	HWND windowHandle;

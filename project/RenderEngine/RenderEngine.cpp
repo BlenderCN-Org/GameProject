@@ -197,7 +197,12 @@ void RenderEngine::setScissorTest(bool enable) {
 
 void RenderEngine::setScissorRegion(int x, int y, int width, int height) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
-		glScissor(x, y, width, height);
+		
+		int wx = 0;
+		int wy = 0;
+		glWindow.getWindowSize(wx, wy);
+
+		glScissor(x,  wy - (y + height), width, height);
 	}
 }
 

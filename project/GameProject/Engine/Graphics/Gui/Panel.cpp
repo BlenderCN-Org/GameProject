@@ -51,12 +51,12 @@ namespace Engine {
 					std::vector<GuiItem*>::iterator eit = subItems.end();
 
 					posAndSize = positionAndSizeFromMatrix(vpMatRef);
-
 					// render all subitems
 					for (it; it != eit; it++) {
+						glm::mat4 cpy = vpMatRef;
 						gRenderEngine->setScissorTest(true);
 						gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
-						(*it)->render(vpMatRef, shaderContainer);
+						(*it)->render(cpy, shaderContainer);
 						gRenderEngine->setScissorTest(false);
 					}
 				}

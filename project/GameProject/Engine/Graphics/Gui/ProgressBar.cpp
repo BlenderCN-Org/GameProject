@@ -59,7 +59,7 @@ namespace Engine {
 					shaderContainer.standardQuad->bind();
 					shaderContainer.standardQuad->render();
 
-					posAndSize = positionAndSizeFromMatrix(vpMatRef);
+					posAndSize = clipRegion(positionAndSizeFromMatrix(vpMatRef), posAndSize);
 
 					float percentage = System::percentageInRange(min, max, value);
 

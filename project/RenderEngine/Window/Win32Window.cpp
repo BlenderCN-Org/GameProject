@@ -124,7 +124,13 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			enableXinput(false);
 			return 1;
 			break;
-
+		case WM_SYSCOMMAND:
+			switch (wParam) {
+				case SC_KEYMENU:
+					return(0);
+					break;
+			}
+			break;
 		case RESTORE_FROM_EDIT:
 		{
 			wnd->setWindowBorderless(false);
@@ -304,7 +310,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 		};
 
 		renderingContext = wglCreateContextAttribsARB(windowDC, NULL, contextAttributes);
-	} else {
+} else {
 		renderingContext = wglCreateContext(windowDC);
 	}
 
@@ -339,6 +345,20 @@ void BaseWindow::setWindowSize(int x, int y) {
 	AdjustWindowRectEx(&r, (DWORD)GetWindowLongPtr(windowHandle, GWL_STYLE), FALSE, (DWORD)GetWindowLongPtr(windowHandle, GWL_EXSTYLE));
 
 	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, SWP_NOZORDER | SWP_NOMOVE);
+}
+
+void BaseWindow::getWindowSize(int &x, int &y) 	{
+
+	if (width == 0 || height == 0) 		{
+		RECT r;
+		GetClientRect(windowHandle, &r);
+
+		width = r.right - r.left;
+		height = r.bottom - r.top;
+	}
+
+	x = width;
+	y = height;
 }
 
 bool BaseWindow::isVisible() {

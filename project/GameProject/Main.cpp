@@ -7,6 +7,8 @@
 
 #include <Memory\MemoryMan.hpp>
 
+#include <conio.h>
+
 #include "Engine/Engine.hpp"
 #include "Engine/Input/Input.hpp"
 #include "Engine/Interfaces/IDataParser.hpp"
@@ -43,6 +45,9 @@ int main(int argc, char* argv[]) {
 	InitMemoryManagement();
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	printf("Waiting for RenderDoc injection, Press any key to continue...\n");
+	_getch();
 
 	initExceptionHandlers();
 
@@ -90,9 +95,9 @@ int main(int argc, char* argv[]) {
 	label->setAnchorPoint(Engine::Graphics::GuiAnchor::CENTER);
 	label->setVisible(true);
 
-	progress->setPosition(0, 0);
-	progress->setSize(200, 10);
-	progress->setAnchorPoint(Engine::Graphics::GuiAnchor::LEFT);
+	progress->setPosition(-50, 0);
+	progress->setSize(50, 10);
+	progress->setAnchorPoint(Engine::Graphics::GuiAnchor::BOTTOM_LEFT);
 	progress->setVisible(true);
 	progress->setRange(0U, 1000U);
 	progress->setValue(500U);
@@ -101,11 +106,13 @@ int main(int argc, char* argv[]) {
 
 	gui->addGuiItem(panel);
 	panel->addGuiItem(panel2);
-	gui->addGuiItem(progress);
+	panel->addGuiItem(progress);
 
 	gui->addGuiItem(label);
 
 	uint32_t value = 500U;
+
+	printf("starting loop\n");
 
 	while (e->isRunning()) {
 
@@ -136,6 +143,8 @@ int main(int argc, char* argv[]) {
 		}
 
 	}
+
+	printf("finished execution\n");
 
 	delete progress;
 	delete pBack;

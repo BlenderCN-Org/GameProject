@@ -41,6 +41,7 @@ namespace Engine {
 		protected:
 
 			void calculatePoints(glm::mat4 &positionMatrix, int xSize, int ySize);
+			glm::vec4 clipRegion(glm::vec4 element, glm::vec4 region);
 
 			glm::vec4 positionAndSizeFromMatrix(const glm::mat4 &positionMatrix);
 

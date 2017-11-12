@@ -39,6 +39,7 @@ CEngine::CEngine() {
 
 	input->setupCallbacks(gameWindow);
 	gameWindow->setWindowSize(1280, 720);
+	running = true;
 }
 
 CEngine::~CEngine() {
