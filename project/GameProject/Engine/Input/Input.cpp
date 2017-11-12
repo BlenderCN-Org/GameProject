@@ -124,9 +124,9 @@ namespace Engine {
 			singleton = nullptr;
 		}
 
-		//void Input::attachConsole(Console * con) {
-		//	console = con;
-		//}
+		void Input::attachConsole(Core::Console* con) {
+			console = con;
+		}
 
 		void Input::clearCallbacks() {
 			if (window) {

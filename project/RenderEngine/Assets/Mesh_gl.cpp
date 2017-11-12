@@ -18,6 +18,23 @@ struct Vertex5 {
 	float u, v;
 };
 
+struct Vertex9 {
+	Vertex9(float _x, float _y, float _z, float _u, float _v, float _r, float _g, float _b, float _a) {
+		x = _x;
+		y = _y;
+		z = _z;
+		u = _u;
+		v = _v;
+		r = _r;
+		g = _g;
+		b = _b;
+		a = _a;
+	}
+	float x, y, z;
+	float u, v;
+	float r, g, b, a;
+};
+
 void Mesh_gl::init(MeshPrimitiveType ptype) {
 	primitiveType = ptype;
 	usesIndexBuffer = false;
@@ -94,6 +111,24 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex5), (void*)(sizeof(GLfloat) * 3));
 		}
+		else if (dataLayout == VERT_UV_COL) {
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+			glBufferData(GL_ARRAY_BUFFER, tInfo.size, tInfo.data, GL_STATIC_DRAW);
+
+			glBindVertexArray(vertexArrayObject);
+
+			// vertex in location 0
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex9), (void*)0);
+
+			// uv in location 1
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex9), (void*)(sizeof(GLfloat) * 3));
+			// colors in location 2
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex9), (void*)(sizeof(GLfloat) * 5));
+		}
 
 		if (tInfo.reallocated) {
 			free(tInfo.data);
@@ -123,6 +158,27 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		Vertex5* verts = (Vertex5*)data;
 		for (GLsizei i = 0; i < vertexCount; i++) {
 			Vertex5& v = verts[i];
+			glm::vec3 v2 = glm::vec3(v.x, v.y, v.z);
+			radius = glm::max(radius, glm::distance(v2, glm::vec3(0.0f)));
+		}
+	}
+	else if(layout == VERT_UV_COL) {
+		if (activeThread == getThreadId()) {
+			fn();
+		} else {
+
+			tInfo.data = malloc(size);
+			memcpy(tInfo.data, data, size);
+			tInfo.reallocated = true;
+
+			postGlFunction(fn);
+		}
+
+		vertexCount = (GLsizei)size / sizeof(Vertex9);
+		radius = 0;
+		Vertex9* verts = (Vertex9*)data;
+		for (GLsizei i = 0; i < vertexCount; i++) {
+			Vertex9& v = verts[i];
 			glm::vec3 v2 = glm::vec3(v.x, v.y, v.z);
 			radius = glm::max(radius, glm::distance(v2, glm::vec3(0.0f)));
 		}

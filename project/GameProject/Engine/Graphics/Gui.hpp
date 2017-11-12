@@ -20,15 +20,20 @@ namespace Engine {
 			CGui();
 			virtual ~CGui();
 
-			void addGuiItem(GuiItem* guiItem);
+			void setVisible(bool _visible);
 
+			void setPosition(int x, int y);
+
+			void addGuiItem(GuiItem* guiItem);
+			
 			void render();
 
 		private:
 			std::vector<GuiItem*> guiItems;
 
 			GuiShaderContainer shaders;
-
+			bool visible;
+			glm::ivec2 pos;
 		};
 	}
 }

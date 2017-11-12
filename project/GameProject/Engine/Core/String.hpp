@@ -16,7 +16,7 @@ namespace Engine {
 
 			const size_t getSize() const;
 
-			const char* cStr();
+			const char* cStr() const;
 
 			void operator=(const char* text);
 			void operator+=(const char* text);

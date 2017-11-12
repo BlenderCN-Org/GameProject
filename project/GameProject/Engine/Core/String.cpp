@@ -54,7 +54,7 @@ namespace Engine {
 			return usedSize;
 		}
 
-		const char* String::cStr() {
+		const char* String::cStr() const {
 			return text;
 		}
 
@@ -95,6 +95,7 @@ namespace Engine {
 
 					text = new char[totalSize];
 					memcpy(text, temp, usedSize);
+					delete temp;
 					memcpy(&text[usedSize], _text, stringLength);
 
 					size = totalSize;
@@ -141,6 +142,7 @@ namespace Engine {
 
 					text = new char[totalSize];
 					memcpy(text, temp, usedSize);
+					delete temp;
 					memcpy(&text[usedSize], _text.text, stringLength);
 
 					size = totalSize;

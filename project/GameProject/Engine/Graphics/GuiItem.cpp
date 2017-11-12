@@ -69,80 +69,82 @@ namespace Engine {
 			glm::vec4 p2;
 			glm::vec4 p3;
 
+			glm::ivec2 realSize = size / 2;
+
 			if (anchorPoint == GuiAnchor::CENTER) {
 				x /= 2;
 				y /= 2;
 
-				p0 = glm::vec4(x - size.x, y - size.y, uv1x, uv1y);
-				p1 = glm::vec4(x - size.x, y + size.y, uv2x, uv2y);
-				p2 = glm::vec4(x + size.x, y + size.y, uv3x, uv3y);
-				p3 = glm::vec4(x + size.x, y - size.y, uv4x, uv4y);
+				p0 = glm::vec4(x - realSize.x, y - realSize.y, uv1x, uv1y);
+				p1 = glm::vec4(x - realSize.x, y + realSize.y, uv2x, uv2y);
+				p2 = glm::vec4(x + realSize.x, y + realSize.y, uv3x, uv3y);
+				p3 = glm::vec4(x + realSize.x, y - realSize.y, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::TOP) {
 				x /= 2;
 				y = 0;
 
-				p0 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv1x, uv1y);
-				p1 = glm::vec4(x - size.x, y + 2 * size.y, uv2x, uv2y);
-				p2 = glm::vec4(x + size.x, y + 2 * size.y, uv3x, uv3y);
-				p3 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - realSize.x, y + -+-+-+-+-+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x - realSize.x, y + 2 * realSize.y, uv2x, uv2y);
+				p2 = glm::vec4(x + realSize.x, y + 2 * realSize.y, uv3x, uv3y);
+				p3 = glm::vec4(x + realSize.x, y + -+-+-+-+-+-+-+-+-0, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::BOTTOM) {
 				x /= 2;
 
-				p0 = glm::vec4(x - size.x, y - 2 * size.y, uv1x, uv1y);
-				p1 = glm::vec4(x - size.x, y + -+-+-+-+-0, uv2x, uv2y);
-				p2 = glm::vec4(x + size.x, y + -+-+-+-+-0, uv3x, uv3y);
-				p3 = glm::vec4(x + size.x, y - 2 * size.y, uv4x, uv4y);
+				p0 = glm::vec4(x - realSize.x, y - 2 * realSize.y, uv1x, uv1y);
+				p1 = glm::vec4(x - realSize.x, y + -+-+-+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + realSize.x, y + -+-+-+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x + realSize.x, y - 2 * realSize.y, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::LEFT) {
 				x = 0;
 				y /= 2;
 
-				p0 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv1x, uv1y);
-				p1 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv2x, uv2y);
-				p2 = glm::vec4(x + 2 * size.x, y + size.y, uv3x, uv3y);
-				p3 = glm::vec4(x + 2 * size.x, y - size.y, uv4x, uv4y);
+				p0 = glm::vec4(x, y - realSize.y + -+-+-+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + realSize.y + -+-+-+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * realSize.x, y + realSize.y, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * realSize.x, y - realSize.y, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::RIGHT) {
 				y /= 2;
 
-				p0 = glm::vec4(x - 2 * size.x, y - size.y, uv1x, uv1y);
-				p1 = glm::vec4(x - 2 * size.x, y + size.y, uv2x, uv2y);
-				p2 = glm::vec4(x, y + size.y + -+-+-+-+-0, uv3x, uv3y);
-				p3 = glm::vec4(x, y - size.y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * realSize.x, y - realSize.y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * realSize.x, y + realSize.y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + realSize.y + -+-+-+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y - realSize.y + -+-+-+-+-+-+-0, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::TOP_LEFT) {
 				x = 0;
 				y = 0;
 
-				p0 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv1x, uv1y);
-				p1 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv2x, uv2y);
-				p2 = glm::vec4(x + 2 * size.x, y + 2 * size.y, uv3x, uv3y);
-				p3 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x, y + -+-+-+-+-+-+-0 + -+-+-+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + 2 * realSize.y + -+-+-+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * realSize.x, y + 2 * realSize.y, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * realSize.x, y + -+-+-+-+-+-+-0, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::TOP_RIGHT) {
 				y = 0;
 
-				p0 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv1x, uv1y);
-				p1 = glm::vec4(x - 2 * size.x, y + 2 * size.y, uv2x, uv2y);
-				p2 = glm::vec4(x, y + 2 * size.y + -+-+-+-+-0, uv3x, uv3y);
-				p3 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * realSize.x + -+-+-+-+-+-+-0, y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * realSize.x, y + 2 * realSize.y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + 2 * realSize.y + -+-+-+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y + -+-+-+-+-+-+-0 + -+-+-+-+-+-+-0, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::BOTTOM_RIGHT) {
 
-				p0 = glm::vec4(x - 2 * size.x, y - 2 * size.y, uv1x, uv1y);
-				p1 = glm::vec4(x - 2 * size.x + -+-+-+-+-0, y, uv2x, uv2y);
-				p2 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv3x, uv3y);
-				p3 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv4x, uv4y);
+				p0 = glm::vec4(x - 2 * realSize.x, y - 2 * realSize.y, uv1x, uv1y);
+				p1 = glm::vec4(x - 2 * realSize.x + -+-+-+-+-+-+-0, y, uv2x, uv2y);
+				p2 = glm::vec4(x, y + -+-+-+-+-+-+-0 + -+-+-+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x, y - 2 * realSize.y + -+-+-+-+-+-+-0, uv4x, uv4y);
 
 			} else if (anchorPoint == GuiAnchor::BOTTOM_LEFT) {
 				x = 0;
 
-				p0 = glm::vec4(x, y - 2 * size.y + -+-+-+-+-0, uv1x, uv1y);
-				p1 = glm::vec4(x, y + -+-+-+-+-0 + -+-+-+-+-0, uv2x, uv2y);
-				p2 = glm::vec4(x + 2 * size.x, y + -+-+-+-+-0, uv3x, uv3y);
-				p3 = glm::vec4(x + 2 * size.x, y - 2 * size.y, uv4x, uv4y);
+				p0 = glm::vec4(x, y - 2 * realSize.y + -+-+-+-+-+-+-0, uv1x, uv1y);
+				p1 = glm::vec4(x, y + -+-+-+-+-+-+-0 + -+-+-+-+-+-+-0, uv2x, uv2y);
+				p2 = glm::vec4(x + 2 * realSize.x, y + -+-+-+-+-+-+-0, uv3x, uv3y);
+				p3 = glm::vec4(x + 2 * realSize.x, y - 2 * realSize.y, uv4x, uv4y);
 			}
 
 			positionMatrix[0] = p0;

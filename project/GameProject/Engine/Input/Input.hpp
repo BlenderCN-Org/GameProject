@@ -3,6 +3,7 @@
 
 #include <RenderEngine/IWindow.hpp>
 #include <Config\Config.hpp>
+#include "../Core/Console.hpp"
 
 #include <map>
 #include <sstream>
@@ -69,7 +70,7 @@ namespace Engine {
 			static Input* GetInput();
 			static void Release();
 
-			//void attachConsole(Console* con);
+			void attachConsole(Core::Console* con);
 			void clearCallbacks();
 			void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
 
@@ -129,6 +130,8 @@ namespace Engine {
 
 			int winW;
 			int winH;
+
+			Core::Console* console;
 
 			static void keyCallback(IWindow* window, int scancode, int action, int mods);
 			static void mouseButtonCallback(IWindow* window, int button, int action, int mods);

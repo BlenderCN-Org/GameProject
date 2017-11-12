@@ -1,0 +1,51 @@
+Engine::Graphics::CGui* gui = new Engine::Graphics::CGui();
+	Engine::Graphics::Gui::Panel* panel = new Engine::Graphics::Gui::Panel();
+
+	Engine::Graphics::Gui::Panel* panel2 = new Engine::Graphics::Gui::Panel();
+
+	Engine::Graphics::Texture::Texture2D* tex = new Engine::Graphics::Texture::Texture2D();
+	Engine::Graphics::Texture::Texture2D* tex2 = new Engine::Graphics::Texture::Texture2D();
+
+	Engine::Graphics::Gui::Label* label = new Engine::Graphics::Gui::Label();
+
+	Engine::Graphics::Gui::ProgressBar* progress = new Engine::Graphics::Gui::ProgressBar();
+	Engine::Graphics::Texture::Texture2D* pBack = new Engine::Graphics::Texture::Texture2D();
+	Engine::Graphics::Texture::Texture2D* pProg = new Engine::Graphics::Texture::Texture2D();
+
+	tex->singleColor(0.5F, 0.5F, 0.0F, 1.0F);
+	tex2->singleColor(0.0F, 0.5F, 0.0F, 1.0F);
+
+	pBack->singleColor(0.0F, 0.0F, 0.0F, 1.0F);
+	pProg->singleColor(1.0F, 0.0F, 0.0F, 1.0F);
+
+	panel->setPosition(0, 0);
+	panel->setSize(100, 100);
+	panel->setAnchorPoint(Engine::Graphics::GuiAnchor::CENTER);
+	panel->setVisible(true);
+	panel->setTexture(tex);
+
+	panel2->setPosition(0, 0);
+	panel2->setSize(200, 10);
+	panel2->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
+	panel2->setVisible(true);
+	panel2->setTexture(tex2);
+
+	label->setPosition(100, 0);
+	label->setSize(200, 10);
+	label->setAnchorPoint(Engine::Graphics::GuiAnchor::CENTER);
+	label->setVisible(true);
+
+	progress->setPosition(-50, 0);
+	progress->setSize(50, 10);
+	progress->setAnchorPoint(Engine::Graphics::GuiAnchor::BOTTOM_LEFT);
+	progress->setVisible(true);
+	progress->setRange(0U, 1000U);
+	progress->setValue(500U);
+	progress->setBackgorundTexture(pBack);
+	progress->setProgressTexture(pProg);
+
+	gui->addGuiItem(panel);
+	panel->addGuiItem(panel2);
+	panel->addGuiItem(progress);
+
+	gui->addGuiItem(label);

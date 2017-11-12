@@ -1,9 +1,15 @@
-
+#ifndef ENGINE_HPP
+#define ENGINE_HPP 
 /// Internal Includes
 #include "Core/LibraryLoader.hpp"
+#include "Core/Console.hpp"
 #include "Interfaces/IDataParser.hpp"
 #include "Physics/PhysicsEngine.hpp"
 #include "Utils/MemoryBuffer.hpp"
+#include "Graphics/Gui.hpp"
+#include "Graphics/Gui/Panel.hpp"
+#include "Graphics/Gui/Label.hpp"
+#include "Graphics/Textures/Texture2D.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -55,6 +61,7 @@ public:
 private:
 
 	Core::Library renderEngineLib;
+	Core::Console console;
 	IRenderEngine* renderEngine;
 	IWindow* gameWindow;
 
@@ -67,4 +74,17 @@ private:
 
 	bool pauseFlag;
 	bool running;
+
+	Engine::Graphics::CGui* consoleGui;
+	Engine::Graphics::Gui::Panel* consolePanel;
+	Engine::Graphics::Gui::Label* consoleHistory;
+	Engine::Graphics::Gui::Label* consoleText;
+
+	Engine::Graphics::Texture::Texture2D* consoleBg;
+
+	float consolePosY;
+	float consoleTargetY;
+
 };
+
+#endif

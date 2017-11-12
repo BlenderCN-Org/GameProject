@@ -27,15 +27,15 @@ Text::~Text() {
 	}
 }
 
-void Text::setText(Engine::Core::String text) {
+void Text::setText(const Engine::Core::FormattedString& text) {
 	if (textMesh) {
-		const char* cStr = text.cStr();
+		const Engine::Core::FormattedChar* cStr = text.cStr();
 		size_t len = text.getSize();
 
-		char c = '\0';
+		Engine::Core::FormattedChar c = '\0';
 		Character chr;
 
-		const size_t floatsPerVertex = 5; // 5 elements per vertex
+		const size_t floatsPerVertex = 9; // 9 elements per vertex
 		const size_t nrVertices = 6; // 3 verts per triangle = 6 verts
 
 		const size_t nrVerexFloats = nrVertices * floatsPerVertex; // number of floats per character
@@ -104,14 +104,16 @@ void Text::setText(Engine::Core::String text) {
 			float texX2 = (float)(chr.texturePos.x + chr.size.x) / (float)texWidth;
 			float texY2 = (float)(chr.texturePos.y + chr.size.y) / (float)texHeight;
 
-			float vertices[6][5] = {
-				{ xpos,     ypos - h, 0,   texX1, texY1 },
-				{ xpos,     ypos, 0,       texX1, texY2 },
-				{ xpos + w, ypos, 0,       texX2, texY2 },
+			glm::vec4 color = c;
 
-				{ xpos,     ypos - h, 0,   texX1, texY1 },
-				{ xpos + w, ypos, 0,       texX2, texY2 },
-				{ xpos + w, ypos - h, 0,   texX2, texY1 }
+			float vertices[6][9] = {
+				{ xpos,     ypos - h, 0,   texX1, texY1, color.r, color.g, color.b, color.a },
+				{ xpos,     ypos, 0,       texX1, texY2, color.r, color.g, color.b, color.a },
+				{ xpos + w, ypos, 0,       texX2, texY2, color.r, color.g, color.b, color.a },
+
+				{ xpos,     ypos - h, 0,   texX1, texY1, color.r, color.g, color.b, color.a },
+				{ xpos + w, ypos, 0,       texX2, texY2, color.r, color.g, color.b, color.a },
+				{ xpos + w, ypos - h, 0,   texX2, texY1, color.r, color.g, color.b, color.a }
 			};
 
 			memcpy(&verts[i * nrVerexFloats], vertices, sizeof(vertices));
@@ -126,7 +128,7 @@ void Text::setText(Engine::Core::String text) {
 
 		}
 
-		textMesh->setMeshData(verts, arraySize * sizeof(float), MeshDataLayout::VERT_UV);
+		textMesh->setMeshData(verts, arraySize * sizeof(float), MeshDataLayout::VERT_UV_COL);
 
 		delete[] verts;
 	}

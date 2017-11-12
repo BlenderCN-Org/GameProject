@@ -2,7 +2,7 @@
 #define TEXT_HPP
 
 /// Internal Includes
-#include "../../Core/String.hpp"
+#include "../../Core/FormattedString.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -13,7 +13,7 @@ public:
 	Text();
 	virtual ~Text();
 
-	void setText(Engine::Core::String text);
+	void setText(const Engine::Core::FormattedString& text);
 
 	void render(int textureSlot);
 

@@ -264,20 +264,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="Core\AssetManager.cpp" />
-    <Text Include="Core\Assets\DataObjects.cpp" />
-    <Text Include="Core\Assets\GameFile.cpp" />
-    <Text Include="Core\Assets\RenderLayer.cpp" />
-    <Text Include="Core\Core.cpp" />
-    <Text Include="Core\CoreGlobals.cpp" />
-    <Text Include="Core\Extensions\ExtensionHandler.cpp" />
-    <Text Include="Core\Extensions\SaveExtension.cpp" />
-    <Text Include="Core\System\Console.cpp" />
-    <Text Include="Core\System\LibraryLoader.cpp" />
-    <Text Include="Core\System\MemBuffer.cpp" />
-    <Text Include="Core\System\Sys.cpp" />
     <ClCompile Include="Engine\Core\Camera.cpp" />
     <ClCompile Include="Engine\Core\Console.cpp" />
+    <ClCompile Include="Engine\Core\FormattedString.cpp" />
     <ClCompile Include="Engine\Core\LibraryLoader.cpp" />
     <ClCompile Include="Engine\Core\String.cpp" />
     <ClCompile Include="Engine\Core\System.cpp" />
@@ -301,41 +290,13 @@
     <ClCompile Include="Engine\Physics\PhysicsEngine.cpp" />
     <ClCompile Include="Engine\Utils\MemoryBuffer.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
-    <Text Include="Game\Camera.cpp" />
-    <Text Include="Game\Components\BaseComponent.cpp" />
-    <Text Include="Game\Components\PhysicsComponent.cpp" />
-    <Text Include="Game\Components\RenderComponent.cpp" />
-    <Text Include="Game\Components\TransformComponent.cpp" />
-    <Text Include="Game\EditorAccess.cpp" />
-    <Text Include="Game\Game.cpp" />
-    <Text Include="Game\GameObject.cpp" />
-    <Text Include="Game\GUI\Gui.cpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiItem.cpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiLabel.cpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiPanel.cpp" />
-    <Text Include="Game\GUI\Text.cpp" />
-    <Text Include="Game\Input\CameraInput.cpp" />
-    <Text Include="Game\Menu.cpp" />
-    <Text Include="Game\Scene.cpp" />
+    <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Core\AssetManager.hpp" />
-    <Text Include="Core\Assets\DataObjects.hpp" />
-    <Text Include="Core\Assets\GameFile.hpp" />
-    <Text Include="Core\Assets\GVar.hpp" />
-    <Text Include="Core\Assets\RenderLayer.hpp" />
-    <Text Include="Core\Core.hpp" />
-    <Text Include="Core\CoreGlobals.hpp" />
-    <Text Include="Core\Extensions\ExtensionHandler.hpp" />
-    <Text Include="Core\Extensions\SaveExtension.hpp" />
-    <Text Include="Core\System\Console.hpp" />
-    <Text Include="Core\System\LibraryLoader.hpp" />
-    <Text Include="Core\System\MemBuffer.hpp" />
-    <Text Include="Core\System\Sys.hpp" />
-    <Text Include="Core\System\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
+    <ClInclude Include="Engine\Core\FormattedString.hpp" />
     <ClInclude Include="Engine\Core\LibraryLoader.hpp" />
     <ClInclude Include="Engine\Core\String.hpp" />
     <ClInclude Include="Engine\Core\System.hpp" />
@@ -364,24 +325,7 @@
     <ClInclude Include="Engine\Physics\PhysicsEngine.hpp" />
     <ClInclude Include="Engine\Utils\MemoryBuffer.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
-    <ClInclude Include="FileStructs.hpp" />
-    <Text Include="Game\Camera.hpp" />
-    <Text Include="Game\Components\BaseComponent.hpp" />
-    <Text Include="Game\Components\IBaseComponent.hpp" />
-    <Text Include="Game\Components\PhysicsComponent.hpp" />
-    <Text Include="Game\Components\RenderComponent.hpp" />
-    <Text Include="Game\Components\TransformComponent.hpp" />
-    <Text Include="Game\Game.hpp" />
-    <Text Include="Game\GameObject.hpp" />
-    <Text Include="Game\GameState.hpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiAnchorPoint.hpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiItem.hpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiPanel.hpp" />
-    <Text Include="Game\GUI\GuiComponents\GuiLabel.hpp" />
-    <Text Include="Game\Input\CameraInput.hpp" />
-    <Text Include="Game\Scene.hpp" />
-    <ClInclude Include="IAssetManager.hpp" />
-    <ClInclude Include="IExtension.hpp" />
+    <ClInclude Include="Game\Game.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ResourceFiles\CodeStructure.txt" />
@@ -396,12 +340,6 @@
     <None Include="Blender Plugin\export_mesh.py" />
     <None Include="Blender Plugin\export_skeleton.py" />
     <None Include="Blender Plugin\__init__.py" />
-    <Text Include="Game\EditorAccess.hpp" />
-    <Text Include="Game\GUI\DefaultTextShader.hpp" />
-    <Text Include="Game\GUI\Gui.hpp" />
-    <Text Include="Game\GUI\Text.hpp" />
-    <Text Include="Game\Menu.hpp" />
-    <None Include="IEditorAccess.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

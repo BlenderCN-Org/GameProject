@@ -19,6 +19,8 @@ namespace Engine {
 				Label();
 				virtual ~Label();
 
+				void setText(const Engine::Core::FormattedString& str);
+
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

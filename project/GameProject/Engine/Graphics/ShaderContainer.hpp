@@ -27,7 +27,6 @@ namespace Engine {
 			int textVpMat;
 			int textTransform;
 			int textTexture;
-			int textColor;
 
 		};
 	} // namespace Graphics

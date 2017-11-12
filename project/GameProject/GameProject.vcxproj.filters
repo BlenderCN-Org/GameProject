@@ -19,33 +19,6 @@
     <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{e66368e2-5048-4b11-be48-75768ae9c555}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{df4fe985-802d-45f1-a124-4e7ef9048a31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Input">
-      <UniqueIdentifier>{1882d1ef-dc04-4306-a968-63c7c3bff398}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Components">
-      <UniqueIdentifier>{6f7850a4-0ed2-48d7-a5de-e428dbc8cde6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\GUI">
-      <UniqueIdentifier>{603287a4-0669-4397-8224-a09678fe15b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\GUI\GuiComponents">
-      <UniqueIdentifier>{96ba6e9b-64cc-4960-adf7-71fdadfeece4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{498f9e92-67e3-44c2-bcb4-c8a10a9e1508}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\System">
-      <UniqueIdentifier>{91981ae1-26c3-4326-867f-51ac1fe9f68d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Extensions">
-      <UniqueIdentifier>{c7156fc7-d3c2-48b5-b3bc-485b719b9ed4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Assets">
-      <UniqueIdentifier>{52f36dc9-2702-4571-8347-fc3f17be79b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Physics">
       <UniqueIdentifier>{0d7c247c-678f-4ba0-ae68-f43205996487}</UniqueIdentifier>
     </Filter>
@@ -69,6 +42,9 @@
     </Filter>
     <Filter Include="Source Files\Engine\Graphics\Texture">
       <UniqueIdentifier>{0fd3e9c6-7083-480f-926f-b2fc7cb21cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{74df1da8-e5ce-483f-b6db-44873280d7fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\ProgressBar.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\FormattedString.cpp">
+      <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,15 +215,6 @@
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp">
       <Filter>Source Files\Engine\Graphics\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="IExtension.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="IAssetManager.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="FileStructs.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\String.hpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
@@ -250,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\ProgressBar.hpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\FormattedString.hpp">
+      <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -271,192 +250,6 @@
     <Text Include="ResourceFiles\MeshFormat.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Core\AssetManager.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Assets\DataObjects.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Assets\GameFile.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Assets\GVar.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Assets\RenderLayer.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Core.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\CoreGlobals.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Extensions\ExtensionHandler.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\Extensions\SaveExtension.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\System\Console.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\System\LibraryLoader.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\System\MemBuffer.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\System\Sys.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\System\TemporaryStorage.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Camera.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Components\BaseComponent.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Components\IBaseComponent.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Components\PhysicsComponent.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Components\RenderComponent.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Components\TransformComponent.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Game.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GameObject.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GameState.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiAnchorPoint.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiItem.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiPanel.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiLabel.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Input\CameraInput.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Scene.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\EditorAccess.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\DefaultTextShader.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\Gui.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\GUI\Text.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Game\Menu.hpp">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="Core\AssetManager.cpp">
-      <Filter>Source Files\Core\Assets</Filter>
-    </Text>
-    <Text Include="Core\Core.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\CoreGlobals.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\System\Console.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\System\MemBuffer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\System\Sys.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Components\TransformComponent.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GUI\Text.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Scene.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\Extensions\SaveExtension.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\Assets\RenderLayer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Components\RenderComponent.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Components\PhysicsComponent.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Menu.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\System\LibraryLoader.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiPanel.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiLabel.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GUI\GuiComponents\GuiItem.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GUI\Gui.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\GameObject.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\Assets\GameFile.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Game.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\Extensions\ExtensionHandler.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\EditorAccess.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Core\Assets\DataObjects.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Input\CameraInput.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Camera.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
-    <Text Include="Game\Components\BaseComponent.cpp">
-      <Filter>Source Files\Core</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Blender Plugin\__init__.py">
@@ -470,9 +263,6 @@
     </None>
     <None Include="Blender Plugin\export_animation.py">
       <Filter>Resource Files\Blender Plugin</Filter>
-    </None>
-    <None Include="IEditorAccess.hpp">
-      <Filter>Source Files\Core</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -15,6 +15,10 @@ namespace Engine {
 
 			Label::~Label() {}
 
+			void Label::setText(const Engine::Core::FormattedString& str) {
+				text.setText(str);
+			}
+
 			void Label::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 				if (visible) {
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
@@ -25,16 +29,10 @@ namespace Engine {
 
 					shaderContainer.guiTextShader->useShader();
 					shaderContainer.guiTextShader->bindData(shaderContainer.textVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
-					shaderContainer.guiTextShader->bindData(shaderContainer.textTransform, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+					shaderContainer.guiTextShader->bindData(shaderContainer.textTransform, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTexture, UniformDataType::UNI_INT, &textureSlot);
-					shaderContainer.guiTextShader->bindData(shaderContainer.textColor, UniformDataType::UNI_FLOAT3, &glm::vec3(1, 1, 1));
-
-					gRenderEngine->setBlending(true);
 
 					text.render(textureSlot);
-
-					gRenderEngine->setBlending(false);
-
 
 					// setup shader
 					/*shaderContainer.guiElementShader->useShader();

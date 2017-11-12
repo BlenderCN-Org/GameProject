@@ -12,7 +12,8 @@ namespace Engine {
 
 		CGui::CGui()
 			: guiItems()
-			, shaders() {
+			, shaders()
+			, visible(false) {
 
 			// create resources from renderEngine
 			shaders.guiElementShader = gRenderEngine->createShaderObject();
@@ -48,11 +49,10 @@ namespace Engine {
 			shaders.elementVpMat = shaders.guiElementShader->getShaderUniform("viewProjMatrix");
 			shaders.elementTransformMat = shaders.guiElementShader->getShaderUniform("worldMat");
 			shaders.elementTexture = shaders.guiElementShader->getShaderUniform("tex");
-			
+
 			shaders.textVpMat = shaders.guiTextShader->getShaderUniform("viewProjMatrix");
 			shaders.textTransform = shaders.guiTextShader->getShaderUniform("worldMat");
 			shaders.textTexture = shaders.guiTextShader->getShaderUniform("text");
-			shaders.textColor = shaders.guiTextShader->getShaderUniform("textColor");
 
 			// set dummy data for rendering a single point
 			float data[5];
@@ -68,45 +68,54 @@ namespace Engine {
 			shaders.standardQuad->release();
 		}
 
+		void CGui::setVisible(bool _visible) {
+			visible = _visible;
+		}
+
+		void CGui::setPosition(int x, int y) {
+			pos = glm::ivec2(x, y);
+		}
+
 		void CGui::addGuiItem(GuiItem* guiItem) {
-
 			guiItems.push_back(guiItem);
-
 		}
 
 		void CGui::render() {
+			if (visible) {
+				std::vector<GuiItem*>::const_iterator it = guiItems.begin();
+				std::vector<GuiItem*>::const_iterator eit = guiItems.end();
 
-			std::vector<GuiItem*>::const_iterator it = guiItems.begin();
-			std::vector<GuiItem*>::const_iterator eit = guiItems.end();
-
-			glm::mat4 screenSize;
-
-			screenSize[0].x = 0;
-			screenSize[0].y = 0;
-
-			int w = 0, h = 0;
-
-			Input::Input::GetInput()->getWindowSize(w, h);
-
-			screenSize[2].x = float(w);
-			screenSize[2].y = float(h);
-
-			shaders.orthoMatrix = glm::ortho(0.0f, float(w), float(h), 0.0f);
-
-			gRenderEngine->setDepthTest(false);
-
-			for (it; it != eit; it++) {
-				screenSize[2].x = float(w);
-				screenSize[2].y = float(h);
+				glm::mat4 screenSize;
 
 				screenSize[0].x = 0;
 				screenSize[0].y = 0;
 
-				gRenderEngine->setScissorTest(false);
-				(*it)->render(screenSize, shaders);
-			}
+				int w = 0, h = 0;
 
-			gRenderEngine->setDepthTest(true);
+				Input::Input::GetInput()->getWindowSize(w, h);
+
+				screenSize[2].x = float(w);
+				screenSize[2].y = float(h);
+
+				shaders.orthoMatrix = glm::ortho(0.0f, float(w), float(h), 0.0f);
+
+				gRenderEngine->setDepthTest(false);
+				gRenderEngine->setBlending(true);
+
+				for (it; it != eit; it++) {
+					screenSize[2].x = float(w);
+					screenSize[2].y = float(h);
+
+					screenSize[0].x = float(pos.x);
+					screenSize[0].y = float(pos.y);
+
+					gRenderEngine->setScissorTest(false);
+					(*it)->render(screenSize, shaders);
+				}
+
+				gRenderEngine->setDepthTest(true);
+				gRenderEngine->setBlending(false);
+			}
 		}
 	}
 }

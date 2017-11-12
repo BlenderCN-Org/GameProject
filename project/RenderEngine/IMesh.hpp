@@ -17,7 +17,7 @@ enum MeshDataLayout {
 	VERT,
 	VERT_UV,
 	VERT_UV_NORM,
-
+	VERT_UV_COL,
 	NONE,
 };
 

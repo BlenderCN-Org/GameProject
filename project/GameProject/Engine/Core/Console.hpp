@@ -7,7 +7,12 @@ namespace Engine {
 		class Console {
 		public:
 
+			Console();
+			virtual ~Console();
+
 			void setVisible(bool visible);
+
+			bool isVisible() const;
 
 		private:
 
