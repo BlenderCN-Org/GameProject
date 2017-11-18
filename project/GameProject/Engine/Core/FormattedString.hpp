@@ -96,7 +96,7 @@ namespace Engine {
 
 		};
 
-		//FormattedString subString(const FormattedString &str, size_t offset, size_t count);
+		FormattedString toFString(uint32_t value, uint8_t charPadding);
 
 	}
 }

@@ -1,7 +1,12 @@
+/// Internal Includes
 #include "TextArea.hpp"
 #include "../Graphics.hpp"
 
+/// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
+
+/// Std Includes
+#include <string>
 
 namespace Engine {
 	namespace Graphics {
@@ -63,7 +68,7 @@ namespace Engine {
 					idx = str.indexAt('\n', idx);
 
 					Engine::Core::FormattedString str2 = str.subString((size_t)oldIdx, (size_t)idx + 1);
-					
+
 					textData.push_back(str2);
 
 					oldIdx = idx;
@@ -95,10 +100,26 @@ namespace Engine {
 
 				Engine::Core::FormattedString fString;
 
+				std::string maxLinCnt = std::to_string(vectorSize);
+
 				for (size_t i = 0; i < elementsPerScreen; i++) {
 					if (selectedIndex + i >= vectorSize) {
 						break;
 					}
+
+					std::string s = std::to_string(selectedIndex + i);
+					Engine::Core::FormattedString lineNumber;
+
+					for (size_t i = 0; i < maxLinCnt.size() - s.size() ; i++) {
+						lineNumber += "0";
+					}
+
+					lineNumber += s.c_str();
+					lineNumber += ": ";
+
+					lineNumber.formatString(0, -1, glm::vec4(0.418924, 0.573681, 0.626665, 1.000000));
+
+					fString += lineNumber;
 					fString += textData[selectedIndex + i];
 					fString += "\n";
 				}
