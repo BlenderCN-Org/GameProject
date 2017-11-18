@@ -27,11 +27,24 @@ namespace Engine {
 				subItems.push_back(guiItem);
 			}
 
+			void Panel::update(float dt) {
+				if (visible) {
+					std::vector<GuiItem*>::iterator it = subItems.begin();
+					std::vector<GuiItem*>::iterator eit = subItems.end();
+
+					for (it; it != eit; it++) {
+						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+						(*it)->update(dt);
+					}
+
+				}
+			}
+
 			void Panel::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 				if (visible) {
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
-					calculatePoints(vpMatRef, (int)posAndSize.z, (int)posAndSize.w);
+					calculatePoints(vpMatRef);
 
 					int textureSlot = 0;
 

@@ -43,7 +43,10 @@ namespace Engine {
 				if (visible) {
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
-					calculatePoints(vpMatRef, (int)posAndSize.z, (int)posAndSize.w);
+					//calculatePoints(vpMatRef, (int)posAndSize.z, (int)posAndSize.w);
+
+					//updateAbsoultePos((int)vpMatRef[0].x, (int)vpMatRef[0].y, (int)posAndSize.z, (int)posAndSize.w);
+					calculatePoints(vpMatRef);
 
 					int textureSlot = 0;
 

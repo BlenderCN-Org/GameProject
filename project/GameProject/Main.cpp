@@ -16,6 +16,7 @@
 #include "Engine/Graphics/Gui/Panel.hpp"
 #include "Engine/Graphics/Gui/Label.hpp"
 #include "Engine/Graphics/Gui/ProgressBar.hpp"
+#include "Engine/Graphics/Gui/ScrollBar.hpp"
 
 #include "Game/Game.hpp"
 
@@ -48,9 +49,10 @@ int main(int argc, char* argv[]) {
 	InitMemoryManagement();
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
+#if _DEBUG
 	printf("Waiting for RenderDoc injection, Press any key to continue...\n");
 	_getch();
+#endif
 
 	initExceptionHandlers();
 
@@ -67,6 +69,7 @@ int main(int argc, char* argv[]) {
 
 	printf("starting loop\n");
 
+	
 	while (e->isRunning()) {
 
 		if (in->wasPressedThisFrame(Engine::Input::KeyBindings[Engine::Input::KEYBIND_ENTER], false)) {
@@ -93,7 +96,7 @@ int main(int argc, char* argv[]) {
 		}
 
 	}
-
+	
 	printf("finished execution\n");
 
 	delete e;

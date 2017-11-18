@@ -96,7 +96,7 @@ namespace Engine {
 
 			void print();
 
-			private:
+		private:
 
 			Config keyConf;
 			bool consoleActive;
@@ -151,6 +151,7 @@ namespace Engine {
 			KEYBIND_LEFT,
 			KEYBIND_RIGHT,
 			KEYBIND_ENTER,
+			KEYBIND_MOUSE_L_CLICK,
 
 			KEYBINDS_LENGTH
 		};
@@ -160,7 +161,8 @@ namespace Engine {
 			"KeyAction_Backward",
 			"KeyAction_Left",
 			"KeyAction_Right",
-			"KeyAction_Enter"
+			"KeyAction_Enter",
+			"KeyAction_Mouse_L_Click"
 		};
 
 		static const char* KeyBindsDefault[] =
@@ -168,7 +170,8 @@ namespace Engine {
 		"31:0:0",
 		"30:0:0",
 		"32:0:0",
-		"28:0:0"
+		"28:0:0",
+		"0:1:0"
 		};
 
 		extern KeyBind KeyBindings[];

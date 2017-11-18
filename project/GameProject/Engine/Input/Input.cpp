@@ -22,11 +22,10 @@ namespace Engine {
 			singleton->modkey = mods;
 			if (singleton->consoleActive) {
 				if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
-					//singleton->console->print("\n>");
-					//gConsole->execute();
+					singleton->console->execute();
 				} else if (scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2)) {
 					//gConsole->removeLastChar();
-					//singleton->console->backSpace();
+					singleton->console->backSpace();
 				}
 				printf("Scancode %d with modkey %d\n", scancode, mods);
 			}
@@ -77,11 +76,11 @@ namespace Engine {
 		}
 
 		void Input::characterCallback(IWindow * window, unsigned int codepoint) {
-			//if (singleton->consoleActive && gConsole) {
-			//	//printf("%c", codepoint);
-			//	gConsole->putChar(codepoint);
-			//	//singleton->console->keyPress(codepoint);
-			//}
+			if (singleton->consoleActive) {
+				//printf("%c", codepoint);
+				singleton->console->putChar(codepoint);
+				//singleton->console->keyPress(codepoint);
+			}
 		}
 
 		void Input::sizeCallback(IWindow * window, int w, int h) {

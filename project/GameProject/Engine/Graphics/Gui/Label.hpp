@@ -21,6 +21,7 @@ namespace Engine {
 
 				void setText(const Engine::Core::FormattedString& str);
 
+				virtual void update(float dt) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

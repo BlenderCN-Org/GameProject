@@ -22,7 +22,7 @@ namespace Engine {
 			}
 		}
 
-		String::String(const String& org) {
+		String::String(const String& org) : size(0U), usedSize(0U), text(nullptr) {
 
 			if (text) {
 				delete[] text;

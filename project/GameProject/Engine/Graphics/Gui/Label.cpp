@@ -19,11 +19,17 @@ namespace Engine {
 				text.setText(str);
 			}
 
+			void Label::update(float dt) {
+				int br = 0;
+			}
+
 			void Label::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 				if (visible) {
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
-					calculatePoints(vpMatRef, (int)posAndSize.z, (int)posAndSize.w);
+					//calculatePoints(vpMatRef, (int)posAndSize.z, (int)posAndSize.w);
+					//updateAbsoultePos((int)vpMatRef[0].x, (int)vpMatRef[0].y, (int)posAndSize.z, (int)posAndSize.w);
+					calculatePoints(vpMatRef);
 
 					int textureSlot = 0;
 
@@ -33,14 +39,6 @@ namespace Engine {
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTexture, UniformDataType::UNI_INT, &textureSlot);
 
 					text.render(textureSlot);
-
-					// setup shader
-					/*shaderContainer.guiElementShader->useShader();
-					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
-					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
-					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);*/
-
-
 				}
 			}
 

@@ -132,6 +132,9 @@
     <ClCompile Include="Engine\Core\FormattedString.cpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\Gui\ScrollBar.cpp">
+      <Filter>Source Files\Engine\Graphics\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\FormattedString.hpp">
       <Filter>Source Files\Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Gui\ScrollBar.hpp">
+      <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

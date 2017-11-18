@@ -26,6 +26,7 @@ namespace Engine {
 
 			void addGuiItem(GuiItem* guiItem);
 			
+			void update(float dt);
 			void render();
 
 		private:

@@ -62,6 +62,7 @@ namespace Engine {
 			FormattedString();
 			FormattedString(const FormattedString& org);
 			FormattedString(const char* text);
+			FormattedString(const FormattedChar* text, size_t size);
 			FormattedString(const String& str);
 
 			virtual ~FormattedString();
@@ -72,14 +73,17 @@ namespace Engine {
 
 			void formatString(size_t start, size_t end, glm::vec4 color);
 
-			void operator=(const char* text);
-			void operator+=(const char* text);
+			FormattedString &operator=(const char* text);
+			FormattedString &operator+=(const char* text);
 
-			void operator=(FormattedString text);
-			void operator+=(FormattedString text);
+			FormattedString &operator=(const FormattedString text);
+			FormattedString &operator+=(const FormattedString text);
 
-			void operator=(String text);
-			void operator+=(String text);
+			FormattedString &operator=(const String text);
+			FormattedString &operator+=(const String text);
+
+			int indexAt(FormattedChar chr, size_t offset = 0) const;
+			FormattedString subString(size_t offset, size_t count) const;
 
 		private:
 
@@ -91,6 +95,9 @@ namespace Engine {
 			void formattedCharMemcpy(FormattedChar* dest, const char* src, const size_t size);
 
 		};
+
+		//FormattedString subString(const FormattedString &str, size_t offset, size_t count);
+
 	}
 }
 

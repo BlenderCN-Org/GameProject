@@ -80,6 +80,24 @@ namespace Engine {
 			guiItems.push_back(guiItem);
 		}
 
+		void CGui::update(float dt) {
+			if (visible) {
+				std::vector<GuiItem*>::const_iterator it = guiItems.begin();
+				std::vector<GuiItem*>::const_iterator eit = guiItems.end();
+
+				int w = 0, h = 0;
+
+				Input::Input::GetInput()->getWindowSize(w, h);
+
+				for (it; it != eit; it++) {
+					int cw = w;
+					int ch = h;
+					(*it)->updateAbsoultePos(pos.x, pos.y, cw, ch);
+					(*it)->update(dt);
+				}
+			}
+		}
+
 		void CGui::render() {
 			if (visible) {
 				std::vector<GuiItem*>::const_iterator it = guiItems.begin();

@@ -9,7 +9,7 @@ Text::Text() : font(nullptr), textMesh(nullptr), width(0), height(0) {
 	font = gRenderEngine->createFont();
 
 	if (font) {
-		font->init("C:/Windows/Fonts/Arial.ttf", 12);
+		font->init("C:/Windows/Fonts/Arial.ttf", 13);
 	}
 
 	if (textMesh) {
@@ -45,7 +45,7 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 
 		float* verts = new float[arraySize];
 
-		float x = 10;
+		float x = 0;
 		float y = 10;
 		float scale = 1.0F;
 
@@ -61,8 +61,8 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 			c = cStr[i];
 			chr = font->getCharacter(c);
 
-			if (i == 0)
-				y += fSize;
+			//if (i == 0)
+			//	y += fSize;
 
 			if (c == '\n') {
 				if (yAdv) {
@@ -132,6 +132,10 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 
 		delete[] verts;
 	}
+}
+
+int Text::getFontSize() const {
+	return font->getFontSize();
 }
 
 void Text::render(int textureSlot) {

@@ -83,6 +83,14 @@ namespace Engine {
 			return (vmm / mmm);
 		}
 
+		float percentageInRange(size_t min, size_t max, size_t value) {
+
+			float mmm = float(max - min);
+			float vmm = float(value - min);
+
+			return (vmm / mmm);
+		}
+
 #ifdef _WIN32
 
 		void pollCpuUsage() {

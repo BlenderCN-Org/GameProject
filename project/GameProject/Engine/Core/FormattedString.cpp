@@ -8,18 +8,14 @@ namespace Engine {
 
 		FormattedString::FormattedString() : size(0U), usedSize(0U), text(nullptr) {}
 
-		FormattedString::FormattedString(const FormattedString& org) {
-			if (text) {
-				delete[] text;
-			}
+		FormattedString::FormattedString(const FormattedString& org) : size(0U), usedSize(0U), text(nullptr) {
 
-			size = org.size;
-			usedSize = org.usedSize;
+			if (org.size) {
+				text = new FormattedChar[org.size];
+				memcpy(text, org.text, org.size * sizeof(FormattedChar));
 
-			if (size != 0U) {
-
-				text = new FormattedChar[size];
-				memcpy(text, org.text, size);
+				size = org.size;
+				usedSize = org.usedSize;
 
 			}
 		}
@@ -38,7 +34,23 @@ namespace Engine {
 			}
 		}
 
-		FormattedString::FormattedString(const String& org) {
+		FormattedString::FormattedString(const FormattedChar* _text, size_t _size) {
+
+			size_t stringLength = _size;
+
+			if (stringLength != 0U) {
+
+				size = stringLength;
+				usedSize = stringLength;
+
+				text = new FormattedChar[size];
+
+				memcpy(text, _text, size * sizeof(FormattedChar));
+			}
+
+		}
+
+		FormattedString::FormattedString(const String& org) : size(0U), usedSize(0U), text(nullptr) {
 			if (text) {
 				delete[] text;
 			}
@@ -84,53 +96,54 @@ namespace Engine {
 			}
 		}
 
-		void FormattedString::operator=(const char* _text) {
+		FormattedString &FormattedString::operator=(const char* _text) {
 			size_t stringLength = Engine::System::strlen_s(_text);
 			if (stringLength != 0) {
 				if (stringLength > size) {
 					delete[] text;
 					text = new FormattedChar[stringLength];
 					formattedCharMemcpy(text, _text, stringLength);
-			
+
 					size = usedSize = stringLength;
 				} else {
 					memset(text, 0, size * sizeof(FormattedChar));
 					formattedCharMemcpy(text, _text, stringLength);
 				}
 			}
+			return *this;
 		}
 
-		void FormattedString::operator+=(const char* _text) {
+		FormattedString &FormattedString::operator+=(const char* _text) {
 
 			size_t stringLength = Engine::System::strlen_s(_text);
-			
+
 			size_t totalSize = stringLength + usedSize;
-			
+
 			// we can append to the current array
 			if (stringLength != 0) {
 				if (size > totalSize) {
-			
+
 					formattedCharMemcpy(&text[usedSize], _text, stringLength);
-			
+
 					usedSize = totalSize;
 				}
 				// we cannot append to the array so we are going to make a new one
 				else {
 					FormattedChar* temp = text;
-			
+
 					text = new FormattedChar[totalSize];
 					memcpy(text, temp, usedSize * sizeof(FormattedChar));
 					delete temp;
 					formattedCharMemcpy(&text[usedSize], _text, stringLength);
-			
+
 					size = totalSize;
 					usedSize = totalSize;
 				}
 			}
-
+			return *this;
 		}
 
-		void FormattedString::operator=(FormattedString _text) {
+		FormattedString &FormattedString::operator=(const FormattedString _text) {
 			size_t stringLength = _text.getSize();
 			if (stringLength != 0) {
 				if (stringLength > size) {
@@ -144,9 +157,10 @@ namespace Engine {
 					memcpy(text, _text.text, stringLength * sizeof(FormattedChar));
 				}
 			}
+			return *this;
 		}
 
-		void FormattedString::operator+=(FormattedString _text) {
+		FormattedString &FormattedString::operator+=(const FormattedString _text) {
 			size_t stringLength = _text.getSize();
 
 			size_t totalSize = stringLength + usedSize;
@@ -172,9 +186,10 @@ namespace Engine {
 					usedSize = totalSize;
 				}
 			}
+			return *this;
 		}
 
-		void FormattedString::operator=(String _text) {
+		FormattedString &FormattedString::operator=(const String _text) {
 
 			size_t stringLength = _text.getSize();
 			if (stringLength != 0) {
@@ -182,16 +197,17 @@ namespace Engine {
 					delete[] text;
 					text = new FormattedChar[stringLength];
 					formattedCharMemcpy(text, _text.cStr(), stringLength);
-			
+
 					size = usedSize = stringLength;
 				} else {
 					memset(text, 0, size * sizeof(FormattedChar));
 					formattedCharMemcpy(text, _text.cStr(), stringLength);
 				}
 			}
+			return *this;
 		}
 
-		void FormattedString::operator+=(String _text) {
+		FormattedString &FormattedString::operator+=(const String _text) {
 
 			size_t stringLength = _text.getSize();
 
@@ -221,7 +237,43 @@ namespace Engine {
 					usedSize = totalSize;
 				}
 			}
+			return *this;
 		}
+
+		int FormattedString::indexAt(FormattedChar chr, size_t offset) const {
+
+			int index = -1;
+
+			for (size_t i = offset; i < usedSize; i++) {
+				if (text[i].c == chr.c) {
+					index = (int)i;
+					break;
+				}
+			}
+			return index;
+		}
+
+		FormattedString FormattedString::subString(size_t offset, size_t count) const {
+
+			if (count > usedSize) {
+				count = usedSize - offset;
+			}
+			if (count == 0) {
+				count = usedSize - offset;
+			}
+
+			FormattedChar* fChars = new FormattedChar[count];
+
+			for (size_t i = 0; i < count; i++) {
+				fChars[i] = text[offset + i];
+			}
+
+			FormattedString fString(fChars, count);
+			delete fChars;
+
+			return fString;
+		}
+
 		void FormattedString::formattedCharMemcpy(FormattedChar* dst, const char* src, const size_t size) {
 
 			for (size_t i = 0; i < size; i++) {
@@ -229,5 +281,6 @@ namespace Engine {
 				dst[i].r = dst[i].g = dst[i].b = 255;
 			}
 		}
+
 	}
 }

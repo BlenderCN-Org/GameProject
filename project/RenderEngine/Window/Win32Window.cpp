@@ -344,6 +344,9 @@ void BaseWindow::setWindowSize(int x, int y) {
 
 	AdjustWindowRectEx(&r, (DWORD)GetWindowLongPtr(windowHandle, GWL_STYLE), FALSE, (DWORD)GetWindowLongPtr(windowHandle, GWL_EXSTYLE));
 
+	width = x;
+	height = y;
+
 	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, SWP_NOZORDER | SWP_NOMOVE);
 }
 

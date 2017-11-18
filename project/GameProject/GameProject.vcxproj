@@ -282,6 +282,7 @@
     <ClCompile Include="Engine\Graphics\Gui\Panel.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\ProgressBar.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\ScrollArea.cpp" />
+    <ClCompile Include="Engine\Graphics\Gui\ScrollBar.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Text.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\TextArea.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Tree.cpp" />
@@ -313,6 +314,7 @@
     <ClInclude Include="Engine\Graphics\Gui\Panel.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\ProgressBar.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\ScrollArea.hpp" />
+    <ClInclude Include="Engine\Graphics\Gui\ScrollBar.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Text.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\TextArea.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Tree.hpp" />

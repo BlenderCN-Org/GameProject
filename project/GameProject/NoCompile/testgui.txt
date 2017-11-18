@@ -1,4 +1,4 @@
-Engine::Graphics::CGui* gui = new Engine::Graphics::CGui();
+	Engine::Graphics::CGui* gui = new Engine::Graphics::CGui();
 	Engine::Graphics::Gui::Panel* panel = new Engine::Graphics::Gui::Panel();
 
 	Engine::Graphics::Gui::Panel* panel2 = new Engine::Graphics::Gui::Panel();

@@ -35,18 +35,25 @@ namespace Engine {
 			void setVisible(bool visibilityFlag);
 
 			void setAnchorPoint(GuiAnchor anchor);
-
+			virtual void update(float dt);
 			virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
+
+			void updateAbsoultePos(const int xOff, const int yOff, const int xSize, const int ySize);
 
 		protected:
 
-			void calculatePoints(glm::mat4 &positionMatrix, int xSize, int ySize);
+			void calculatePoints(glm::mat4 &positionMatrix);
 			glm::vec4 clipRegion(glm::vec4 element, glm::vec4 region);
+
+			bool posInItem(int x, int y);
 
 			glm::vec4 positionAndSizeFromMatrix(const glm::mat4 &positionMatrix);
 
 			glm::ivec2 position;
 			glm::ivec2 size;
+			glm::ivec2 absoulutePosition;
+
+			glm::vec4 uvCoords;
 
 			GuiAnchor anchorPoint;
 
