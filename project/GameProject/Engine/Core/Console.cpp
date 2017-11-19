@@ -1,6 +1,14 @@
 /// Internal Includes
 #include "Console.hpp"
 #include "../Input/Input.hpp"
+#include "../Graphics/Graphics.hpp"
+
+/// External Includes
+#include <RenderEngine/IRenderEngine.hpp>
+
+/// Std Includes
+#include <sstream>
+#include <string>
 
 namespace Engine {
 	namespace Core {
@@ -226,7 +234,31 @@ namespace Engine {
 		}
 
 		void Console::checkCommand(ConsoleString& cmd) {
-			print("Command not valid", Core::LogSeverity::LOG_ERROR);
+
+			std::stringstream ss;
+			ss << cmd;
+
+			std::string line;
+			std::getline(ss, line, ' ');
+
+			if (line == "setClearColor") {
+				print("Changing clear color");
+
+				float r, g, b, a;
+				std::getline(ss, line, ' ');
+				r = std::strtof(line.c_str(), nullptr);
+				std::getline(ss, line, ' ');
+				g = std::strtof(line.c_str(), nullptr);
+				std::getline(ss, line, ' ');
+				b = std::strtof(line.c_str(), nullptr);
+				std::getline(ss, line, ' ');
+				a = std::strtof(line.c_str(), nullptr);
+
+				gRenderEngine->setClearColor(r, g, b, a);
+
+			} else {
+				print("Command not valid", Core::LogSeverity::LOG_ERROR);
+			}
 		}
 
 	}

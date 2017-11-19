@@ -6,6 +6,8 @@ layout(location = 2) in vec3 norm;
 
 layout(location = 3) noperspective in vec3 dista;
 
+layout(location = 4) in vec4 vColor;
+
 layout(location = 0) out vec4 fragmentColor;
 
 //layout(location = 1) out vec4 red;
@@ -22,7 +24,8 @@ void main()
 	float nearD = min(min(dista[0],dista[1]),dista[2]);
 	float edgeIntensity = exp2(-1.0*nearD*nearD);
 
-	vec4 color = vec4(selectedColor, 1.0);// texture(textureIN, vec2(fragUv.x, fragUv.y));
+	//vec4 color = vec4(selectedColor, 1.0);// texture(textureIN, vec2(fragUv.x, fragUv.y));
+	vec4 color = vColor;
 	fragmentColor = color; //vec4(fragUv.x, fragUv.y, 0, 1);
 //	red = vec4(1.0, 0.0, 0, 1);
 
@@ -50,6 +53,7 @@ void main()
 	//fragmentColor *= letThereBeLight;
 	
 	fragmentColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * (color * letThereBeLight));
+	//fragmentColor = (color * letThereBeLight);
 	//fragmentColor = vec4(edgeIntensity, edgeIntensity, edgeIntensity, 1.0);
 	//fragmentColor = vec4(nearD, nearD, nearD , 1.0);
 }

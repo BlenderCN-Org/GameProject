@@ -20,31 +20,6 @@
 
 #include "Game/Game.hpp"
 
-//#include <vld.h>
-
-//void reset(Game*& g) {
-//	Sleep(5000);
-//	delete g;
-//	Sleep(5000);
-//	g = new Game();
-//	g->init();
-//}
-
-/*Game* g = new Game();
-g->init();
-
-while (g->isRunning()) {
-if (g->updateAndRender(dt) == false) {
-reset(g);
-}
-
-unsigned int temp = clock();
-dt = unsigned int(temp - start) / 1000.0f;
-start = temp;
-}
-
-delete g;*/
-
 int main(int argc, char* argv[]) {
 	InitMemoryManagement();
 
@@ -65,24 +40,17 @@ int main(int argc, char* argv[]) {
 
 	uint32_t value = 500U;
 
-	Game game(e);
+	Game* game = new Game(e);
 
 	printf("starting loop\n");
 
 	
 	while (e->isRunning()) {
 
-		if (in->wasPressedThisFrame(Engine::Input::KeyBindings[Engine::Input::KEYBIND_ENTER], false)) {
-			printf("Enter was pressed this frame\n");
-		}
-		if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_FORWARD], false)) {
-			printf("Forward is begin pressed\n");
-		}
-
-		game.update(dt);
-		//e->clearBackBuffer();
-		e->clearDebug();
-		game.render();
+		game->update(dt);
+		e->clearBackBuffer();
+		
+		game->render();
 
 		e->presentFrame();
 
@@ -98,6 +66,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	printf("finished execution\n");
+	delete game;
 
 	delete e;
 	ReleaseMemoryManagement();

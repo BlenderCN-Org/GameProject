@@ -264,7 +264,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Core\Camera.cpp" />
+    <Text Include="Engine\Core\Camera.cpp" />
     <ClCompile Include="Engine\Core\Console.cpp" />
     <ClCompile Include="Engine\Core\FormattedString.cpp" />
     <ClCompile Include="Engine\Core\LibraryLoader.cpp" />
@@ -286,16 +286,20 @@
     <ClCompile Include="Engine\Graphics\Gui\Text.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\TextArea.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Tree.cpp" />
+    <ClCompile Include="Engine\Graphics\Mesh\StaticMesh.cpp" />
     <ClCompile Include="Engine\Graphics\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsEngine.cpp" />
     <ClCompile Include="Engine\Utils\MemoryBuffer.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
+    <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Core\Camera.hpp" />
+    <ClInclude Include="Engine\Core\Allocator.hpp" />
+    <Text Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
     <ClInclude Include="Engine\Core\FormattedString.hpp" />
     <ClInclude Include="Engine\Core\LibraryLoader.hpp" />
@@ -318,6 +322,7 @@
     <ClInclude Include="Engine\Graphics\Gui\Text.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\TextArea.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Tree.hpp" />
+    <ClInclude Include="Engine\Graphics\Mesh\StaticMesh.hpp" />
     <ClInclude Include="Engine\Graphics\ShaderContainer.hpp" />
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp" />
     <ClInclude Include="Engine\Input\Input.hpp" />
@@ -327,6 +332,8 @@
     <ClInclude Include="Engine\Physics\PhysicsEngine.hpp" />
     <ClInclude Include="Engine\Utils\MemoryBuffer.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
+    <ClInclude Include="Game\Camera.hpp" />
+    <ClInclude Include="Game\CameraInput.hpp" />
     <ClInclude Include="Game\Game.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,26 @@
 #  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # ##### END GPL LICENSE BLOCK #####
+	#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
 if "bpy" in locals():
 	import imp
 	if "export_skeleton" in locals():
@@ -43,11 +62,103 @@ def createTriangleList(tessfaces):
 	triList = []
 
 	for tri in tessfaces:
-		triList.append( [tri.vertices[0], tri.vertices[1], tri.vertices[2] ] )
+		triList.append([tri.vertices[0], tri.vertices[1], tri.vertices[2]])
 		if len(tri.vertices) == 4:
-			triList.append( [tri.vertices[0], tri.vertices[2], tri.vertices[3] ] )
+			triList.append([tri.vertices[0], tri.vertices[2], tri.vertices[3]])
 
 	return triList
+
+def createMesh(meshdata):
+
+	meshdata.update(calc_tessface=True)
+
+	vertquad_list = [] # (vertex, uv coordinate, normal, vertex color) list
+	vertmap = [None for i in range(len(meshdata.vertices))]
+	vertlist = [] 
+	normlist = []
+	vcollist = []
+	uvlist = []
+	trilist = []
+	epsilon = 0.01
+
+	for f in meshdata.tessfaces:
+		f_numverts = len(f.vertices)
+		if (f_numverts < 3): continue # ignore degenerate faces
+		assert((f_numverts == 3) or (f_numverts == 4)) # debug
+		# find (vert, uv-vert, normal, vcol) quad, and if not found, create it
+		f_index = [-1] * f_numverts
+		for i, fv_index in enumerate(f.vertices):
+			fv = meshdata.vertices[fv_index].co
+			if f.use_smooth:
+				fn = meshdata.vertices[fv_index].normal
+			else:
+				fn = f.normal
+			
+			hasUV = False
+			hasCol = False
+
+			fuv = []
+			if len(meshdata.uv_textures) > 0 :
+				hasUV = True
+				fuv.append(getattr(meshdata.tessface_uv_textures[0].data[f.index],
+						"uv%i" % (i + 1)))
+			
+			fcol = []
+			if len(meshdata.vertex_colors) > 0:
+				hasCol = True
+				fcol.append(getattr(meshdata.tessface_vertex_colors[0].data[f.index],
+						"color%i" % (i + 1)))
+
+			vertquad = (fv, fuv, fn, fcol)
+
+			f_index[i] = len(vertquad_list)
+			if vertmap[fv_index]:
+				for j in vertmap[fv_index]:
+					#if abs(vertquad[0][0] - vertquad_list[j][0][0]) > epsilon:
+					#continue
+					#if abs(vertquad[0][1] - vertquad_list[j][0][1]) > epsilon:
+					#continue
+					#if abs(vertquad[0][2] - vertquad_list[j][0][2]) > epsilon:
+					#continue
+					if hasUV:
+						if abs(vertquad[1][0][0] - vertquad_list[j][1][0][0]) > epsilon: continue
+						if abs(vertquad[1][0][1] - vertquad_list[j][1][0][1]) > epsilon: continue
+					if abs(vertquad[2][0] - vertquad_list[j][2][0]) > epsilon: continue
+					if abs(vertquad[2][1] - vertquad_list[j][2][1]) > epsilon: continue
+					if abs(vertquad[2][2] - vertquad_list[j][2][2]) > epsilon: continue
+					if hasCol:
+						if abs(vertquad[3][0].r - vertquad_list[j][3][0].r) > epsilon: continue
+						if abs(vertquad[3][0].g - vertquad_list[j][3][0].g) > epsilon: continue
+						if abs(vertquad[3][0].b - vertquad_list[j][3][0].b) > epsilon: continue
+					#if abs(vertquad[3][0].a - vertquad_list[j][3][0].a) >
+					#epsilon: continue #alpha does not exist in blender 2.64
+					# all tests passed: so yes, we already have it!
+					f_index[i] = j
+					break
+
+			if (f_index[i] == len(vertquad_list)):
+				# first: add it to the vertex map
+				if not vertmap[fv_index]:
+					vertmap[fv_index] = []
+				vertmap[fv_index].append(len(vertquad_list))
+				# new (vert, uv-vert, normal, vcol) quad: add it
+				vertquad_list.append(vertquad)
+				# add all data to their list
+				vertlist.append(vertquad[0])
+				normlist.append(vertquad[2])
+				if hasCol:
+					vcollist.append(vertquad[3])
+				if hasUV:
+					uvlist.append(vertquad[1])
+
+		for i in range(f_numverts - 2):
+			if True: #TODO: #(ob_scale > 0):
+				f_indexed = (f_index[0], f_index[1 + i], f_index[2 + i])
+			else:
+				f_indexed = (f_index[0], f_index[2 + i], f_index[1 + i])
+			trilist.append(f_indexed)
+	
+	return [vertlist, normlist, vcollist, uvlist, trilist]
 
 def writeVersion_1_0(context, fw, objects, matrix):
 	print("Writing version 1.0")
@@ -57,64 +168,78 @@ def writeVersion_1_0(context, fw, objects, matrix):
 	objectList = objects
 
 	for obj in objectList:
-		if( obj.type == 'MESH'):
+		if(obj.type == 'MESH'):
 			
 			data = bytearray()
 			print("a mesh")
 
-			meshData = obj.to_mesh(context.scene, True, 'PREVIEW', calc_tessface=False)
-			meshData.transform(matrix * obj.matrix_world)
+			mesh = obj.to_mesh(context.scene, True, 'PREVIEW', calc_tessface=False)
+			mesh.transform(matrix * obj.matrix_world)
+			
+			meshData = createMesh(mesh)
+
 			useVNormals = True
 			useVColors = False
 			useVUV = False
 			padding = False
 
-			vertexColors = None
-			vertexUV = None
-			
+			vertlist = meshData[0]
+			normlist = meshData[1]
+			vcollist = meshData[2]
+			uvlist = meshData[3]
+			trilist = meshData[4]
+
+			#print("verts", vertlist)
+			#print("normal", normlist)
+			#print("colors", vcollist)
+			#print("uv", uvlist)
+			#print("tris", trilist)
+
+			if(len(vcollist) > 0):
+				useVColors = True
+
+			if(len(uvlist) > 0):
+				useVUV = True
+
 			#if len(meshData.vertex_colors) != 0:
 			#	useVColors = True
-			#	vertexColors = meshData.vertex_colors[0].data;
+			#	vertexColors = meshData.vertex_colors[0].data
 			#	if len(meshData.vertex_colors) > 1:
 			#		print("Only 1 vertex color layer is supported for file version 1.0")
 			#
-			#if len(meshData.uv_layers) != 0:
-			#	useVUV = True
-			#	vertexUV = meshData.uv_layers[0].data;
-			#	if len(meshData.uv_layers) > 1:
-			#		print("Only 1 uv layer is supported for file version 1.0")
-			
-			data.extend(struct.pack("????", useVNormals, useVColors, useVUV, padding))
-			vertices = meshData.vertices
-			meshData.update(calc_tessface=True)
-			triangles = createTriangleList(meshData.tessfaces)
-
-			data.extend(struct.pack("II", len(vertices), len(triangles) ))
-
-			#print(len(vertices))
-			#print(len(vertexColors))
-			#print(len(vertexUV))
-			
-			for vert in vertices:
-				data.extend(struct.pack("fff", vert.co[0], vert.co[1], vert.co[2]))
-
-			if useVNormals:
-				for vert in vertices:
-					data.extend(struct.pack("fff", vert.normal[0], vert.normal[1], vert.normal[2]))
-
-			#if useVColors:
-			#	for col in vertexColors:
-			#		data.extend(struct.pack("ffff", col.color[0], col.color[1], col.color[2], 1.0))
+			##if len(meshData.uv_layers) != 0:
+			##	useVUV = True
+			##	vertexUV = meshData.uv_layers[0].data;
+			##	if len(meshData.uv_layers) > 1:
+			##		print("Only 1 uv layer is supported for file version 1.0")
 			#
-			#if useVUV:
-			#	for uv in vertexUV:
-			#		data.extend(struct.pack("ff", uv.uv[0], uv.uv[1]))
+			data.extend(struct.pack("????", useVNormals, useVColors, useVUV, padding))
+			data.extend(struct.pack("II", len(vertlist), len(trilist)))
+			
+			##print(len(vertices))
+			##print(len(vertexColors))
+			##print(len(vertexUV))
+			#
+			for vert in vertlist:
+				data.extend(struct.pack("fff", vert[0], vert[1], vert[2]))
+			
+			if useVNormals:
+				for vert in normlist:
+					data.extend(struct.pack("fff", vert[0], vert[1], vert[2]))
+			
+			if useVColors:
+				for col in vcollist:
+					data.extend(struct.pack("ffff", col[0][0], col[0][1], col[0][2], 1.0))
+			
+			if useVUV:
+				for uv in uvlist:
+					data.extend(struct.pack("ff", uv[0][0], uv[0][1]))
 					
-			for tri in triangles:
+			for tri in trilist:
 				data.extend(struct.pack("III", tri[0], tri[1], tri[2]))
 
 			dataObjectList.append(data)
-			bpy.data.meshes.remove(meshData)
+			bpy.data.meshes.remove(mesh)
 		else:
 			print("not a mesh")
 
@@ -143,7 +268,7 @@ def writeMesh(context, objects, filepath, version, global_matrix):
 
 def save(context,
 		filepath,
-        *,
+		*,
 		use_selection=True,
 		export_meshes_flag=True,
 		export_skeleton_flag=True,
@@ -165,7 +290,7 @@ def save(context,
 	else:
 		objectList = context.scene.objects
 
-		## no objects to export 
+		## no objects to export
 	if len(objectList) == 0:
 		return {'FINISHED'}
 	if(export_meshes_flag):
