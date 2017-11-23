@@ -203,6 +203,19 @@ void FrameBuffer_gl::resolveToScreen(int bufferIndex) {
 	}
 }
 
+void FrameBuffer_gl::resolveAllToScreen() {
+	if (lockdown == false) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		for (int i = 0; i < colorAttachmentCount; i++) {
+			glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+			glBlitFramebuffer(0, 0, width, height, (width / 4) * i, 0, (width / 4) * (i + 1), (height / 4), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+}
+
 void FrameBuffer_gl::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 }

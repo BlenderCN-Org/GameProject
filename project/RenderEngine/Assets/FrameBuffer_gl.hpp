@@ -20,6 +20,7 @@ public:
 	virtual void setWindowSize(int windowWidth, int windowHeight);
 
 	virtual void resolveToScreen(int bufferIndex = 0);
+	virtual void resolveAllToScreen();
 
 	virtual void bind();
 

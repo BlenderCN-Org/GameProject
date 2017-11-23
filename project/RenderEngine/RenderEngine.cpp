@@ -103,11 +103,16 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 		printInfo(info);
 
+		// opengl 4.5 extension
+		if (glClipControl) {
+			glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+		}
+
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEPTH_TEST);
 
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
 		clearColor = RGB(0, 0, 0);
@@ -184,6 +189,18 @@ void RenderEngine::setDepthTest(bool enable) {
 	}
 }
 
+void RenderEngine::depthMask(bool mask) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glDepthMask(mask);
+	}
+}
+
+void RenderEngine::colorMask(bool r, bool g, bool b, bool a) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glColorMask(r, g, b, a);
+	}
+}
+
 void RenderEngine::setScissorTest(bool enable) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		GLenum cap = GL_SCISSOR_TEST;
@@ -197,12 +214,12 @@ void RenderEngine::setScissorTest(bool enable) {
 
 void RenderEngine::setScissorRegion(int x, int y, int width, int height) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
-		
+
 		int wx = 0;
 		int wy = 0;
 		glWindow.getWindowSize(wx, wy);
 
-		glScissor(x,  wy - (y + height), width, height);
+		glScissor(x, wy - (y + height), width, height);
 	}
 }
 

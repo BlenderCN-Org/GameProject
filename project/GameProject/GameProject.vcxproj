@@ -286,6 +286,7 @@
     <ClCompile Include="Engine\Graphics\Gui\Text.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\TextArea.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Tree.cpp" />
+    <ClCompile Include="Engine\Graphics\Mesh\MirrorMesh.cpp" />
     <ClCompile Include="Engine\Graphics\Mesh\StaticMesh.cpp" />
     <ClCompile Include="Engine\Graphics\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="Engine\Graphics\Gui\Text.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\TextArea.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Tree.hpp" />
+    <ClInclude Include="Engine\Graphics\Mesh\MirrorMesh.hpp" />
     <ClInclude Include="Engine\Graphics\Mesh\StaticMesh.hpp" />
     <ClInclude Include="Engine\Graphics\ShaderContainer.hpp" />
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp" />

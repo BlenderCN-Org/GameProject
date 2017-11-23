@@ -71,6 +71,10 @@ public:
 	virtual void bindDefaultFrameBuffer() = 0;
 	
 	virtual void setDepthTest(bool enable) = 0;
+	virtual void depthMask(bool mask) = 0;
+
+	virtual void colorMask(bool r, bool g, bool b, bool a) = 0;
+
 	virtual void setScissorTest(bool enable) = 0;
 	virtual void setScissorRegion(int x, int y, int width, int height) = 0 ;
 

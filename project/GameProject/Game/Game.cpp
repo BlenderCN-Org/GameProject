@@ -90,6 +90,46 @@ Game::Game(CEngine* _engine)
 
 	gRenderEngine->setClearColor(0.300290F, 0.469524F, 0.581466F, 1.000000F);
 
+	r = 10;
+	a = 30;
+
+	mirror = new Engine::Graphics::Mesh::MirrorMesh();
+	mirror->setSize(glm::vec2(5, 2));
+
+	FrameBufferCreateInfo fbci{};
+
+	fbci.height = 720;
+	fbci.width = 1280;
+	fbci.mutlisample = 0;
+	fbci.nrColorBuffers = 3;
+	fbci.useDepth = true;
+	fbci.useMultisample = false;
+	fbci.useRenderbuffer = false;
+	fbci.useStencil = true;
+
+	gBuffer = gRenderEngine->createFrameBuffer();
+	gBuffer->init(&fbci);
+
+	gBufferShader = gRenderEngine->createShaderObject();
+	gBufferShader->init();
+
+	vs = readShader("data/shaders/gbuffer.vs.glsl");
+	gs = readShader("data/shaders/gbuffer.gs.glsl");
+	fs = readShader("data/shaders/gbuffer.fs.glsl");
+
+	gBufferShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+	gBufferShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
+	gBufferShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
+
+	if (!gBufferShader->buildShader()) {
+		assert(0 && "shader failed to build");
+	}
+
+	vpLocationGBuff = gBufferShader->getShaderUniform("viewProjMatrix");
+	matLocationGBuff = gBufferShader->getShaderUniform("worldMat");
+	selectedLocGBuff = gBufferShader->getShaderUniform("selectedColor");
+	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
+
 }
 
 Game::~Game() {
@@ -99,7 +139,11 @@ Game::~Game() {
 		mesh = nullptr;
 	}
 
+	delete mirror;
+
 	shader->release();
+	gBuffer->release();
+	gBufferShader->release();
 
 	if (gameGui) {
 		delete gameGui;
@@ -108,7 +152,7 @@ Game::~Game() {
 	delete metrixPanel;
 	delete infoLabel;
 	delete panelTexture;
-
+	
 }
 
 void Game::update(float dt) {
@@ -121,11 +165,23 @@ void Game::update(float dt) {
 	dtOneSec += dt;
 	fpsCounter++;
 
+	float x = r * glm::sin(a);
+	float z = r * glm::cos(a);
+
+	glm::vec3 posx = glm::vec3(x, 2, z);
+
+	mirror->setMirrorPosition(posx);
+	mirror->setMirrorNormal(-glm::normalize(posx - glm::vec3(0, 2, 0)));
+	mirror->setSize(glm::vec2(10, 5));
+
 	if (dtOneSec > 1.0F) {
 		fps = fpsCounter;
 		fpsCounter = 0;
 		dtOneSec -= 1.0F;
+
 	}
+
+	//a += 0.3F * dt;
 
 	std::string str = "FPS: " + std::to_string(fps) + "\n";
 	str += "Dt: " + std::to_string(dt) + "\n";
@@ -141,13 +197,48 @@ void Game::update(float dt) {
 
 void Game::render() {
 
-	shader->useShader();
-	shader->bindData(vpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
-	shader->bindData(matLocation, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	shader->bindData(selectedLoc, UniformDataType::UNI_FLOAT3, &glm::vec3(0.4F));
+	gBuffer->bind();
+	gBuffer->clear();
+
+	gBufferShader->useShader();
+	gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
+	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(selectedLocGBuff, UniformDataType::UNI_FLOAT3, &glm::vec3(0.4F));
+	
+	// render mirror
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirror->modelMatrix());
+	mirror->render();
+
+	gRenderEngine->setStencilTest(false);
+	gRenderEngine->stencilFunc(0x0205, 0x01, 0xFF);
+
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
 	mesh->bind();
 	mesh->render();
+
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(-20, 0, 0))));
+	gRenderEngine->setStencilTest(true);
+
+	mesh->bind();
+	mesh->render();
+
+	glm::mat4 mirrorMat = mirror->reflectionMatrix();
+
+	gRenderEngine->setStencilTest(true);
+	gRenderEngine->stencilFunc(0x0202, 0x01, 0xFF);
+
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
+	mesh->bind();
+	mesh->render();
+
+	gRenderEngine->setStencilTest(false);
+
+	int index = 0;
+
+	gBuffer->resolveToScreen(index);
+	gBuffer->resolveAllToScreen();
 
 	gameGui->render();
 

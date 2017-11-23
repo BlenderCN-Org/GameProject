@@ -8,6 +8,7 @@
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Mesh/StaticMesh.hpp"
+#include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -39,11 +40,22 @@ private:
 	glm::mat4 vpMat;
 
 	Engine::Graphics::Mesh::StaticMesh* mesh;
+	Engine::Graphics::Mesh::MirrorMesh* mirror;
+	float r;
+	float a;
+
+	IFrameBuffer* gBuffer;
 	IShaderObject* shader;
+	IShaderObject* gBufferShader;
 
 	int vpLocation;
 	int matLocation;
 	int selectedLoc;
+
+	int vpLocationGBuff;
+	int matLocationGBuff;
+	int refMatLocationGBuff;
+	int selectedLocGBuff;
 
 	float dtOneSec;
 	int fps;

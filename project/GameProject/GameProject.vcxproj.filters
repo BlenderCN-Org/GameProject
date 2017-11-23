@@ -66,9 +66,6 @@
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Source Files\Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\Camera.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\LibraryLoader.cpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
@@ -147,6 +144,9 @@
     <ClCompile Include="Game\Camera.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\Mesh\MirrorMesh.cpp">
+      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -166,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Interfaces\IDataParser.hpp">
       <Filter>Source Files\Engine\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\Camera.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Interfaces\ICamera.hpp">
       <Filter>Source Files\Engine\Interfaces</Filter>
@@ -260,6 +257,9 @@
     <ClInclude Include="Game\Camera.hpp">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Mesh\MirrorMesh.hpp">
+      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ResourceFiles\Script.txt">
@@ -279,6 +279,12 @@
     </Text>
     <Text Include="ResourceFiles\MeshFormat.txt">
       <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Engine\Core\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Engine\Core\Camera.hpp">
+      <Filter>Header Files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

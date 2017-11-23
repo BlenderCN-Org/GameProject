@@ -21,6 +21,7 @@ public:
 	//virtual bool setupFrameBuffer(int width, int height, int nrColorAttachments, bool useDepth, bool multisample, bool useRenderBuffer, bool stencil) = 0;
 
 	virtual void resolveToScreen(int bufferIndex = 0) = 0;
+	virtual void resolveAllToScreen() = 0;
 
 	virtual void clear() = 0;
 
