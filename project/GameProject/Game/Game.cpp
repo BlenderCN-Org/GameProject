@@ -53,14 +53,14 @@ Game::Game(CEngine* _engine)
 	panelTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
 
 	metrixPanel = new Engine::Graphics::Gui::Panel();
-	metrixPanel->setPosition(10, 10);
-	metrixPanel->setSize(300, 50);
+	metrixPanel->setPosition(-10, 10);
+	metrixPanel->setSize(300, 100);
 	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_RIGHT);
 	metrixPanel->setVisible(true);
 	metrixPanel->setTexture(panelTexture);
 
 	infoLabel = new Engine::Graphics::Gui::Label();
-	infoLabel->setSize(300, 50);
+	infoLabel->setSize(300, 100);
 	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	infoLabel->setVisible(true);
 	infoLabel->setText("test");
@@ -130,6 +130,31 @@ Game::Game(CEngine* _engine)
 	selectedLocGBuff = gBufferShader->getShaderUniform("selectedColor");
 	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
 
+	camPath.init(&camInput);
+	camPath.followPaths(true);
+
+	skyDome = new SkyDome();
+
+	skyDomeShader = gRenderEngine->createShaderObject();
+	skyDomeShader->init();
+
+	vs = readShader("data/shaders/skydome.vs.glsl");
+	fs = readShader("data/shaders/skydome.fs.glsl");
+
+	skyDomeShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+	skyDomeShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
+	skyDomeShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
+
+	if (!skyDomeShader->buildShader()) {
+		assert(0 && "shader failed to build");
+	}
+
+	skydomeVpLocation = skyDomeShader->getShaderUniform("viewProjMatrix");
+	skydomeMatLocation = skyDomeShader->getShaderUniform("worldMat");
+	skydomeTimeLoc = skyDomeShader->getShaderUniform("time");
+	skydomeCamPos = skyDomeShader->getShaderUniform("cameraPos");
+	skydomeEyeDir = skyDomeShader->getShaderUniform("eyeDir");
+	skydomeSunMoon = skyDomeShader->getShaderUniform("sunMoonDir");
 }
 
 Game::~Game() {
@@ -144,6 +169,7 @@ Game::~Game() {
 	shader->release();
 	gBuffer->release();
 	gBufferShader->release();
+	skyDomeShader->release();
 
 	if (gameGui) {
 		delete gameGui;
@@ -152,13 +178,43 @@ Game::~Game() {
 	delete metrixPanel;
 	delete infoLabel;
 	delete panelTexture;
-	
+	delete skyDome;
 }
 
 void Game::update(float dt) {
 	engine->update(dt);
 	gameGui->update(dt);
 	camInput.update(dt);
+	camPath.update(dt);
+
+
+	if (GetAsyncKeyState(VK_F8)) {
+
+		std::string vs = readShader("data/shaders/skydome.vs.glsl");
+		std::string fs = readShader("data/shaders/skydome.fs.glsl");
+
+		skyDomeShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
+		skyDomeShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
+		skyDomeShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
+
+		skyDomeShader->buildShader();
+
+		skydomeVpLocation = skyDomeShader->getShaderUniform("viewProjMatrix");
+		skydomeMatLocation = skyDomeShader->getShaderUniform("worldMat");
+		skydomeTimeLoc = skyDomeShader->getShaderUniform("time");
+		skydomeCamPos = skyDomeShader->getShaderUniform("cameraPos");
+		skydomeEyeDir = skyDomeShader->getShaderUniform("eyeDir");
+		skydomeSunMoon = skyDomeShader->getShaderUniform("sunMoonDir");
+		Sleep(10);
+	}
+
+	if (Input::Input::GetInput()->sizeChange) {
+		int w = 0;
+		int h = 0;
+		Input::Input::GetInput()->getWindowSize(w, h);
+		gBuffer->resize(w, h);
+		gBuffer->setWindowSize(w, h);
+	}
 
 	vpMat = camera.viewProjection();
 
@@ -181,6 +237,11 @@ void Game::update(float dt) {
 
 	}
 
+	skyTime += dt * 0.01F;
+	if (skyTime > 1.0F) {
+		skyTime -= 1.0F;
+	}
+	//skyTime = 0.5F;
 	//a += 0.3F * dt;
 
 	std::string str = "FPS: " + std::to_string(fps) + "\n";
@@ -192,6 +253,15 @@ void Game::update(float dt) {
 	glm::vec3 dir = camInput.direction();
 	str += "Dir: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ", " + std::to_string(dir.z) + "\n";
 
+	str += "SkyTime: " + std::to_string(skyTime) + "\n";
+
+	//const float r = 100.0F;
+	//glm::vec3 sunMoonDir(-r * 0.47F, r * sin(glm::pi<float>() * skyTime), r * sin(glm::pi<float>() * skyTime));
+	//
+	//sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
+	//
+	//str += "Sun: (" + std::to_string(sunMoonDir.x) + ", " + std::to_string(sunMoonDir.y) + ", " + std::to_string(sunMoonDir.z) + "\n";
+
 	infoLabel->setText(str.c_str());
 }
 
@@ -200,11 +270,42 @@ void Game::render() {
 	gBuffer->bind();
 	gBuffer->clear();
 
+	skyDomeShader->useShader();
+	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
+	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), camera.getPos() - glm::vec3(0, 1, 0))));
+	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
+	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &camera.getPos());
+	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &camInput.direction());
+
+	const float r = 100.0F;
+	const float PI = glm::pi<float>();
+
+	float s = (glm::abs(glm::sin(PI * skyTime * 2.0F + (PI * 0.5F))) * 1.6F) - 0.6F;
+	float c = glm::cos(PI * skyTime * 2.0F + (PI * 0.5F));
+
+	if (skyTime >= 0.25F && skyTime <= 0.75F) {
+		c = -c;
+	}
+	if (s > 0.0F) {
+		s *= 0.2F;
+	}
+
+	glm::vec3 sunMoonDir(-r * 0.4F, r * s, r * c);
+
+	sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
+
+	skyDomeShader->bindData(skydomeSunMoon, UniformDataType::UNI_FLOAT3, &sunMoonDir);
+
+	gRenderEngine->depthMask(false);
+
+	skyDome->render();
+
+	gRenderEngine->depthMask(true);
+
 	gBufferShader->useShader();
 	gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	gBufferShader->bindData(selectedLocGBuff, UniformDataType::UNI_FLOAT3, &glm::vec3(0.4F));
-	
+
 	// render mirror
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirror->modelMatrix());
 	mirror->render();

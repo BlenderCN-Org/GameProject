@@ -5,7 +5,7 @@
 
 #include "ExceptionHandling.hpp"
 
-#include <Memory\MemoryMan.hpp>
+//#include <Memory\MemoryMan.hpp>
 
 #include <conio.h>
 
@@ -21,12 +21,20 @@
 #include "Game/Game.hpp"
 
 int main(int argc, char* argv[]) {
-	InitMemoryManagement();
+	//InitMemoryManagement();
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #if _DEBUG
-	printf("Waiting for RenderDoc injection, Press any key to continue...\n");
-	_getch();
+	Engine::Core::Library renderDoc;
+	printf("Press 1 to attach RenderDoc, any other key to ignore!\n");
+	int c = _getch();
+	if (c == 49) {
+		if (renderDoc.loadLibrary("C:/Program Files/RenderDoc/RenderDoc.dll")) {
+			printf("RenderDoc successfully loaded!\nGPU debugging avalible!\n");
+		} else {
+			printf("Failed to load RenderDoc!\nGPU debugging not avaible!\n");
+		}
+	}
 #endif
 
 	initExceptionHandlers();
@@ -69,7 +77,8 @@ int main(int argc, char* argv[]) {
 	delete game;
 
 	delete e;
-	ReleaseMemoryManagement();
+	renderDoc.unloadLibrary();
+	//ReleaseMemoryManagement();
 
 	return 0;
 }

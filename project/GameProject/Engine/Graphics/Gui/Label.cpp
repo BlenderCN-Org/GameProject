@@ -38,7 +38,13 @@ namespace Engine {
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTransform, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTexture, UniformDataType::UNI_INT, &textureSlot);
 
+					gRenderEngine->setScissorTest(true);
+					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+
 					text.render(textureSlot);
+					
+					gRenderEngine->setScissorTest(false);
+
 				}
 			}
 

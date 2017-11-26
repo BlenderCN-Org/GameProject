@@ -209,7 +209,7 @@ void FrameBuffer_gl::resolveAllToScreen() {
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		for (int i = 0; i < colorAttachmentCount; i++) {
 			glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
-			glBlitFramebuffer(0, 0, width, height, (width / 4) * i, 0, (width / 4) * (i + 1), (height / 4), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, width, height, (windowWidth / 4) * i, 0, (windowWidth / 4) * (i + 1), (windowHeight / 4), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -222,6 +222,32 @@ void FrameBuffer_gl::bind() {
 
 bool FrameBuffer_gl::isUsingRenderBuffer() const {
 	return usingRenderBuffers;
+}
+
+int FrameBuffer_gl::numAttachments() const {
+
+	uint32_t numAttach = colorAttachmentCount;
+	if (depth || stencil) {
+		numAttach++;
+	}
+	return numAttach;
+}
+
+void FrameBuffer_gl::bindAttachment(const int index) const {
+
+	uint32_t target = 0U;
+
+	if (index > colorAttachmentCount) {
+
+		if ((index == colorAttachmentCount + 1)) {
+			target = depthAttachment;
+		}
+
+	} else {
+		target = colorAttachments[index];;
+	}
+	
+	glBindTexture(GL_TEXTURE_2D, target);
 }
 
 GLuint FrameBuffer_gl::createDepthTexture(int width, int height, bool stencil) {

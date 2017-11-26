@@ -1,5 +1,5 @@
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
+#ifndef TEXTURE_2D_HPP
+#define TEXTURE_2D_HPP
 
 /// Internal Includes
 

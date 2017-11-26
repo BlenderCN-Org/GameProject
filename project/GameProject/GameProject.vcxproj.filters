@@ -147,6 +147,12 @@
     <ClCompile Include="Engine\Graphics\Mesh\MirrorMesh.cpp">
       <Filter>Source Files\Engine\Graphics\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Game\CameraPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\SkyDome.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -259,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Mesh\MirrorMesh.hpp">
       <Filter>Source Files\Engine\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CameraPath.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\SkyDome.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

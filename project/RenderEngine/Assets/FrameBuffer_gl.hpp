@@ -26,6 +26,9 @@ public:
 
 	virtual bool isUsingRenderBuffer() const;
 
+	virtual int numAttachments() const;
+	virtual void bindAttachment(const int index) const;
+
 private:
 
 	bool setupFrameBuffer();

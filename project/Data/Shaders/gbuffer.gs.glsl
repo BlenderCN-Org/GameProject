@@ -29,10 +29,11 @@ void main() {
 	float area = abs(v1.x*v2.y - v1.y * v2.x) ;
 	
 	norm = normalize(cross(poss[1] - poss[0], poss[2] - poss[0]));
-
+	
 	UV = fragUv[0];
 	dist = vec3(area/length(v0),0,0);
 	gl_Position = gl_in[0].gl_Position;
+	gl_ClipDistance[0] = gl_in[0].gl_ClipDistance[0];
 	pos = poss[0];
 	color = colorss[0];
 	EmitVertex();
@@ -40,6 +41,7 @@ void main() {
 	UV = fragUv[1];
 	dist = vec3(0,area/length(v1),0);
 	gl_Position = gl_in[1].gl_Position;
+	gl_ClipDistance[0] = gl_in[1].gl_ClipDistance[0];
 	pos = poss[1];
 	color = colorss[1];
 	EmitVertex();
@@ -47,6 +49,7 @@ void main() {
 	UV = fragUv[2];
 	dist = vec3(0,0,area/length(v2));
 	gl_Position = gl_in[2].gl_Position;
+	gl_ClipDistance[0] = gl_in[2].gl_ClipDistance[0];
 	pos = poss[2];
 	color = colorss[2];
 	EmitVertex();

@@ -31,6 +31,9 @@ public:
 	virtual void setWindowSize(int windowWidth, int windowHeight) = 0;
 
 	virtual bool isUsingRenderBuffer() const = 0;
+
+	virtual int numAttachments() const = 0;
+	virtual void bindAttachment(const int index) const = 0;
 };
 
 #endif

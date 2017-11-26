@@ -111,6 +111,7 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CLIP_DISTANCE0);
 
 		//glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -191,7 +192,7 @@ void RenderEngine::setDepthTest(bool enable) {
 
 void RenderEngine::depthMask(bool mask) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
-		glDepthMask(mask);
+		glDepthMask(mask ? GL_TRUE : GL_FALSE);
 	}
 }
 

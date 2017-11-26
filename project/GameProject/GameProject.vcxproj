@@ -288,6 +288,7 @@
     <ClCompile Include="Engine\Graphics\Gui\Tree.cpp" />
     <ClCompile Include="Engine\Graphics\Mesh\MirrorMesh.cpp" />
     <ClCompile Include="Engine\Graphics\Mesh\StaticMesh.cpp" />
+    <ClCompile Include="Engine\Graphics\SkyDome.cpp" />
     <ClCompile Include="Engine\Graphics\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsEngine.cpp" />
@@ -295,6 +296,7 @@
     <ClCompile Include="ExceptionHandling.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CameraInput.cpp" />
+    <ClCompile Include="Game\CameraPath.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -326,6 +328,7 @@
     <ClInclude Include="Engine\Graphics\Mesh\MirrorMesh.hpp" />
     <ClInclude Include="Engine\Graphics\Mesh\StaticMesh.hpp" />
     <ClInclude Include="Engine\Graphics\ShaderContainer.hpp" />
+    <ClInclude Include="Engine\Graphics\SkyDome.hpp" />
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp" />
     <ClInclude Include="Engine\Input\Input.hpp" />
     <ClInclude Include="Engine\Interfaces\IAssetData.hpp" />
@@ -336,6 +339,7 @@
     <ClInclude Include="ExceptionHandling.hpp" />
     <ClInclude Include="Game\Camera.hpp" />
     <ClInclude Include="Game\CameraInput.hpp" />
+    <ClInclude Include="Game\CameraPath.hpp" />
     <ClInclude Include="Game\Game.hpp" />
   </ItemGroup>
   <ItemGroup>
