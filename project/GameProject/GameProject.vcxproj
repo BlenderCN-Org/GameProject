@@ -298,10 +298,14 @@
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
     <ClCompile Include="Game\Game.cpp" />
+    <ClCompile Include="Game\GameObject.cpp" />
+    <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\Allocator.hpp" />
+    <ClInclude Include="Game\GameObject.hpp" />
+    <ClInclude Include="Game\Scene.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
     <ClInclude Include="Engine\Core\FormattedString.hpp" />

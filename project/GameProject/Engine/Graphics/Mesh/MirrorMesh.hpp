@@ -25,7 +25,7 @@ namespace Engine {
 				glm::mat4 reflectionMatrix();
 				glm::mat4 modelMatrix();
 
-				void render();
+				void render(bool writeDepth = false);
 
 			private:
 

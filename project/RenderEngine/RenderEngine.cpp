@@ -196,6 +196,12 @@ void RenderEngine::depthMask(bool mask) {
 	}
 }
 
+void RenderEngine::forceWriteDepth(bool forceWrite) 	{
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glDepthFunc(forceWrite ? GL_GREATER : GL_LESS);
+	}
+}
+
 void RenderEngine::colorMask(bool r, bool g, bool b, bool a) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		glColorMask(r, g, b, a);

@@ -43,7 +43,7 @@ namespace Engine {
 				const glm::vec3 b = n2;
 				glm::vec3 v = glm::cross(b, a);
 				float angle = acos(glm::dot(b, a) / (glm::length(b) * glm::length(a)));
-				
+
 				rotMat = glm::rotate(rotMat, -angle, v) * glm::transpose(glm::translate(rotMat, pos));
 
 				glm::vec2 s2 = size / 2.0F;
@@ -91,14 +91,15 @@ namespace Engine {
 				return rotMat;
 			}
 
-			void MirrorMesh::render() {
-
-				gRenderEngine->setStencilTest(true);
-				gRenderEngine->stencilFunc(0x0207, 0x01, 0xFF);
-				gRenderEngine->stencilOp(0x1E00, 0x1E00, 0x1E01);
-				gRenderEngine->stencilMask(0xFF);
-				gRenderEngine->clearStencil();
-				gRenderEngine->depthMask(false);
+			void MirrorMesh::render(bool writeDepth) {
+				if (writeDepth == false) {
+					gRenderEngine->setStencilTest(true);
+					gRenderEngine->stencilFunc(0x0207, 0x01, 0xFF);
+					gRenderEngine->stencilOp(0x1E00, 0x1E00, 0x1E01);
+					gRenderEngine->stencilMask(0xFF);
+					gRenderEngine->clearStencil();
+					gRenderEngine->depthMask(false);
+				}
 				//gRenderEngine->colorMask(false, false, false, false);
 				//glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
 				//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -109,10 +110,13 @@ namespace Engine {
 				mesh->bind();
 				mesh->render();
 				
-				gRenderEngine->setStencilTest(false);
-				gRenderEngine->stencilMask(0x00);
-				gRenderEngine->depthMask(true);
-				//gRenderEngine->colorMask(true, true, true, true);
+				if (writeDepth == false) {
+
+					gRenderEngine->setStencilTest(false);
+					gRenderEngine->stencilMask(0x00);
+					gRenderEngine->depthMask(true);
+					//gRenderEngine->colorMask(true, true, true, true);
+				}
 			}
 
 		}

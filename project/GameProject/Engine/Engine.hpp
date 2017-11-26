@@ -53,6 +53,7 @@ public:
 	void clearDebug();
 	void presentFrame();
 
+	void writeDepth(float depthValue, glm::mat4 worldMat, glm::mat4 mdl);
 
 private:
 
@@ -71,6 +72,10 @@ private:
 	bool pauseFlag;
 	bool running;
 
+	IShaderObject* depthWriteShader;
+	int depthValueLoc;
+	int depthVpMatLoc;
+	int depthMdlMatLoc;
 };
 
 #endif

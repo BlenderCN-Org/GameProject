@@ -5,6 +5,31 @@
 #include "Core/System.hpp"
 #include "Graphics/Graphics.hpp"
 
+const char* vs = ""
+"#version 410\n"
+"\n"
+"layout(location = 0) in vec3 vertexPos;\n"
+"uniform mat4 vp;\n"
+"uniform mat4 mdl;\n"
+"\n"
+"void main() {\n"
+"	vec3 p = vertexPos;\n"
+"	vec3 pos = (vec4(p, 1.0) * mdl).xyz;\n"
+"	gl_Position = vp * vec4(pos, 1.0);\n"
+"}\n"
+"\n";
+
+const char* fs = ""
+"#version 410\n"
+"\n"
+"out float gl_FragDepth;\n"
+"uniform float depthValue;\n"
+"\n"
+"void main() {\n"
+"gl_FragDepth = depthValue;"
+"}\n"
+"\n";
+
 CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr) {
 
 	Engine::System::initSys();
@@ -47,12 +72,27 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	gameWindow->setVsync(true);
 	running = true;
 
+	depthWriteShader = gRenderEngine->createShaderObject();
+	depthWriteShader->init();
+
+	depthWriteShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
+	depthWriteShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs);
+
+	if (!depthWriteShader->buildShader()) {
+		assert(0 && "Failed to build ClearDepth shader!");
+	}
+
+	depthValueLoc = depthWriteShader->getShaderUniform("depthValue");
+	depthVpMatLoc = depthWriteShader->getShaderUniform("vp");
+	depthMdlMatLoc = depthWriteShader->getShaderUniform("mdl");
+
 }
 
 CEngine::~CEngine() {
 
+	depthWriteShader->release();
 	delete console;
-	
+
 	gRenderEngine = nullptr;
 
 	Input::Input::Release();
@@ -84,7 +124,7 @@ void CEngine::update(const float dt) {
 		int h = 0;
 		Input::Input::GetInput()->getWindowSize(w, h);
 		renderEngine->updateViewPort(w, h);
-		
+
 		console->updateSize(w, h);
 
 		windowHeight = h;
@@ -109,4 +149,11 @@ void CEngine::presentFrame() {
 	console->render();
 
 	gameWindow->swapBuffers();
+}
+
+void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {
+	depthWriteShader->useShader();
+	depthWriteShader->bindData(depthValueLoc, UniformDataType::UNI_FLOAT, &depthValue);
+	depthWriteShader->bindData(depthVpMatLoc, UniformDataType::UNI_MATRIX4X4, &vpMat);
+	depthWriteShader->bindData(depthMdlMatLoc, UniformDataType::UNI_MATRIX4X4, &mdl);
 }

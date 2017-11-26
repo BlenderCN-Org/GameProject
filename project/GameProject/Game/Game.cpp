@@ -42,7 +42,7 @@ Game::Game(CEngine* _engine)
 	camInput.init((glm::mat4*)camera.getViewMatrix());
 	camInput.setCam(glm::vec3(5, 1, 0), glm::vec3(-1, 0, 0));
 
-	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.01F, 100.0F);
+	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
 	mesh = new Engine::Graphics::Mesh::StaticMesh();
 	mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
@@ -131,7 +131,7 @@ Game::Game(CEngine* _engine)
 	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
 
 	camPath.init(&camInput);
-	camPath.followPaths(true);
+	camPath.followPaths(false);
 
 	skyDome = new SkyDome();
 
@@ -334,6 +334,10 @@ void Game::render() {
 	mesh->bind();
 	mesh->render();
 
+	engine->writeDepth(1.0F, vpMat, mirror->modelMatrix());
+	gRenderEngine->forceWriteDepth(true);
+	mirror->render(true);
+	gRenderEngine->forceWriteDepth(false);
 	gRenderEngine->setStencilTest(false);
 
 	int index = 0;

@@ -72,6 +72,7 @@ public:
 	
 	virtual void setDepthTest(bool enable) = 0;
 	virtual void depthMask(bool mask) = 0;
+	virtual void forceWriteDepth(bool forceWrite) = 0;
 
 	virtual void colorMask(bool r, bool g, bool b, bool a) = 0;
 
