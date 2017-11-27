@@ -60,9 +60,11 @@ public:
 	virtual void setStencilTest(bool enable);
 	virtual void stencilMask(unsigned int mask);
 	virtual void stencilClear(int mask);
-	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass);
-	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask);
+	virtual void stencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass);
+	virtual void stencilFunc(FuncConstants func, int ref, unsigned int mask);
 	virtual void setClearColor(float r, float g, float b, float a);
+
+	virtual void activeTexture(int slot);
 
 	virtual void setBlending(bool enable);
 
@@ -91,6 +93,9 @@ public:
 private:
 
 	void printInfo(GLinfo info);
+
+	int stencilOpToGlInt(StencilOp op);
+	int funcConstantToGlInt(FuncConstants funcConst);
 
 	int counter = 0;
 

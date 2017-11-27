@@ -304,6 +304,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Core\Allocator.hpp" />
+    <ClInclude Include="Engine\Interfaces\IReflected.hpp" />
+    <ClInclude Include="Engine\Reflection.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
     <ClInclude Include="Game\Scene.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />

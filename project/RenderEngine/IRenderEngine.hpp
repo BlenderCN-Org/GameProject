@@ -60,6 +60,22 @@ struct RenderEngineCreateInfo {
 	void* pNext;
 };
 
+enum class FuncConstants : int {
+	ALWAYS,
+	LESS,
+	LEQUAL,
+	EQUAL,
+	GEQUAL,
+	GREATER,
+	NOTEQUAL,
+	NEVER
+};
+
+enum class StencilOp :int {
+	REPLACE,
+	KEEP,
+};
+
 class IRenderEngine {
 public:
 
@@ -67,9 +83,9 @@ public:
 	virtual void release() = 0;
 	virtual void renderDebugFrame() = 0;
 	virtual void clear() = 0;
-	
+
 	virtual void bindDefaultFrameBuffer() = 0;
-	
+
 	virtual void setDepthTest(bool enable) = 0;
 	virtual void depthMask(bool mask) = 0;
 	virtual void forceWriteDepth(bool forceWrite) = 0;
@@ -77,16 +93,18 @@ public:
 	virtual void colorMask(bool r, bool g, bool b, bool a) = 0;
 
 	virtual void setScissorTest(bool enable) = 0;
-	virtual void setScissorRegion(int x, int y, int width, int height) = 0 ;
+	virtual void setScissorRegion(int x, int y, int width, int height) = 0;
 
 	virtual void clearStencil() = 0;
 
 	virtual void setStencilTest(bool enable) = 0;
 	virtual void stencilMask(unsigned int mask) = 0;
 	virtual void stencilClear(int mask) = 0;
-	virtual void stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass) = 0;
-	virtual void stencilFunc(unsigned int func, int ref, unsigned int mask) = 0;
+	virtual void stencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) = 0;
+	virtual void stencilFunc(FuncConstants func, int ref, unsigned int mask) = 0;
 	virtual void setClearColor(float r, float g, float b, float a) = 0;
+
+	virtual void activeTexture(int slot) = 0;
 
 	virtual void setBlending(bool enable) = 0;
 

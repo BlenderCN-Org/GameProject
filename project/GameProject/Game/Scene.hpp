@@ -5,14 +5,14 @@
 
 #include <vector>
 
-
-
 class Scene {
 
 public:
 
 	Scene();
 	virtual ~Scene();
+
+	void addGameObject(GameObject* go);
 
 	void update(float dt);
 

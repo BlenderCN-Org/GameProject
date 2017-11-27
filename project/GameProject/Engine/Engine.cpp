@@ -86,11 +86,27 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	depthVpMatLoc = depthWriteShader->getShaderUniform("vp");
 	depthMdlMatLoc = depthWriteShader->getShaderUniform("mdl");
 
+	fullQuad = gRenderEngine->createMesh();
+	fullQuad->init(MeshPrimitiveType::TRIANGLE);
+
+	float vertex[6][5]{
+		{ 0 - 1, 0 - 1, 0, 0, 0 },
+		{ 0 - 1, 0 + 1, 0, 0, 1 },
+		{ 0 + 1, 0 + 1, 0, 1, 1 },
+
+		{ 0 - 1, 0 - 1, 0, 0, 0 },
+		{ 0 + 1, 0 + 1, 0, 1, 1 },
+		{ 0 + 1, 0 - 1, 0, 1, 0 },
+	};
+
+	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
+
 }
 
 CEngine::~CEngine() {
 
 	depthWriteShader->release();
+	fullQuad->release();
 	delete console;
 
 	gRenderEngine = nullptr;
@@ -156,4 +172,9 @@ void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {
 	depthWriteShader->bindData(depthValueLoc, UniformDataType::UNI_FLOAT, &depthValue);
 	depthWriteShader->bindData(depthVpMatLoc, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	depthWriteShader->bindData(depthMdlMatLoc, UniformDataType::UNI_MATRIX4X4, &mdl);
+}
+
+void CEngine::renderFullQuad() {
+	fullQuad->bind();
+	fullQuad->render();
 }

@@ -94,8 +94,8 @@ namespace Engine {
 			void MirrorMesh::render(bool writeDepth) {
 				if (writeDepth == false) {
 					gRenderEngine->setStencilTest(true);
-					gRenderEngine->stencilFunc(0x0207, 0x01, 0xFF);
-					gRenderEngine->stencilOp(0x1E00, 0x1E00, 0x1E01);
+					gRenderEngine->stencilFunc(FuncConstants::ALWAYS, 0x01, 0xFF);
+					gRenderEngine->stencilOp(StencilOp::KEEP, StencilOp::KEEP, StencilOp::REPLACE);
 					gRenderEngine->stencilMask(0xFF);
 					gRenderEngine->clearStencil();
 					gRenderEngine->depthMask(false);

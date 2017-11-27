@@ -55,6 +55,8 @@ public:
 
 	void writeDepth(float depthValue, glm::mat4 worldMat, glm::mat4 mdl);
 
+	void renderFullQuad();
+
 private:
 
 	Core::Library renderEngineLib;
@@ -76,6 +78,9 @@ private:
 	int depthValueLoc;
 	int depthVpMatLoc;
 	int depthMdlMatLoc;
+
+	IMesh* fullQuad;
+
 };
 
 #endif

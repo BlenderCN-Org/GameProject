@@ -29,6 +29,9 @@ public:
 
 private:
 
+	void renderSky();
+	void renderScene();
+
 	bool paused;
 	Engine::Graphics::CGui* gameGui;
 	Engine::Graphics::Gui::Panel* metrixPanel;
@@ -53,6 +56,7 @@ private:
 	IShaderObject* shader;
 	IShaderObject* gBufferShader;
 	IShaderObject* skyDomeShader;
+	IShaderObject* gBufferBlit;
 
 	int vpLocation;
 	int matLocation;
@@ -71,6 +75,10 @@ private:
 	int skydomeSunMoon;
 
 	float skyTime;
+
+	int blitTexDiff;
+	int blitTexNorm;
+	int blitTexWPos;
 
 	float dtOneSec;
 	int fps;

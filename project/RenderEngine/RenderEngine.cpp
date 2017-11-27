@@ -196,7 +196,7 @@ void RenderEngine::depthMask(bool mask) {
 	}
 }
 
-void RenderEngine::forceWriteDepth(bool forceWrite) 	{
+void RenderEngine::forceWriteDepth(bool forceWrite) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		glDepthFunc(forceWrite ? GL_GREATER : GL_LESS);
 	}
@@ -260,21 +260,30 @@ void RenderEngine::stencilClear(int mask) {
 	}
 }
 
-void RenderEngine::stencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass) {
+void RenderEngine::stencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
-		glStencilOp(fail, zfail, zpass);
+		int f = stencilOpToGlInt(fail);
+		int zf = stencilOpToGlInt(zfail);
+		int zp = stencilOpToGlInt(zpass);
+		glStencilOp(f, zf, zp);
 	}
 }
 
-void RenderEngine::stencilFunc(unsigned int func, int ref, unsigned int mask) {
+void RenderEngine::stencilFunc(FuncConstants func, int ref, unsigned int mask) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
-		glStencilFunc(func, ref, mask);
+		glStencilFunc(funcConstantToGlInt(func), ref, mask);
 	}
 }
 
 void RenderEngine::setClearColor(float r, float g, float b, float a) {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		glClearColor(r, g, b, a);
+	}
+}
+
+void RenderEngine::activeTexture(int slot) {
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glActiveTexture(GL_TEXTURE0 + slot);
 	}
 }
 
@@ -402,6 +411,54 @@ void RenderEngine::toNormalizedDeviceSpace(float & x, float & y) {
 
 void RenderEngine::printInfo(GLinfo info) {
 	printf("%s\nGPU: %s\nDriver:%s\nGLSL: %s\n", info.vendor, info.renderer, info.version, info.shadingLanguageVersion);
+}
+
+int RenderEngine::stencilOpToGlInt(StencilOp op) {
+	int r = 0;
+	switch (op) {
+		case StencilOp::REPLACE:
+			r = GL_REPLACE;
+			break;
+		case StencilOp::KEEP:
+			r = GL_KEEP;
+			break;
+		default:
+			break;
+	}
+	return r;
+}
+
+int RenderEngine::funcConstantToGlInt(FuncConstants funcConst) {
+	int r = 0;
+	switch (funcConst) {
+		case FuncConstants::ALWAYS:
+			r = GL_ALWAYS;
+			break;
+		case FuncConstants::LESS:
+			r = GL_LESS;
+			break;
+		case FuncConstants::LEQUAL:
+			r = GL_LEQUAL;
+			break;
+		case FuncConstants::EQUAL:
+			r = GL_EQUAL;
+			break;
+		case FuncConstants::GEQUAL:
+			r = GL_GEQUAL;
+			break;
+		case FuncConstants::GREATER:
+			r = GL_GREATER;
+			break;
+		case FuncConstants::NOTEQUAL:
+			r = GL_NOTEQUAL;
+			break;
+		case FuncConstants::NEVER:
+			r = GL_NEVER;
+			break;
+		default:
+			break;
+	}
+	return r;
 }
 
 IRenderEngine* CreateRenderEngine() {

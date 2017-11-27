@@ -155,6 +155,28 @@ Game::Game(CEngine* _engine)
 	skydomeCamPos = skyDomeShader->getShaderUniform("cameraPos");
 	skydomeEyeDir = skyDomeShader->getShaderUniform("eyeDir");
 	skydomeSunMoon = skyDomeShader->getShaderUniform("sunMoonDir");
+
+	gBufferBlit = gRenderEngine->createShaderObject();
+	gBufferBlit->init();
+
+	vs = readShader("data/shaders/BlitShader.vs.glsl");
+	fs = readShader("data/shaders/BlitShader.fs.glsl");
+
+	char* cvs = (char*)vs.c_str();
+	char* cfs = (char*)fs.c_str();
+
+	gBufferBlit->setShaderCode(ShaderStages::VERTEX_STAGE, cvs);
+	gBufferBlit->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
+	gBufferBlit->setShaderCode(ShaderStages::FRAGMENT_STAGE, cfs);
+
+	if (!gBufferBlit->buildShader()) {
+		assert(0 && "shader failed to build");
+	}
+
+	blitTexDiff = gBufferBlit->getShaderUniform("textureDiff");
+	blitTexNorm = gBufferBlit->getShaderUniform("textureNorm");
+	blitTexWPos = gBufferBlit->getShaderUniform("textureWPos");
+
 }
 
 Game::~Game() {
@@ -170,6 +192,7 @@ Game::~Game() {
 	gBuffer->release();
 	gBufferShader->release();
 	skyDomeShader->release();
+	gBufferBlit->release();
 
 	if (gameGui) {
 		delete gameGui;
@@ -270,6 +293,40 @@ void Game::render() {
 	gBuffer->bind();
 	gBuffer->clear();
 
+	renderSky();
+
+	renderScene();
+
+	int index = 0;
+
+	gBuffer->resolveToScreen(index);
+	gBuffer->resolveAllToScreen();
+
+	int tex = 0;
+	gBufferBlit->useShader();
+	gBufferBlit->bindData(blitTexDiff, UniformDataType::UNI_INT, &tex);
+	tex = 1;
+	gBufferBlit->bindData(blitTexNorm, UniformDataType::UNI_INT, &tex);
+	tex = 2;
+	gBufferBlit->bindData(blitTexWPos, UniformDataType::UNI_INT, &tex);
+
+	gRenderEngine->activeTexture(0);
+	gBuffer->bindAttachment(0);
+	gRenderEngine->activeTexture(1);
+	gBuffer->bindAttachment(1);
+	gRenderEngine->activeTexture(2);
+	gBuffer->bindAttachment(2);
+	
+	engine->renderFullQuad();
+
+	gRenderEngine->activeTexture(0);
+
+	gRenderEngine->bindDefaultFrameBuffer();
+	gameGui->render();
+
+}
+
+void Game::renderSky() {
 	skyDomeShader->useShader();
 	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), camera.getPos() - glm::vec3(0, 1, 0))));
@@ -301,50 +358,45 @@ void Game::render() {
 	skyDome->render();
 
 	gRenderEngine->depthMask(true);
+}
 
+void Game::renderScene() {
+
+	// render scene as normal
 	gBufferShader->useShader();
 	gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-
-	// render mirror
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirror->modelMatrix());
-	mirror->render();
-
-	gRenderEngine->setStencilTest(false);
-	gRenderEngine->stencilFunc(0x0205, 0x01, 0xFF);
-
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
 	mesh->bind();
 	mesh->render();
 
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(-20, 0, 0))));
-	gRenderEngine->setStencilTest(true);
-
 	mesh->bind();
 	mesh->render();
 
-	glm::mat4 mirrorMat = mirror->reflectionMatrix();
+	// render mirror
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirror->modelMatrix());
+	mirror->render();
 
+	// stencil test must pass before rendering
 	gRenderEngine->setStencilTest(true);
-	gRenderEngine->stencilFunc(0x0202, 0x01, 0xFF);
-
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
-	mesh->bind();
-	mesh->render();
-
+	gRenderEngine->stencilFunc(FuncConstants::EQUAL, 0x01, 0xFF);
+	// clear depth where mirror was written
 	engine->writeDepth(1.0F, vpMat, mirror->modelMatrix());
 	gRenderEngine->forceWriteDepth(true);
 	mirror->render(true);
 	gRenderEngine->forceWriteDepth(false);
+	
+	// render reflected scene
+	glm::mat4 mirrorMat = mirror->reflectionMatrix();
+	gBufferShader->useShader();
+	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	
+	mesh->bind();
+	mesh->render();
+
 	gRenderEngine->setStencilTest(false);
-
-	int index = 0;
-
-	gBuffer->resolveToScreen(index);
-	gBuffer->resolveAllToScreen();
-
-	gameGui->render();
 
 }

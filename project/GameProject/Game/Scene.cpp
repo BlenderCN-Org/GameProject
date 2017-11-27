@@ -8,6 +8,10 @@ Scene::~Scene() {
 
 }
 
+void Scene::addGameObject(GameObject* go) {
+	gameObjects.push_back(go);
+}
+
 void Scene::update(float dt) {
 
 }
