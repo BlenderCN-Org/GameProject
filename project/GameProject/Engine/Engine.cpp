@@ -69,7 +69,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	input->attachConsole(console);
 
 	gameWindow->setWindowSize(windowWidth, windowHeight);
-	gameWindow->setVsync(true);
+	gameWindow->setVsync(false);
 	running = true;
 
 	depthWriteShader = gRenderEngine->createShaderObject();

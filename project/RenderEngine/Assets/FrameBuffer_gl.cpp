@@ -76,7 +76,7 @@ bool FrameBuffer_gl::setupFrameBuffer() {
 		if (depth)
 			depthAttachment = createDepthTexture(width, height, stencil);
 		for (int i = 0; i < colorAttachmentCount; i++) {
-			colorAttachments[i] = createColorTexture(width, height, GL_RGBA, GL_COLOR_ATTACHMENT0 + i);
+			colorAttachments[i] = createColorTexture(width, height, GL_RGBA16F, GL_COLOR_ATTACHMENT0 + i);
 			drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
 		}
 	}
@@ -175,7 +175,7 @@ void FrameBuffer_gl::resize(int _width, int _height) {
 		for (int i = 0; i < colorAttachmentCount; i++) {
 			glBindTexture(GL_TEXTURE_2D, colorAttachments[i]);
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorAttachments[i], 0);
 		}
 	}
@@ -244,7 +244,7 @@ void FrameBuffer_gl::bindAttachment(const int index) const {
 		}
 
 	} else {
-		target = colorAttachments[index];;
+		target = colorAttachments[index];
 	}
 	
 	glBindTexture(GL_TEXTURE_2D, target);
@@ -254,7 +254,7 @@ GLuint FrameBuffer_gl::createDepthTexture(int width, int height, bool stencil) {
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-
+	
 	if (stencil)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 	else
@@ -262,8 +262,8 @@ GLuint FrameBuffer_gl::createDepthTexture(int width, int height, bool stencil) {
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
 	if (stencil) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);

@@ -49,7 +49,8 @@ void main()
 	
 	}
 	
-	fragmentColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * (color * letThereBeLight));
+	//fragmentColor = (edgeIntensity * vec4(0.1,0.1,0.1,1.0)) + ((1.0-edgeIntensity) * (color * letThereBeLight));
+	fragmentColor = color;
 	normalColor = vec4(norm, 1.0);
 	worldPos = vec4(pos, 1.0);
 }

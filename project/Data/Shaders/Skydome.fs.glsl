@@ -36,7 +36,10 @@ vec3 sky(in vec3 light, in vec3 rd) {
          
 	if(rd.y < 0.0){
 	// Sky with haze		
-	float si = sin(time * PI);
+	
+	float t = time;
+	
+	float si = sin(t * PI);
 	
 	vec3 sky = mix(daySky, nightSky, si);
 	col = sky * (1.0 - 0.8 * rd.y) * 0.9;
@@ -55,6 +58,12 @@ vec3 sky(in vec3 light, in vec3 rd) {
     col = mix(col, persp, pow(1.0 - max(abs(rd.y), 0.0), 8.0));
     }
 	
+	// basic dithering
+	if(int(gl_FragCoord.x + gl_FragCoord.y) % 2 == 0 )
+	{
+		col += vec3(10.0 / 128.0);
+	}
+	
 	return col;
 }
 
@@ -64,5 +73,5 @@ void main()
 	
 	fragmentColor = vec4(sky(light, normalize(cameraPos - pos)), 1.0); 
 	normalColor = vec4(norm, 1.0);
-	worldPos = vec4(pos, 1.0);
+	worldPos = vec4(pos * 1000, 1.0);
 }

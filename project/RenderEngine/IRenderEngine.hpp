@@ -84,6 +84,8 @@ public:
 	virtual void renderDebugFrame() = 0;
 	virtual void clear() = 0;
 
+	virtual void enableCulling(bool enable, bool backFace = true) = 0;
+
 	virtual void bindDefaultFrameBuffer() = 0;
 
 	virtual void setDepthTest(bool enable) = 0;

@@ -31,6 +31,7 @@ private:
 
 	void renderSky();
 	void renderScene();
+	void renderShadowMap();
 
 	bool paused;
 	Engine::Graphics::CGui* gameGui;
@@ -53,10 +54,14 @@ private:
 	float a;
 
 	IFrameBuffer* gBuffer;
+	IFrameBuffer* shadowMap;
+
 	IShaderObject* shader;
 	IShaderObject* gBufferShader;
 	IShaderObject* skyDomeShader;
 	IShaderObject* gBufferBlit;
+
+	IShaderObject* shadowShader;
 
 	int vpLocation;
 	int matLocation;
@@ -75,10 +80,15 @@ private:
 	int skydomeSunMoon;
 
 	float skyTime;
+	glm::vec3 sunMoonDir;
 
 	int blitTexDiff;
 	int blitTexNorm;
 	int blitTexWPos;
+	int blitTextShadow;
+	int blitDepthMvp;
+
+	int shadowMVP;
 
 	float dtOneSec;
 	int fps;

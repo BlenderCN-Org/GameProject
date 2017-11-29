@@ -46,6 +46,8 @@ public:
 	virtual void clear();
 	virtual void bindDefaultFrameBuffer();
 
+	virtual void enableCulling(bool enable, bool backFace = true);
+
 	virtual void setDepthTest(bool enable);
 	virtual void depthMask(bool mask);
 	virtual void forceWriteDepth(bool forceWrite);

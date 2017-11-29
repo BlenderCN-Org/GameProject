@@ -112,6 +112,7 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CLIP_DISTANCE0);
+		//glEnable(GL_FRAMEBUFFER_SRGB);
 
 		//glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -177,6 +178,20 @@ void RenderEngine::bindDefaultFrameBuffer() {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+}
+
+void RenderEngine::enableCulling(bool enable, bool backFace) {
+
+	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
+		glCullFace(backFace ? GL_BACK : GL_FRONT);
+		GLenum cap = GL_CULL_FACE;
+		if (enable) {
+			glEnable(cap);
+		} else {
+			glDisable(cap);
+		}
+	}
+
 }
 
 void RenderEngine::setDepthTest(bool enable) {

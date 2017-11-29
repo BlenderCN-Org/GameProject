@@ -3,7 +3,9 @@
 #include "Game.hpp"
 #include "../Engine/Graphics/Graphics.hpp"
 
+/// External Includes
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 /// Std Includes
 #include <fstream>
@@ -100,10 +102,10 @@ Game::Game(CEngine* _engine)
 
 	fbci.height = 720;
 	fbci.width = 1280;
-	fbci.mutlisample = 0;
+	fbci.mutlisample = 16;
 	fbci.nrColorBuffers = 3;
 	fbci.useDepth = true;
-	fbci.useMultisample = false;
+	fbci.useMultisample = true;
 	fbci.useRenderbuffer = false;
 	fbci.useStencil = true;
 
@@ -131,7 +133,7 @@ Game::Game(CEngine* _engine)
 	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
 
 	camPath.init(&camInput);
-	camPath.followPaths(false);
+	camPath.followPaths(true);
 
 	skyDome = new SkyDome();
 
@@ -176,6 +178,37 @@ Game::Game(CEngine* _engine)
 	blitTexDiff = gBufferBlit->getShaderUniform("textureDiff");
 	blitTexNorm = gBufferBlit->getShaderUniform("textureNorm");
 	blitTexWPos = gBufferBlit->getShaderUniform("textureWPos");
+	blitTextShadow = gBufferBlit->getShaderUniform("textureShadow");
+	blitDepthMvp = gBufferBlit->getShaderUniform("depthMVP");
+
+	shadowMap = gRenderEngine->createFrameBuffer();
+
+	fbci.width = 1024 * 8;
+	fbci.height = 1024 * 8;
+
+	fbci.useDepth = true;
+	fbci.nrColorBuffers = 0;
+	fbci.mutlisample = 16;
+	fbci.useStencil = false;
+	fbci.useMultisample = true;
+
+	shadowMap->init(&fbci);
+
+	shadowShader = gRenderEngine->createShaderObject();
+	shadowShader->init();
+
+	vs = readShader("data/shaders/shadow.vs.glsl");
+	fs = readShader("data/shaders/shadow.fs.glsl");
+
+	shadowShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs.c_str());
+	shadowShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
+	shadowShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs.c_str());
+
+	if (!shadowShader->buildShader()) {
+		assert(0 && "shader failed to build");
+	}
+
+	shadowMVP = shadowShader->getShaderUniform("depthMVP");
 
 }
 
@@ -193,6 +226,8 @@ Game::~Game() {
 	gBufferShader->release();
 	skyDomeShader->release();
 	gBufferBlit->release();
+	shadowMap->release();
+	shadowShader->release();
 
 	if (gameGui) {
 		delete gameGui;
@@ -267,6 +302,25 @@ void Game::update(float dt) {
 	//skyTime = 0.5F;
 	//a += 0.3F * dt;
 
+
+	const float r = 100.0F;
+	const float PI = glm::pi<float>();
+
+	float s = (glm::abs(glm::sin(PI * skyTime * 2.0F + (PI * 0.5F))) * 1.6F) - 0.6F;
+	float c = glm::cos(PI * skyTime * 2.0F + (PI * 0.5F));
+
+	if (skyTime >= 0.25F && skyTime <= 0.75F) {
+		c = -c;
+	}
+	if (s > 0.0F) {
+		s *= 0.2F;
+	}
+
+	sunMoonDir = glm::vec3(-r * 0.4F, r * s, r * c);
+
+	sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
+
+
 	std::string str = "FPS: " + std::to_string(fps) + "\n";
 	str += "Dt: " + std::to_string(dt) + "\n";
 
@@ -290,6 +344,12 @@ void Game::update(float dt) {
 
 void Game::render() {
 
+	renderShadowMap();
+	int w = 0;
+	int h = 0;
+	Input::Input::GetInput()->getWindowSize(w, h);
+	gRenderEngine->updateViewPort(w, h);
+
 	gBuffer->bind();
 	gBuffer->clear();
 
@@ -309,6 +369,27 @@ void Game::render() {
 	gBufferBlit->bindData(blitTexNorm, UniformDataType::UNI_INT, &tex);
 	tex = 2;
 	gBufferBlit->bindData(blitTexWPos, UniformDataType::UNI_INT, &tex);
+	tex = 3;
+	gBufferBlit->bindData(blitTextShadow, UniformDataType::UNI_INT, &tex);
+
+	glm::vec3 lightDir = sunMoonDir;
+
+	//lightDir = glm::vec3(0.5f, 2, 2);
+
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -100, 20);
+	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix;
+
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
+	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
+
+	gBufferBlit->bindData(blitDepthMvp, UniformDataType::UNI_MATRIX4X4, &depthBiasMVP);
 
 	gRenderEngine->activeTexture(0);
 	gBuffer->bindAttachment(0);
@@ -316,7 +397,9 @@ void Game::render() {
 	gBuffer->bindAttachment(1);
 	gRenderEngine->activeTexture(2);
 	gBuffer->bindAttachment(2);
-	
+	gRenderEngine->activeTexture(3);
+	shadowMap->bindAttachment(1);
+
 	engine->renderFullQuad();
 
 	gRenderEngine->activeTexture(0);
@@ -333,23 +416,6 @@ void Game::renderSky() {
 	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
 	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &camera.getPos());
 	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &camInput.direction());
-
-	const float r = 100.0F;
-	const float PI = glm::pi<float>();
-
-	float s = (glm::abs(glm::sin(PI * skyTime * 2.0F + (PI * 0.5F))) * 1.6F) - 0.6F;
-	float c = glm::cos(PI * skyTime * 2.0F + (PI * 0.5F));
-
-	if (skyTime >= 0.25F && skyTime <= 0.75F) {
-		c = -c;
-	}
-	if (s > 0.0F) {
-		s *= 0.2F;
-	}
-
-	glm::vec3 sunMoonDir(-r * 0.4F, r * s, r * c);
-
-	sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
 
 	skyDomeShader->bindData(skydomeSunMoon, UniformDataType::UNI_FLOAT3, &sunMoonDir);
 
@@ -387,16 +453,43 @@ void Game::renderScene() {
 	gRenderEngine->forceWriteDepth(true);
 	mirror->render(true);
 	gRenderEngine->forceWriteDepth(false);
-	
+
 	// render reflected scene
 	glm::mat4 mirrorMat = mirror->reflectionMatrix();
 	gBufferShader->useShader();
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	
+
 	mesh->bind();
 	mesh->render();
 
 	gRenderEngine->setStencilTest(false);
+
+}
+
+void Game::renderShadowMap() {
+
+	gRenderEngine->updateViewPort(1024 *8, 1024 *8);
+	shadowMap->bind();
+	shadowMap->clear();
+
+	glm::vec3 lightDir = sunMoonDir;
+
+	//lightDir = glm::vec3(0.5f, 2, 2);
+
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -100, 20);
+	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
+	glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+
+	shadowShader->useShader();
+	shadowShader->bindData(shadowMVP, UniformDataType::UNI_MATRIX4X4, &depthMVP);
+
+	gRenderEngine->enableCulling(true, false);
+
+	mesh->bind();
+	mesh->render();
+
+	gRenderEngine->enableCulling(false, false);
 
 }
