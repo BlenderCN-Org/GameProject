@@ -12,16 +12,19 @@ uniform mat4 viewProjMatrix;
 uniform mat4 worldMat;
 uniform mat4 reflectMat;
 
-vec4 plane = vec4(0.0, 0.0, 0.0, 0.0);
+uniform vec4 clipPlane;
+
+vec4 plane = vec4(0.0, -1.0, 0.0, 2.0);
 
 void main()
 {
 	fragUv = vertexUv;
-	pos = (vec4(vertexPos, 1.0) * worldMat).xyz;
+	vec4 p = (vec4(vertexPos, 1.0) * worldMat);
+	pos = p.xyz;
 	vec4 p2 = vec4(pos, 1.0) * reflectMat;
 	
 	
-	gl_ClipDistance[0] = dot(plane, p2);
+	gl_ClipDistance[0] = dot(clipPlane, p);
 	
 	gl_Position = viewProjMatrix * p2;
 	color = vertexColor;

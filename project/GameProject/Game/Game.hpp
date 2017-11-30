@@ -71,6 +71,7 @@ private:
 	int matLocationGBuff;
 	int refMatLocationGBuff;
 	int selectedLocGBuff;
+	int clipPlane;
 
 	int skydomeVpLocation;
 	int skydomeMatLocation;

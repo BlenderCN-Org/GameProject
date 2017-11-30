@@ -22,8 +22,11 @@ namespace Engine {
 				void setMirrorPosition(glm::vec3 p);
 				void setMirrorNormal(glm::vec3 n);
 
-				glm::mat4 reflectionMatrix();
+				glm::mat4 reflectionMatrix(glm::vec3 reflectDist = glm::vec3());
 				glm::mat4 modelMatrix();
+
+				glm::vec4 getNormal() const;
+				glm::vec3 getPos() const;
 
 				void render(bool writeDepth = false);
 

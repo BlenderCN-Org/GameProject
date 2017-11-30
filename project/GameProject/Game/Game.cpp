@@ -131,6 +131,7 @@ Game::Game(CEngine* _engine)
 	matLocationGBuff = gBufferShader->getShaderUniform("worldMat");
 	selectedLocGBuff = gBufferShader->getShaderUniform("selectedColor");
 	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
+	clipPlane = gBufferShader->getShaderUniform("clipPlane");
 
 	camPath.init(&camInput);
 	camPath.followPaths(true);
@@ -183,8 +184,8 @@ Game::Game(CEngine* _engine)
 
 	shadowMap = gRenderEngine->createFrameBuffer();
 
-	fbci.width = 1024 * 8;
-	fbci.height = 1024 * 8;
+	fbci.width = 1024 * 4;
+	fbci.height = 1024 * 4;
 
 	fbci.useDepth = true;
 	fbci.nrColorBuffers = 0;
@@ -359,8 +360,8 @@ void Game::render() {
 
 	int index = 0;
 
-	gBuffer->resolveToScreen(index);
-	gBuffer->resolveAllToScreen();
+	//gBuffer->resolveToScreen(index);
+	//gBuffer->resolveAllToScreen();
 
 	int tex = 0;
 	gBufferBlit->useShader();
@@ -374,9 +375,7 @@ void Game::render() {
 
 	glm::vec3 lightDir = sunMoonDir;
 
-	//lightDir = glm::vec3(0.5f, 2, 2);
-
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -100, 20);
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -50, 10);
 	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix;
 
@@ -400,11 +399,11 @@ void Game::render() {
 	gRenderEngine->activeTexture(3);
 	shadowMap->bindAttachment(1);
 
+	gRenderEngine->bindDefaultFrameBuffer();
 	engine->renderFullQuad();
 
 	gRenderEngine->activeTexture(0);
 
-	gRenderEngine->bindDefaultFrameBuffer();
 	gameGui->render();
 
 }
@@ -433,6 +432,7 @@ void Game::renderScene() {
 	gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
 
 	mesh->bind();
 	mesh->render();
@@ -454,13 +454,50 @@ void Game::renderScene() {
 	mirror->render(true);
 	gRenderEngine->forceWriteDepth(false);
 
+	// reflect the sky
+	skyDomeShader->useShader();
+	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
+
+	glm::mat4 mat = glm::transpose(glm::translate(glm::mat4(), camera.getPos() - glm::vec3(0, 1, 0)));
+
+	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &mat);
+	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
+
+	glm::vec4 pos = glm::vec4(camera.getPos(), 1.0F);// *mirror->reflectionMatrix();
+
+	glm::vec3 dir = glm::reflect(camInput.direction(), glm::vec3(mirror->getNormal()));
+
+	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &pos);
+	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &mirror->getNormal());
+
+	skyDomeShader->bindData(skydomeSunMoon, UniformDataType::UNI_FLOAT3, &sunMoonDir);
+
+	gRenderEngine->depthMask(false);
+
+	skyDome->render();
+
+	gRenderEngine->depthMask(true);
+
+
 	// render reflected scene
 	glm::mat4 mirrorMat = mirror->reflectionMatrix();
+	glm::vec4 normal = mirror->getNormal();
+	//normal.w = 20;
+
 	gBufferShader->useShader();
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &normal);
 
 	mesh->bind();
+	mesh->render();
+
+	//mirrorMat = mirror->reflectionMatrix();
+	normal = mirror->getNormal();
+	//normal.w = -20;
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(-20, 0, 0))));
+	//gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
+	//gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &normal);
 	mesh->render();
 
 	gRenderEngine->setStencilTest(false);
@@ -469,15 +506,13 @@ void Game::renderScene() {
 
 void Game::renderShadowMap() {
 
-	gRenderEngine->updateViewPort(1024 *8, 1024 *8);
+	gRenderEngine->updateViewPort(1024 *4, 1024 *4);
 	shadowMap->bind();
 	shadowMap->clear();
 
 	glm::vec3 lightDir = sunMoonDir;
 
-	//lightDir = glm::vec3(0.5f, 2, 2);
-
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -100, 20);
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -50, 10);
 	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
@@ -489,6 +524,13 @@ void Game::renderShadowMap() {
 
 	mesh->bind();
 	mesh->render();
+
+	//depthModelMatrix = glm::transpose(glm::translate(glm::mat4(), glm::vec3(-20, 0, 0)));
+	//depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+	//
+	//shadowShader->bindData(shadowMVP, UniformDataType::UNI_MATRIX4X4, &depthMVP);
+	//mesh->render();
+
 
 	gRenderEngine->enableCulling(false, false);
 

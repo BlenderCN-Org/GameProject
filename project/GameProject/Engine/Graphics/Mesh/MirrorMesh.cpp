@@ -70,14 +70,14 @@ namespace Engine {
 				normal = n;
 			}
 
-			glm::mat4 MirrorMesh::reflectionMatrix() {
+			glm::mat4 MirrorMesh::reflectionMatrix(glm::vec3 reflectDist) {
 
 				glm::mat4 mat(1.0F);
 
 				float a = normal.x;
 				float b = normal.y;
 				float c = normal.z;
-				float d = glm::distance(glm::vec3(), pos);
+				float d = glm::distance(glm::vec3(reflectDist), pos);
 
 				mat[0][0] = 1.0F - 2.0F * a*a;	mat[0][1] = -2.0F * a*b;	    mat[0][2] = -2.0F * a*c;	    mat[0][3] = -2.0F * a*d;
 				mat[1][0] = -2.0F * a*b;       mat[1][1] = 1.0F - 2.0F * b*b;	mat[1][2] = -2.0F * b*c;	    mat[1][3] = -2.0F * b*d;
@@ -89,6 +89,14 @@ namespace Engine {
 
 			glm::mat4 MirrorMesh::modelMatrix() {
 				return rotMat;
+			}
+
+			glm::vec4 MirrorMesh :: getNormal() const {
+				return glm::vec4(normal.x, normal.y, normal.z, glm::distance(glm::vec3(), pos));
+			}
+
+			glm::vec3 MirrorMesh::getPos() const {
+				return pos;
 			}
 
 			void MirrorMesh::render(bool writeDepth) {
