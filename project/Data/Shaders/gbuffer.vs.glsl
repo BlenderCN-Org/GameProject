@@ -2,7 +2,11 @@
 
 layout(location = 0) in vec3 vertexPos;
 layout(location = 1) in vec2 vertexUv;
-layout(location = 2) in vec4 vertexColor;
+layout(location = 5) in ivec4 vertexColor;
+
+//layout(location = 4) in vec4 vertexWeights;
+//layout(location = 5) in vec4 vertexIndex;
+
 
 layout(location = 0) out vec2 fragUv;
 layout(location = 1) out vec3 pos;

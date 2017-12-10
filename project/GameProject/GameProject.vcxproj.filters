@@ -135,9 +135,6 @@
     <ClCompile Include="Engine\Graphics\Gui\ScrollBar.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\Mesh\StaticMesh.cpp">
-      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CameraInput.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -157,6 +154,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Mesh\Mesh.cpp">
+      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,9 +266,6 @@
     <ClInclude Include="Engine\Core\Allocator.hpp">
       <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Mesh\StaticMesh.hpp">
-      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Game\CameraInput.hpp">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
@@ -288,6 +291,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Interfaces\IReflected.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Formats\Formats.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Mesh\Mesh.hpp">
+      <Filter>Source Files\Engine\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Interfaces\IAssetManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AssetManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Interfaces\ICMesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

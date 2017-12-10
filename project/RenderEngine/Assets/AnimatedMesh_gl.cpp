@@ -6,6 +6,8 @@ void AnimatedMesh_gl::release() {}
 
 void AnimatedMesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {}
 
+void AnimatedMesh_gl::setMeshData(void* data, size_t size, DataLayout* layouts, unsigned char numLayouts) {}
+
 float AnimatedMesh_gl::getRadius() {
 	return 0.0f;
 }

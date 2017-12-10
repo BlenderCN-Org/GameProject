@@ -19,6 +19,8 @@ public:
 	virtual void release();
 
 	virtual void setMeshData(void* data, size_t size, MeshDataLayout layout);
+	virtual void setMeshData(void* data, size_t size, DataLayout* layouts, unsigned char numLayouts);
+
 	virtual float getRadius();
 
 	virtual void bind();

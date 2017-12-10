@@ -101,9 +101,13 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
 
+	assetManager = new AssetManager();
+
 }
 
 CEngine::~CEngine() {
+
+	delete assetManager;
 
 	depthWriteShader->release();
 	fullQuad->release();
@@ -125,6 +129,15 @@ CEngine::~CEngine() {
 
 void CEngine::registerDataParser(Interfaces::IDataParser* dataParser, DataParsersTypes parserType) {
 	dataParsers[parserType].push_back(dataParser);
+}
+
+bool CEngine::setAssetDataFolder(const char* folderPath) {
+	bool success = false;
+	if (System::folderExists(folderPath)) {
+		gAssetDataPath = folderPath;
+		success = true;
+	}
+	return success;
 }
 
 const bool CEngine::isRunning() const {
@@ -177,4 +190,8 @@ void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {
 void CEngine::renderFullQuad() {
 	fullQuad->bind();
 	fullQuad->render();
+}
+
+Interfaces::IAssetManager* CEngine::getAssetManager() const {
+	return assetManager;
 }

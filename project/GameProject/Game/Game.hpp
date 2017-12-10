@@ -5,10 +5,11 @@
 #include "CameraInput.hpp"
 #include "Camera.hpp"
 #include "CameraPath.hpp"
+#include "Player.hpp"
 
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
-#include "../Engine/Graphics/Mesh/StaticMesh.hpp"
+#include "../Engine/Graphics/Mesh/Mesh.hpp"
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 #include "../Engine/Graphics/SkyDome.hpp"
 
@@ -44,9 +45,11 @@ private:
 	Camera camera;
 	CameraPath camPath;
 
+	Player* player;
+
 	glm::mat4 vpMat;
 
-	Engine::Graphics::Mesh::StaticMesh* mesh;
+	Engine::Graphics::Mesh::CMesh* mesh;
 	Engine::Graphics::Mesh::MirrorMesh* mirror;
 	SkyDome* skyDome;
 

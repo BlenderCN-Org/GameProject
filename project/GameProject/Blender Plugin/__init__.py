@@ -64,7 +64,8 @@ from bpy.types import (Panel,
                        )
 
 versions = [("VERSION_1_0", "Version 1.0 (Basic mesh only)", "File version 1.0 (Export basic mesh data, vertex and normals)"),
-			("VERSION_1_1", "Version 1.1 (Skeleton only)", "File version 1.1 (Export only skeletal information, bone position and parent relation )")
+			("VERSION_1_1", "Version 1.1 (Skeleton only)", "File version 1.1 (Export only skeletal information, bone position and parent relation )"),
+			("VERSION_2_0", "Version 2.0 (Mesh with animations)", "File version 2.0 (Export mesh with skeletal information and animations)")
 ]
 
 IOOBJOrientationHelper = orientation_helper_factory("IOOBJOrientationHelper", axis_forward='-Z', axis_up='Y')

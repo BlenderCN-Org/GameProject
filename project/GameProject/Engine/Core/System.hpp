@@ -20,6 +20,7 @@ namespace Engine {
 		void pollCpuUsage();
 
 		bool fileExists(const char* fileName);
+		bool folderExists(const char* dirName);
 
 		int getLogicalProcessorCount();
 

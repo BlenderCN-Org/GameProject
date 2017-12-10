@@ -46,8 +46,10 @@ Game::Game(CEngine* _engine)
 
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
-	mesh = new Engine::Graphics::Mesh::StaticMesh();
-	mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
+	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
+
+	//mesh = new Engine::Graphics::Mesh::CMesh();
+	//mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
 	gameGui = new Engine::Graphics::CGui();
 	gameGui->setVisible(true);
 
@@ -66,7 +68,6 @@ Game::Game(CEngine* _engine)
 	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	infoLabel->setVisible(true);
 	infoLabel->setText("test");
-
 
 	gameGui->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
@@ -134,7 +135,7 @@ Game::Game(CEngine* _engine)
 	clipPlane = gBufferShader->getShaderUniform("clipPlane");
 
 	camPath.init(&camInput);
-	camPath.followPaths(true);
+	camPath.followPaths(false);
 
 	skyDome = new SkyDome();
 

@@ -3,6 +3,8 @@
 
 /// Internal Includes
 
+#include "../../Interfaces/ICMesh.hpp"
+
 /// External Includes
 #include <RenderEngine/IMesh.hpp>
 
@@ -12,16 +14,19 @@ namespace Engine {
 	namespace Graphics {
 		namespace Mesh {
 
-			class StaticMesh {
+			class CMesh : public Interfaces::ICMesh {
 			
 			public:
-				StaticMesh();
-				virtual ~StaticMesh();
+				CMesh();
+				virtual ~CMesh();
 
+				IMesh* getIMesh() const;
 				void loadMesh(const char* file);
 
-				void bind();
-				void render();
+				virtual bool hasAnimations();
+
+				virtual void bind();
+				virtual void render();
 
 			private:
 

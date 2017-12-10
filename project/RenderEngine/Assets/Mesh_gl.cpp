@@ -35,6 +35,63 @@ struct Vertex9 {
 	float r, g, b, a;
 };
 
+int layoutSize(DataLayout &layout) {
+
+	switch (layout.dataType) {
+		case LayoutDataType::POSITION:
+			return 3 * sizeof(float);
+		case LayoutDataType::UV:
+			return 2 * sizeof(float);
+		case LayoutDataType::NORMAL:
+			return 3 * sizeof(float);
+		case LayoutDataType::COLOR:
+			return 4 * sizeof(float);
+		case LayoutDataType::WEIGHT:
+			return 4 * sizeof(float);
+		case LayoutDataType::INDEX:
+			return 4 * sizeof(int);
+		case LayoutDataType::INVALID:
+			return 0;
+		default:
+			throw "invalid DataType";
+			break;
+	}
+}
+
+int layoutElemetCount(DataLayout &layout) {
+
+	switch (layout.dataType) {
+		case LayoutDataType::POSITION:
+			return 3;
+		case LayoutDataType::UV:
+			return 2;
+		case LayoutDataType::NORMAL:
+			return 3;
+		case LayoutDataType::COLOR:
+			return 4;
+		case LayoutDataType::WEIGHT:
+			return 4;
+		case LayoutDataType::INDEX:
+			return 4;
+		case LayoutDataType::INVALID:
+			return 0;
+		default:
+			throw "invalid DataType";
+			break;
+	}
+}
+
+int layoutStride(DataLayout* layout, int size) {
+
+	int stride = 0;
+
+	for (int i = 0; i < size; i++) {
+		stride += layoutSize(layout[i]);
+	}
+
+	return stride;
+}
+
 void Mesh_gl::init(MeshPrimitiveType ptype) {
 	primitiveType = ptype;
 	usesIndexBuffer = false;
@@ -89,13 +146,13 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 	else if (primitiveType == MeshPrimitiveType::POINT)
 		meshPrimitive = GL_POINTS;
 
-	
+
 	tInfo.data = data;
 	tInfo.size = size;
 	tInfo.reallocated = false;
 
 	auto fn = [&]() {
-		
+
 		if (dataLayout == VERT_UV) {
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
@@ -110,8 +167,7 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 			// uv in location 1
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex5), (void*)(sizeof(GLfloat) * 3));
-		}
-		else if (dataLayout == VERT_UV_COL) {
+		} else if (dataLayout == VERT_UV_COL) {
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 			glBufferData(GL_ARRAY_BUFFER, tInfo.size, tInfo.data, GL_STATIC_DRAW);
@@ -161,8 +217,7 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 			glm::vec3 v2 = glm::vec3(v.x, v.y, v.z);
 			radius = glm::max(radius, glm::distance(v2, glm::vec3(0.0f)));
 		}
-	}
-	else if(layout == VERT_UV_COL) {
+	} else if (layout == VERT_UV_COL) {
 		if (activeThread == getThreadId()) {
 			fn();
 		} else {
@@ -185,6 +240,73 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 	}
 }
 
+void attribData(DataLayout& layout, int stride, int &offset) {
+
+	if (layout.dataType != LayoutDataType::INVALID) {
+		unsigned char attribLoc = static_cast<unsigned char>(layout.dataType);
+		int attribSize = layoutElemetCount(layout);
+
+		glEnableVertexAttribArray(attribLoc);
+		size_t o = offset;
+		int type = GL_FLOAT;
+		if (layout.dataType == LayoutDataType::INDEX) {
+			type = GL_INT;
+		}
+
+		glVertexAttribPointer(attribLoc, attribSize, type, GL_FALSE, stride, (void*)(o));
+
+		offset += layoutSize(layout);
+	}
+}
+
+void Mesh_gl::setMeshData(void* data, size_t size, DataLayout* layouts, unsigned char numLayouts) {
+
+	tInfo.data = data;
+	tInfo.size = size;
+	tInfo.reallocated = false;
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+	glBufferData(GL_ARRAY_BUFFER, tInfo.size, tInfo.data, GL_STATIC_DRAW);
+
+	glBindVertexArray(vertexArrayObject);
+
+	int stride = layoutStride(layouts, numLayouts);
+	int offset = 0;
+
+	for (unsigned char i = 0; i < numLayouts; i++) {
+
+		attribData(layouts[i], stride, offset);
+	}
+
+	vertexCount = (GLsizei)size / stride;
+	meshPrimitive = GL_TRIANGLES;
+
+	// vertex in location 0
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+	//
+	//// uv in location 1
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(GLfloat) * 3));
+	//
+	//// colors in location 2
+	//glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(GLfloat) * 3));
+	//
+	//// normals in location 3
+	//glEnableVertexAttribArray(3);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(GLfloat) * 3));
+	//
+	//// weights in location 4
+	//glEnableVertexAttribArray(4);
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(GLfloat) * 3));
+	//
+	//// index in location 5
+	//glEnableVertexAttribArray(5);
+	//glVertexAttribPointer(1, 4, GL_INT, GL_FALSE, stride, (void*)(sizeof(GLfloat) * 3));
+}
+
 float Mesh_gl::getRadius() {
 	return radius;
 }
@@ -199,17 +321,18 @@ void Mesh_gl::bind() {
 }
 
 void Mesh_gl::render() {
+	if (vertexCount > 0) {
+		if (activeThread == getThreadId()) {
+			if (usesIndexBuffer) {
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	if (activeThread == getThreadId()) {
-		if (usesIndexBuffer) {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-			glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
+				glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0);
+			} else {
+				glDrawArrays(meshPrimitive, 0, vertexCount);
+			}
 		} else {
-			glDrawArrays(meshPrimitive, 0, vertexCount);
+			// only render thread may render object
 		}
-	} else {
-		// only render thread may render object
 	}
 }
 

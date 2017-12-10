@@ -4,8 +4,11 @@
 #include "Core/LibraryLoader.hpp"
 #include "Core/Console.hpp"
 #include "Interfaces/IDataParser.hpp"
+#include "Interfaces/IAssetManager.hpp"
 #include "Physics/PhysicsEngine.hpp"
 #include "Utils/MemoryBuffer.hpp"
+
+#include "AssetManager.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -45,6 +48,8 @@ public:
 	//	}
 	//}
 
+	bool setAssetDataFolder(const char* folderPath);
+
 	const bool isRunning() const;
 
 	void update(const float dt);
@@ -57,12 +62,15 @@ public:
 
 	void renderFullQuad();
 
+	Interfaces::IAssetManager* getAssetManager() const;
+
 private:
 
 	Core::Library renderEngineLib;
 	Core::Console* console;
 	IRenderEngine* renderEngine;
 	IWindow* gameWindow;
+	AssetManager* assetManager;
 
 	std::map<DataParsersTypes, std::vector<Interfaces::IDataParser*>> dataParsers;
 

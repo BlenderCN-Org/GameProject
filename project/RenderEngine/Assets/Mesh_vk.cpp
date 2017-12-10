@@ -6,6 +6,8 @@ void Mesh_vk::release() {}
 
 void Mesh_vk::setMeshData(void * data, size_t size, MeshDataLayout layout) {}
 
+void Mesh_vk::setMeshData(void* data, size_t size, DataLayout* layouts, unsigned char numLayouts) {}
+
 float Mesh_vk::getRadius() {
 	return 0;
 }

@@ -1,7 +1,7 @@
 
 /// Internal Includes
 #include "../Graphics.hpp"
-#include "StaticMesh.hpp"
+#include "Mesh.hpp"
 #include "../../Utils/MemoryBuffer.hpp"
 
 /// External Includes
@@ -202,7 +202,7 @@ namespace Engine {
 						Triangle t = triangles[i];
 
 						glm::vec4 c1(1), c2(1), c3(1);
-						
+
 						if (bf->useVColors) {
 							c1 = glm::vec4(colors[t.v1]);
 							c2 = glm::vec4(colors[t.v2]);
@@ -273,33 +273,51 @@ namespace Engine {
 
 
 
-			StaticMesh::StaticMesh() : mesh(nullptr) {
+			CMesh::CMesh() : mesh(nullptr) {
 				mesh = gRenderEngine->createMesh();
 				mesh->init(MeshPrimitiveType::TRIANGLE);
 			}
 
-			StaticMesh::~StaticMesh() {
+			CMesh::~CMesh() {
 				if (mesh) {
 					mesh->release();
 				}
 			}
 
-			void StaticMesh::loadMesh(const char* file) {
-				uint32_t dataSize = 0;
-				void* data = AssetLib::fileToMemory(file, dataSize);
-
-				void* vertData = createVertUVData(data, dataSize);
-				delete data;
-
-				mesh->setMeshData(vertData, dataSize, MeshDataLayout::VERT_UV_COL);
-				delete vertData;
+			IMesh* CMesh::getIMesh() const {
+				return mesh;
 			}
 
-			void StaticMesh::bind() {
+			void CMesh::loadMesh(const char* file) {
+				uint32_t dataSize = 0;
+
+				std::string path = "";
+
+				if (gAssetDataPath != nullptr) {
+					path = gAssetDataPath;
+				}
+
+				path += file;
+
+				void* data = AssetLib::fileToMemory(path.c_str(), dataSize);
+				if (data) {
+					void* vertData = createVertUVData(data, dataSize);
+					delete data;
+
+					mesh->setMeshData(vertData, dataSize, MeshDataLayout::VERT_UV_COL);
+					delete vertData;
+				}
+			}
+
+			bool CMesh::hasAnimations() {
+				return false;
+			}
+
+			void CMesh::bind() {
 				mesh->bind();
 			}
 
-			void StaticMesh::render() {
+			void CMesh::render() {
 				mesh->render();
 			}
 

@@ -108,7 +108,18 @@ namespace Engine {
 			return (int)counterVal.largeValue;
 		}
 
-		
+
+		bool folderExists(const char* dirName) {
+			DWORD attribs = GetFileAttributesA(dirName);
+			if (attribs == INVALID_FILE_ATTRIBUTES) {
+				return false;
+			}
+			if (attribs & FILE_ATTRIBUTE_DIRECTORY) {
+				return true;
+			}
+			return false;
+		}
+
 #endif
 	}
 }

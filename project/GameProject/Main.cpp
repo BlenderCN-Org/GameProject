@@ -5,8 +5,6 @@
 
 #include "ExceptionHandling.hpp"
 
-//#include <Memory\MemoryMan.hpp>
-
 #include <conio.h>
 
 #include "Engine/Engine.hpp"
@@ -21,7 +19,6 @@
 #include "Game/Game.hpp"
 
 int main(int argc, char* argv[]) {
-	//InitMemoryManagement();
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #if _DEBUG
@@ -43,6 +40,8 @@ int main(int argc, char* argv[]) {
 	unsigned int start = clock();
 
 	CEngine* e = new CEngine();
+
+	e->setAssetDataFolder("E:/GameProjectAssets/");
 
 	Engine::Input::Input* in = Engine::Input::Input::GetInput();
 
@@ -78,7 +77,6 @@ int main(int argc, char* argv[]) {
 
 	delete e;
 	renderDoc.unloadLibrary();
-	//ReleaseMemoryManagement();
 
 	return 0;
 }
