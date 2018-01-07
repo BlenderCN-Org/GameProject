@@ -34,7 +34,8 @@ const vec3 moon2 = vec3(0.5, 0.5, 0.5);
 vec3 sky(in vec3 light, in vec3 rd) {
     vec3 col = vec3(0);
          
-	if(rd.y < 0.0){
+	//if(rd.y < 0.0)
+	{
 	// Sky with haze		
 	
 	float t = time;
@@ -73,5 +74,8 @@ void main()
 	
 	fragmentColor = vec4(sky(light, normalize(cameraPos - pos)), 1.0); 
 	normalColor = vec4(norm, 1.0);
-	worldPos = vec4(pos * 1000, 1.0);
+	
+	vec3 dir = normalize(pos - cameraPos);
+	
+	worldPos = vec4(dir * 1000, 1.0);
 }

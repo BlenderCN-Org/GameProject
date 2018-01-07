@@ -10,6 +10,7 @@ namespace Engine {
 		const uint16_t MODEL_DATA_TYPE_ID = 0x0001;
 
 		struct GenericHeader {
+			char tag[4];
 			uint16_t version;
 			uint16_t dataType;
 		};
@@ -36,11 +37,14 @@ namespace Engine {
 				uv < list < & flags
 				weitghts[4] < list < & bones
 				weitghtsInd[4] < list < & bones
+			--- bone name list --- < list
+				nameLength
+				name[nameLength]
 			---- bone info ---- < list
 				boneId
+				boneNameId
 				parentBone
-				startPos
-				endPos
+				localBindPose
 			---- anim info ---- < list
 				animId
 				numKeyFrames
@@ -65,10 +69,9 @@ namespace Engine {
 				};
 
 				struct BoneInfo {
-					uint8_t boneId;
-					uint8_t parentBone;
-					float boneStart[3];
-					float boneEnd[3];
+					uint16_t boneId;
+					uint16_t parentBone;
+					float localBindPose[16];
 				};
 
 				struct AnimationInfo {
@@ -78,9 +81,9 @@ namespace Engine {
 				};
 
 				struct KeyFrame {
-					float position[3];
-					float rotation[3];
-					float scale[3];
+					uint16_t boneId;
+					uint16_t parentBone;
+					float transform[16];
 				};
 
 			}

@@ -2,8 +2,8 @@
 #define STATIC_MESH_HPP
 
 /// Internal Includes
-
 #include "../../Interfaces/ICMesh.hpp"
+#include "Animation.hpp"
 
 /// External Includes
 #include <RenderEngine/IMesh.hpp>
@@ -20,16 +20,20 @@ namespace Engine {
 				CMesh();
 				virtual ~CMesh();
 
+				void setAnimationData(Animation* anim);
+
 				IMesh* getIMesh() const;
 				void loadMesh(const char* file);
 
 				virtual bool hasAnimations();
+				virtual Interfaces::ICAnimation* getAnimData();
 
 				virtual void bind();
 				virtual void render();
 
 			private:
 
+				Animation* anim;
 				IMesh* mesh;
 
 			};

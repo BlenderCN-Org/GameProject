@@ -28,8 +28,14 @@ namespace Engine {
 
 		const size_t strlen_s(const char* str);
 
-		float percentageInRange(uint32_t min, uint32_t max, uint32_t value);
-		float percentageInRange(size_t min, size_t max, size_t value);
+		template<typename T>
+		float percentageInRange(T min, T max, T value) {
+
+			float mmm = float(max - min);
+			float vmm = float(value - min);
+
+			return (vmm / mmm);
+		}
 
 	}
 }

@@ -44,12 +44,11 @@ class Mesh2_0Flags(ctypes.Union):
                 ("asbyte", c_uint8)]
 
 def writeHeader(fw, version):
+	fw(bytes("MESH", "utf-8"))
 	if(version == "VERSION_1_0"):
-		fw(bytes("MESH", "utf-8"))
 		fw(struct.pack("H", 1))
 		fw(struct.pack("H", 0))
 	if(version == "VERSION_1_1"):
-		fw(bytes("MESH", "utf-8"))
 		fw(struct.pack("H", 1))
 		fw(struct.pack("H", 1))
 	if(version == "VERSION_2_0"):
@@ -67,14 +66,21 @@ def createTriangleList(tessfaces):
 	return triList
 
 def verexWeight(vertex):
+	
 	numGroups = len(vertex.groups)
 	
+	if numGroups == 0:
+		return [[0,0,0,0], [0,0,0,0]];
+
 	w = []
 	ind = []
 	for i in range(numGroups):
 		w.append(vertex.groups[i].weight)
 		ind.append(vertex.groups[i].group)
 	
+	norm = [float(i)/sum(w) for i in w]
+	w = norm
+
 	while(len(w) > 4):
 		idx = w.index(min(w))
 		w.pop(idx)
@@ -84,8 +90,11 @@ def verexWeight(vertex):
 		w = norm
 
 	while(len(w) < 4):
-		w.append(0)
+		w.append(0.0)
 		ind.append(0)
+		
+		norm = [float(i)/sum(w) for i in w]
+		w = norm
 
 	return [w, ind]
 
@@ -285,6 +294,16 @@ def writeVersion_1_0(context, fw, objects, matrix):
 	for data in dataObjectList:
 		fw(data)
 
+def vGroupIndexToName(indexList, vGroups):
+
+	idxNameMap = []
+
+	for index in indexList:
+		for i in index:
+			idxNameMap.extend([i, vGroups[i].name])
+	
+	return idxNameMap
+
 def createBoneList_2_0(bones, indexList):
 
 	# all bone index we use
@@ -297,7 +316,7 @@ def createBoneList_2_0(bones, indexList):
 				cnt += 1
 				print(bones[i])
 	
-	print(cnt)
+	#print(cnt)
 	
 	# list of bones with id, parent index, and pointer to self
 	boneList = [[i ,0, b] for i, b in enumerate(bones2) ]
@@ -311,6 +330,55 @@ def createBoneList_2_0(bones, indexList):
 	return boneList
 
 
+def createBoneList_2_1(bones, vGroups, vIdx):
+
+	# map vertex index to bone name
+	boneNames = []
+	for index in vIdx:
+		for i in index:
+			v = [i, vGroups[i].name]
+			if(v not in boneNames):
+				boneNames.append(v)
+
+	# generate full skeleton from parent info
+	skeleton = []
+	for index, name in boneNames:
+		if bones[name].name not in skeleton:
+			skeleton.append(bones[name].name)
+			for p in bones[name].parent_recursive:
+				if p.name not in skeleton:
+					skeleton.append(p.name)
+
+	# store group index, skeleton bone index, name and bone
+	boneList = [[0 ,i , name, bones[name]] for i, name in enumerate(skeleton) ]
+	bDict = {}
+
+	for vb in boneNames:
+		boneList[skeleton.index(vb[1])][0] = vb[0]
+		bDict[vb[0]] = skeleton.index(vb[1])
+
+	return [boneList, bDict]
+
+def parentIndex(boneList, currentBone):
+	index = currentBone[1]
+
+	parentBone = currentBone[3].parent
+
+	if parentBone is not None:
+		parentName = parentBone.name
+		for bone in boneList:
+			if bone[2] == parentName:
+				index = boneList.index(bone)
+				break
+
+	return index
+
+def getPoseBoneLocalMatrix(poseBone):
+    if poseBone.parent is None:
+        return poseBone.matrix
+    else:
+        return poseBone.parent.matrix.inverted() * poseBone.matrix
+
 def writeVersion_2_0(context, fw, objects, matrix):
 	print("Writing version 2.0")
 	dataObjectList = []
@@ -323,7 +391,21 @@ def writeVersion_2_0(context, fw, objects, matrix):
 			data = bytearray()
 			print("a mesh")
 
+			rig = obj.find_armature()
+			armPos = None
+			if rig is not None:
+				armPos = rig.data.pose_position
+				rig.data.pose_position = 'REST'
+			
+			context.scene.update()
+
 			mesh = obj.to_mesh(context.scene, True, 'PREVIEW', calc_tessface=False)
+			
+			if rig is not None:
+				rig.data.pose_position = armPos
+			
+			context.scene.update()
+
 			mesh.transform(matrix * obj.matrix_world)
 			
 			meshData = createMesh(mesh)
@@ -339,7 +421,9 @@ def writeVersion_2_0(context, fw, objects, matrix):
 			uvlist = meshData[3]
 			trilist = meshData[4]
 			weightlist = meshData[5]
-			weightindexlist = meshData[6]
+			weightindexlist = meshData[6] # vertex group index
+
+
 
 			if(len(vcollist) > 0):
 				useVColors = True
@@ -358,13 +442,18 @@ def writeVersion_2_0(context, fw, objects, matrix):
 			print(flags.asbyte)
 
 			numBones = 0
-			bones = []
+			
+			numAnumations = len(bpy.data.actions)
 
-			arm = obj.find_armature()
-			if(arm is not None):
-				arm = arm.data.copy()
+			bones = []
+			bDict = []
+
+			if(rig is not None):
+				arm = rig.data.copy()
 				arm.transform(matrix * obj.matrix_world)
-				bones = createBoneList_2_0(arm.bones, weightindexlist)
+				a = createBoneList_2_1(arm.bones, obj.vertex_groups, weightindexlist)
+				bones = a[0]
+				bDict = a[1]
 				numBones = len(bones)
 
 			print("Nr bones ", numBones)
@@ -372,7 +461,7 @@ def writeVersion_2_0(context, fw, objects, matrix):
 			#data.extend(struct.pack("????", useVNormals, useVColors, useVUV, padding))
 			data.extend(struct.pack("B", flags.asbyte))
 			data.extend(struct.pack("B", numBones))
-			data.extend(struct.pack("H", 0))
+			data.extend(struct.pack("H", numAnumations))
 			data.extend(struct.pack("II", len(vertlist), len(trilist)))
 			
 			print(len(vertlist))
@@ -397,23 +486,106 @@ def writeVersion_2_0(context, fw, objects, matrix):
 				for w in weightlist:
 					data.extend(struct.pack("ffff", w[0], w[1], w[2], w[3] ))
 				for i in weightindexlist:
-					data.extend(struct.pack("IIII", i[0], i[1], i[2], i[3] ))
+					data.extend(struct.pack("IIII", bDict[i[0]], bDict[i[1]], bDict[i[2]], bDict[i[3]] ))
 
 			for tri in trilist:
 				data.extend(struct.pack("III", tri[0], tri[1], tri[2]))
 
 			dataObjectList.append(data)
 			bpy.data.meshes.remove(mesh)
-			if(arm is not None):
+			if(rig is not None):
 
+				dict = {}
+				nameCount = 0
+
+				print("Bone info")
 				for b in bones:
-					id = b[0]
-					pInd = b[1]
-					v_tail = b[2].tail_local.xyz
-					v_head = b[2].head_local.xyz
-					print(b[2].name, ", ", v_tail.x, v_tail.y, v_tail.z)
-					data.extend(struct.pack("BBfff", id, pInd, v_head.x, v_head.y, v_head.z))
-					data.extend(struct.pack("fff", v_tail.x, v_tail.y, v_tail.z))
+					name = b[2]
+					length = len(name)
+					data.extend(struct.pack("H", length))
+					data.extend(bytes(name, "utf-8"))
+					dict[name] = nameCount;
+					nameCount += 1
+
+				print("Bindpose")
+				for b in bones:
+					id = b[1]
+					pInd = parentIndex(bones, b)
+					#v_tail = b[2].tail_local.xyz
+					#v_head = b[2].head_local.xyz
+					#print(b[2].name, ", ", v_tail.x, v_tail.y, v_tail.z)
+					data.extend(struct.pack("HHHH", id, dict[b[2]], pInd, 0))
+					#data.extend(struct.pack("ffffff",v_head.x, v_head.y, v_head.z, v_tail.x, v_tail.y, v_tail.z))
+					
+					if b[3].parent is not None:
+						pMat = b[3].parent.matrix_local
+						mat = pMat.inverted() * b[3].matrix_local
+					else:
+						mat = b[3].matrix_local
+					#print(b[2], "\n", mat, "\n")
+					print(b[2], "\n", mat)
+					v1 = mat[0]
+					v2 = mat[1]
+					v3 = mat[2]
+					v4 = mat[3]
+					data.extend(struct.pack("ffff", v1.x, v1.y, v1.z, v1.w))
+					data.extend(struct.pack("ffff", v2.x, v2.y, v2.z, v2.w))
+					data.extend(struct.pack("ffff", v3.x, v3.y, v3.z, v3.w))
+					data.extend(struct.pack("ffff", v4.x, v4.y, v4.z, v4.w))
+
+
+				print("posebone")
+
+				for action in bpy.data.actions:
+
+					rig.animation_data.action = action
+					frameStart = action.frame_range[0]
+					frameEnd = action.frame_range[1]
+
+					numFrames = frameEnd - frameStart
+
+					data.extend(struct.pack("HH", 0, int(numFrames)))
+					print(numFrames)
+
+					for i in range(int(frameStart), int(frameEnd)):
+						bpy.context.scene.frame_set(i)
+						print(action.name, " ", i)
+
+						pose = rig.pose
+
+						for b in bones:
+							poseBone = pose.bones[b[2]]
+
+							mat = None
+
+							#print("*"*5, " ", poseBone.name, " ", "*"*5)
+
+							if poseBone.parent is not None:
+								pMat = poseBone.parent.matrix
+								mat = pMat.inverted() * poseBone.matrix
+								#mat = poseBone.matrix
+								#print("parent inv ", poseBone.parent.matrix.inverted())
+							else:
+								mat = matrix * poseBone.matrix
+
+							#mat = matrix * mat
+
+							#print("mat ", mat)
+
+							#print(poseBone.name, "\n", mat, "\n")
+
+							id = b[1]
+							pInd = parentIndex(bones, b)
+							data.extend(struct.pack("HH", id, pInd))
+
+							v1 = mat[0]
+							v2 = mat[1]
+							v3 = mat[2]
+							v4 = mat[3]
+							data.extend(struct.pack("ffff", v1.x, v1.y, v1.z, v1.w))
+							data.extend(struct.pack("ffff", v2.x, v2.y, v2.z, v2.w))
+							data.extend(struct.pack("ffff", v3.x, v3.y, v3.z, v3.w))
+							data.extend(struct.pack("ffff", v4.x, v4.y, v4.z, v4.w))
 
 				bpy.data.armatures.remove(arm)
 		else:
@@ -445,6 +617,9 @@ def writeMesh(context, objects, filepath, version, global_matrix):
 		write(context, fw, objects, version, global_matrix)
 	except:
 		print("export failed!")
+		print('-'*60)
+		traceback.print_exc(file=sys.stdout)
+		print('-'*60)
 	finally:
 		del fw
 		file.close()

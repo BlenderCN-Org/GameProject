@@ -12,7 +12,6 @@ namespace Engine {
 		public:
 
 			virtual ICMesh* loadMesh(const char* model) = 0;
-
 		};
 	}
 }

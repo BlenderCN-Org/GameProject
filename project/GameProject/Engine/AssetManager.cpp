@@ -8,11 +8,15 @@
 /// External Includes
 #include <AssetLib/AssetLib.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 /// Std Includes
 #include <vector>
+#include <functional>
 
 namespace Engine {
+
+	typedef Graphics::Mesh::Animation::BindPoseInfo BindPoseInfo;
 
 	Interfaces::ICMesh* AssetManager::loadMesh(const char* model) {
 
@@ -28,24 +32,9 @@ namespace Engine {
 			return loadedAssets[mdl];
 		}
 
-		uint32_t size = 0;
-		void* data = AssetLib::fileToMemory(mdl.c_str(), size);
-
 		Interfaces::ICMesh* mesh = nullptr;
 
-		if (data) {
-			Core::MemoryBuffer memBuff;
-			memBuff.setData(data, size);
-			delete data;
-
-			Formats::GenericHeader header = *memBuff.returnBytes<Formats::GenericHeader>(sizeof(Formats::GenericHeader));
-
-			if (header.version == 0x0100) {
-				mesh = loadMeshV2_0(memBuff);
-			}
-
-			memBuff.deleteBuffer();
-		}
+		mesh = loadMeshV2_0(mdl.c_str());
 
 		if (mesh) {
 			loadedAssets[mdl] = mesh;
@@ -54,58 +43,93 @@ namespace Engine {
 		return mesh;
 	}
 
-	Interfaces::ICMesh* AssetManager::loadMeshV2_0(Core::MemoryBuffer& memBuff) {
+	// static functions
 
-		typedef Formats::ModelFormat::version_2_0::MeshInfo MI;
-		typedef Formats::ModelFormat::version_2_0::BoneInfo BI;
-		typedef Formats::ModelFormat::version_2_0::KeyFrame KF;
-		typedef Formats::ModelFormat::version_2_0::AnimationInfo AI;
 
-		MI mi = *memBuff.returnBytes<MI>(sizeof(MI));
-		bool uv = (mi.meshFlags & Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_UV) == Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_UV;
-		bool normal = (mi.meshFlags & Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_NORMALS) == Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_NORMALS;
-		bool vColors = (mi.meshFlags & Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_VCOLORS) == Formats::ModelFormat::version_2_0::MESH_INFO_FLAG_USE_VCOLORS;
+	void deleteBindposeChilds(BindPoseInfo* info) {
 
-		glm::vec3* positions = memBuff.returnBytes<glm::vec3>(mi.numVerts * sizeof(glm::vec3));
+		for (size_t i = 0; i < info->numChildren; i++) {
+			deleteBindposeChilds(&info->children[i]);
+		}
 
-		glm::vec3* normals = normal ? memBuff.returnBytes<glm::vec3>(sizeof(glm::vec3) * mi.numVerts) : nullptr;
-		glm::vec4* colors = vColors ? memBuff.returnBytes<glm::vec4>(sizeof(glm::vec4) * mi.numVerts) : nullptr;
-		glm::vec2* uvs = uv ? memBuff.returnBytes<glm::vec2>(sizeof(glm::vec2) * mi.numVerts) : nullptr;
+		delete[] info->children;
 
-		glm::vec4* weights = (mi.numBones > 0) ? memBuff.returnBytes<glm::vec4>(sizeof(glm::vec4) * mi.numVerts) : nullptr;
-		glm::ivec4* wIndex = (mi.numBones > 0) ? memBuff.returnBytes<glm::ivec4>(sizeof(glm::ivec4) * mi.numVerts) : nullptr;
+	};
 
-		Formats::Triangle* triangles = (Formats::Triangle*)memBuff.returnBytes<Formats::Triangle>(sizeof(Formats::Triangle) * mi.numTris);
 
-		BI* bi = (mi.numBones > 0) ? memBuff.returnBytes<BI>(sizeof(BI) * mi.numBones) : nullptr;
+	BindPoseInfo createBoneHierarchy(AssetLib::SkeletonBone* org, bool bindPose, AssetLib::JointKeyFrames* frames, AssetLib::Model &mdl) {
 
-		// worst case, can be optimized;
+		BindPoseInfo b;
+
+		b.boneIndex = org->boneIndex;
+
+		size_t len = strlen(org->boneName);
+
+		if (bindPose) {
+			b.transformMatrix = AssetLib::toType<glm::mat4>(org->transform);
+		} else {
+
+			int index = 0;
+
+			for (size_t i = 0; i < mdl.numBones; i++) {
+				if (frames[i].boneIndex == org->boneIndex) {
+					b.transformMatrix = AssetLib::toType<glm::mat4>(frames[i].transforms[17].transform);
+				}
+			}
+		}
+
+		b.numChildren = org->numChildren;
+
+		if (org->children) {
+
+			b.children = new BindPoseInfo[b.numChildren];
+
+			for (size_t i = 0; i < b.numChildren; i++) {
+				b.children[i] = createBoneHierarchy(&org->children[i], bindPose, frames, mdl);
+			}
+		} else {
+			b.children = nullptr;
+		}
+
+		return b;
+
+
+	}
+
+	// private functions
+
+	Interfaces::ICMesh* AssetManager::loadMeshV2_0(const char* file) {
+
+		AssetLib::Model mdl = AssetLib::loadModel(file);
+
 		uint32_t size = sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec4) + sizeof(glm::vec4);
-		size *= (mi.numTris * 3);
+		size *= (mdl.numFaces * 3);
 		void* data = malloc(size);
 
 		Core::MemoryPusher memPush;
 		memPush.setBuffer(data, size);
 
 		auto fn = [&](uint32_t idx) {
-			memPush.pushData(&positions[idx], sizeof(glm::vec3));
-			if (uv) {
-				memPush.pushData(&uvs[idx], sizeof(glm::vec2));
+			glm::vec3 pos = AssetLib::toType<glm::vec3>(mdl.verices[idx]);
+
+			memPush.pushData(&pos, sizeof(glm::vec3));
+			if (mdl.hasUv) {
+				memPush.pushData(&mdl.uvs[idx], sizeof(glm::vec2));
 			}
-			if (normal) {
-				memPush.pushData(&normals[idx], sizeof(glm::vec3));
+			if (mdl.hasNormals) {
+				memPush.pushData(&mdl.normals[idx], sizeof(glm::vec3));
 			}
-			if (vColors) {
-				memPush.pushData(&colors[idx], sizeof(glm::vec4));
+			if (mdl.hasColors) {
+				memPush.pushData(&mdl.vertexColors[idx], sizeof(glm::vec4));
 			}
-			if (mi.numBones > 0) {
-				memPush.pushData(&weights[idx], sizeof(glm::vec4));
-				memPush.pushData(&wIndex[idx], sizeof(glm::vec4));
+			if (mdl.hasWeights) {
+				memPush.pushData(&mdl.vertexWeights[idx], sizeof(glm::vec4));
+				memPush.pushData(&mdl.vertexIndex[idx], sizeof(glm::vec4));
 			}
 		};
 
-		for (size_t i = 0; i < mi.numTris; i++) {
-			Formats::Triangle t = triangles[i];
+		for (size_t i = 0; i < mdl.numFaces; i++) {
+			AssetLib::Triangle t = mdl.faces[i];
 
 			fn(t.v1);
 			fn(t.v2);
@@ -126,19 +150,19 @@ namespace Engine {
 
 		fn2(count, LayoutDataType::POSITION);
 		count++;
-		if (uv) {
+		if (mdl.hasUv) {
 			fn2(count, LayoutDataType::UV);
 			count++;
 		}
-		if (normal) {
+		if (mdl.hasNormals) {
 			fn2(count, LayoutDataType::NORMAL);
 			count++;
 		}
-		if (vColors) {
+		if (mdl.hasColors) {
 			fn2(count, LayoutDataType::COLOR);
 			count++;
 		}
-		if (mi.numBones > 0) {
+		if (mdl.hasWeights) {
 			fn2(count, LayoutDataType::WEIGHT);
 			count++;
 			fn2(count, LayoutDataType::INDEX);
@@ -147,13 +171,80 @@ namespace Engine {
 
 		Graphics::Mesh::CMesh* mesh = new Graphics::Mesh::CMesh();
 
-		IMesh* mdl = mesh->getIMesh();
+		IMesh* meshData = mesh->getIMesh();
 
-		mdl->setMeshData(data, memPush.getOffset(), layout, count + 1);
+		meshData->setMeshData(data, memPush.getOffset(), layout, count + 1);
 
-		delete data;
+		if (mdl.skeleton) {
+
+			AssetLib::JointKeyFrames* frames = mdl.animations[1].joint;
+
+			std::function<BindPoseInfo(AssetLib::SkeletonBone*, bool)> copy = [&](AssetLib::SkeletonBone* org, bool other) -> BindPoseInfo {
+
+				BindPoseInfo b;
+
+				b.boneIndex = org->boneIndex;
+
+				size_t len = strlen(org->boneName);
+
+				if (!other) {
+					b.transformMatrix = AssetLib::toType<glm::mat4>(org->transform);
+				} else {
+
+					int index = 0;
+
+					for (size_t i = 0; i < mdl.numBones; i++) {
+						if (frames[i].boneIndex == org->boneIndex) {
+							b.transformMatrix = AssetLib::toType<glm::mat4>(frames[i].transforms[0].transform);
+						}
+					}
+				}
+
+				b.numChildren = org->numChildren;
+
+				if (org->children) {
+
+					b.children = new BindPoseInfo[b.numChildren];
+
+					for (size_t i = 0; i < b.numChildren; i++) {
+						b.children[i] = copy(&org->children[i], other);
+					}
+				} else {
+					b.children = nullptr;
+				}
+
+				return b;
+			};
+
+			uint32_t numBones = mdl.numBones;
+			BindPoseInfo* poseInfo = new BindPoseInfo;
+
+			bool bindPose = true;
+			*poseInfo = createBoneHierarchy(mdl.skeleton, bindPose, frames, mdl);
+
+			Graphics::Mesh::Animation* anim = new Graphics::Mesh::Animation;
+
+			anim->setBindPoseData(poseInfo, numBones);
+
+			deleteBindposeChilds(poseInfo);
+
+			bindPose = false;
+			*poseInfo = createBoneHierarchy(mdl.skeleton, bindPose, frames, mdl);
+
+			anim->setRawAnim(poseInfo);
+
+			deleteBindposeChilds(poseInfo);
+
+			delete poseInfo;
+
+			mesh->setAnimationData(anim);
+
+		}
+
+		free(data);
 
 		return mesh;
 	}
+
 
 }

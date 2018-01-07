@@ -1,198 +1,59 @@
-legend:
-	<D> = Done
-	<W> = Working
-	<V> = Verify done
-	- = thing to do
-	<M> = might not happen
-
-Todo:
-
-Today:
-
-	Project:
-		- Create GameObject class
-			- Create baseComponent
-				- define all components in game
-		- define "world" file format
-			- define ways to store components and gameobject templates (prefabs)
-	RenderEngine:
-
-	Editor:
-		
-List:
-
-	Project:
-
-		<W> Divide into multiple projects
-			<W> Memory
-			- Console
-			- Threading
-			- Scripts
-		
-		<w> Create gameobjects where meshes and states are stored
-			<W> position state, animation state, etc
-		<W> Export uv, normals, and colors with mesh exporter for blender
-			<W> UV coords
-			<D> Normals
-			<W> Colors
-
-		- Gui stuff:
-			- Gui focus control
-			<M> Gui quad instances (might be better with immediate)
-			- Gui controls
-				- TextArea scrollable text, (horz & vert)
-				- Buttons
-				- CheckBox
-				- Lists
-				- ComboBox
-				- Tree
-				- ColorChooser
-				- ModelPreview
-				- Simple TextField
-				- Label
-				- ProgressBar
-				- Image/Icon
-			- Text
-				- formatting
-					- per character color
-					- numbers
-					- strings
-					- textures(icons) ?
-
-		- Scripting:
-			- lexer and parser
-			- codegen? (bytecode)
-			- scripting in console
-			- various batch jobs
-				- like world interaction
-				- background jobs
-
-		- Threading:
-			- add sync point. stall main thread until all worker threads are done etc
-			- add more assets to task loading.
-			- add more tasks, like save to file, actions, other data processing, physics, script execution.
-
-		- Formats:
-			- Custom format
-			- DataPacking and unpacking
-
-	
-	RenderEngine:
-		- Fix fullscreen mode
-		<V> Fix crash if mesh data size is equal to zero (Render Engine)
-		<V> Fix errors if mesh data is not set
-		- Support for unicode characters (font map)
-		- Add buffer interface (buffers are used for vertices, indices, texture data, etc)
-		<M> Make font scale on resolution (not sure if needed)
 
 
-	Editor:
-		- Figure out why editorGameBitmap was to small and caused a crash. (rare)
-			- easy fix (check array size with pixel size)
-		- Add objects to game world
-			- Drag and drop from object window
-			- Double click in object window
-			
-		- Select file to load
-		<W> Add dialogs for mesh preview, text editor, object properites etc.
-			- Mesh previewer
-			<W> Text editor
-				<D> Plain Text
-				- Hex view
-				- Line numbers
-				- Syntax Highlighting
-			- Object Properties
-			- Node Editor
-				- Materials
-				- Shaders
-				- Scripts
-				- Work together with Text Editor
-			<W> Game Settings
-			<W> Add Item Dialogs
-		<W> Dark Theme for Editor
-			- ToolBar
+/*************************************
+*									 *
+*				TODO's				 *
+*									 *
+**************************************/
 
-Done Stuff:
+- Fix editor
 
-	Project:
-		<D> Have a simple demo world that can be loaded and changed offline
-		<D> Add requested loading of meshes.
-		<D> Make the main menu togglable after game has started.
-		<D> Make managers global. So that no stupid core access is needed. maybe exception for memory manager? (since it need to be sorta thread safe)
-		<D> Remove "release" from non interface and non singelton instances
-		<D> Disable movement while in main menu
-		<D> Make asset manager use and load custom model format
-		<D> Added export orientation settings for blender export script
-		<D> Displaying fps numbers
-		<D> Main menu loaded from data file (master file)
-		<D> Main menu not visible ever while in editor mode
-		<D> Access to renderEngine
-		<D> Ray from mouse cursor
+- Decide on a C++ Exporter for Custom Format
 
-	RenderEngine:
+- Physics
+	- Gravity
+	- Constraints
+	- Asset loading
 
-	Editor:
-		<D> Remove win32Host
-			<D> Render and resize in wpf editor
-			<D> Handle input events
-			<D> Cleanup win32Host code
-			<D> Post events to editorWindow. Then post to game using editor->poll() to call input callbacks
-			<D> give editor access to render engine
-			<D> move pixelbuffer to editor
-		<D> Fix delete
-		<D> Next need to make gamewindow borderless and auto resize to editor window.
-		<D> Add panels for scene, object list.
-		<D> Allow editor to add entries and such to main menu
-			<D> Define callback types for adding, removing and editing menu form
-				<D> callback for adding form
-				<D> callback for removing form
-				<D> callback for editing form
-				<D> callback to get form info
-			<D> Make Editor add entries
-			<D> Make Editor delete entry
-			<D> Make Editor get form info
-			<D> Make Editor change entry
+- Cloth simulation
+	- Add info to model format
+		- New model version number
 
-Other Notes:
+- Decide on editor plugin support
+	- Custom Windows
+	- Custom data loaders
+	- more tools
 
-Window notes:
+- Animation player
 
-		Drag window with single user stuff dock (dock have border to move window)
-		DragWindow -> grid -> DockPanel (UC) -> User stuff
+- Script language
+	- Custom or existing
+	- Console script reflection
 
-		Drag window with multiple user stuff dock (window have border for move)
-		DockPanel have no border, DockPanel1 and DockPanel2 have 
-		DragWindow -> grid -> DockPanel (UC) -> DockPanel1 -> User stuff
-											 -> DockPanel2 -> User stuff
+- Multiple threads
 
-Loader implementation (threadable)
-	-textures
-	-models
-	-animations
-	etc.
+- Ik solver
+
+- Shader node language
+	- Implement in RenderEngine
+
+- Gui stuff
+
+- Other stuff
+	- Unicode Fonts
+	- Dual Quaternion Skinning
 
 
-Asset
-	// allways (base asset)
-	uint32_t dataSize;
-	void* dataPtr;
+/*************************************
+*									 *
+*			  DONE STUFF			 *
+*									 *
+**************************************/
 
-	uint32_t assetID;
-	enum assetType;
-	enum assetState; (loaded, unloaded, etc)
-
-	// asset specific
-	int32_t width, height;	// texure only
-	int32_t nrKeyFrames;	// animation only
-	int32_t nrBones;		// animation only
-
-
-
-Asset creation
-	mainThread creates asset object.
-	Task is created to move data to asset object.
-		task copies data (from file, memory or network)
-		task notify asset object it is host complete (CPU side)
-		task terminates and worker thread waits for new task
-	mainThread check if asset object is complete when rendering or other parts of code needs it
-		if not complete nothing should happen
+- Clean up model importer/loader code
+	- Fix x64 Build errors
+		- Assetlib
+		- GameProject
+	- Fix memory leaks
+	- Load animations from file
+		- export animations from blender

@@ -19,7 +19,7 @@ namespace Engine {
 
 	private:
 
-		Interfaces::ICMesh * loadMeshV2_0(Core::MemoryBuffer& memBuff);
+		Interfaces::ICMesh* loadMeshV2_0(const char* fileName);
 
 		std::map<std::string, Interfaces::ICMesh*> loadedAssets;
 

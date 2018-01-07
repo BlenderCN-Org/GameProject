@@ -178,8 +178,9 @@ namespace Engine {
 				int* tag = (int*)h->tag;
 
 				int* meshTag = (int*)"MESH";
+				int* skelTag = (int*)"SKEL";
 
-				if (*tag != *meshTag) {
+				if (*tag != *meshTag && *tag != *skelTag) {
 					//gConsole->print("Invalid mesh file\n");
 					size = 0;
 					return nullptr;
@@ -273,7 +274,7 @@ namespace Engine {
 
 
 
-			CMesh::CMesh() : mesh(nullptr) {
+			CMesh::CMesh() : anim(nullptr), mesh(nullptr) {
 				mesh = gRenderEngine->createMesh();
 				mesh->init(MeshPrimitiveType::TRIANGLE);
 			}
@@ -282,7 +283,15 @@ namespace Engine {
 				if (mesh) {
 					mesh->release();
 				}
+				if (anim) {
+					delete anim;
+				}
 			}
+
+			void CMesh::setAnimationData(Animation* _anim) {
+				anim = _anim;
+			}
+
 
 			IMesh* CMesh::getIMesh() const {
 				return mesh;
@@ -310,7 +319,15 @@ namespace Engine {
 			}
 
 			bool CMesh::hasAnimations() {
-				return false;
+				bool hasAnim = false;
+				if (anim) {
+					hasAnim = true;
+				}
+				return hasAnim;
+			}
+
+			Interfaces::ICAnimation* CMesh::getAnimData() {
+				return anim;
 			}
 
 			void CMesh::bind() {

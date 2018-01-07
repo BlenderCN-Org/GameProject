@@ -37,6 +37,7 @@ public:
 
 	virtual int getShaderUniform(char* uniformName) = 0;
 	virtual void bindData(int location, UniformDataType type, void* data) = 0;
+	virtual void bindDataArray(int location, UniformDataType type, void* data, unsigned int count) = 0;
 };
 
 #endif

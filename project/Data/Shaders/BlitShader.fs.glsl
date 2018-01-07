@@ -9,6 +9,8 @@ uniform sampler2D textureNorm;
 uniform sampler2D textureWPos;
 uniform sampler2D textureShadow;
 
+uniform vec3 eyePos;
+
 uniform mat4 depthMVP;
 
 vec3 lightColor = vec3(1, 1, 1);
@@ -34,13 +36,19 @@ void main()
 
 	float dist = distance(pos.xyz, lPos.xyz);
 	
-	if( dist < 1000.0)
-	{
+	float fr = 1;
 	
-		if(shad.r < shadowPos.z)
-		{
-			shading = 0.5;
-		}
+	if(distance(pos.xyz, eyePos) < 50 )
+	{
+		fr = dot(normalize(eyePos - pos), norm);
+	}
+	
+	if( dist < 900.0)
+	{
+		//if(shad.r < shadowPos.z)
+		//{
+		//	shading = 0.5;
+		//}
 	
 		float d = lPos.w;
 		
@@ -66,5 +74,8 @@ void main()
 	//letThereBeLight = clamp(letThereBeLight, 0.2, 1.0);
 	//vec4(vec3(shading), 1.0);
 	//vec4(sPos, 1.0);
-	fragmentColor =  (color * letThereBeLight * shading); // pow(color, vec4(vec3(0.4545), 1.0));
+	
+	color = mix(vec4(1, 0, 0, 0), color, fr);
+	
+	fragmentColor =  color;//(color * letThereBeLight * shading); // pow(color, vec4(vec3(0.4545), 1.0));
 }

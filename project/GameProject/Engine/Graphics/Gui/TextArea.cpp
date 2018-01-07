@@ -102,7 +102,7 @@ namespace Engine {
 
 				std::string maxLinCnt = std::to_string(vectorSize);
 
-				for (size_t i = 0; i < elementsPerScreen; i++) {
+				for (int i = 0; i < elementsPerScreen; i++) {
 					if (selectedIndex + i >= vectorSize) {
 						break;
 					}

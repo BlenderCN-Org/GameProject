@@ -47,9 +47,12 @@ Game::Game(CEngine* _engine)
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
 	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
+	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/untitled.dae");
+	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadDea("Data/Meshes/untitled.dae");
 
 	//mesh = new Engine::Graphics::Mesh::CMesh();
 	//mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
+	//mesh->loadMesh("Data/Meshes/newFmat.skel");
 	gameGui = new Engine::Graphics::CGui();
 	gameGui->setVisible(true);
 
@@ -133,6 +136,7 @@ Game::Game(CEngine* _engine)
 	selectedLocGBuff = gBufferShader->getShaderUniform("selectedColor");
 	refMatLocationGBuff = gBufferShader->getShaderUniform("reflectMat");
 	clipPlane = gBufferShader->getShaderUniform("clipPlane");
+	skinArray = gBufferShader->getShaderUniform("skinMatrices");
 
 	camPath.init(&camInput);
 	camPath.followPaths(false);
@@ -182,6 +186,7 @@ Game::Game(CEngine* _engine)
 	blitTexWPos = gBufferBlit->getShaderUniform("textureWPos");
 	blitTextShadow = gBufferBlit->getShaderUniform("textureShadow");
 	blitDepthMvp = gBufferBlit->getShaderUniform("depthMVP");
+	blitEyePos = gBufferBlit->getShaderUniform("eyePos");
 
 	shadowMap = gRenderEngine->createFrameBuffer();
 
@@ -346,7 +351,7 @@ void Game::update(float dt) {
 
 void Game::render() {
 
-	renderShadowMap();
+	//renderShadowMap();
 	int w = 0;
 	int h = 0;
 	Input::Input::GetInput()->getWindowSize(w, h);
@@ -391,6 +396,8 @@ void Game::render() {
 
 	gBufferBlit->bindData(blitDepthMvp, UniformDataType::UNI_MATRIX4X4, &depthBiasMVP);
 
+	gBufferBlit->bindData(blitEyePos, UniformDataType::UNI_FLOAT3, &camera.getPos());
+
 	gRenderEngine->activeTexture(0);
 	gBuffer->bindAttachment(0);
 	gRenderEngine->activeTexture(1);
@@ -411,8 +418,14 @@ void Game::render() {
 
 void Game::renderSky() {
 	skyDomeShader->useShader();
+
+	glm::mat4 m;
+	m = glm::translate(m, camera.getPos());
+	m = glm::transpose(m);
+
+
 	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
-	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), camera.getPos() - glm::vec3(0, 1, 0))));
+	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &m);
 	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
 	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &camera.getPos());
 	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &camInput.direction());
@@ -435,10 +448,20 @@ void Game::renderScene() {
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 	gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
 
+	glm::mat4 arr[200];
+	if (mesh->hasAnimations()) {
+		unsigned int numJoints = 0;
+		mesh->getAnimData()->updateAnimation(0);
+		void* data = mesh->getAnimData()->getCurrentAnimation(numJoints);
+		memcpy(arr, data, sizeof(glm::mat4) * numJoints);
+	}
+	gBufferShader->bindDataArray(skinArray, UniformDataType::UNI_MATRIX4X4, arr, 200);
+
+
 	mesh->bind();
 	mesh->render();
 
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(-20, 0, 0))));
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(0, 0, 0))));
 	mesh->bind();
 	mesh->render();
 
@@ -507,7 +530,7 @@ void Game::renderScene() {
 
 void Game::renderShadowMap() {
 
-	gRenderEngine->updateViewPort(1024 *4, 1024 *4);
+	gRenderEngine->updateViewPort(1024 * 4, 1024 * 4);
 	shadowMap->bind();
 	shadowMap->clear();
 

@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 	printf("Press 1 to attach RenderDoc, any other key to ignore!\n");
 	int c = _getch();
 	if (c == 49) {
-		if (renderDoc.loadLibrary("C:/Program Files/RenderDoc/RenderDoc.dll")) {
+		if (renderDoc.loadLibrary("C:/Program Files/RenderDoc/x86/RenderDoc.dll")) {
 			printf("RenderDoc successfully loaded!\nGPU debugging avalible!\n");
 		} else {
 			printf("Failed to load RenderDoc!\nGPU debugging not avaible!\n");

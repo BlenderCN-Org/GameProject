@@ -75,6 +75,8 @@ private:
 	int refMatLocationGBuff;
 	int selectedLocGBuff;
 	int clipPlane;
+	int skinArray;
+
 
 	int skydomeVpLocation;
 	int skydomeMatLocation;
@@ -91,6 +93,7 @@ private:
 	int blitTexWPos;
 	int blitTextShadow;
 	int blitDepthMvp;
+	int blitEyePos;
 
 	int shadowMVP;
 

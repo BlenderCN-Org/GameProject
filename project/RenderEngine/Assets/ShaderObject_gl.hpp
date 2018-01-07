@@ -19,6 +19,7 @@ public:
 
 	virtual int getShaderUniform(char* uniformName);
 	virtual void bindData(int location, UniformDataType type, void* data);
+	virtual void bindDataArray(int location, UniformDataType type, void* data, unsigned int count);
 
 private:
 

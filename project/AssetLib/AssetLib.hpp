@@ -1,9 +1,14 @@
 #ifndef ASSETLIB_HPP
 #define ASSETLIB_HPP
 
+/// Imternal Includes
+#include "ModelStucts.hpp"
+
+/// Std Includes
 #include <cstdint>
 
 namespace AssetLib {
+	
 	// loads an obj file
 	void* loadWavefrontOBJ(const char* fileName, uint32_t &dataSize);
 
@@ -12,6 +17,8 @@ namespace AssetLib {
 
 	// loads data from any file into memory
 	void* fileToMemory(const char* fileName, uint32_t &dataSize);
+
+	Model loadModel(const char* fileName);
 }
 
 #endif

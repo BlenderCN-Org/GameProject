@@ -17,7 +17,7 @@ void main()
 	fragUv = vertexUv;
 	pos = (vec4(vertexPos, 1.0) * worldMat).xyz;
 	gl_Position = viewProjMatrix * vec4(pos, 1.0);
-	gl_ClipDistance[0] = dot(plane, gl_Position);
-	norm = normalize(-vertexPos);
+	gl_ClipDistance[0] = 0;//dot(plane, gl_Position);
+	norm = normalize(-pos);
 	
 }

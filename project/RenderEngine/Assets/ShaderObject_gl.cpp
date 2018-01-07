@@ -144,3 +144,8 @@ void ShaderObject_gl::bindData(int location, UniformDataType type, void* data) {
 			break;
 	}
 }
+
+void ShaderObject_gl::bindDataArray(int location, UniformDataType type, void* data, unsigned int count) {
+	float* d = (float*)data;
+	glProgramUniformMatrix4fv(shaderProgram, location, count, GL_FALSE, d);
+}

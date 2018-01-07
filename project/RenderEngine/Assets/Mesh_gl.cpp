@@ -250,10 +250,12 @@ void attribData(DataLayout& layout, int stride, int &offset) {
 		size_t o = offset;
 		int type = GL_FLOAT;
 		if (layout.dataType == LayoutDataType::INDEX) {
-			type = GL_INT;
+			glVertexAttribIPointer(attribLoc, attribSize, GL_INT, stride, (void*)(o));
+		} else {
+			glVertexAttribPointer(attribLoc, attribSize, type, GL_FALSE, stride, (void*)(o));
 		}
 
-		glVertexAttribPointer(attribLoc, attribSize, type, GL_FALSE, stride, (void*)(o));
+
 
 		offset += layoutSize(layout);
 	}

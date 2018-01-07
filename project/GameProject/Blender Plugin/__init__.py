@@ -107,7 +107,7 @@ class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 	use_selection = BoolProperty(
 			name="Selection Only",
 			description="Export selected objects only",
-			default=False,
+			default=True,
 			)
 
 	export_meshes_flag = BoolProperty(
@@ -134,7 +134,7 @@ class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
             default=1.0,
             )
 			
-	version = EnumProperty(items=versions, options=set(), default="VERSION_1_0")
+	version = EnumProperty(items=versions, options=set(), default="VERSION_2_0")
 
 	def execute(self, context):
 		print('Exporting file', self.filepath)
@@ -152,6 +152,8 @@ class ExportMesh(bpy.types.Operator, ExportHelper, IOOBJOrientationHelper):
 						axis_conversion(to_forward=self.axis_forward,
 										to_up=self.axis_up,
 										).to_4x4())
+
+		#global_matrix = Matrix()
 
 		keywords["global_matrix"] = global_matrix
 

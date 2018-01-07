@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\CustomMesh">
+      <UniqueIdentifier>{92a41edc-9e3a-4917-b746-4b27af491ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collada">
+      <UniqueIdentifier>{7a59b8f8-7bb3-4420-a392-96fb23792e9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjLoader.cpp">
@@ -24,10 +30,34 @@
     <ClCompile Include="FileLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModelStructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collada\ColladaLoader.cpp">
+      <Filter>Source Files\Collada</Filter>
+    </ClCompile>
+    <ClCompile Include="Tinyxml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetLib.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelStucts.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoaderHelpers.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomMesh\MeshFormat.hpp">
+      <Filter>Source Files\CustomMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Collada\ColladaLoader.hpp">
+      <Filter>Source Files\Collada</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
