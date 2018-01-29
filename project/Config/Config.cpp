@@ -37,7 +37,7 @@ void Section::addBoolean(std::string _name, bool value) {
 	settingsMap[_name] = v;
 }
 
-int Section::getInteger(std::string _name, int def) {
+int Section::getInteger(std::string _name, int def) const {
 	int retVal = def;
 
 	if (settingsMap.count(_name)) {
@@ -49,7 +49,7 @@ int Section::getInteger(std::string _name, int def) {
 	return retVal;
 }
 
-std::string Section::getString(std::string _name, std::string def) {
+std::string Section::getString(std::string _name, std::string def) const {
 	std::string retVal = def;
 
 	if (settingsMap.count(_name)) {
@@ -61,7 +61,7 @@ std::string Section::getString(std::string _name, std::string def) {
 	return retVal;
 }
 
-bool Section::getBoolean(std::string _name, bool def) {
+bool Section::getBoolean(std::string _name, bool def) const {
 	bool retVal = def;
 
 	if (settingsMap.count(_name)) {
@@ -167,39 +167,43 @@ void Config::addBoolean(std::string section, std::string name, bool value) {
 	sectionMap[section].addBoolean(name, value);
 }
 
-int Config::getInteger(std::string section, std::string name, int def) {
+int Config::getInteger(std::string section, std::string name, int def) const{
 	int retVal = def;
 
 	if (sectionMap.count(section)) {
-		retVal = sectionMap[section].getInteger(name, def);
+		const Section s = getSection(section);
+		retVal = s.getInteger(name, def);
 	}
 
 	return retVal;
 }
 
-std::string Config::getString(std::string section, std::string name, std::string def) {
+std::string Config::getString(std::string section, std::string name, std::string def) const {
 	std::string retVal = def;
 
 	if (sectionMap.count(section)) {
-		retVal = sectionMap[section].getString(name, def);
+		const Section s = getSection(section);
+		retVal = s.getString(name, def);
 	}
 
 	return retVal;
 }
 
-bool Config::getBoolean(std::string section, std::string name, bool def) {
+bool Config::getBoolean(std::string section, std::string name, bool def) const {
 	bool retVal = def;
 
 	if (sectionMap.count(section)) {
-		retVal = sectionMap[section].getBoolean(name, def);
+		const Section s = getSection(section);
+
+		retVal = s.getBoolean(name, def);
 	}
 
 	return retVal;
 }
 
-Section Config::getSection(std::string section) {
+const Section Config::getSection(std::string section) const {
 	// TODO: insert return statement here
-	std::map<std::string, Section>::iterator it;
+	std::map<std::string, Section>::const_iterator it;
 
 	Section s = Section("");
 

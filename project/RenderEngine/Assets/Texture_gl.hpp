@@ -21,6 +21,8 @@ public:
 	virtual void init(int internalComponents, bool compressed);
 	virtual void release();
 
+	virtual void getTextureSize(unsigned int& width, unsigned int& height);
+
 	virtual void setCompressed(bool compression);
 
 	virtual void setTextureData(int width, int height, int components, void* data);

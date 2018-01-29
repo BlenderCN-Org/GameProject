@@ -76,7 +76,9 @@ int main(int argc, char* argv[]) {
 	delete game;
 
 	delete e;
+#if _DEBUG
 	renderDoc.unloadLibrary();
+#endif
 
 	return 0;
 }

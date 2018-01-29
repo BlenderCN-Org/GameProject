@@ -1,9 +1,15 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
+/// Internal Includes
 #include "GameObject.hpp"
 
+/// External Includes
+
+/// Std Includes
 #include <vector>
+
+
 
 class Scene {
 

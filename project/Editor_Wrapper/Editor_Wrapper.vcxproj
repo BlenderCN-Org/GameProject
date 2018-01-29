@@ -171,7 +171,6 @@
     <ClInclude Include="Editor.hpp" />
     <ClInclude Include="EditorWindow.hpp" />
     <ClInclude Include="ExtensionMap.hpp" />
-    <ClInclude Include="IEditor.hpp" />
     <ClInclude Include="Window\MainWindowWrapper.hpp" />
   </ItemGroup>
   <ItemGroup>

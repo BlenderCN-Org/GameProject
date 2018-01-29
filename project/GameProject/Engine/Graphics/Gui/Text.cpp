@@ -134,6 +134,10 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 	}
 }
 
+int Text::getTextWidth() {
+	return width;
+}
+
 int Text::getFontSize() const {
 	return font->getFontSize();
 }

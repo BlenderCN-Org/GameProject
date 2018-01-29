@@ -6,7 +6,7 @@
 *									 *
 **************************************/
 
-- Fix editor
+- Simple Internal Editor
 
 - Decide on a C++ Exporter for Custom Format
 

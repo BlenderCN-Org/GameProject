@@ -15,6 +15,10 @@ namespace Engine {
 
 			Label::~Label() {}
 
+			int Label::calcTextWidth() {
+				return text.getTextWidth();
+			}
+
 			void Label::setText(const Engine::Core::FormattedString& str) {
 				text.setText(str);
 			}
@@ -42,7 +46,7 @@ namespace Engine {
 					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 
 					text.render(textureSlot);
-					
+
 					gRenderEngine->setScissorTest(false);
 
 				}

@@ -101,14 +101,14 @@ namespace Engine {
 
 			void MirrorMesh::render(bool writeDepth) {
 				if (writeDepth == false) {
+					gRenderEngine->colorMask(false, false, false, false);
 					gRenderEngine->setStencilTest(true);
 					gRenderEngine->stencilFunc(FuncConstants::ALWAYS, 0x01, 0xFF);
 					gRenderEngine->stencilOp(StencilOp::KEEP, StencilOp::KEEP, StencilOp::REPLACE);
 					gRenderEngine->stencilMask(0xFF);
-					gRenderEngine->clearStencil();
 					gRenderEngine->depthMask(false);
+					gRenderEngine->clearStencil();
 				}
-				//gRenderEngine->colorMask(false, false, false, false);
 				//glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
 				//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 				//glStencilMask(0xFF); // Write to stencil buffer
@@ -123,7 +123,7 @@ namespace Engine {
 					gRenderEngine->setStencilTest(false);
 					gRenderEngine->stencilMask(0x00);
 					gRenderEngine->depthMask(true);
-					//gRenderEngine->colorMask(true, true, true, true);
+					gRenderEngine->colorMask(true, true, true, true);
 				}
 			}
 

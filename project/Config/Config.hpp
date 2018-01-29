@@ -16,9 +16,9 @@ public:
 	void addInteger(std::string name, int value);
 	void addBoolean(std::string name, bool value);
 
-	int getInteger(std::string name, int def = 0);
-	std::string getString(std::string name, std::string def = "");
-	bool getBoolean(std::string name, bool def = false);
+	int getInteger(std::string name, int def = 0) const;
+	std::string getString(std::string name, std::string def = "") const;
+	bool getBoolean(std::string name, bool def = false) const;
 
 	std::string getName() const;
 
@@ -43,11 +43,11 @@ public:
 	void addInteger(std::string section, std::string name, int value);
 	void addBoolean(std::string section, std::string name, bool value);
 
-	int getInteger(std::string section, std::string name, int def = 0);
-	std::string getString(std::string section, std::string name, std::string def = "");
-	bool getBoolean(std::string section, std::string name, bool def = false);
+	int getInteger(std::string section, std::string name, int def = 0) const;
+	std::string getString(std::string section, std::string name, std::string def = "") const;
+	bool getBoolean(std::string section, std::string name, bool def = false) const;
 
-	Section getSection(std::string section);
+	const Section getSection(std::string section) const;
 
 private:
 

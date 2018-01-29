@@ -66,6 +66,12 @@ void Texture_gl::release() {
 	delete this;
 }
 
+void Texture_gl::getTextureSize(unsigned int& width, unsigned int& height)
+{
+	width = this->width;
+	height = this->height;
+}
+
 void Texture_gl::setCompressed(bool compression) {
 	if (compressTexture == compression) return;
 

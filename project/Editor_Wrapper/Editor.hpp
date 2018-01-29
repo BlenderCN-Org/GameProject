@@ -1,7 +1,7 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-#include "IEditor.hpp"
+#include <GameProject/Engine/Interfaces/IEditor.hpp>
 #include "EditorWindow.hpp"
 
 #include "Window\MainWindowWrapper.hpp"
@@ -18,11 +18,11 @@ namespace Editor_clr {
 		bool hideEditor = false;
 	};
 
-	class Editor_wrp : public IEditor {
+	class Editor_wrp : public Engine::Interfaces::IEditor {
 	public:
 
 		Editor_wrp() {
-			editorStatus = EditorStatus::STOPPED;
+			editorStatus = Engine::Interfaces::EditorStatus::STOPPED;
 		}
 
 		virtual bool initializeEditor(IRenderEngine* re);
@@ -31,9 +31,9 @@ namespace Editor_clr {
 		virtual void startEditor();
 		virtual void stopEditor();
 
-		virtual void registerExtension(int callbackIndex, IExtension<void>* ext);
+		//virtual void registerExtension(int callbackIndex, IExtension<void>* ext);
 
-		virtual EditorStatus getStatus() const;
+		virtual Engine::Interfaces::EditorStatus getStatus() const;
 
 		virtual void update();
 
@@ -41,8 +41,8 @@ namespace Editor_clr {
 
 		virtual void postPixels(uint32_t width, uint32_t height);
 
-		virtual void setAssetManager(IAssetManager* assetMan);
-		virtual void setEditorAccess(IEditorAccess* editAccess);
+		//virtual void setAssetManager(IAssetManager* assetMan);
+		//virtual void setEditorAccess(IEditorAccess* editAccess);
 
 	private:
 
@@ -56,7 +56,7 @@ namespace Editor_clr {
 
 		EditorWindow editWindow;
 
-		EditorStatus editorStatus;
+		Engine::Interfaces::EditorStatus editorStatus;
 
 		IRenderEngine* renderEngine;
 

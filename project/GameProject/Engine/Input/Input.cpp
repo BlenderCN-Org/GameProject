@@ -263,6 +263,15 @@ namespace Engine {
 		void Input::getWindowSize(int & w, int & h) {
 			w = winW;
 			h = winH;
+
+			if (w < 1280) {
+				w = 1280;
+			}
+
+			if (h < 720) {
+				h = 720;
+			}
+
 		}
 
 		void Input::getMousePos(int & x, int & y) {

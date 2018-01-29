@@ -15,6 +15,7 @@ public:
 
 	void setText(const Engine::Core::FormattedString& text);
 
+	int getTextWidth();
 	int getFontSize() const;
 
 	void render(int textureSlot);

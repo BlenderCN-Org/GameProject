@@ -30,16 +30,22 @@ inline std::string readShader(const char *filePath) {
 	fileStream.close();
 	return content;
 }
+
+TemporaryStorage ts(16 * KB);
+
 // @temporary end
 
 Game::Game(CEngine* _engine)
-	: paused(false)
-	, gameGui(nullptr)
+	: gameGui(nullptr)
 	, engine(_engine)
 	, mesh(nullptr)
 	, dtOneSec(0.0F)
 	, fps(0)
-	, fpsCounter(0) {
+	, fpsCounter(0)
+	, batchTmp(nullptr) {
+
+	currentState = GameState::MAIN_MENU;
+	lastState = GameState::MAIN_MENU;
 
 	camInput.init((glm::mat4*)camera.getViewMatrix());
 	camInput.setCam(glm::vec3(5, 1, 0), glm::vec3(-1, 0, 0));
@@ -75,6 +81,46 @@ Game::Game(CEngine* _engine)
 	gameGui->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
 
+	tex = gRenderEngine->createTexture();
+
+	tex->init(4, false);
+
+	const int imgWidth = 500;
+	const int imgHeight = 500;
+
+	uint8_t image[imgHeight * imgWidth * 4];
+
+	int c = 0;
+
+	for (size_t i = 0; i < imgHeight * imgWidth * 4; i += 4) {
+
+		if (i % imgWidth == 0) {
+			c = 0;
+		}
+
+		image[i + 0] = c;
+		image[i + 1] = c;
+		image[i + 2] = c;
+
+
+		c++;
+
+		image[i + 3] = 255;
+	}
+
+	tex->setTextureData(imgWidth, imgHeight, 4, image);
+
+	refTexture = new Engine::Graphics::Texture::Texture2DReference();
+	refTexture->setTexture(tex);
+
+	textureView = new Engine::Graphics::Gui::TextureView();
+	textureView->setAnchorPoint(Engine::Graphics::GuiAnchor::RIGHT);
+	textureView->setSize(300, 300);
+	textureView->setTexture(refTexture);
+	textureView->setVisible(true);
+
+	gameGui->addGuiItem(textureView);
+
 	shader = gRenderEngine->createShaderObject();
 	shader->init();
 
@@ -102,7 +148,7 @@ Game::Game(CEngine* _engine)
 	mirror = new Engine::Graphics::Mesh::MirrorMesh();
 	mirror->setSize(glm::vec2(5, 2));
 
-	FrameBufferCreateInfo fbci{};
+	FrameBufferCreateInfo fbci {};
 
 	fbci.height = 720;
 	fbci.width = 1280;
@@ -141,28 +187,7 @@ Game::Game(CEngine* _engine)
 	camPath.init(&camInput);
 	camPath.followPaths(false);
 
-	skyDome = new SkyDome();
-
-	skyDomeShader = gRenderEngine->createShaderObject();
-	skyDomeShader->init();
-
-	vs = readShader("data/shaders/skydome.vs.glsl");
-	fs = readShader("data/shaders/skydome.fs.glsl");
-
-	skyDomeShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
-	skyDomeShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
-	skyDomeShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
-
-	if (!skyDomeShader->buildShader()) {
-		assert(0 && "shader failed to build");
-	}
-
-	skydomeVpLocation = skyDomeShader->getShaderUniform("viewProjMatrix");
-	skydomeMatLocation = skyDomeShader->getShaderUniform("worldMat");
-	skydomeTimeLoc = skyDomeShader->getShaderUniform("time");
-	skydomeCamPos = skyDomeShader->getShaderUniform("cameraPos");
-	skydomeEyeDir = skyDomeShader->getShaderUniform("eyeDir");
-	skydomeSunMoon = skyDomeShader->getShaderUniform("sunMoonDir");
+	sky = new Sky();
 
 	gBufferBlit = gRenderEngine->createShaderObject();
 	gBufferBlit->init();
@@ -217,9 +242,17 @@ Game::Game(CEngine* _engine)
 
 	shadowMVP = shadowShader->getShaderUniform("depthMVP");
 
+	menu = new MainMenu();
+
+	editor = new Engine::RefObject<Editor>(5.0F);
 }
 
 Game::~Game() {
+
+
+	delete editor;
+
+	delete menu;
 
 	if (mesh) {
 		delete mesh;
@@ -228,10 +261,13 @@ Game::~Game() {
 
 	delete mirror;
 
+	tex->release();
+	delete textureView;
+	delete refTexture;
+
 	shader->release();
 	gBuffer->release();
 	gBufferShader->release();
-	skyDomeShader->release();
 	gBufferBlit->release();
 	shadowMap->release();
 	shadowShader->release();
@@ -243,35 +279,24 @@ Game::~Game() {
 	delete metrixPanel;
 	delete infoLabel;
 	delete panelTexture;
-	delete skyDome;
+	delete sky;
 }
 
 void Game::update(float dt) {
+
+	size_t tUsed = ts.getUsed();
+
+	ts.clear();
+
+	batchTmp = ts.allocate<RenderBatch>(1, 1000, &ts);
+
+	frameObjects.clear();
+
 	engine->update(dt);
+	editor->refUpdate(dt);
+	updateFps(dt);
+
 	gameGui->update(dt);
-	camInput.update(dt);
-	camPath.update(dt);
-
-
-	if (GetAsyncKeyState(VK_F8)) {
-
-		std::string vs = readShader("data/shaders/skydome.vs.glsl");
-		std::string fs = readShader("data/shaders/skydome.fs.glsl");
-
-		skyDomeShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
-		skyDomeShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
-		skyDomeShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, (char*)fs.c_str());
-
-		skyDomeShader->buildShader();
-
-		skydomeVpLocation = skyDomeShader->getShaderUniform("viewProjMatrix");
-		skydomeMatLocation = skyDomeShader->getShaderUniform("worldMat");
-		skydomeTimeLoc = skyDomeShader->getShaderUniform("time");
-		skydomeCamPos = skyDomeShader->getShaderUniform("cameraPos");
-		skydomeEyeDir = skyDomeShader->getShaderUniform("eyeDir");
-		skydomeSunMoon = skyDomeShader->getShaderUniform("sunMoonDir");
-		Sleep(10);
-	}
 
 	if (Input::Input::GetInput()->sizeChange) {
 		int w = 0;
@@ -281,10 +306,39 @@ void Game::update(float dt) {
 		gBuffer->setWindowSize(w, h);
 	}
 
+	//ts.
+
+	bool clear = true;
+
+	ActiveFrameBufferCommand* fbCmd = ts.allocate<ActiveFrameBufferCommand>(1, gBuffer, clear);
+	batchTmp->addCommand(fbCmd);
+
+	//ActiveShaderCommand* asc = ts.allocate<ActiveShaderCommand>(1, gBufferShader);
+	//batchTmp->addCommand(asc);
+
+	switch (currentState) {
+	case GameState::MAIN_MENU:
+		updateMenu(dt);
+		break;
+	case GameState::PLAY:
+		updatePlay(dt);
+		break;
+	case GameState::EDIT:
+		updateEdit(dt);
+		break;
+	case GameState::PAUSE:
+		updatePaused(dt);
+		break;
+	default:
+		break;
+	}
+
 	vpMat = camera.viewProjection();
 
-	dtOneSec += dt;
-	fpsCounter++;
+	camPath.update(dt);
+
+	sky->update(dt);
+
 
 	float x = r * glm::sin(a);
 	float z = r * glm::cos(a);
@@ -294,38 +348,6 @@ void Game::update(float dt) {
 	mirror->setMirrorPosition(posx);
 	mirror->setMirrorNormal(-glm::normalize(posx - glm::vec3(0, 2, 0)));
 	mirror->setSize(glm::vec2(10, 5));
-
-	if (dtOneSec > 1.0F) {
-		fps = fpsCounter;
-		fpsCounter = 0;
-		dtOneSec -= 1.0F;
-
-	}
-
-	skyTime += dt * 0.01F;
-	if (skyTime > 1.0F) {
-		skyTime -= 1.0F;
-	}
-	//skyTime = 0.5F;
-	//a += 0.3F * dt;
-
-
-	const float r = 100.0F;
-	const float PI = glm::pi<float>();
-
-	float s = (glm::abs(glm::sin(PI * skyTime * 2.0F + (PI * 0.5F))) * 1.6F) - 0.6F;
-	float c = glm::cos(PI * skyTime * 2.0F + (PI * 0.5F));
-
-	if (skyTime >= 0.25F && skyTime <= 0.75F) {
-		c = -c;
-	}
-	if (s > 0.0F) {
-		s *= 0.2F;
-	}
-
-	sunMoonDir = glm::vec3(-r * 0.4F, r * s, r * c);
-
-	sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
 
 
 	std::string str = "FPS: " + std::to_string(fps) + "\n";
@@ -337,14 +359,9 @@ void Game::update(float dt) {
 	glm::vec3 dir = camInput.direction();
 	str += "Dir: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ", " + std::to_string(dir.z) + "\n";
 
-	str += "SkyTime: " + std::to_string(skyTime) + "\n";
+	str += "TempUsed: " + std::to_string(tUsed) + " Bytes\n";
 
-	//const float r = 100.0F;
-	//glm::vec3 sunMoonDir(-r * 0.47F, r * sin(glm::pi<float>() * skyTime), r * sin(glm::pi<float>() * skyTime));
-	//
-	//sunMoonDir = normalize(glm::vec3(0) - sunMoonDir);
-	//
-	//str += "Sun: (" + std::to_string(sunMoonDir.x) + ", " + std::to_string(sunMoonDir.y) + ", " + std::to_string(sunMoonDir.z) + "\n";
+	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
 	infoLabel->setText(str.c_str());
 }
@@ -357,10 +374,14 @@ void Game::render() {
 	Input::Input::GetInput()->getWindowSize(w, h);
 	gRenderEngine->updateViewPort(w, h);
 
-	gBuffer->bind();
-	gBuffer->clear();
+	//gBuffer->bind();
+	//gBuffer->clear();
 
 	renderSky();
+
+	batchTmp->executeBatch();
+
+	//renderSky();
 
 	renderScene();
 
@@ -379,7 +400,7 @@ void Game::render() {
 	tex = 3;
 	gBufferBlit->bindData(blitTextShadow, UniformDataType::UNI_INT, &tex);
 
-	glm::vec3 lightDir = sunMoonDir;
+	glm::vec3 lightDir = glm::vec3(1, 0, 0);//sunMoonDir;
 
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -50, 10);
 	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
@@ -414,29 +435,18 @@ void Game::render() {
 
 	gameGui->render();
 
+	auto it = frameObjects.begin();
+	auto eit = frameObjects.end();
+
+	for (it; it != eit; it++) {
+		(*it)->render();
+	}
 }
 
 void Game::renderSky() {
-	skyDomeShader->useShader();
-
-	glm::mat4 m;
-	m = glm::translate(m, camera.getPos());
-	m = glm::transpose(m);
-
-
-	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
-	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &m);
-	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
-	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &camera.getPos());
-	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &camInput.direction());
-
-	skyDomeShader->bindData(skydomeSunMoon, UniformDataType::UNI_FLOAT3, &sunMoonDir);
-
-	gRenderEngine->depthMask(false);
-
-	skyDome->render();
-
-	gRenderEngine->depthMask(true);
+	SkyCommand* sc = ts.allocate<SkyCommand>(1, sky, vpMat, camera.getPos(), camInput.direction(), nullptr);
+	batchTmp->addCommand(sc);
+	//sky->render(vpMat, camera.getPos(), camInput.direction());
 }
 
 void Game::renderScene() {
@@ -457,18 +467,17 @@ void Game::renderScene() {
 	}
 	gBufferShader->bindDataArray(skinArray, UniformDataType::UNI_MATRIX4X4, arr, 200);
 
-
 	mesh->bind();
 	mesh->render();
 
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(0, 0, 0))));
-	mesh->bind();
-	mesh->render();
+	//gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(0, 0, 0))));
+	//mesh->bind();
+	//mesh->render();
 
 	// render mirror
 	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirror->modelMatrix());
 	mirror->render();
-
+	//
 	// stencil test must pass before rendering
 	gRenderEngine->setStencilTest(true);
 	gRenderEngine->stencilFunc(FuncConstants::EQUAL, 0x01, 0xFF);
@@ -479,29 +488,7 @@ void Game::renderScene() {
 	gRenderEngine->forceWriteDepth(false);
 
 	// reflect the sky
-	skyDomeShader->useShader();
-	skyDomeShader->bindData(skydomeVpLocation, UniformDataType::UNI_MATRIX4X4, &vpMat);
-
-	glm::mat4 mat = glm::transpose(glm::translate(glm::mat4(), camera.getPos() - glm::vec3(0, 1, 0)));
-
-	skyDomeShader->bindData(skydomeMatLocation, UniformDataType::UNI_MATRIX4X4, &mat);
-	skyDomeShader->bindData(skydomeTimeLoc, UniformDataType::UNI_FLOAT, &skyTime);
-
-	glm::vec4 pos = glm::vec4(camera.getPos(), 1.0F);// *mirror->reflectionMatrix();
-
-	glm::vec3 dir = glm::reflect(camInput.direction(), glm::vec3(mirror->getNormal()));
-
-	skyDomeShader->bindData(skydomeCamPos, UniformDataType::UNI_FLOAT3, &pos);
-	skyDomeShader->bindData(skydomeEyeDir, UniformDataType::UNI_FLOAT3, &mirror->getNormal());
-
-	skyDomeShader->bindData(skydomeSunMoon, UniformDataType::UNI_FLOAT3, &sunMoonDir);
-
-	gRenderEngine->depthMask(false);
-
-	skyDome->render();
-
-	gRenderEngine->depthMask(true);
-
+	sky->render(vpMat, camera.getPos(), camInput.direction(), &mirror->reflectionMatrix());
 
 	// render reflected scene
 	glm::mat4 mirrorMat = mirror->reflectionMatrix();
@@ -534,7 +521,7 @@ void Game::renderShadowMap() {
 	shadowMap->bind();
 	shadowMap->clear();
 
-	glm::vec3 lightDir = sunMoonDir;
+	glm::vec3 lightDir = glm::vec3(1, 0, 0);// sunMoonDir;
 
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -50, 10);
 	glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
@@ -555,7 +542,62 @@ void Game::renderShadowMap() {
 	//shadowShader->bindData(shadowMVP, UniformDataType::UNI_MATRIX4X4, &depthMVP);
 	//mesh->render();
 
-
 	gRenderEngine->enableCulling(false, false);
+}
+
+/*
+
+Private Functions
+
+*/
+
+void Game::updateFps(float dt) {
+	dtOneSec += dt;
+	fpsCounter++;
+
+	if (dtOneSec > 1.0F) {
+		fps = fpsCounter;
+		fpsCounter = 0;
+		dtOneSec -= 1.0F;
+	}
+}
+
+void Game::updateMenu(float dt) {
+
+	if (menu) {
+		menu->update(dt);
+
+		int pressedIndex = menu->buttonPressed();
+
+		if (pressedIndex == 0) {
+			currentState = GameState::PLAY;
+		} else if (pressedIndex == 1) {
+			currentState = GameState::EDIT;
+		} else if (pressedIndex == 2) {
+			engine->close();
+		}
+
+
+		frameObjects.push_back(menu->getRenderable());
+	}
+
+}
+
+void Game::updatePlay(float dt) {
+
+	camInput.update(dt);
+}
+
+void Game::updateEdit(float dt) {
+	camInput.update(dt);
+
+	(*editor)->update(dt);
+
+	Renderable** rends = (*editor)->renderObjects(1);
+
+	frameObjects.push_back(rends[0]);
+}
+
+void Game::updatePaused(float dt) {
 
 }

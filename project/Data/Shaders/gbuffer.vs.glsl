@@ -47,7 +47,7 @@ void main()
 	
 	vec4 p = (vec4(vPos.xyz, 1.0) * worldMat);
 	pos = p.xyz;
-	vec4 p2 = vec4(pos, 1.0);// * reflectMat;
+	vec4 p2 = vec4(pos, 1.0) * reflectMat;
 	
 	gl_ClipDistance[0] = dot(clipPlane, p);
 	

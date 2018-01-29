@@ -146,6 +146,9 @@
     <Compile Include="EditorWindows\SelectWindow_dropDown.xaml.cs">
       <DependentUpon>SelectWindow_dropDown.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindows\ShaderEditor.xaml.cs">
+      <DependentUpon>ShaderEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventHandler\EventManager.cs" />
     <Compile Include="EditorWindows\GameSettings.xaml.cs">
       <DependentUpon>GameSettings.xaml</DependentUpon>
@@ -214,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindows\DragWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindows\ShaderEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

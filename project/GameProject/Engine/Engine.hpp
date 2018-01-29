@@ -3,6 +3,7 @@
 /// Internal Includes
 #include "Core/LibraryLoader.hpp"
 #include "Core/Console.hpp"
+#include "Core/Settings.hpp"
 #include "Interfaces/IDataParser.hpp"
 #include "Interfaces/IAssetManager.hpp"
 #include "Physics/PhysicsEngine.hpp"
@@ -48,6 +49,8 @@ public:
 	//	}
 	//}
 
+	void close();
+
 	bool setAssetDataFolder(const char* folderPath);
 
 	const bool isRunning() const;
@@ -61,10 +64,12 @@ public:
 	void writeDepth(float depthValue, glm::mat4 worldMat, glm::mat4 mdl);
 
 	void renderFullQuad();
-
+	
 	Interfaces::IAssetManager* getAssetManager() const;
 
 private:
+
+	Core::Settings engineSettings;
 
 	Core::Library renderEngineLib;
 	Core::Console* console;

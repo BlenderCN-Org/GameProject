@@ -24,6 +24,11 @@ namespace Editor
         public MainWindow()
         {
             InitializeComponent();
+
+            EditorWindows.ShaderEditor shaderEditor = new EditorWindows.ShaderEditor();
+            shaderEditor.Show();
+            shaderEditor.Owner = this;
+
             //EditorWindows.AddEditItemDialog addDlg = new EditorWindows.AddEditItemDialog();
             //
             //addDlg.PageArea.Children.Add(bm);

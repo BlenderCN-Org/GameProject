@@ -9,17 +9,17 @@ namespace Editor_clr {
 		GC::WaitForFullGCComplete();
 		if (!initialized) {
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-			editorStatus = EditorStatus::STOPPED;
+			editorStatus = Engine::Interfaces::EditorStatus::STOPPED;
 
-			Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&Extensions::OnSaveEvent);
-			Editor::EventHandler::EventManager::onQueryDataEvent += gcnew System::EventHandler<Editor::EventHandler::QueryDataArgs^>(&Extensions::OnQueryEvent);
-			Editor::EventHandler::EventManager::onAddObjectEvent += gcnew System::EventHandler<Editor::EventHandler::AddObjectArgs^>(&Extensions::OnAddEvent);
-			Editor::EventHandler::EventManager::onEditFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnEditEvent);
-			Editor::EventHandler::EventManager::onDeleteFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnDeleteEvent);
-			Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
-			Editor::EventHandler::EventManager::onGetFormView += gcnew System::EventHandler<Editor::EventHandler::FormView^>(&Extensions::OnGetFormView);
-			Editor::EventHandler::EventManager::onSceneChangeEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnSceneChangeEvent);
-			Editor::EventHandler::EventManager::onAddToSceneEvent += gcnew System::EventHandler<System::UInt32>(&Extensions::OnAddToSceneEvent);
+			//Editor::EventHandler::EventManager::onSaveEvent += gcnew System::EventHandler<Editor::EventHandler::SaveEventArgs^>(&Extensions::OnSaveEvent);
+			//Editor::EventHandler::EventManager::onQueryDataEvent += gcnew System::EventHandler<Editor::EventHandler::QueryDataArgs^>(&Extensions::OnQueryEvent);
+			//Editor::EventHandler::EventManager::onAddObjectEvent += gcnew System::EventHandler<Editor::EventHandler::AddObjectArgs^>(&Extensions::OnAddEvent);
+			//Editor::EventHandler::EventManager::onEditFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnEditEvent);
+			//Editor::EventHandler::EventManager::onDeleteFormEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnDeleteEvent);
+			//Editor::EventHandler::EventManager::onGetFormIDEvent += gcnew System::EventHandler<Editor::EventHandler::GetFormIDArgs^>(&Extensions::OnGetFormIDEvent);
+			//Editor::EventHandler::EventManager::onGetFormView += gcnew System::EventHandler<Editor::EventHandler::FormView^>(&Extensions::OnGetFormView);
+			////Editor::EventHandler::EventManager::onSceneChangeEvent += gcnew System::EventHandler<Editor::EventHandler::FormArgs^>(&Extensions::OnSceneChangeEvent);
+			//Editor::EventHandler::EventManager::onAddToSceneEvent += gcnew System::EventHandler<System::UInt32>(&Extensions::OnAddToSceneEvent);
 
 			initialized = true;
 
@@ -33,7 +33,7 @@ namespace Editor_clr {
 
 			pixelBuffers[0]->resize(10, 10);
 			pixelBuffers[1]->resize(10, 10);
-			Extensions::assetMan = nullptr;
+			//Extensions::assetMan = nullptr;
 		}
 		return true;
 	}
@@ -64,8 +64,8 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::startEditor() {
-		if (editorStatus == EditorStatus::STOPPED) {
-			editorStatus = EditorStatus::STARTING;
+		if (editorStatus == Engine::Interfaces::EditorStatus::STOPPED) {
+			editorStatus = Engine::Interfaces::EditorStatus::STARTING;
 			initialized = true;
 			printf("Starting editor\n");
 
@@ -80,11 +80,11 @@ namespace Editor_clr {
 			wrapper->window->SetEditWindow(editorWindowWrapper);
 			wrapper->window->onCloseEvent += gcnew System::EventHandler<Editor::EventHandler::CloseArgs^>(eventWrapper, &EventWrapper::OnClosing);
 
-			editorStatus = EditorStatus::RUNNING;
-		} else if (editorStatus == EditorStatus::RUNNING || editorStatus == EditorStatus::HIDDEN) {
-			if (editorStatus == HIDDEN) {
+			editorStatus = Engine::Interfaces::EditorStatus::RUNNING;
+		} else if (editorStatus == Engine::Interfaces::EditorStatus::RUNNING || editorStatus == Engine::Interfaces::EditorStatus::HIDDEN) {
+			if (editorStatus == Engine::Interfaces::HIDDEN) {
 				wrapper->window->invokeShow();
-				editorStatus = RUNNING;
+				editorStatus = Engine::Interfaces::RUNNING;
 			}
 			printf("Editor already started\n");
 		} else {
@@ -93,29 +93,31 @@ namespace Editor_clr {
 	}
 
 	void Editor_wrp::stopEditor() {
-		editorStatus = EditorStatus::STOPPING;
-		if (editorWindowWrapper.operator EditorWindowWrapper ^ () != nullptr) {
-			editorWindowWrapper->~EditorWindowWrapper();
-			editorWindowWrapper = nullptr;
+		if (editorStatus == Engine::Interfaces::EditorStatus::RUNNING) {
+			editorStatus = Engine::Interfaces::EditorStatus::STOPPING;
+			if (editorWindowWrapper.operator EditorWindowWrapper ^ () != nullptr) {
+				editorWindowWrapper->~EditorWindowWrapper();
+				editorWindowWrapper = nullptr;
+			}
+			delete wrapper;
+			delete eventWrapper;
+
+			editorStatus = Engine::Interfaces::EditorStatus::STOPPED;
 		}
-		delete wrapper;
-		delete eventWrapper;
-
-		editorStatus = EditorStatus::STOPPED;
 	}
 
-	void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
-		Extensions::extensionMap[callbackIndex] = ext;
-	}
+	//void Editor_wrp::registerExtension(int callbackIndex, IExtension<void> * ext) {
+	//	Extensions::extensionMap[callbackIndex] = ext;
+	//}
 
-	EditorStatus Editor_wrp::getStatus() const {
+	Engine::Interfaces::EditorStatus Editor_wrp::getStatus() const {
 		return editorStatus;
 	}
 
 	void Editor_wrp::update() {
 		if (eventWrapper->hideEditor) {
 			GC::Collect();
-			editorStatus = HIDDEN;
+			editorStatus = Engine::Interfaces::HIDDEN;
 			eventWrapper->hideEditor = false;
 		}
 
@@ -125,17 +127,17 @@ namespace Editor_clr {
 		}
 
 		switch (editorStatus) {
-			case UNINITIALIZED:
+			case Engine::Interfaces::UNINITIALIZED:
 				break;
-			case STOPPED:
+			case Engine::Interfaces::STOPPED:
 				break;
-			case STARTING:
+			case Engine::Interfaces::STARTING:
 				break;
-			case RUNNING:
-			case HIDDEN:
+			case Engine::Interfaces::RUNNING:
+			case Engine::Interfaces::HIDDEN:
 				poll();
 				break;
-			case STOPPING:
+			case Engine::Interfaces::STOPPING:
 				break;
 			default:
 				break;
@@ -171,13 +173,13 @@ namespace Editor_clr {
 		pixelBuffers[pboNextIndex]->unMap();
 	}
 
-	void Editor_wrp::setAssetManager(IAssetManager* assetMan) {
-		Extensions::assetMan = assetMan;
-	}
+	//void Editor_wrp::setAssetManager(IAssetManager* assetMan) {
+	//	Extensions::assetMan = assetMan;
+	//}
 
-	void Editor_wrp::setEditorAccess(IEditorAccess * editAccess) {
-		Extensions::editAccess = editAccess;
-	}
+	//void Editor_wrp::setEditorAccess(IEditorAccess * editAccess) {
+	//	Extensions::editAccess = editAccess;
+	//}
 
 	void EventWrapper::OnClosing(System::Object ^sender, Editor::EventHandler::CloseArgs ^e) {
 		System::String^ message = "Are you sure you want to close the editor";
@@ -199,6 +201,6 @@ namespace Editor_clr {
 	}
 }
 
-EDITOR_API IEditor * CreateEditor() {
+EDITOR_API Engine::Interfaces::IEditor * CreateEditor() {
 	return new Editor_clr::Editor_wrp();
 }

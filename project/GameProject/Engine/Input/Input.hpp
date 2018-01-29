@@ -152,6 +152,7 @@ namespace Engine {
 			KEYBIND_RIGHT,
 			KEYBIND_ENTER,
 			KEYBIND_MOUSE_L_CLICK,
+			KEYBIND_MOUSE_WHEEL_CLICK,
 
 			KEYBINDS_LENGTH
 		};
@@ -163,6 +164,7 @@ namespace Engine {
 			"KeyAction_Right",
 			"KeyAction_Enter",
 			"KeyAction_Mouse_L_Click"
+			"KeyAction_Mouse_WHEEL_Click"
 		};
 
 		static const char* KeyBindsDefault[] =
@@ -171,7 +173,8 @@ namespace Engine {
 		"30:0:0",
 		"32:0:0",
 		"28:0:0",
-		"0:1:0"
+		"0:1:0",
+		"2:1:0"
 		};
 
 		extern KeyBind KeyBindings[];

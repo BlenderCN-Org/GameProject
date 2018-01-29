@@ -85,7 +85,7 @@ namespace Engine {
 
 				const int fntSize = text.getFontSize();
 				const int elementsPerScreen = size.y / fntSize;
-				const size_t vectorSize = textData.size();
+				const int32_t vectorSize = (int32_t)textData.size();
 
 				verticalScroll->setSize(15, size.y);
 				verticalScroll->setMinElements(elementsPerScreen);
@@ -96,7 +96,7 @@ namespace Engine {
 				verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 				verticalScroll->update(dt);
 
-				size_t selectedIndex = verticalScroll->getSelectedElement();
+				int32_t selectedIndex = verticalScroll->getSelectedElement();
 
 				Engine::Core::FormattedString fString;
 

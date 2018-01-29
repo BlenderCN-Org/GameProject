@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 /// Internal Includes
+#include "../Interfaces/Renderable.hpp"
 #include "GuiItem.hpp"
 #include "ShaderContainer.hpp"
 
@@ -14,7 +15,7 @@
 namespace Engine {
 	namespace Graphics {
 
-		class CGui {
+		class CGui : public Renderable {
 		public:
 
 			CGui();

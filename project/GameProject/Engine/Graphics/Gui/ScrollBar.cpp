@@ -33,20 +33,73 @@ namespace Engine {
 				scrollDir = dir;
 			}
 
-			void ScrollBar::setNumElements(size_t num) {
+			void ScrollBar::setNumElements(int32_t num) {
 				if (num != numElements) {
 					numElements = num;
 					forceUpdate = true;
 				}
 			}
-			void ScrollBar::setMinElements(size_t num) {
+			void ScrollBar::setMinElements(int32_t num) {
 				if (num != minElements) {
 					minElements = num;
 					forceUpdate = true;
 				}
 			}
 
-			size_t ScrollBar::getSelectedElement() const {
+			void ScrollBar::selectElement(int32_t element) {
+
+				if (element != selectedElement) {
+
+					int32_t lastSelectableElement = numElements - minElements;
+
+					int minPos = 0;
+					int maxPos = 0;
+
+					if (element > lastSelectableElement) {
+						element = lastSelectableElement;
+					}
+					if (element < 0) {
+						element = 0;
+					}
+
+					float elementPos = System::percentageInRange<int32_t>(0, lastSelectableElement, element);
+
+					float scrollThicknessPer = System::percentageInRange<int32_t>(0, numElements, minElements);
+
+					if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
+
+						scrollbarThickness = (int)(float(size.x) * scrollThicknessPer);
+
+						if (scrollbarThickness < 10) {
+							scrollbarThickness = 10;
+						}
+
+						minPos = absoulutePosition.x;
+						maxPos = absoulutePosition.x + (size.x - scrollbarThickness);
+
+					} else {
+
+						scrollbarThickness = (int)(float(size.y) * scrollThicknessPer);
+
+						if (scrollbarThickness < 10) {
+							scrollbarThickness = 10;
+						}
+
+						minPos = absoulutePosition.y;
+						maxPos = absoulutePosition.y + (size.y - scrollbarThickness);
+
+					}
+
+					scrollbarScreenPosition = int(float(maxPos - minPos) * elementPos);
+
+					//float per = System::percentageInRange(0, maxPos - minPos, scrollbarScreenPosition);
+
+					//selectedElement = (int32_t)(float(lastSelectableElement) * per);
+					selectedElement = element;
+				}
+			}
+
+			int32_t ScrollBar::getSelectedElement() const {
 				return selectedElement;
 			}
 
@@ -180,12 +233,12 @@ namespace Engine {
 
 			void ScrollBar::updateBarPosition(int mx, int my) {
 
-				size_t lastSelectableElement = numElements - minElements;
+				int32_t lastSelectableElement = numElements - minElements;
 
 				int minPos = 0;
 				int maxPos = 0;
 
-				float scrollThicknessPer = System::percentageInRange<size_t>(0, numElements, minElements);
+				float scrollThicknessPer = System::percentageInRange<int32_t>(0, numElements, minElements);
 
 				if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
 					scrollbarThickness = (int)(float(size.x) * scrollThicknessPer);
@@ -233,7 +286,7 @@ namespace Engine {
 				}
 				float per = System::percentageInRange(0, maxPos - minPos, scrollbarScreenPosition);
 
-				selectedElement = (size_t)(float(lastSelectableElement) * per);
+				selectedElement = (int32_t)(float(lastSelectableElement) * per);
 
 			}
 		}

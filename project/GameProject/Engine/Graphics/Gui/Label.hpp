@@ -19,6 +19,8 @@ namespace Engine {
 				Label();
 				virtual ~Label();
 
+				int calcTextWidth();
+
 				void setText(const Engine::Core::FormattedString& str);
 
 				virtual void update(float dt) override;

@@ -6,17 +6,32 @@
 #include "Camera.hpp"
 #include "CameraPath.hpp"
 #include "Player.hpp"
+#include "Editor.hpp"
+#include "Sky.hpp"
 
+#include "RenderBatch.hpp"
+
+#include "MainMenu.hpp"
+
+#include "../Engine/RefObject.hpp"
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Mesh/Mesh.hpp"
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
-#include "../Engine/Graphics/SkyDome.hpp"
+#include "../Engine/Graphics/Gui/TextureView.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 
 /// Std Includes
+#include <vector>
+
+enum class GameState {
+	MAIN_MENU,
+	PLAY,
+	EDIT,
+	PAUSE,
+};
 
 class Game {
 public:
@@ -30,19 +45,39 @@ public:
 
 private:
 
+	CEngine * engine;
+	CameraInput camInput;
+	Camera camera;
+
+	GameState currentState;
+	GameState lastState;
+
+	void updateFps(float dt);
+
+	void updateMenu(float dt);
+	void updatePlay(float dt);
+	void updateEdit(float dt);
+	void updatePaused(float dt);
+
 	void renderSky();
 	void renderScene();
 	void renderShadowMap();
 
-	bool paused;
+	RenderBatch* batchTmp;
+
+	MainMenu* menu;
+
+	Engine::RefObject<Editor>* editor;
+
 	Engine::Graphics::CGui* gameGui;
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
 	Engine::Graphics::Texture::Texture2D* panelTexture;
 
-	CEngine* engine;
-	CameraInput camInput;
-	Camera camera;
+	ITexture* tex;
+	Engine::Graphics::Texture::Texture2DReference* refTexture;
+	Engine::Graphics::Gui::TextureView* textureView;
+
 	CameraPath camPath;
 
 	Player* player;
@@ -51,7 +86,7 @@ private:
 
 	Engine::Graphics::Mesh::CMesh* mesh;
 	Engine::Graphics::Mesh::MirrorMesh* mirror;
-	SkyDome* skyDome;
+	Sky* sky;
 
 	float r;
 	float a;
@@ -61,7 +96,6 @@ private:
 
 	IShaderObject* shader;
 	IShaderObject* gBufferShader;
-	IShaderObject* skyDomeShader;
 	IShaderObject* gBufferBlit;
 
 	IShaderObject* shadowShader;
@@ -76,18 +110,7 @@ private:
 	int selectedLocGBuff;
 	int clipPlane;
 	int skinArray;
-
-
-	int skydomeVpLocation;
-	int skydomeMatLocation;
-	int skydomeTimeLoc;
-	int skydomeCamPos;
-	int skydomeEyeDir;
-	int skydomeSunMoon;
-
-	float skyTime;
-	glm::vec3 sunMoonDir;
-
+	
 	int blitTexDiff;
 	int blitTexNorm;
 	int blitTexWPos;
@@ -100,6 +123,8 @@ private:
 	float dtOneSec;
 	int fps;
 	int fpsCounter;
+	
+	std::vector<Renderable*> frameObjects;
 
 };	
 

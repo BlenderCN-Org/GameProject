@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Input/Input.hpp"
 #include "Core/System.hpp"
+#include "Core/LibraryLoader.hpp"
 #include "Graphics/Graphics.hpp"
 
 const char* vs = ""
@@ -41,10 +42,14 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 		//gConsole->print("Failed to load Renderer\n");
 		throw;
 	}
+
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
-	windowWidth = 1280;
-	windowHeight = 720;
+	//engineSettings.setResolution(Interfaces::Resolution{ 1280, 720 });
+	//engineSettings.setVSync(true);
+
+	windowWidth = engineSettings.resolution().width;
+	windowHeight = engineSettings.resolution().height;
 
 	RenderEngineCreateInfo reci;
 	reci.stype = SType::sRenderEngineCreateInfo;
@@ -69,7 +74,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	input->attachConsole(console);
 
 	gameWindow->setWindowSize(windowWidth, windowHeight);
-	gameWindow->setVsync(true);
+	gameWindow->setVsync(engineSettings.vSync());
 	running = true;
 
 	depthWriteShader = gRenderEngine->createShaderObject();
@@ -102,7 +107,6 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
 
 	assetManager = new AssetManager();
-
 }
 
 CEngine::~CEngine() {
@@ -127,6 +131,10 @@ CEngine::~CEngine() {
 	gameWindow = nullptr;
 }
 
+void CEngine::close() {
+	gameWindow->showWindow(false);
+}
+
 void CEngine::registerDataParser(Interfaces::IDataParser* dataParser, DataParsersTypes parserType) {
 	dataParsers[parserType].push_back(dataParser);
 }
@@ -146,13 +154,16 @@ const bool CEngine::isRunning() const {
 
 void CEngine::update(const float dt) {
 	Input::Input::GetInput()->reset();
+
 	gameWindow->pollMessages();
 
 	if (Input::Input::GetInput()->sizeChange) {
 		int w = 0;
 		int h = 0;
 		Input::Input::GetInput()->getWindowSize(w, h);
+
 		renderEngine->updateViewPort(w, h);
+		gameWindow->setWindowSize(w, h);
 
 		console->updateSize(w, h);
 
@@ -163,13 +174,16 @@ void CEngine::update(const float dt) {
 
 	console->update(dt);
 	running = gameWindow->isVisible();
+
 }
 
 void CEngine::clearBackBuffer() {
+	renderEngine->bindDefaultFrameBuffer();
 	renderEngine->clear();
 }
 
 void CEngine::clearDebug() {
+	renderEngine->bindDefaultFrameBuffer();
 	renderEngine->renderDebugFrame();
 }
 
@@ -178,6 +192,7 @@ void CEngine::presentFrame() {
 	console->render();
 
 	gameWindow->swapBuffers();
+
 }
 
 void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {

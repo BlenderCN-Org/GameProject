@@ -23,10 +23,11 @@ namespace Engine {
 				void setAutoScroll(bool autoScroll);
 
 				void setScrollDirection(ScrollBarDirection dir);
-				void setNumElements(size_t num);
-				void setMinElements(size_t num);
+				void setNumElements(int32_t num);
+				void setMinElements(int32_t num);
 
-				size_t getSelectedElement() const;
+				void selectElement(int32_t element);
+				int32_t getSelectedElement() const;
 
 				void setBackgroundTexture(Texture::Texture2D* texture);
 				void setScrollbarTexture(Texture::Texture2D* texture);
@@ -40,10 +41,10 @@ namespace Engine {
 
 				ScrollBarDirection scrollDir;
 
-				size_t numElements;
-				size_t minElements;
+				int32_t numElements;
+				int32_t minElements;
 
-				size_t selectedElement;
+				int32_t selectedElement;
 				bool autoScrollLastElement;
 
 				int scrollbarScreenPosition;

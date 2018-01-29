@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IEditor.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
