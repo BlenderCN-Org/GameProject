@@ -20,6 +20,18 @@ namespace Engine {
 
 		GuiItem::~GuiItem() {}
 
+		bool GuiItem::isMouseInside() const {
+
+			bool inside = false;
+			if (visible) {
+				Input::Input* in = Input::Input::GetInput();
+				int x, y;
+				in->getMousePos(x, y);
+				inside = posInItem(x, y);
+			}
+			return inside;
+		}
+
 		void GuiItem::setPosition(int x, int y) {
 			position = glm::ivec2(x, y);
 		}
@@ -132,7 +144,7 @@ namespace Engine {
 			if (aX < ox) {
 				aX = ox;
 			}
-			
+
 			if (aY < oy) {
 				aY = oy;
 			}
@@ -187,7 +199,7 @@ namespace Engine {
 			return newPos;
 		}
 
-		bool GuiItem::posInItem(int x, int y) {
+		bool GuiItem::posInItem(int x, int y) const {
 
 			x -= absoulutePosition.x;
 			y -= absoulutePosition.y;

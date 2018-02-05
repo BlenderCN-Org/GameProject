@@ -21,6 +21,9 @@ namespace Engine {
 				TextArea();
 				virtual ~TextArea();
 
+				void setEditMode(bool edit);
+
+				void showLineNumbers(bool show);
 				void setText(const Engine::Core::FormattedString& str);
 				void addText(const Engine::Core::FormattedString& str);
 
@@ -28,6 +31,18 @@ namespace Engine {
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:
+
+				bool allowEdit;
+				int editCursorLine;
+				int editCursorChar;
+
+				int cursorRenderXOffset;
+				float cursorTimer;
+				bool renderCursor;
+				int cursorRenderYOffset;
+				int cursorHeight;
+
+				bool lineNumbers;
 
 				std::vector<Engine::Core::FormattedString> textData;
 
@@ -37,7 +52,7 @@ namespace Engine {
 				
 				int sizeYClipp;
 
-
+				Texture::Texture2D* cursorTexture;
 				Text text;
 			};
 		}

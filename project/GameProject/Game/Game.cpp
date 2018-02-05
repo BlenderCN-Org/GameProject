@@ -2,6 +2,7 @@
 /// Internal Includess
 #include "Game.hpp"
 #include "../Engine/Graphics/Graphics.hpp"
+#include "../Engine/Core/System.hpp"
 
 /// External Includes
 #include <glm/gtx/transform.hpp>
@@ -80,46 +81,6 @@ Game::Game(CEngine* _engine)
 
 	gameGui->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
-
-	tex = gRenderEngine->createTexture();
-
-	tex->init(4, false);
-
-	const int imgWidth = 500;
-	const int imgHeight = 500;
-
-	uint8_t image[imgHeight * imgWidth * 4];
-
-	int c = 0;
-
-	for (size_t i = 0; i < imgHeight * imgWidth * 4; i += 4) {
-
-		if (i % imgWidth == 0) {
-			c = 0;
-		}
-
-		image[i + 0] = c;
-		image[i + 1] = c;
-		image[i + 2] = c;
-
-
-		c++;
-
-		image[i + 3] = 255;
-	}
-
-	tex->setTextureData(imgWidth, imgHeight, 4, image);
-
-	refTexture = new Engine::Graphics::Texture::Texture2DReference();
-	refTexture->setTexture(tex);
-
-	textureView = new Engine::Graphics::Gui::TextureView();
-	textureView->setAnchorPoint(Engine::Graphics::GuiAnchor::RIGHT);
-	textureView->setSize(300, 300);
-	textureView->setTexture(refTexture);
-	textureView->setVisible(true);
-
-	gameGui->addGuiItem(textureView);
 
 	shader = gRenderEngine->createShaderObject();
 	shader->init();
@@ -245,10 +206,20 @@ Game::Game(CEngine* _engine)
 	menu = new MainMenu();
 
 	editor = new Engine::RefObject<Editor>(5.0F);
+
+	mapLoader.openMap("E:/GameProjectAssets/Data/GameMap.map");
+
+	LoadedData data = mapLoader.loadDataEntry(1);
+
+	map = new Map(data);
+
+	free(data.data);
+
 }
 
 Game::~Game() {
 
+	delete map;
 
 	delete editor;
 
@@ -260,11 +231,7 @@ Game::~Game() {
 	}
 
 	delete mirror;
-
-	tex->release();
-	delete textureView;
-	delete refTexture;
-
+	
 	shader->release();
 	gBuffer->release();
 	gBufferShader->release();
@@ -282,7 +249,7 @@ Game::~Game() {
 	delete sky;
 }
 
-void Game::update(float dt) {
+void Game::update(float dt, uint64_t clocks) {
 
 	size_t tUsed = ts.getUsed();
 
@@ -360,6 +327,8 @@ void Game::update(float dt) {
 	str += "Dir: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ", " + std::to_string(dir.z) + "\n";
 
 	str += "TempUsed: " + std::to_string(tUsed) + " Bytes\n";
+
+	str += "Clocks: " + std::to_string(clocks) + "\n";
 
 	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
@@ -589,9 +558,12 @@ void Game::updatePlay(float dt) {
 }
 
 void Game::updateEdit(float dt) {
-	camInput.update(dt);
 
 	(*editor)->update(dt);
+
+	if ((*editor)->mouseInGui() == false) {
+		camInput.update(dt);
+	}
 
 	Renderable** rends = (*editor)->renderObjects(1);
 

@@ -3,6 +3,7 @@
 
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
+#include "../Engine/Graphics/Gui/GuiWindow.hpp"
 
 class Editor {
 
@@ -11,11 +12,15 @@ public:
 	Editor();
 	~Editor();
 
+	bool mouseInGui();
 	void update(float dt);
 
 	Renderable** renderObjects(uint32_t count);
 
 private:
+
+	bool mouseDownInGui;
+	bool pressing;
 
 	uint32_t renderObjectCount;
 
@@ -25,6 +30,7 @@ private:
 	Engine::Graphics::Texture::Texture2D* toolbarTexture;
 	Engine::Graphics::Gui::Panel* toolbar;
 
+	Engine::Graphics::Gui::TextArea* textArea;
 
 };
 

@@ -9,9 +9,13 @@
 #include "Editor.hpp"
 #include "Sky.hpp"
 
+#include "Map.hpp"
+
 #include "RenderBatch.hpp"
 
 #include "MainMenu.hpp"
+
+#include "Loader/MapLoader.hpp"
 
 #include "../Engine/RefObject.hpp"
 #include "../Engine/Engine.hpp"
@@ -39,15 +43,19 @@ public:
 	Game(CEngine* _engine);
 	virtual ~Game();
 
-	void update(float dt);
+	void update(float dt, uint64_t clocks);
 
 	void render();
 
 private:
+	
+	MapLoader mapLoader;
 
 	CEngine * engine;
 	CameraInput camInput;
 	Camera camera;
+
+	Map* map;
 
 	GameState currentState;
 	GameState lastState;
@@ -73,10 +81,6 @@ private:
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
 	Engine::Graphics::Texture::Texture2D* panelTexture;
-
-	ITexture* tex;
-	Engine::Graphics::Texture::Texture2DReference* refTexture;
-	Engine::Graphics::Gui::TextureView* textureView;
 
 	CameraPath camPath;
 

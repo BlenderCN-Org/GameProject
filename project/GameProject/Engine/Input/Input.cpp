@@ -20,20 +20,25 @@ namespace Engine {
 			//singleton->keyMap[InputEvent{ scancode, false }] = (action == ACTION_BUTTON_DOWN);
 
 			singleton->modkey = mods;
-			if (singleton->consoleActive) {
-				if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
+			if ((scancode == 28 || scancode == 284) && action == ACTION_BUTTON_DOWN) {
+				if (singleton->consoleActive) {
 					singleton->console->execute();
-				} else if (scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2)) {
+				}
+				singleton->returnPressed = true;
+
+			} else if (scancode == 14 && (action == ACTION_BUTTON_DOWN || action == 2)) {
+				if (singleton->consoleActive) {
 					//gConsole->removeLastChar();
 					singleton->console->backSpace();
 				}
-				printf("Scancode %d with modkey %d\n", scancode, mods);
+				singleton->backspacePressed = true;
 			}
+			printf("Scancode %d with modkey %d\n", scancode, mods);
 
 			if (action == ACTION_BUTTON_UP) {
-				singleton->releaseMap[InputEvent{ scancode, false }] = true;
+				singleton->releaseMap[InputEvent { scancode, false }] = true;
 			} else if (action == ACTION_BUTTON_DOWN) {
-				singleton->pressedMap[InputEvent{ scancode, false }] = true;
+				singleton->pressedMap[InputEvent { scancode, false }] = true;
 			}
 		}
 
@@ -46,9 +51,9 @@ namespace Engine {
 
 			//singleton->keyMap[InputEvent{ button, true }] = (action == ACTION_BUTTON_DOWN);
 			if (action == ACTION_BUTTON_UP) {
-				singleton->releaseMap[InputEvent{ button, true }] = true;
+				singleton->releaseMap[InputEvent { button, true }] = true;
 			} else if (action == ACTION_BUTTON_DOWN) {
-				singleton->pressedMap[InputEvent{ button, true }] = true;
+				singleton->pressedMap[InputEvent { button, true }] = true;
 			}
 			//printf("MouseButton %d with modkey %d\n", button, mods);
 		}
@@ -81,6 +86,10 @@ namespace Engine {
 				singleton->console->putChar(codepoint);
 				//singleton->console->keyPress(codepoint);
 			}
+
+			singleton->characterRecieved = true;
+			singleton->characterThisFrame = codepoint;
+
 		}
 
 		void Input::sizeCallback(IWindow * window, int w, int h) {
@@ -157,7 +166,7 @@ namespace Engine {
 		}
 
 		bool Input::isKeyBindPressed(const KeyBind & keyBind, bool includeMods) {
-			auto it = keyMap.find(InputEvent{ keyBind.code, keyBind.mouse });
+			auto it = keyMap.find(InputEvent { keyBind.code, keyBind.mouse });
 			bool pressed = false;
 			if (it != keyMap.end()) {
 				pressed = it->second;
@@ -169,7 +178,7 @@ namespace Engine {
 		}
 
 		bool Input::releasedThisFrame(const KeyBind & keyBind, bool includeMods) {
-			auto it = releaseMap.find(InputEvent{ keyBind.code, keyBind.mouse });
+			auto it = releaseMap.find(InputEvent { keyBind.code, keyBind.mouse });
 			bool released = false;
 
 			if (it != releaseMap.end()) {
@@ -182,7 +191,7 @@ namespace Engine {
 		}
 
 		bool Input::wasPressedThisFrame(const KeyBind & keyBind, bool includeMods) {
-			auto it = pressedMap.find(InputEvent{ keyBind.code, keyBind.mouse });
+			auto it = pressedMap.find(InputEvent { keyBind.code, keyBind.mouse });
 			bool pressed = false;
 
 			if (it != pressedMap.end()) {
@@ -204,7 +213,7 @@ namespace Engine {
 		}
 
 		bool Input::consoleKeyWasPressed() {
-			auto& it = keyMap.find(InputEvent{ 41, false });
+			auto& it = keyMap.find(InputEvent { 41, false });
 			//keyMap[InputEvent{ 41, false }] = false;
 			bool pressed = false;
 			if (it != keyMap.end()) {
@@ -230,6 +239,12 @@ namespace Engine {
 		void Input::reset() {
 			//printf("Pos (%d,%d)\n", int(xPos), int(yPos));
 			//printf("Delta (%f,%f)\n", singleton->xDelta, singleton->yDelta);
+
+			characterRecieved = false;
+			characterThisFrame = 0U;
+			returnPressed = false;
+			backspacePressed = false;
+
 			blockInput = false;
 			xDelta = 0.0f;
 			yDelta = 0.0;
@@ -282,15 +297,15 @@ namespace Engine {
 			mx = xPos;
 			my = yPos;
 
-			if (keyMap[InputEvent{ 0, true }] == true)
+			if (keyMap[InputEvent { 0, true }] == true)
 				mb += 1;
-			if (keyMap[InputEvent{ 1, true }] == true)
+			if (keyMap[InputEvent { 1, true }] == true)
 				mb += 2;
-			if (keyMap[InputEvent{ 2, true }] == true)
+			if (keyMap[InputEvent { 2, true }] == true)
 				mb += 4;
-			if (keyMap[InputEvent{ 3, true }] == true)
+			if (keyMap[InputEvent { 3, true }] == true)
 				mb += 8;
-			if (keyMap[InputEvent{ 4, true }] == true)
+			if (keyMap[InputEvent { 4, true }] == true)
 				mb += 16;
 			sc = (int)scrollY;
 		}

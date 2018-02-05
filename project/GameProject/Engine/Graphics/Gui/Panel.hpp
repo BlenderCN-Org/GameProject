@@ -17,7 +17,7 @@ namespace Engine {
 			public:
 				Panel();
 				virtual ~Panel();
-
+				
 				void setTexture(Texture::Texture2D* texture);
 
 				void addGuiItem(GuiItem* guiItem);

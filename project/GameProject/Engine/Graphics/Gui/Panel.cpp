@@ -2,6 +2,8 @@
 #include "Panel.hpp"
 #include "../Graphics.hpp"
 
+#include "../../Input/Input.hpp"
+
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 

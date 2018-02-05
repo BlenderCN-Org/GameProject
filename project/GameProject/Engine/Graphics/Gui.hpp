@@ -27,6 +27,7 @@ namespace Engine {
 
 			void addGuiItem(GuiItem* guiItem);
 			
+			bool mouseHitGui() const;
 			void update(float dt);
 			void render();
 

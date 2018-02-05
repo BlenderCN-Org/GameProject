@@ -7,6 +7,7 @@
 
 /// Std Includes
 #include <cstdint>
+#include <chrono>
 
 /*
 *	System file
@@ -36,6 +37,21 @@ namespace Engine {
 
 			return (vmm / mmm);
 		}
+		
+		struct HighResClock {
+
+			HighResClock() {
+				start = std::chrono::high_resolution_clock::now();
+				time = 0;
+			}
+
+			std::chrono::high_resolution_clock::time_point start;
+			float time;
+
+			uint64_t tick();
+			float seconds();
+
+		};
 
 	}
 }

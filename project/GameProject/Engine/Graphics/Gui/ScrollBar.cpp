@@ -115,6 +115,7 @@ namespace Engine {
 
 				// if we cannot scroll always select first element
 				if (numElements <= minElements) {
+					scrollbarScreenPosition = 0;
 					selectedElement = 0;
 					if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
 						scrollbarThickness = size.x;

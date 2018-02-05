@@ -1,6 +1,5 @@
 //#include "Game\Game.hpp"
 
-#include <time.h>
 #include <string>
 
 #include "ExceptionHandling.hpp"
@@ -15,6 +14,8 @@
 #include "Engine/Graphics/Gui/Label.hpp"
 #include "Engine/Graphics/Gui/ProgressBar.hpp"
 #include "Engine/Graphics/Gui/ScrollBar.hpp"
+
+#include "Engine\Core\System.hpp"
 
 #include "Game/Game.hpp"
 
@@ -36,17 +37,16 @@ int main(int argc, char* argv[]) {
 
 	initExceptionHandlers();
 
-	float dt = 0.0f;
-	unsigned int start = clock();
+	float dt = 0;
+	uint64_t clocks = 0U;
+	Engine::System::HighResClock clock;
 
 	CEngine* e = new CEngine();
 
 	e->setAssetDataFolder("E:/GameProjectAssets/");
 
 	Engine::Input::Input* in = Engine::Input::Input::GetInput();
-
-	uint32_t value = 500U;
-
+	
 	Game* game = new Game(e);
 
 	printf("starting loop\n");
@@ -54,22 +54,15 @@ int main(int argc, char* argv[]) {
 	
 	while (e->isRunning()) {
 
-		game->update(dt);
+		game->update(dt, clocks);
 		e->clearBackBuffer();
 		
 		game->render();
 
 		e->presentFrame();
 
-		unsigned int temp = clock();
-		dt = unsigned int(temp - start) / 1000.0f;
-		start = temp;
-
-		value++;
-		if (value > 1000U) {
-			value = 0U;
-		}
-
+		clocks = clock.tick();
+		dt = clock.seconds();
 	}
 	
 	printf("finished execution\n");

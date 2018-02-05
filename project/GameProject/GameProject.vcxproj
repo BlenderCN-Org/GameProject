@@ -225,9 +225,11 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
+    <ClCompile Include="Game\Cell.cpp" />
     <ClCompile Include="Game\Editor.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
+    <ClCompile Include="Game\Loader\MapLoader.cpp" />
     <ClCompile Include="Game\MainMenu.cpp" />
     <ClCompile Include="Game\Map.cpp" />
     <ClCompile Include="Game\Player.cpp" />
@@ -256,8 +258,10 @@
     <ClInclude Include="Engine\SafeQueue.hpp" />
     <ClInclude Include="Engine\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\ThreadManager.hpp" />
+    <ClInclude Include="Game\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
+    <ClInclude Include="Game\Loader\MapLoader.hpp" />
     <ClInclude Include="Game\MainMenu.hpp" />
     <ClInclude Include="Game\Map.hpp" />
     <ClInclude Include="Game\Player.hpp" />

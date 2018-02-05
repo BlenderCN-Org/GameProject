@@ -1,6 +1,7 @@
 /// Internal Includes
 #include "TextArea.hpp"
 #include "../Graphics.hpp"
+#include "../../Input/Input.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -28,6 +29,16 @@ namespace Engine {
 				verticalScroll->setBackgroundTexture(scrollBg);
 				verticalScroll->setScrollbarTexture(scrollBar);
 				verticalScroll->setAutoScroll(true);
+				lineNumbers = true;
+				allowEdit = false;
+				editCursorChar = 0;
+				editCursorLine = 0;
+				renderCursor = false;
+
+
+				cursorTexture = new Texture::Texture2D();
+				float cursorColor = 0.8F;
+				cursorTexture->singleColor(cursorColor, cursorColor, cursorColor, 1.0F);
 
 			}
 
@@ -35,6 +46,18 @@ namespace Engine {
 				delete verticalScroll;
 				delete scrollBg;
 				delete scrollBar;
+				delete cursorTexture;
+			}
+
+			void TextArea::setEditMode(bool edit) {
+				allowEdit = edit;
+				if (!edit) {
+					renderCursor = false;
+				}
+			}
+
+			void TextArea::showLineNumbers(bool show) {
+				lineNumbers = show;
 			}
 
 			void TextArea::setText(const Engine::Core::FormattedString& str) {
@@ -83,7 +106,135 @@ namespace Engine {
 
 			void TextArea::update(float dt) {
 
+				if (allowEdit) {
+					if (isMouseInside()) {
+
+						Input::Input* in = Input::Input::GetInput();
+
+						if (in->characterRecieved) {
+
+							char c = (char)in->characterThisFrame;
+
+							textData[editCursorLine].insertAt(editCursorChar++, c);
+
+						}
+
+						if (in->returnPressed) {
+
+							Engine::Core::FormattedString fString = textData[editCursorLine];
+							Engine::Core::FormattedString str2;
+
+							if (editCursorChar) {
+								str2 = fString.subString(0, editCursorChar);
+								textData[editCursorLine] = str2;
+							} else {
+								textData[editCursorLine] = Engine::Core::FormattedString("");
+							}
+
+							str2 = fString.subString(editCursorChar, 0);
+
+							textData.insert(textData.begin() + editCursorLine + 1, str2);
+
+							editCursorLine++;
+							editCursorChar = 0;
+
+						}
+
+						if (in->backspacePressed) {
+
+							// delete char on current line
+							if (editCursorChar) {
+								textData[editCursorLine].remoteAt(--editCursorChar);
+							}
+							// delete the line and merge upwards
+							else {
+
+								if (editCursorLine) {
+									int cursor = (int)textData[editCursorLine - 1].getSize();
+									textData[editCursorLine - 1] += textData[editCursorLine];
+									textData.erase(textData.begin() + editCursorLine);
+									editCursorLine--;
+									editCursorChar = cursor;
+								}
+							}
+						}
+
+						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_UP_ARROW])) {
+							if (editCursorLine) {
+								editCursorLine--;
+							}
+
+							int lineLength = (int)textData[editCursorLine].getSize();
+
+							if (lineLength < editCursorChar) {
+								editCursorChar = lineLength;
+							}
+
+						}
+
+						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_DOWN_ARROW])) {
+
+							editCursorLine++;
+
+							if ((int)textData.size() <= editCursorLine) {
+								editCursorLine = textData.size() - 1;
+							}
+
+							int lineLength = (int)lineLength = textData[editCursorLine].getSize();
+
+							if (lineLength < editCursorChar) {
+								editCursorChar = lineLength;
+							}
+
+						}
+
+						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_LEFT_ARROW])) {
+							if (editCursorChar) {
+								editCursorChar--;
+							} else {
+								if (editCursorLine) {
+									editCursorLine--;
+						
+									editCursorChar = textData[editCursorLine].getSize();
+								}
+							}
+						}
+						
+						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_RIGHT_ARROW])) {
+							
+							editCursorChar++;
+						
+							if ((int)textData[editCursorLine].getSize() < editCursorChar) {
+								editCursorLine++;
+								if ((int)textData.size() <= editCursorLine) {
+									editCursorLine = textData.size() - 1;
+									editCursorChar = textData[editCursorLine].getSize();
+								}
+							}
+						}
+					}
+
+					if (editCursorChar) {
+						Engine::Core::FormattedString tmpStr = textData[editCursorLine].subString(0, editCursorChar);
+						text.setText(tmpStr);
+					} else {
+						text.setText("");
+					}
+
+					cursorTimer -= dt;
+
+					if (cursorTimer < 0.0F) {
+						renderCursor = !renderCursor;
+						cursorTimer += 0.4F;
+					}
+
+					cursorRenderXOffset = text.getTextWidth();
+
+				}
+
+
 				const int fntSize = text.getFontSize();
+				cursorHeight = fntSize;
 				const int elementsPerScreen = size.y / fntSize;
 				const int32_t vectorSize = (int32_t)textData.size();
 
@@ -102,24 +253,34 @@ namespace Engine {
 
 				std::string maxLinCnt = std::to_string(vectorSize);
 
+				cursorRenderYOffset = cursorHeight * -1;
+
 				for (int i = 0; i < elementsPerScreen; i++) {
 					if (selectedIndex + i >= vectorSize) {
 						break;
 					}
 
-					std::string s = std::to_string(selectedIndex + i);
-					Engine::Core::FormattedString lineNumber;
-
-					for (size_t i = 0; i < maxLinCnt.size() - s.size() ; i++) {
-						lineNumber += "0";
+					if (selectedIndex + i == editCursorLine) {
+						cursorRenderYOffset = cursorHeight * i;
 					}
 
-					lineNumber += s.c_str();
-					lineNumber += ": ";
+					std::string s = std::to_string(selectedIndex + i);
 
-					lineNumber.formatString(0, -1, glm::vec4(0.418924, 0.573681, 0.626665, 1.000000));
+					if (lineNumbers) {
+						Engine::Core::FormattedString lineNumber;
 
-					fString += lineNumber;
+						for (size_t i = 0; i < maxLinCnt.size() - s.size(); i++) {
+							lineNumber += "0";
+						}
+
+						lineNumber += s.c_str();
+						lineNumber += ": ";
+
+						lineNumber.formatString(0, -1, glm::vec4(0.418924, 0.573681, 0.626665, 1.000000));
+
+						fString += lineNumber;
+					}
+
 					fString += textData[selectedIndex + i];
 					fString += "\n";
 				}
@@ -146,30 +307,25 @@ namespace Engine {
 					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x - 15, sizeYClipp);
 					gRenderEngine->setScissorTest(true);
 					text.render(textureSlot);
+
+					if (renderCursor) {
+
+						cursorTexture->bind();
+
+						gRenderEngine->setScissorRegion(absoulutePosition.x + cursorRenderXOffset, absoulutePosition.y + cursorRenderYOffset, 1, cursorHeight);
+						shaderContainer.guiElementShader->useShader();
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
+
+						shaderContainer.standardQuad->bind();
+						shaderContainer.standardQuad->render();
+					}
+
 					gRenderEngine->setScissorTest(false);
 				}
 
 			}
-
-			/*const int TextArea::newLinesInString(const Engine::Core::FormattedString& str) const {
-
-				int nrNewLines = 0;
-
-				size_t strLen = str.getSize();
-				Engine::Core::FormattedChar* chrArr;
-
-				size_t count = 0U;
-
-				while (count < strLen) {
-
-					if (chrArr[count] == '\n') {
-
-					}
-					count++;
-				}
-
-				return nrNewLines;
-			}*/
 
 		}
 	}

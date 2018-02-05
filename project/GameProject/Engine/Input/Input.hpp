@@ -51,7 +51,7 @@ namespace Engine {
 
 				std::getline(ss, buff, ':');
 				mod = std::stoi(buff);
-				KeyBind kb{ code, mod, mouse };
+				KeyBind kb { code, mod, mouse };
 
 				return kb;
 			}
@@ -95,6 +95,11 @@ namespace Engine {
 			void getState(int &mx, int &my, int &mb, int &sc);
 
 			void print();
+
+			bool characterRecieved;
+			unsigned int characterThisFrame;
+			bool returnPressed;
+			bool backspacePressed;
 
 		private:
 
@@ -153,6 +158,10 @@ namespace Engine {
 			KEYBIND_ENTER,
 			KEYBIND_MOUSE_L_CLICK,
 			KEYBIND_MOUSE_WHEEL_CLICK,
+			KEYBIND_UP_ARROW,
+			KEYBIND_DOWN_ARROW,
+			KEYBIND_LEFT_ARROW,
+			KEYBIND_RIGHT_ARROW,
 
 			KEYBINDS_LENGTH
 		};
@@ -165,16 +174,24 @@ namespace Engine {
 			"KeyAction_Enter",
 			"KeyAction_Mouse_L_Click"
 			"KeyAction_Mouse_WHEEL_Click"
+			"KeyAction_Arrow_UP"
+			"KeyAction_Arrow_DOWN"
+			"KeyAction_Arrow_LEFT"
+			"KeyAction_Arrow_RIGHT"
 		};
 
 		static const char* KeyBindsDefault[] =
-		{ "17:0:0",
-		"31:0:0",
-		"30:0:0",
-		"32:0:0",
-		"28:0:0",
-		"0:1:0",
-		"2:1:0"
+		{	"17:0:0",
+			"31:0:0",
+			"30:0:0",
+			"32:0:0",
+			"28:0:0",
+			"0:1:0",
+			"2:1:0",
+			"72:0:0",
+			"80:0:0",
+			"75:0:0",
+			"77:0:0"
 		};
 
 		extern KeyBind KeyBindings[];

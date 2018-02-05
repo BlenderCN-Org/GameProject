@@ -108,6 +108,7 @@ namespace Engine {
 				} else {
 					memset(text, 0, size * sizeof(FormattedChar));
 					formattedCharMemcpy(text, _text, stringLength);
+					usedSize = stringLength;
 				}
 			}
 			return *this;
@@ -155,7 +156,13 @@ namespace Engine {
 				} else {
 					memset(text, 0, size * sizeof(FormattedChar));
 					memcpy(text, _text.text, stringLength * sizeof(FormattedChar));
+					usedSize = stringLength;
 				}
+			} else {
+				delete[] text;
+				text = nullptr;
+				size = 0U;
+				usedSize = 0U;
 			}
 			return *this;
 		}
@@ -202,6 +209,7 @@ namespace Engine {
 				} else {
 					memset(text, 0, size * sizeof(FormattedChar));
 					formattedCharMemcpy(text, _text.cStr(), stringLength);
+					usedSize = stringLength;
 				}
 			}
 			return *this;
@@ -272,6 +280,43 @@ namespace Engine {
 			delete fChars;
 
 			return fString;
+		}
+
+		void FormattedString::insertAt(int position, FormattedChar chr) {
+
+			if (usedSize + 1 > size) {
+
+				FormattedChar* chars = new FormattedChar[usedSize + 1];
+
+				for (size_t i = 0; i < size_t(position); i++) {
+					chars[i] = text[i];
+				}
+				chars[position] = chr;
+				for (size_t i = position; i < usedSize; i++) {
+					chars[i + 1] = text[i];
+				}
+
+				delete[] text;
+				text = chars;
+				usedSize++;
+				size = usedSize;
+			} else {
+
+				for (size_t i = usedSize; i > size_t(position); i--) {
+					text[i] = text[i - 1];
+				}
+				text[position] = chr;
+				usedSize++;
+			}
+		}
+
+		void FormattedString::remoteAt(int position) {
+
+			for (size_t i = position; i < usedSize; i++) {
+				text[i] = text[i + 1];
+			}
+			usedSize--;
+
 		}
 
 		void FormattedString::formattedCharMemcpy(FormattedChar* dst, const char* src, const size_t size) {

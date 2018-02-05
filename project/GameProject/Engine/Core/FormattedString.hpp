@@ -85,6 +85,9 @@ namespace Engine {
 			int indexAt(FormattedChar chr, size_t offset = 0) const;
 			FormattedString subString(size_t offset, size_t count) const;
 
+			void insertAt(int position, FormattedChar chr);
+			void remoteAt(int position);
+
 		private:
 
 			size_t size;

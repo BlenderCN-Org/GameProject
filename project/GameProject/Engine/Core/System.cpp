@@ -74,7 +74,24 @@ namespace Engine {
 				return strlen(str);
 			}
 		}
-		
+
+		uint64_t HighResClock::tick() {
+
+			using namespace std::chrono;
+
+			high_resolution_clock::time_point temp = high_resolution_clock::now();
+			
+			auto d = temp - start;
+			start = temp;
+			time = duration_cast<duration<float>>(d).count();
+
+			return d.count();
+		}
+
+		float HighResClock::seconds() {
+			return time;
+		}
+
 #ifdef _WIN32
 
 		void pollCpuUsage() {
@@ -103,7 +120,7 @@ namespace Engine {
 			}
 			return false;
 		}
-
+		
 #endif
 	}
 }

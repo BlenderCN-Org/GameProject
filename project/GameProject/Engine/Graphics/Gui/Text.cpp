@@ -29,6 +29,9 @@ Text::~Text() {
 
 void Text::setText(const Engine::Core::FormattedString& text) {
 	if (textMesh) {
+		width = 0;
+		height = 0;
+
 		const Engine::Core::FormattedChar* cStr = text.cStr();
 		size_t len = text.getSize();
 
@@ -69,7 +72,7 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 					y += (fSize);
 					oldYAdv = (float)fSize;
 				} else {
-					y += oldYAdv;
+					y += fSize;
 				}
 				yAdv = 0;
 				x = dx;

@@ -29,6 +29,8 @@ namespace Engine {
 			GuiItem();
 			virtual ~GuiItem();
 
+			bool isMouseInside() const;
+
 			void setPosition(int x, int y);
 			void setSize(int w, int h);
 
@@ -45,7 +47,7 @@ namespace Engine {
 			void calculatePoints(glm::mat4 &positionMatrix);
 			glm::vec4 clipRegion(glm::vec4 element, glm::vec4 region);
 
-			bool posInItem(int x, int y);
+			bool posInItem(int x, int y) const;
 
 			glm::vec4 positionAndSizeFromMatrix(const glm::mat4 &positionMatrix);
 

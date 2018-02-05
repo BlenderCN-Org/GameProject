@@ -58,6 +58,7 @@ namespace Engine {
 			float data[5];
 			memset(data, 0, sizeof(data));
 			shaders.standardQuad->setMeshData(data, sizeof(data), VERT_UV);
+
 		}
 
 		CGui::~CGui() {
@@ -78,6 +79,26 @@ namespace Engine {
 
 		void CGui::addGuiItem(GuiItem* guiItem) {
 			guiItems.push_back(guiItem);
+		}
+
+		bool CGui::mouseHitGui() const {
+
+			bool hit = false;
+
+			if (visible) {
+				std::vector<GuiItem*>::const_iterator it = guiItems.begin();
+				std::vector<GuiItem*>::const_iterator eit = guiItems.end();
+
+				for (it; it != eit; it++) {
+					hit = (*it)->isMouseInside();
+					if (hit) {
+						break;
+					}
+				}
+
+			}
+
+			return hit;
 		}
 
 		void CGui::update(float dt) {
