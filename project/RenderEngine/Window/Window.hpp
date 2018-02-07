@@ -18,6 +18,9 @@
 
 class BaseWindow : public IWindow {
 public:
+
+	BaseWindow();
+
 	virtual void getCursorPos(int &x, int &y);
 
 	virtual void setWindowPos(int x, int y);
@@ -54,31 +57,31 @@ public:
 	virtual void* getNativeWindowHandle();
 
 	//private:
-	IDirectInput8* dinput8dev = nullptr;
-	IDirectInputDevice8* inputDevice = nullptr;
+	IDirectInput8* dinput8dev;
+	IDirectInputDevice8* inputDevice;
 	XINPUT_STATE lastState;
 	HWND getWindowHandle();
 
-	WindowResizeCallback_t* resizeCallback = 0;
-	WindowMouseMoveCallback_t* mouseMoveCallback = 0;
-	WindowMouseButtonCallback_t* mouseButtonCallback = 0;
-	WindowScrollCallback_t* scrollCallback = 0;
-	WindowKeyCallback_t* keyCallback = 0;
-	WindowCharacterCallback_t* characterCallback = 0;
+	WindowResizeCallback_t* resizeCallback;
+	WindowMouseMoveCallback_t* mouseMoveCallback;
+	WindowMouseButtonCallback_t* mouseButtonCallback;
+	WindowScrollCallback_t* scrollCallback;
+	WindowKeyCallback_t* keyCallback;
+	WindowCharacterCallback_t* characterCallback;
 
-	WindowControllerAxisCallback_t* controllerAxisCallback = 0;
-	WindowControllerButtonCallback_t* controllerButtonCallback = 0;
+	WindowControllerAxisCallback_t* controllerAxisCallback;
+	WindowControllerButtonCallback_t* controllerButtonCallback;
 
-	WindowFocus_t* focusCallback = 0;
+	WindowFocus_t* focusCallback;
 
-	WindowMouseDeltaCallback_t* mouseDeltaCallback = 0;
+	WindowMouseDeltaCallback_t* mouseDeltaCallback;
 
-	bool cursorLock = false;
-	int modkeys = 0;
-	bool inputProcessedByControllers = false;
+	bool cursorLock;
+	int modkeys;
+	bool inputProcessedByControllers;
 
-	int width = 0;
-	int height = 0;
+	int width;
+	int height;
 
 protected:
 	HWND windowHandle;
@@ -113,6 +116,8 @@ private:
 class VKWindow : public BaseWindow {
 public:
 
+	VKWindow();
+
 	void init();
 	void deinit();
 
@@ -133,23 +138,23 @@ private:
 
 	VulkanSwapchain swapchainData;
 
-	VkQueue queue = VK_NULL_HANDLE;
+	VkQueue queue;
 
-	VkCommandPool presentPool = VK_NULL_HANDLE;
-	VkCommandBuffer* presentBuffers = nullptr;
+	VkCommandPool presentPool;
+	VkCommandBuffer* presentBuffers;
 
-	VkSemaphore imageAvaible = VK_NULL_HANDLE;
-	VkSemaphore renderingFinished = VK_NULL_HANDLE;
+	VkSemaphore imageAvaible;
+	VkSemaphore renderingFinished;
 
-	uint32_t currentImage = 0;
+	uint32_t currentImage;
 
-	VkFence waitFence = VK_NULL_HANDLE;
+	VkFence waitFence;
 
-	VkDebugReportCallbackEXT debugReportCallback = VK_NULL_HANDLE;
+	VkDebugReportCallbackEXT debugReportCallback;
 
-	bool recreateSwapchain = false;
+	bool recreateSwapchain;
 
-	VkRenderPass renderPass = VK_NULL_HANDLE;
+	VkRenderPass renderPass;
 };
 
 #endif

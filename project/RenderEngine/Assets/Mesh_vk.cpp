@@ -1,5 +1,11 @@
 #include "Mesh_vk.hpp"
 
+Mesh_vk::Mesh_vk()
+	: vertexBuffer(VK_NULL_HANDLE)
+	, vertexMemory(VK_NULL_HANDLE)
+	, indexBuffer(VK_NULL_HANDLE)
+	, indexMemory(VK_NULL_HANDLE) {}
+
 void Mesh_vk::init(MeshPrimitiveType p) {}
 
 void Mesh_vk::release() {}

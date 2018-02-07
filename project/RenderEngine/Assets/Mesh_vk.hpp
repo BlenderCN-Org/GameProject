@@ -10,6 +10,8 @@
 class Mesh_vk : public IMesh {
 public:
 
+	Mesh_vk();
+
 	virtual void init(MeshPrimitiveType p);
 	virtual void release();
 
@@ -32,11 +34,11 @@ private:
 
 #if SUPPORT_VULKAN_WINDOW
 
-	VkBuffer vertexBuffer = VK_NULL_HANDLE;
-	VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
+	VkBuffer vertexBuffer;
+	VkDeviceMemory vertexMemory;
 
-	VkBuffer indexBuffer = VK_NULL_HANDLE;
-	VkDeviceMemory indexMemory = VK_NULL_HANDLE;
+	VkBuffer indexBuffer;
+	VkDeviceMemory indexMemory;
 
 #endif
 	//GLuint vertexBuffer;

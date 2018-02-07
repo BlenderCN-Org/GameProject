@@ -99,7 +99,7 @@ private:
 	int stencilOpToGlInt(StencilOp op);
 	int funcConstantToGlInt(FuncConstants funcConst);
 
-	int counter = 0;
+	int counter;
 
 	GLinfo info;
 
