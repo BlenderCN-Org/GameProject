@@ -59,11 +59,23 @@ MainMenu::MainMenu() : mainMenu(nullptr) {
 	exitButton->setHoverTexture(buttonHoverTexture);
 	exitButton->setPressTexture(buttonPressTexture);
 
+	asteroids = new Engine::Graphics::Gui::Button();
+	asteroids->setSize(190, 30);
+	asteroids->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
+	asteroids->setPosition(0, 150);
+	asteroids->setVisible(true);
+	asteroids->setTexture(panelTexture);
+	asteroids->setText("Asteroids");
+	asteroids->setHoverTexture(buttonHoverTexture);
+	asteroids->setPressTexture(buttonPressTexture);
+
+
 	mainMenu->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
 	metrixPanel->addGuiItem(newGameButton);
 	metrixPanel->addGuiItem(editorButton);
 	metrixPanel->addGuiItem(exitButton);
+	metrixPanel->addGuiItem(asteroids);
 }
 
 MainMenu::~MainMenu() {
@@ -76,7 +88,7 @@ MainMenu::~MainMenu() {
 	delete newGameButton;
 	delete editorButton;
 	delete exitButton;
-	
+	delete asteroids;
 }
 
 void MainMenu::update(float dt) {
@@ -101,6 +113,11 @@ int MainMenu::buttonPressed() {
 	if (exitButton->wasPressed()) {
 		printf("Exit, YAY!!!!\n");
 		index = 2;
+	}
+
+	if (asteroids->wasPressed()) {
+		printf("Asteroids, YAY!!!!\n");
+		index = 3;
 	}
 
 	return index;

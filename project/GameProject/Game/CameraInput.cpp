@@ -123,8 +123,13 @@ void CameraInput::setCam(vec3 _pos, vec3 _dir) {
 	float angleXZ = atan2(_dir.x, _dir.z) - atan2(dir.x, dir.z);
 	angleH += angleXZ * toDEGREE;
 
-	float angleYold = dot(dir, vec3(0, 1, 0));
-	float angleYnew = dot(_dir, vec3(0, 1, 0));
+	glm::vec3 v = vec3(0, 1, 0);
+
+	if (_pos == vec3(0, 1, 0)) {
+		v = vec3(0, 0, 1);
+	}
+	float angleYold = dot(dir, v);
+	float angleYnew = dot(_dir, v);
 
 	float diff = angleYold - angleYnew;
 	diff *= toDEGREE;
@@ -134,7 +139,7 @@ void CameraInput::setCam(vec3 _pos, vec3 _dir) {
 	pos = _pos;
 	dir = _dir;
 
-	*viewMat = lookAt(pos, pos + dir, vec3(0, 1, 0));
+	*viewMat = lookAt(pos, pos + dir, v);
 }
 
 glm::vec3 CameraInput::direction() const {

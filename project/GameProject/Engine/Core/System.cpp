@@ -75,12 +75,17 @@ namespace Engine {
 			}
 		}
 
+		float randomFloat(float low, float high) {
+
+			return low + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (high - low)));
+		}
+
 		uint64_t HighResClock::tick() {
 
 			using namespace std::chrono;
 
 			high_resolution_clock::time_point temp = high_resolution_clock::now();
-			
+
 			auto d = temp - start;
 			start = temp;
 			time = duration_cast<duration<float>>(d).count();
@@ -120,7 +125,7 @@ namespace Engine {
 			}
 			return false;
 		}
-		
+
 #endif
 	}
 }

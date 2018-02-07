@@ -75,7 +75,7 @@ void main()
 	//vec4(vec3(shading), 1.0);
 	//vec4(sPos, 1.0);
 	
-	color = mix(vec4(1, 0, 0, 0), color, fr);
+	//color = mix(vec4(1, 0, 0, 0), color, fr);
 	
 	fragmentColor =  color;//(color * letThereBeLight * shading); // pow(color, vec4(vec3(0.4545), 1.0));
 }

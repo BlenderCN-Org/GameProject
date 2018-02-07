@@ -29,6 +29,8 @@ namespace Engine {
 
 		const size_t strlen_s(const char* str);
 
+		float randomFloat(float low, float high);
+
 		template<typename T>
 		float percentageInRange(T min, T max, T value) {
 

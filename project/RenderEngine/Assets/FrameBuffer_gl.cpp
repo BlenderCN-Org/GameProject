@@ -197,7 +197,7 @@ void FrameBuffer_gl::resolveToScreen(int bufferIndex) {
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 		}
 		//glDrawBuffer(GL_BACK);
-		glBlitFramebuffer(0, 0, width, height, 0, 0, windowWidth, windowHeight, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		glBlitFramebuffer(0, 0, width, height, 0, 0, windowWidth, windowHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

@@ -29,6 +29,7 @@ private:
 	Engine::Graphics::Gui::Button* newGameButton;
 	Engine::Graphics::Gui::Button* editorButton;
 	Engine::Graphics::Gui::Button* exitButton;
+	Engine::Graphics::Gui::Button* asteroids;
 
 };
 

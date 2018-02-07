@@ -24,6 +24,14 @@
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 #include "../Engine/Graphics/Gui/TextureView.hpp"
 
+// Asteroid Temp
+
+#include "Asteroids/Ship.hpp"
+#include "Asteroids/Asteroid.hpp"
+#include "Asteroids/Bullet.hpp"
+
+// Eng Asteroid Temp
+
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 
@@ -33,6 +41,7 @@
 enum class GameState {
 	MAIN_MENU,
 	PLAY,
+	PLAY_ASTEROIDS,
 	EDIT,
 	PAUSE,
 };
@@ -48,7 +57,7 @@ public:
 	void render();
 
 private:
-	
+
 	MapLoader mapLoader;
 
 	CEngine * engine;
@@ -65,11 +74,14 @@ private:
 	void updateMenu(float dt);
 	void updatePlay(float dt);
 	void updateEdit(float dt);
+	void updateAsteroids(float dt);
 	void updatePaused(float dt);
 
 	void renderSky();
 	void renderScene();
 	void renderShadowMap();
+
+	void renderAsteroids();
 
 	RenderBatch* batchTmp;
 
@@ -114,7 +126,7 @@ private:
 	int selectedLocGBuff;
 	int clipPlane;
 	int skinArray;
-	
+
 	int blitTexDiff;
 	int blitTexNorm;
 	int blitTexWPos;
@@ -127,10 +139,25 @@ private:
 	float dtOneSec;
 	int fps;
 	int fpsCounter;
-	
+
 	std::vector<Renderable*> frameObjects;
 
-};	
+	// Asteroid Temp
+	Ship* asteroidShip;
+
+	std::vector<Asteroid*> asteroids;
+	std::vector<Bullet*> bullets;
+
+	IShaderObject* asteroidShader;
+	int asteroidVP;
+	int asteroidMdl;
+	int asteroidColor;
+
+	IMesh* bulletMesh;
+
+	// Eng Asteroid Temp
+
+};
 
 
 #endif

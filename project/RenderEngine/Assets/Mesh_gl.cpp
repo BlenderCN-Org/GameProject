@@ -145,6 +145,8 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		meshPrimitive = GL_QUADS;
 	else if (primitiveType == MeshPrimitiveType::POINT)
 		meshPrimitive = GL_POINTS;
+	else if (primitiveType == MeshPrimitiveType::LINE)
+		meshPrimitive = GL_LINE_STRIP;
 
 
 	tInfo.data = data;

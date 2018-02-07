@@ -222,6 +222,9 @@
     <ClCompile Include="Engine\ThreadManager.cpp" />
     <ClCompile Include="Engine\Utils\MemoryBuffer.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
+    <ClCompile Include="Game\Asteroids\Asteroid.cpp" />
+    <ClCompile Include="Game\Asteroids\Bullet.cpp" />
+    <ClCompile Include="Game\Asteroids\Ship.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
@@ -258,6 +261,9 @@
     <ClInclude Include="Engine\SafeQueue.hpp" />
     <ClInclude Include="Engine\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\ThreadManager.hpp" />
+    <ClInclude Include="Game\Asteroids\Asteroid.hpp" />
+    <ClInclude Include="Game\Asteroids\Bullet.hpp" />
+    <ClInclude Include="Game\Asteroids\Ship.hpp" />
     <ClInclude Include="Game\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />

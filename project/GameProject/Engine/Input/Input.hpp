@@ -101,6 +101,8 @@ namespace Engine {
 			bool returnPressed;
 			bool backspacePressed;
 
+			IWindow* window;
+
 		private:
 
 			Config keyConf;
@@ -114,7 +116,6 @@ namespace Engine {
 			void loadkeyBinds();
 			void saveKeyBinds();
 
-			IWindow* window;
 
 			std::map<InputEvent, bool> keyMap;
 			std::map<InputEvent, bool> releaseMap;
@@ -162,7 +163,7 @@ namespace Engine {
 			KEYBIND_DOWN_ARROW,
 			KEYBIND_LEFT_ARROW,
 			KEYBIND_RIGHT_ARROW,
-
+			KEYBIND_SPACE,
 			KEYBINDS_LENGTH
 		};
 
@@ -178,6 +179,7 @@ namespace Engine {
 			"KeyAction_Arrow_DOWN"
 			"KeyAction_Arrow_LEFT"
 			"KeyAction_Arrow_RIGHT"
+			"KeyAction_Space"
 		};
 
 		static const char* KeyBindsDefault[] =
@@ -191,7 +193,8 @@ namespace Engine {
 			"72:0:0",
 			"80:0:0",
 			"75:0:0",
-			"77:0:0"
+			"77:0:0",
+			"57:0:0"
 		};
 
 		extern KeyBind KeyBindings[];
