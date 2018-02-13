@@ -5,8 +5,8 @@
 #include <RenderEngine/IRenderEngine.hpp>
 
 const float ROTATION = 1.3F;
-const float ACCELERATION = 1.0F;
-const float MAX_VELOCITY = 4.0F;
+const float ACCELERATION = 50.0F;
+const float MAX_VELOCITY = 400.0F;
 
 class Ship {
 

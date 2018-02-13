@@ -2,7 +2,7 @@
 #define BULLET_HPP
 
 const float BULLET_TTL = 5.0F;
-const float BULLET_SPEED = 3.0F;
+const float BULLET_SPEED = 300.0F;
 
 class Bullet {
 

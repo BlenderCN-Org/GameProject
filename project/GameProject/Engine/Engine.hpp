@@ -17,6 +17,7 @@
 /// Std Includes
 #include <map>
 #include <vector>
+#include <thread>
 
 using namespace Engine;
 
@@ -64,10 +65,14 @@ public:
 	void writeDepth(float depthValue, glm::mat4 worldMat, glm::mat4 mdl);
 
 	void renderFullQuad();
-	
+
 	Interfaces::IAssetManager* getAssetManager() const;
 
+	PhysicsShape_AABB getAABB(uint32_t index);
+
 private:
+
+	void physicsLoop();
 
 	Core::Settings engineSettings;
 
@@ -93,6 +98,8 @@ private:
 	int depthMdlMatLoc;
 
 	IMesh* fullQuad;
+
+	std::thread* physicsThread;
 
 };
 

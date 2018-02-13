@@ -111,77 +111,79 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 	switch (msg) {
-		break;
-		case WM_SETFOCUS:
-			if (wnd->focusCallback)
-				wnd->focusCallback(wnd, true);
-			enableXinput(true);
-			return 1;
+		//break;
+		//case WM_SETFOCUS:
+		//	if (wnd->focusCallback)
+		//		wnd->focusCallback(wnd, true);
+		//	enableXinput(true);
+		//	return 1;
+		//	break;
+		//case WM_KILLFOCUS:
+		//	if (wnd->focusCallback)
+		//		wnd->focusCallback(wnd, false);
+		//	enableXinput(false);
+		//	return 1;
+		//	break;
+	case WM_SYSCOMMAND:
+		switch (wParam) {
+		case SC_KEYMENU:
+			return(0);
 			break;
-		case WM_KILLFOCUS:
-			if (wnd->focusCallback)
-				wnd->focusCallback(wnd, false);
+		}
+		break;
+	case RESTORE_FROM_EDIT:
+	{
+		wnd->setWindowBorderless(false);
+		SetParent(hWnd, NULL);
+		break;
+	}
+	case WM_SIZE:
+	{
+		if (wnd) {
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
+			if (wnd->resizeCallback)
+				wnd->resizeCallback(wnd, width, height);
+
+			wnd->setWindowSize(width, height);
+			printf("callback stuff");
+		}
+		printf("Resize\n");
+	}
+
+	break;
+	case WM_CLOSE:
+		break;
+
+	case WM_ACTIVATEAPP:
+		// g_bWindowActive is used to control if the Windows key is filtered by the keyboard hook or not.
+		if (wParam == TRUE) {
 			enableXinput(false);
+			g_bWindowActive = true;
+		} else {
+			enableXinput(false);
+			g_bWindowActive = false;
+		}
+		break;
+
+	case WM_CHAR:
+	case WM_SYSCHAR:
+	case WM_UNICHAR:
+	{
+		return characterCallback(wnd, msg, wParam);
+	}
+	break;
+	case WM_INPUT:
+	{
+		if (wnd) {
+			inputCallback(wnd, lParam);
+			DefWindowProc(hWnd, msg, wParam, lParam);
 			return 1;
-			break;
-		case WM_SYSCOMMAND:
-			switch (wParam) {
-				case SC_KEYMENU:
-					return(0);
-					break;
-			}
-			break;
-		case RESTORE_FROM_EDIT:
-		{
-			wnd->setWindowBorderless(false);
-			SetParent(hWnd, NULL);
-			break;
 		}
-		case WM_SIZE:
-		{
-			if (wnd) {
-				int width = LOWORD(lParam);
-				int height = HIWORD(lParam);
-				if (wnd->resizeCallback)
-					wnd->resizeCallback(wnd, width, height);
-
-				wnd->setWindowSize(width, height);
-				printf("callback stuff");
-			}
-			printf("Resize\n");
-		}
-
+	}
+	break;
+	default:
 		break;
-		case WM_CLOSE:
-			break;
-
-		case WM_ACTIVATEAPP:
-			// g_bWindowActive is used to control if the Windows key is filtered by the keyboard hook or not.
-			if (wParam == TRUE) {
-				g_bWindowActive = true;
-			} else {
-				g_bWindowActive = false;
-			}
-			break;
-
-		case WM_CHAR:
-		case WM_SYSCHAR:
-		case WM_UNICHAR:
-		{
-			return characterCallback(wnd, msg, wParam);
-		}
-		break;
-		case WM_INPUT:
-		{
-			if (wnd) {
-				inputCallback(wnd, lParam);
-				DefWindowProc(hWnd, msg, wParam, lParam);
-				return 1;
-			}
-		}
-		break;
-		default:
-			break;
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -261,7 +263,7 @@ void setPixelFormatOGL(HDC windowDC) {
 int registerWindowClass() {
 	if (windowClassInitialized)
 		return windowClassInitialized;
-	WNDCLASS wc{};
+	WNDCLASS wc {};
 
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WindowProc;
@@ -311,7 +313,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 		};
 
 		renderingContext = wglCreateContextAttribsARB(windowDC, NULL, contextAttributes);
-} else {
+	} else {
 		renderingContext = wglCreateContext(windowDC);
 	}
 
@@ -351,9 +353,9 @@ void BaseWindow::setWindowSize(int x, int y) {
 	SetWindowPos(windowHandle, NULL, 0, 0, r.right - r.left, r.bottom - r.top, SWP_NOZORDER | SWP_NOMOVE);
 }
 
-void BaseWindow::getWindowSize(int &x, int &y) 	{
+void BaseWindow::getWindowSize(int &x, int &y) {
 
-	if (width == 0 || height == 0) 		{
+	if (width == 0 || height == 0) {
 		RECT r;
 		GetClientRect(windowHandle, &r);
 
@@ -482,7 +484,7 @@ void VKWindow::init() {
 		// create surface (platform specific)
 
 		/* Should only be inside this function */
-		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo{};
+		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo {};
 		surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 		surfaceCreateInfo.hwnd = windowHandle;
 		surfaceCreateInfo.hinstance = NULL;
@@ -554,7 +556,7 @@ void VKWindow::swapBuffers() {
 
 	VkPipelineStageFlags flags = VkPipelineStageFlagBits::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
 
-	VkSubmitInfo submitInfo{};
+	VkSubmitInfo submitInfo {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &presentBuffers[currentImage];
@@ -566,7 +568,7 @@ void VKWindow::swapBuffers() {
 
 	vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
 
-	VkPresentInfoKHR presentInfo{};
+	VkPresentInfoKHR presentInfo {};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = &swapchainData.swapchain;
@@ -599,7 +601,7 @@ void VKWindow::swapBuffers() {
 		delete[] presentBuffers;
 		presentBuffers = nullptr;
 
-		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
+		VkCommandBufferAllocateInfo commandBufferAllocateInfo {};
 		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		commandBufferAllocateInfo.level = VkCommandBufferLevel::VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		commandBufferAllocateInfo.commandBufferCount = swapchainData.swapchainImageCount;
@@ -609,13 +611,13 @@ void VKWindow::swapBuffers() {
 
 		r = vkAllocateCommandBuffers(instanceData.device, &commandBufferAllocateInfo, presentBuffers);
 
-		VkCommandBufferBeginInfo commandBeginInfo{};
+		VkCommandBufferBeginInfo commandBeginInfo {};
 		commandBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		commandBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 		VkClearColorValue clearColor = { 1.0f, 0.8f, 0.4f, 0.0f };
 
-		VkImageSubresourceRange subresourceRange{};
+		VkImageSubresourceRange subresourceRange {};
 		subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 		subresourceRange.baseMipLevel = 0;
 		subresourceRange.levelCount = 1;

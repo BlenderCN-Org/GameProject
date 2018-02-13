@@ -45,7 +45,7 @@ void main()
 	vPos += (vTrans * vertexWeights[3]);
 	
 	
-	vec4 p = (vec4(vPos.xyz, 1.0) * worldMat);
+	vec4 p = (vec4(vertexPos.xyz, 1.0) * worldMat);
 	pos = p.xyz;
 	vec4 p2 = vec4(pos, 1.0) * reflectMat;
 	

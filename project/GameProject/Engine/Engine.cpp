@@ -6,6 +6,10 @@
 #include "Core/LibraryLoader.hpp"
 #include "Graphics/Graphics.hpp"
 
+
+/// Std Includes
+#include <chrono>
+
 const char* vs = ""
 "#version 410\n"
 "\n"
@@ -44,9 +48,6 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	}
 
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
-
-	//engineSettings.setResolution(Interfaces::Resolution{ 1280, 720 });
-	//engineSettings.setVSync(true);
 
 	windowWidth = engineSettings.resolution().width;
 	windowHeight = engineSettings.resolution().height;
@@ -94,7 +95,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	fullQuad = gRenderEngine->createMesh();
 	fullQuad->init(MeshPrimitiveType::TRIANGLE);
 
-	float vertex[6][5]{
+	float vertex[6][5] {
 		{ 0 - 1, 0 - 1, 0, 0, 0 },
 		{ 0 - 1, 0 + 1, 0, 0, 1 },
 		{ 0 + 1, 0 + 1, 0, 1, 1 },
@@ -107,9 +108,15 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
 
 	assetManager = new AssetManager();
+
+	physicsThread = new std::thread(&CEngine::physicsLoop, this);
+
 }
 
 CEngine::~CEngine() {
+
+	physicsThread->join();
+	delete physicsThread;
 
 	delete assetManager;
 
@@ -172,9 +179,12 @@ void CEngine::update(const float dt) {
 
 	}
 
+	if (Input::Input::GetInput()->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_SPACE])) {
+		physEngine.freezeFlag(false);
+	}
+
 	console->update(dt);
 	running = gameWindow->isVisible();
-
 }
 
 void CEngine::clearBackBuffer() {
@@ -188,11 +198,8 @@ void CEngine::clearDebug() {
 }
 
 void CEngine::presentFrame() {
-
 	console->render();
-
 	gameWindow->swapBuffers();
-
 }
 
 void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {
@@ -209,4 +216,31 @@ void CEngine::renderFullQuad() {
 
 Interfaces::IAssetManager* CEngine::getAssetManager() const {
 	return assetManager;
+}
+
+PhysicsShape_AABB CEngine::getAABB(uint32_t index) {
+	if (index == 0) {
+		return physEngine.aabb;
+	} else {
+		return physEngine.aabb2;
+	}
+}
+
+void CEngine::physicsLoop() {
+
+	System::HighResClock clk;
+
+	float dt = 0.0F;
+
+	while (running) {
+
+		physEngine.update(dt);
+
+		clk.tick();
+		dt = clk.seconds();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
+	}
+
+
 }

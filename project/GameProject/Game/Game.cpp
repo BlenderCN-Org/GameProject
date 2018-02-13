@@ -53,7 +53,9 @@ Game::Game(CEngine* _engine)
 
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
-	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
+	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/HollowCylinder.mesh");
+	aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/HalfCube.mesh");
+	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/untitled.dae");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadDea("Data/Meshes/untitled.dae");
 
@@ -68,13 +70,13 @@ Game::Game(CEngine* _engine)
 
 	metrixPanel = new Engine::Graphics::Gui::Panel();
 	metrixPanel->setPosition(-10, 10);
-	metrixPanel->setSize(300, 100);
+	metrixPanel->setSize(300, 150);
 	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_RIGHT);
 	metrixPanel->setVisible(true);
 	metrixPanel->setTexture(panelTexture);
 
 	infoLabel = new Engine::Graphics::Gui::Label();
-	infoLabel->setSize(300, 100);
+	infoLabel->setSize(300, 150);
 	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	infoLabel->setVisible(true);
 	infoLabel->setText("test");
@@ -113,7 +115,7 @@ Game::Game(CEngine* _engine)
 
 	fbci.height = 720;
 	fbci.width = 1280;
-	fbci.mutlisample = 16;
+	fbci.mutlisample = 2;
 	fbci.nrColorBuffers = 3;
 	fbci.useDepth = true;
 	fbci.useMultisample = true;
@@ -251,7 +253,7 @@ Game::Game(CEngine* _engine)
 
 	bulletMesh->setMeshData(&points, sizeof(points), MeshDataLayout::VERT_UV);
 
-
+	meshRotation = 0.0F;
 }
 
 Game::~Game() {
@@ -396,6 +398,11 @@ void Game::update(float dt, uint64_t clocks) {
 
 	str += "Clocks: " + std::to_string(clocks) + "\n";
 
+	str += "RotationSpeed: " + std::to_string(rotSpeed) + "\n";
+
+	str += "Rotation: " + std::to_string(meshRotation * toDEGREE) + " (" + std::to_string((meshRotation * toDEGREE) / 360.0F) + ")\n";
+	str += "RotTime: " + std::to_string(rotTime) + "\n";
+
 	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
 	infoLabel->setText(str.c_str());
@@ -454,19 +461,21 @@ void Game::render() {
 
 		gBufferBlit->bindData(blitEyePos, UniformDataType::UNI_FLOAT3, &camera.getPos());
 
-		gRenderEngine->activeTexture(0);
-		gBuffer->bindAttachment(0);
-		gRenderEngine->activeTexture(1);
-		gBuffer->bindAttachment(1);
-		gRenderEngine->activeTexture(2);
-		gBuffer->bindAttachment(2);
-		gRenderEngine->activeTexture(3);
-		shadowMap->bindAttachment(1);
+		//gRenderEngine->activeTexture(0);
+		//gBuffer->bindAttachment(0);
+		//gRenderEngine->activeTexture(1);
+		//gBuffer->bindAttachment(1);
+		//gRenderEngine->activeTexture(2);
+		//gBuffer->bindAttachment(2);
+		//gRenderEngine->activeTexture(3);
+		//shadowMap->bindAttachment(1);
+		//
+		//gRenderEngine->bindDefaultFrameBuffer();
+		//engine->renderFullQuad();
+		//
+		//gRenderEngine->activeTexture(0);
 
-		gRenderEngine->bindDefaultFrameBuffer();
-		engine->renderFullQuad();
-
-		gRenderEngine->activeTexture(0);
+		gBuffer->resolveToScreen();
 
 		gameGui->render();
 
@@ -489,11 +498,15 @@ void Game::renderSky() {
 
 void Game::renderScene() {
 
+	glm::mat4 objMat;
+
+	objMat = glm::rotate(meshRotation, glm::vec3(0, 0, 1));
+
 	// render scene as normal
 	gBufferShader->useShader();
 	gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &objMat);
 	gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
 
 	glm::mat4 arr[200];
@@ -506,7 +519,20 @@ void Game::renderScene() {
 	gBufferShader->bindDataArray(skinArray, UniformDataType::UNI_MATRIX4X4, arr, 200);
 
 	mesh->bind();
-	mesh->render();
+	//mesh->render();
+
+	aabbTest->bind();
+
+	glm::mat4 obmat2 = glm::transpose(glm::translate(engine->getAABB(0).origin));
+	obmat2 = glm::scale(obmat2, glm::vec3(2.0F));
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
+
+	aabbTest->render();
+
+	obmat2 = glm::transpose(glm::translate(engine->getAABB(1).origin));
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
+
+	aabbTest->render();
 
 	//gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::transpose(glm::translate(glm::mat4(), glm::vec3(0, 0, 0))));
 	//mesh->bind();
@@ -535,7 +561,7 @@ void Game::renderScene() {
 
 	gBufferShader->useShader();
 	gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &mirrorMat);
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &objMat);
 	gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &normal);
 
 	mesh->bind();
@@ -661,17 +687,19 @@ void Game::renderAsteroids() {
 
 	gBufferBlit->bindData(blitEyePos, UniformDataType::UNI_FLOAT3, &camera.getPos());
 
-	gRenderEngine->activeTexture(0);
-	gBuffer->bindAttachment(0);
-	gRenderEngine->activeTexture(1);
-	gBuffer->bindAttachment(1);
-	gRenderEngine->activeTexture(2);
-	gBuffer->bindAttachment(2);
-	gRenderEngine->activeTexture(3);
-	shadowMap->bindAttachment(1);
+	//gRenderEngine->activeTexture(0);
+	//gBuffer->bindAttachment(0);
+	//gRenderEngine->activeTexture(1);
+	//gBuffer->bindAttachment(1);
+	//gRenderEngine->activeTexture(2);
+	//gBuffer->bindAttachment(2);
+	//gRenderEngine->activeTexture(3);
+	//shadowMap->bindAttachment(1);
+	//
+	//gRenderEngine->bindDefaultFrameBuffer();
+	//engine->renderFullQuad();
 
-	gRenderEngine->bindDefaultFrameBuffer();
-	engine->renderFullQuad();
+	gBuffer->resolveToScreen();
 
 	gRenderEngine->activeTexture(0);
 
@@ -737,9 +765,45 @@ void Game::updateMenu(float dt) {
 
 }
 
+const float MAX_ROT_SPEED = toRADIAN * 36.0F;
+
 void Game::updatePlay(float dt) {
 
 	camInput.update(dt);
+
+	Input::Input* in = Input::Input::GetInput();
+
+	bool hadInput = false;
+
+	if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_LEFT_ARROW])) {
+		rotSpeed += 2.0F * dt;
+		hadInput = true;
+	}
+
+	if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_RIGHT_ARROW])) {
+		rotSpeed -= 2.0F * dt;
+		hadInput = true;
+	}
+
+	if (!hadInput) {
+
+		if (abs(rotSpeed) < 0.01F) {
+			rotSpeed = 0.0F;
+		} else {
+			if (rotSpeed > 0.0) {
+				rotSpeed -= dt;
+			} else {
+				rotSpeed += dt;
+			}
+		}
+	} else {
+		rotTime += dt;
+	}
+
+	rotSpeed = min(max(rotSpeed, -MAX_ROT_SPEED), MAX_ROT_SPEED);
+
+	meshRotation += rotSpeed * dt;
+
 }
 
 void Game::updateEdit(float dt) {
@@ -818,7 +882,7 @@ void Game::updateAsteroids(float dt) {
 					asteroids.push_back(ad);
 				}
 			}
-			
+
 			if (a->mSize == ASTEROID_SIZE::MEDIUM) {
 				for (size_t i = 0; i < 3; i++) {
 					Asteroid* ad = new Asteroid(ASTEROID_SIZE::SMALL, a->xPos, a->yPos);

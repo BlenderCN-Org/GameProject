@@ -177,7 +177,7 @@ namespace Engine {
 
 		if (mdl.skeleton) {
 
-			AssetLib::JointKeyFrames* frames = mdl.animations[1].joint;
+			AssetLib::JointKeyFrames* frames = mdl.animations[0].joint;
 
 			std::function<BindPoseInfo(AssetLib::SkeletonBone*, bool)> copy = [&](AssetLib::SkeletonBone* org, bool other) -> BindPoseInfo {
 

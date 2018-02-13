@@ -219,6 +219,7 @@
     <ClCompile Include="Engine\Graphics\Textures\Texture2DReference.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsEngine.cpp" />
+    <ClCompile Include="Engine\Physics\PhysicsShape.cpp" />
     <ClCompile Include="Engine\ThreadManager.cpp" />
     <ClCompile Include="Engine\Utils\MemoryBuffer.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="Engine\Interfaces\ICAnimation.hpp" />
     <ClInclude Include="Engine\Interfaces\ICMesh.hpp" />
     <ClInclude Include="Engine\Interfaces\IReflected.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsShape.hpp" />
     <ClInclude Include="Engine\Reflection.hpp" />
     <ClInclude Include="Engine\RefObject.hpp" />
     <ClInclude Include="Engine\SafeQueue.hpp" />

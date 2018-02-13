@@ -27,8 +27,8 @@ void Bullet::update(float dt) {
 	int wndY = 0;
 	Engine::Input::Input::GetInput()->getWindowSize(wndX, wndY);
 	
-	xPos -= xVel;
-	yPos += yVel;
+	xPos -= xVel * dt;
+	yPos += yVel * dt;
 	
 	if (yPos < -wndY) {
 		yPos = float(wndY);

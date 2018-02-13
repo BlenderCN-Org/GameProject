@@ -84,8 +84,8 @@ void Ship::update(float dt) {
 		rot += (2 * 3.1415F);
 	}
 
-	xPos -= xVel;
-	yPos += yVel;
+	xPos -= xVel * dt;
+	yPos += yVel * dt;
 
 	if (yPos < -wndY) {
 		yPos = float(wndY);

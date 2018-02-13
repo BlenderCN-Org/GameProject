@@ -23,26 +23,25 @@ Asteroid::Asteroid(ASTEROID_SIZE size, float ox, float oy) {
 		xPos = (Engine::System::randomFloat(0.0F, 2.0F * wndX) - wndX);
 		yPos = (Engine::System::randomFloat(0.0F, 2.0F * wndY) - wndY);
 
-		xVel = (Engine::System::randomFloat(0.0F, 4.0F) - 2.0F);
-		yVel = (Engine::System::randomFloat(0.0F, 4.0F) - 2.0F);
+		xVel = (Engine::System::randomFloat(0.0F, 40.0F) - 20.0F);
+		yVel = (Engine::System::randomFloat(0.0F, 40.0F) - 20.0F);
 	}
 
 	if (size == ASTEROID_SIZE::MEDIUM) {
 		xPos = ox;
 		yPos = oy;
 
-		xVel = (Engine::System::randomFloat(0.0F, 6.0F) - 3.0F);
-		yVel = (Engine::System::randomFloat(0.0F, 6.0F) - 3.0F);
+		xVel = (Engine::System::randomFloat(0.0F, 60.0F) - 30.0F);
+		yVel = (Engine::System::randomFloat(0.0F, 60.0F) - 30.0F);
 	}
 
 	if (size == ASTEROID_SIZE::SMALL) {
 		xPos = ox;
 		yPos = oy;
 
-		xVel = (Engine::System::randomFloat(0.0F, 8.0F) - 4.0F);
-		yVel = (Engine::System::randomFloat(0.0F, 8.0F) - 4.0F);
+		xVel = (Engine::System::randomFloat(0.0F, 80.0F) - 40.0F);
+		yVel = (Engine::System::randomFloat(0.0F, 80.0F) - 40.0F);
 	}
-
 
 	rot = 0.0F;
 
@@ -119,10 +118,10 @@ void Asteroid::update(float dt) {
 	int wndY = 0;
 	Engine::Input::Input::GetInput()->getWindowSize(wndX, wndY);
 
-	rot += rotVel;
+	rot += rotVel * dt;
 
-	xPos -= xVel;
-	yPos += yVel;
+	xPos -= xVel * dt;
+	yPos += yVel * dt;
 
 	if (yPos < -wndY) {
 		yPos = float(wndY);
