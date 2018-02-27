@@ -15,7 +15,7 @@ class CameraInput {
 public:
 
 	void init(glm::mat4* viewMat);
-	void update(float dt);
+	void update(float dt, bool freecam = false);
 
 	void setCam(glm::vec3 _pos, glm::vec3 _dir);
 

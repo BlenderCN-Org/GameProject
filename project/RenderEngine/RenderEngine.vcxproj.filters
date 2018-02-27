@@ -135,6 +135,9 @@
     <ClInclude Include="Assets\ThreadLock.hpp">
       <Filter>Source Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="DataTypes\ShaderNodes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderEngine.cpp">

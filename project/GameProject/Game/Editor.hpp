@@ -26,11 +26,16 @@ private:
 
 	Engine::Graphics::CGui* editorGui;
 
+	Engine::Graphics::Texture::Texture2D* buttonHoverTexture;
+	Engine::Graphics::Texture::Texture2D* buttonPressTexture;
 
 	Engine::Graphics::Texture::Texture2D* toolbarTexture;
 	Engine::Graphics::Gui::Panel* toolbar;
+	Engine::Graphics::Gui::Button* showButton;
 
 	Engine::Graphics::Gui::TextArea* textArea;
+
+	Engine::Graphics::Gui::GuiWindow* guiWindow;
 
 };
 

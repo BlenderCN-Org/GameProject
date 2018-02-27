@@ -111,19 +111,21 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	BaseWindow* wnd = reinterpret_cast<BaseWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 	switch (msg) {
-		//break;
-		//case WM_SETFOCUS:
-		//	if (wnd->focusCallback)
-		//		wnd->focusCallback(wnd, true);
-		//	enableXinput(true);
-		//	return 1;
-		//	break;
-		//case WM_KILLFOCUS:
-		//	if (wnd->focusCallback)
-		//		wnd->focusCallback(wnd, false);
-		//	enableXinput(false);
-		//	return 1;
-		//	break;
+		break;
+	case WM_SETFOCUS:
+		if (wnd->focusCallback)
+			wnd->focusCallback(wnd, true);
+		wnd->hasFocus = true;
+		enableXinput(true);
+		return 1;
+		break;
+	case WM_KILLFOCUS:
+		if (wnd->focusCallback)
+			wnd->focusCallback(wnd, false);
+		wnd->hasFocus = false;
+		enableXinput(false);
+		return 1;
+		break;
 	case WM_SYSCOMMAND:
 		switch (wParam) {
 		case SC_KEYMENU:
@@ -146,9 +148,11 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				wnd->resizeCallback(wnd, width, height);
 
 			wnd->setWindowSize(width, height);
-			printf("callback stuff");
+
+			//printf("callback stuff");
+
 		}
-		printf("Resize\n");
+		//printf("Resize\n");
 	}
 
 	break;

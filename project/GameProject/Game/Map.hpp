@@ -23,7 +23,7 @@ class Map {
 
 public:
 
-	Map(LoadedData& mapData);
+	Map(LoadedData& mapData, MapLoader& ldr);
 	virtual ~Map();
 
 	void update(float dt);
@@ -31,6 +31,10 @@ public:
 	void updateRenderBatch(RenderBatch& batch);
 
 private:
+
+	bool verifyData(LoadedData& data);
+
+	void createCells();
 
 	Sky * sky;
 

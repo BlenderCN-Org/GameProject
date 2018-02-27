@@ -63,7 +63,7 @@ Sky::~Sky() {
 
 void Sky::update(float dt) {
 
-	skyTime += dt * 0.01F;
+	skyTime += dt * 0.001F;
 	if (skyTime > 1.0F) {
 		skyTime -= 1.0F;
 	}

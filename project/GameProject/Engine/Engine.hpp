@@ -6,7 +6,6 @@
 #include "Core/Settings.hpp"
 #include "Interfaces/IDataParser.hpp"
 #include "Interfaces/IAssetManager.hpp"
-#include "Physics/PhysicsEngine.hpp"
 #include "Utils/MemoryBuffer.hpp"
 
 #include "AssetManager.hpp"
@@ -58,6 +57,8 @@ public:
 
 	void update(const float dt);
 
+	void lockCursor(bool lock);
+
 	void clearBackBuffer();
 	void clearDebug();
 	void presentFrame();
@@ -67,8 +68,6 @@ public:
 	void renderFullQuad();
 
 	Interfaces::IAssetManager* getAssetManager() const;
-
-	PhysicsShape_AABB getAABB(uint32_t index);
 
 private:
 
@@ -83,8 +82,6 @@ private:
 	AssetManager* assetManager;
 
 	std::map<DataParsersTypes, std::vector<Interfaces::IDataParser*>> dataParsers;
-
-	Physics::PhysicsEngine physEngine;
 
 	int windowWidth;
 	int windowHeight;

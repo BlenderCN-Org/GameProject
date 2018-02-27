@@ -77,6 +77,7 @@ public:
 	WindowMouseDeltaCallback_t* mouseDeltaCallback;
 
 	bool cursorLock;
+	bool hasFocus;
 	int modkeys;
 	bool inputProcessedByControllers;
 

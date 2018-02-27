@@ -36,8 +36,12 @@ struct OffsetData {
 };
 
 /// Constants
+const Tag NULL_TAG { 'N', 'U', 'L', 'L' };
 const Tag MAP_TAG { 'M', 'A', 'P', ' ' };
 const Tag SKY_TAG { 'S', 'K', 'Y', ' ' };
+const Tag CELL_TAG { 'C', 'E', 'L', 'L' };
+const Tag OBJ_TAG { 'O', 'B', 'J', ' ' };
+const Tag MESH_TAG { 'M', 'E', 'S', 'H' };
 
 class MapLoader {
 

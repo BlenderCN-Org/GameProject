@@ -48,8 +48,12 @@ Game::Game(CEngine* _engine)
 	currentState = GameState::MAIN_MENU;
 	lastState = GameState::MAIN_MENU;
 
+	player = new Player();
+
 	camInput.init((glm::mat4*)camera.getViewMatrix());
 	camInput.setCam(glm::vec3(5, 1, 0), glm::vec3(-1, 0, 0));
+
+	player->setCamera(&camInput);
 
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
@@ -115,7 +119,7 @@ Game::Game(CEngine* _engine)
 
 	fbci.height = 720;
 	fbci.width = 1280;
-	fbci.mutlisample = 2;
+	fbci.mutlisample = 8;
 	fbci.nrColorBuffers = 3;
 	fbci.useDepth = true;
 	fbci.useMultisample = true;
@@ -213,7 +217,7 @@ Game::Game(CEngine* _engine)
 
 	LoadedData data = mapLoader.loadDataEntry(1);
 
-	map = new Map(data);
+	map = new Map(data, mapLoader);
 
 	free(data.data);
 
@@ -290,6 +294,8 @@ Game::~Game() {
 
 	delete menu;
 
+	delete aabbTest;
+
 	if (mesh) {
 		delete mesh;
 		mesh = nullptr;
@@ -312,6 +318,8 @@ Game::~Game() {
 	delete infoLabel;
 	delete panelTexture;
 	delete sky;
+
+	delete player;
 }
 
 void Game::update(float dt, uint64_t clocks) {
@@ -402,6 +410,10 @@ void Game::update(float dt, uint64_t clocks) {
 
 	str += "Rotation: " + std::to_string(meshRotation * toDEGREE) + " (" + std::to_string((meshRotation * toDEGREE) / 360.0F) + ")\n";
 	str += "RotTime: " + std::to_string(rotTime) + "\n";
+
+	Input::InputEvent ie = Input::Input::GetInput()->lastPressed;
+
+	str += "Last Key: " + std::string(ie.mouse ? "mouse " : "key ") + std::to_string(ie.code) + "\n";
 
 	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
@@ -523,14 +535,14 @@ void Game::renderScene() {
 
 	aabbTest->bind();
 
-	glm::mat4 obmat2 = glm::transpose(glm::translate(engine->getAABB(0).origin));
-	obmat2 = glm::scale(obmat2, glm::vec3(2.0F));
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
-
-	aabbTest->render();
-
-	obmat2 = glm::transpose(glm::translate(engine->getAABB(1).origin));
-	gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
+	//glm::mat4 obmat2 = glm::transpose(glm::translate(engine->getAABB(0).origin));
+	//obmat2 = glm::scale(obmat2, glm::vec3(2.0F));
+	//gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
+	//
+	//aabbTest->render();
+	//
+	//obmat2 = glm::transpose(glm::translate(engine->getAABB(1).origin));
+	//gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
 
 	aabbTest->render();
 
@@ -771,6 +783,8 @@ void Game::updatePlay(float dt) {
 
 	camInput.update(dt);
 
+	player->update(dt);
+
 	Input::Input* in = Input::Input::GetInput();
 
 	bool hadInput = false;
@@ -808,10 +822,12 @@ void Game::updatePlay(float dt) {
 
 void Game::updateEdit(float dt) {
 
+	const bool freeCam = true;
+
 	(*editor)->update(dt);
 
 	if ((*editor)->mouseInGui() == false) {
-		camInput.update(dt);
+		camInput.update(dt, freeCam);
 	}
 
 	Renderable** rends = (*editor)->renderObjects(1);

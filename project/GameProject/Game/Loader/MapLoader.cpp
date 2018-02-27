@@ -39,7 +39,7 @@ LoadedData MapLoader::loadDataEntry(uint32_t entryId) {
 
 	ret.data = nullptr;
 	ret.size = 0U;
-	ret.tag = { 0 };
+	ret.tag = NULL_TAG;
 
 	if (mapFile.is_open()) {
 

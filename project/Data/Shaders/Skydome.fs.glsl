@@ -16,8 +16,6 @@ uniform vec3 sunMoonDir;
 
 const float PI = 3.1415;
 
-const vec3 sunDir = vec3(0.47, -0.48, -0.73);
-
 //[0.135633, 0.577581, 1.000000, 1.000000]
 const vec3 daySky = vec3(0.3, 0.55, 0.8);
 //[0.024422, 0.088654, 0.147314, 1.000000]

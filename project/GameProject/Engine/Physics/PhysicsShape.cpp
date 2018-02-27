@@ -91,6 +91,12 @@ bool planeVSPlane(const PhysicsShape_Plane* const shape, const PhysicsShape_Plan
 }
 
 bool planeVSSphere(const PhysicsShape_Plane* const shape, const PhysicsShape_Sphere* const shape2) {
+
+	float d = glm::dot(shape2->center - shape->origin, shape->normal);
+
+	if (d < shape2->radius) {
+		return true;
+	}
 	return false;
 }
 
@@ -143,37 +149,17 @@ AABB
 
 bool AABBVSAABB(const PhysicsShape_AABB* const shape, const PhysicsShape_AABB* const shape2) {
 
-	//glm::vec3 min1 = shape->origin - shape->halfsize;
-	//glm::vec3 max1 = shape->origin + shape->halfsize;
-	//
-	//glm::vec3 min2 = shape2->origin - shape2->halfsize;
-	//glm::vec3 max2 = shape2->origin + shape2->halfsize;
-	//
-	//max1 += FLT_EPSILON;
-	//min1 -= FLT_EPSILON;
-	//
-	//max2 += FLT_EPSILON;
-	//min2 -= FLT_EPSILON;
-	//
-	//if (max1.x > min2.x && min1.x < max2.x)//x
-	//	if (max1.y > min2.y && min1.y < max2.y)//y
-	//		if (max1.z > min2.z && min1.z < max2.z)//z
-	//			return true;
-	//
-	//return false;
-
-
 	glm::vec3 o1 = shape->origin;
 	glm::vec3 o2 = shape2->origin;
-	
+
 	glm::vec3 h1 = shape->halfsize;
 	glm::vec3 h2 = shape2->halfsize;
-	
+
 	bool x = (abs(o1.x - o2.x) <= (h1.x + h2.x));
 	bool y = (abs(o1.y - o2.y) <= (h1.y + h2.y));
 	bool z = (abs(o1.z - o2.z) <= (h1.z + h2.z));
-	
-	
+
+
 	return x && y && z;
 }
 

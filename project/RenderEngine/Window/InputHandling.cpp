@@ -125,16 +125,16 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 		wnd->scrollCallback(wnd, (int)scrollX, (int)scrollY);
 	}
 
-	if (wnd->cursorLock) {
+	if (wnd->cursorLock && wnd->hasFocus) {
 		RECT rec;
 		GetWindowRect(wnd->getWindowHandle(), &rec);
-
+	
 		int posX = (rec.right - rec.left) / 2;
 		posX += rec.left;
-
+	
 		int posY = (rec.bottom - rec.top) / 2;
 		posY += rec.top;
-
+	
 		SetCursorPos(posX, posY);
 	}
 }

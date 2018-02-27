@@ -8,6 +8,12 @@ Editor::Editor() : mouseDownInGui(false) {
 	toolbarTexture = new Engine::Graphics::Texture::Texture2D();
 	toolbarTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
 
+	buttonHoverTexture = new Engine::Graphics::Texture::Texture2D();
+	buttonHoverTexture->singleColor(0.5F, 0.0F, 0.0F, 1.0F);
+
+	buttonPressTexture = new Engine::Graphics::Texture::Texture2D();
+	buttonPressTexture->singleColor(0.75F, 0.0F, 0.0F, 1.0F);
+
 	toolbar = new Engine::Graphics::Gui::Panel();
 	toolbar->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	toolbar->setPosition(10, 10);
@@ -24,9 +30,27 @@ Editor::Editor() : mouseDownInGui(false) {
 	textArea->showLineNumbers(false);
 	textArea->setEditMode(true);
 
+	showButton = new Engine::Graphics::Gui::Button();
+	showButton->setVisible(true);
+	showButton->setAnchorPoint(Engine::Graphics::GuiAnchor::LEFT);
+	showButton->setPosition(0, 0);
+	showButton->setSize(50, 50);
+	showButton->setText("");
+	showButton->setTexture(toolbarTexture);
+	showButton->setHoverTexture(buttonHoverTexture);
+	showButton->setPressTexture(buttonPressTexture);
+
+	toolbar->addGuiItem(showButton);
+
+	guiWindow = new Engine::Graphics::Gui::GuiWindow();
+	guiWindow->setSize(400, 400);
+	guiWindow->setPosition(0, 0);
+	guiWindow->addGuiItem(textArea);
+
 	editorGui->addGuiItem(toolbar);
-	editorGui->addGuiItem(textArea);
+	editorGui->addGuiItem(guiWindow);
 	editorGui->setVisible(true);
+
 }
 
 Editor::~Editor() {
@@ -35,6 +59,12 @@ Editor::~Editor() {
 	delete editorGui;
 	delete toolbar;
 	delete toolbarTexture;
+
+	delete showButton;
+	delete buttonHoverTexture;
+	delete buttonPressTexture;
+
+	delete guiWindow;
 
 }
 
@@ -62,6 +92,10 @@ bool Editor::mouseInGui() {
 			mouseDownInGui = true;
 		}
 		pressing = true;
+	}
+	
+	if (showButton->wasPressed()) {
+		guiWindow->setVisible(true);
 	}
 
 	return inGui;

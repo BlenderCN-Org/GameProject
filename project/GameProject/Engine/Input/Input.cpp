@@ -33,7 +33,8 @@ namespace Engine {
 				}
 				singleton->backspacePressed = true;
 			}
-			printf("Scancode %d with modkey %d\n", scancode, mods);
+			singleton->lastPressed = InputEvent { scancode, false };
+			//printf("Scancode %d with modkey %d\n", scancode, mods);
 
 			if (action == ACTION_BUTTON_UP) {
 				singleton->releaseMap[InputEvent { scancode, false }] = true;
@@ -46,6 +47,8 @@ namespace Engine {
 			if (!singleton->consoleActive && action == 2) {
 				return;
 			}
+
+			singleton->lastPressed = InputEvent { button , true };
 
 			//printf("Mouse callback\n");
 
@@ -104,15 +107,15 @@ namespace Engine {
 			singleton->focus = focus;
 			//printf("focus %d\n", focus);
 			if (focus == false) {
+				window->lockCursor(false);
 				singleton->keyMap.clear();
 				//printf("Clearing key mappings\n");
 			}
 		}
 
-		// todo decide if this is good or bad
 		void Input::mouseDeltaCallback(IWindow * window, float dx, float dy) {
-			//singleton->xDelta = dx * 4.4f;
-			//singleton->yDelta = dy * 4.4f;
+			singleton->xDelta += dx * singleton->inputSensitivity;// * 4.4f;
+			singleton->yDelta += dy * singleton->inputSensitivity;// * 4.4f;
 
 			//printf("Delta (%f,%f)\n", dx, dy);
 		}
@@ -162,7 +165,7 @@ namespace Engine {
 
 			window->setWindowFocusCallback(focusCallback);
 
-			//window->setWindowMouseDeltaCallback(mouseDeltaCallback);
+			window->setWindowMouseDeltaCallback(mouseDeltaCallback);
 		}
 
 		bool Input::isKeyBindPressed(const KeyBind & keyBind, bool includeMods) {
@@ -328,11 +331,13 @@ namespace Engine {
 			xPos = 0;
 			yPos = 0;
 
-			xDelta = 0.0f;
-			yDelta = 0.0f;
+			xDelta = 0.0F;
+			yDelta = 0.0F;
 
-			scrollX = 0.0f;
-			scrollY = 0.0f;
+			scrollX = 0.0F;
+			scrollY = 0.0F;
+
+			inputSensitivity = 0.5F;
 
 			keyConf.read("Config/keybinds.ini");
 			loadkeyBinds();

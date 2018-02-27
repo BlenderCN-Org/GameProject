@@ -12,11 +12,11 @@ enum class PhysShape {
 	MESH
 };
 
-class IPhysicsShape {
+class IPhysicsShapea {
 
 public:
 
-	virtual ~IPhysicsShape() {};
+	virtual ~IPhysicsShapea() {};
 
 	virtual bool collided(const IPhysicsShape& other) = 0;
 

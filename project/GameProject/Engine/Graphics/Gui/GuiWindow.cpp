@@ -18,6 +18,8 @@ namespace Engine {
 
 			GuiWindow::GuiWindow() {
 
+				setAnchorPoint(GuiAnchor::TOP_LEFT);
+
 				background = new Texture::Texture2D();
 				titleBar = new Texture::Texture2D();
 				closeButton = new Button();
@@ -33,7 +35,7 @@ namespace Engine {
 				itemPanel->setPosition(0, GUI_WINDOW_TITLEBAR_HEIGHT);
 				itemPanel->setTexture(background);
 
-				background->singleColor(0.5F, 0.5F, 0.5F, 1.0F);
+				background->singleColor(0.5F, 0.5F, 0.5F, 0.25F);
 				titleBar->singleColor(0.2F, 0.2F, 0.2F, 1.0F);
 
 				buttonTexture->singleColor(0.8F, 0.8F, 0.8F, 1.0F);
@@ -95,14 +97,15 @@ namespace Engine {
 
 						bool inside = false;
 
-						if ((x > 0 && x < size.x) &&
-							(y > 0 && y < GUI_WINDOW_TITLEBAR_HEIGHT)) {
+						if (((x > 0 && x < size.x) &&
+							(y > 0 && y < GUI_WINDOW_TITLEBAR_HEIGHT))
+							|| (isMouseInside() && in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_MOUSE_WHEEL_CLICK]))) {
 							inside = true;
 						}
 
 						if (inside || updating) {
 
-							if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK])) {
+							if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK]) || in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_MOUSE_WHEEL_CLICK])) {
 
 								int px = position.x;
 								int py = position.y;
@@ -118,9 +121,10 @@ namespace Engine {
 								updating = false;
 							}
 
-							oldX = mx;
-							oldY = my;
 						}
+
+						oldX = mx;
+						oldY = my;
 
 					}
 

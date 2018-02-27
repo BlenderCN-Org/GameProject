@@ -4,6 +4,7 @@
 /// Internal Includes
 #include "GameObject.hpp"
 
+#include "Loader/MapLoader.hpp"
 /// External Includes
 
 /// Std Includes
@@ -19,9 +20,13 @@ public:
 	Cell();
 	virtual ~Cell();
 
+	void load(LoadedData& data);
+
 	void update(float dt);
 
 private:
+
+	bool verifyData(LoadedData& data);
 
 	GameObject* mainCellGameObjects;
 	GameObject* borderCellGameObjects;

@@ -103,6 +103,7 @@ namespace Engine {
 
 			IWindow* window;
 
+			InputEvent lastPressed;
 		private:
 
 			Config keyConf;
@@ -115,7 +116,6 @@ namespace Engine {
 
 			void loadkeyBinds();
 			void saveKeyBinds();
-
 
 			std::map<InputEvent, bool> keyMap;
 			std::map<InputEvent, bool> releaseMap;
@@ -136,6 +136,8 @@ namespace Engine {
 
 			int winW;
 			int winH;
+
+			float inputSensitivity;
 
 			Core::Console* console;
 

@@ -19,9 +19,14 @@
 
 #include "Game/Game.hpp"
 
+#include <PhysicsEngine/PhysicsEngine.hpp>
+#include <PhysicsEngine/Shapes/PlaneShape.hpp>
+#include <PhysicsEngine/Shapes/SphereShape.hpp>
+
 int main(int argc, char* argv[]) {
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 #if _DEBUG
 	Engine::Core::Library renderDoc;
 	printf("Press 1 to attach RenderDoc, any other key to ignore!\n");
@@ -46,17 +51,34 @@ int main(int argc, char* argv[]) {
 	e->setAssetDataFolder("E:/GameProjectAssets/");
 
 	Engine::Input::Input* in = Engine::Input::Input::GetInput();
-	
+
 	Game* game = new Game(e);
 
 	printf("starting loop\n");
 
+	PhysicsEngine physEng;
+
+	StaticObject* groundPlane = physEng.createStaticObject();
+
+	PlaneShape* ps = new PlaneShape();
+	groundPlane->shape = ps;
+	ps->normal = glm::vec3(0, 1, 0);
+	ps->distance = -50.0F;
+
+	RigidBody* collisionShape = physEng.createRigidBody();
+
+	SphereShape* ss = new SphereShape();
+	collisionShape->shape = ss;
+	ss->center = glm::vec3(0, 1, 0);
+	ss->radius= 1.0F;
 	
 	while (e->isRunning()) {
 
+		physEng.update(dt);
+
 		game->update(dt, clocks);
 		e->clearBackBuffer();
-		
+
 		game->render();
 
 		e->presentFrame();
@@ -64,11 +86,12 @@ int main(int argc, char* argv[]) {
 		clocks = clock.tick();
 		dt = clock.seconds();
 	}
-	
+
 	printf("finished execution\n");
 	delete game;
 
 	delete e;
+
 #if _DEBUG
 	renderDoc.unloadLibrary();
 #endif

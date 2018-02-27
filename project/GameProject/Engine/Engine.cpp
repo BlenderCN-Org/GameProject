@@ -76,6 +76,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	gameWindow->setWindowSize(windowWidth, windowHeight);
 	gameWindow->setVsync(engineSettings.vSync());
+	//gameWindow->lockCursor(true);
 	running = true;
 
 	depthWriteShader = gRenderEngine->createShaderObject();
@@ -179,12 +180,12 @@ void CEngine::update(const float dt) {
 
 	}
 
-	if (Input::Input::GetInput()->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_SPACE])) {
-		physEngine.freezeFlag(false);
-	}
-
 	console->update(dt);
 	running = gameWindow->isVisible();
+}
+
+void CEngine::lockCursor(bool lock) {
+	gameWindow->lockCursor(lock);
 }
 
 void CEngine::clearBackBuffer() {
@@ -218,14 +219,6 @@ Interfaces::IAssetManager* CEngine::getAssetManager() const {
 	return assetManager;
 }
 
-PhysicsShape_AABB CEngine::getAABB(uint32_t index) {
-	if (index == 0) {
-		return physEngine.aabb;
-	} else {
-		return physEngine.aabb2;
-	}
-}
-
 void CEngine::physicsLoop() {
 
 	System::HighResClock clk;
@@ -233,8 +226,6 @@ void CEngine::physicsLoop() {
 	float dt = 0.0F;
 
 	while (running) {
-
-		physEngine.update(dt);
 
 		clk.tick();
 		dt = clk.seconds();
