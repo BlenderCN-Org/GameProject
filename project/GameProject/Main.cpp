@@ -92,6 +92,13 @@ int main(int argc, char* argv[]) {
 
 	delete e;
 
+
+	delete ps;
+	delete ss;
+
+	physEng.freeStaticObject(groundPlane);
+	physEng.freeRigidBody(collisionShape);
+
 #if _DEBUG
 	renderDoc.unloadLibrary();
 #endif

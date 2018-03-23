@@ -2,6 +2,7 @@
 #define THREAD_LOCK_HPP
 
 #include <cstdint>
+#include <thread>
 
 class ThreadLock {
 
@@ -17,7 +18,7 @@ public:
 
 private:
 
-	uint32_t lockThreadId;
+	std::thread::id lockThreadId;
 
 };
 

@@ -1,11 +1,12 @@
 #include <cstdint>
 
 #include <functional>
+#include <thread>
 
-extern uint32_t activeThread;
+extern std::thread::id activeThread;
 extern bool lockdown;
 
-uint32_t getThreadId();
+std::thread::id getThreadId();
 
 #define GL_REQUEST_BUFFER       0x0001
 #define GL_REQUEST_VERTEX_ARRAY 0x0002

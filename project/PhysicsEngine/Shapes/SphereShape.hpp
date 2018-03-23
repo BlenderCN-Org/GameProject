@@ -11,6 +11,7 @@ class SphereShape : public IPhysicsShape {
 
 public:
 	virtual ~SphereShape() {};
+	virtual PhysShapes getShapeType() const { return PhysShapes::SPHERE; }
 
 	glm::vec3 center;
 	float radius;

@@ -65,8 +65,8 @@ namespace Engine {
 			if (singleton->blockInput) {
 				return;
 			}
-			singleton->xDelta = float(x) - float(singleton->oldX);
-			singleton->yDelta = float(y) - float(singleton->oldY);
+			//singleton->xDelta = float(x) - float(singleton->oldX);
+			//singleton->yDelta = float(y) - float(singleton->oldY);
 
 			singleton->xPos = int(x);
 			singleton->yPos = int(y);
@@ -107,7 +107,7 @@ namespace Engine {
 			singleton->focus = focus;
 			//printf("focus %d\n", focus);
 			if (focus == false) {
-				window->lockCursor(false);
+				//window->lockCursor(false);
 				singleton->keyMap.clear();
 				//printf("Clearing key mappings\n");
 			}
@@ -337,7 +337,7 @@ namespace Engine {
 			scrollX = 0.0F;
 			scrollY = 0.0F;
 
-			inputSensitivity = 0.5F;
+			inputSensitivity = 1.0F;
 
 			keyConf.read("Config/keybinds.ini");
 			loadkeyBinds();

@@ -3,6 +3,8 @@
 #include "Shapes/PlaneShape.hpp"
 #include "Shapes/SphereShape.hpp"
 
+#include "CollisionFuncs.hpp"
+
 PhysicsEngine::PhysicsEngine()
 	: gravity(0.0F, 9.82F, 0.0F) {
 
@@ -57,10 +59,12 @@ void PhysicsEngine::update(float dt) {
 void PhysicsEngine::pUpdate(float dt) {
 
 	for (size_t i = 0; i < rigidBodys.size(); i++) {
-		rigidBodys[i]->velocity -= gravity * dt;
-		rigidBodys[i]->position += rigidBodys[i]->velocity * dt;
+		RigidBody* rb = rigidBodys[i];
+		rb->velocity -= gravity * dt;
+		rb->oldPos = rb->position;
+		rb->position += rb->velocity * dt;
 
-		printf("Pos %f\n", rigidBodys[i]->position.y);
+		printf("Pos %f\n", rb->position.y);
 
 	}
 
@@ -95,16 +99,26 @@ bool PhysicsEngine::isColliding(IPhysicsShape* s1, RigidBody* rb) {
 	PlaneShape* ps = (PlaneShape*)s1;
 	SphereShape* ss = (SphereShape*)rb->shape;
 
-	glm::vec3 po = ps->normal * ps->distance;
-	glm::vec3 sp = ss->center + rb->position;
+	SphereShape ts = *ss;
+	ts.center += rb->position;
 
-	float d = abs(glm::dot(sp - po, ps->normal));
+	collided = PlaneVsSphere(*ps, ts);
 
-	if (d < ss->radius) {
-		return true;
+	//glm::vec3 po = ps->normal * ps->distance;
+	//glm::vec3 sp = ss->center + rb->position;
+	//
+	//float d = abs(glm::dot(sp - po, ps->normal));
+	//
+	//if (d < ss->radius) {
+	//	collided = true;
+	//}
+
+	// might have passed through object due to high speed
+	if (!collided) {
+
+		//rb-> oldPos
+
 	}
-	return false;
-
 
 	return collided;
 }

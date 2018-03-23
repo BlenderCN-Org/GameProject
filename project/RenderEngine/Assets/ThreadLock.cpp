@@ -2,7 +2,7 @@
 #include "../ReGlobal.hpp"
 
 ThreadLock::ThreadLock() {
-	lockThreadId = 0U;
+	lockThreadId = std::thread::id();
 }
 
 ThreadLock::~ThreadLock() {
@@ -14,7 +14,7 @@ bool ThreadLock::lock() {
 	bool aquired = false;
 
 	// if 0 nobody has lock
-	if (lockThreadId == 0U) {
+	if (lockThreadId == std::thread::id()) {
 		lockThreadId = getThreadId();
 		aquired = true;
 	}
@@ -30,7 +30,7 @@ void ThreadLock::unlock() {
 
 	// only unlock if current thread calls unlock
 	if (lockThreadId == getThreadId()) {
-		lockThreadId = 0U;
+		lockThreadId = std::thread::id();
 	}
 
 }

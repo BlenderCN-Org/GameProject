@@ -19,7 +19,7 @@ class CEThread {
 
 public:
 
-	CEThread(ThreadManager& tm);
+	CEThread(ThreadManager& tm, uint32_t _id);
 	virtual ~CEThread();
 
 	void stopThread();
@@ -28,6 +28,7 @@ public:
 
 private:
 
+	uint32_t id;
 	bool running;
 	std::thread* thrd;
 
@@ -39,6 +40,8 @@ class ThreadManager {
 
 public:
 
+	ThreadManager();
+	virtual ~ThreadManager();
 
 	Task nextTask();
 
@@ -46,6 +49,7 @@ private:
 
 	SafeQueue<Task> threadTasks;
 
+	CEThread* threads;
 
 };
 

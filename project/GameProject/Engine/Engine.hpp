@@ -10,6 +10,8 @@
 
 #include "AssetManager.hpp"
 
+#include "ThreadManager.hpp"
+
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 
@@ -70,6 +72,8 @@ public:
 	Interfaces::IAssetManager* getAssetManager() const;
 
 private:
+
+	ThreadManager* threadManager;
 
 	void physicsLoop();
 

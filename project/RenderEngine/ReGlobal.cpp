@@ -5,14 +5,12 @@
 #include <thread>
 #include <vector>
 
-uint32_t activeThread = 0U;
+std::thread::id activeThread = std::thread::id();
 bool lockdown = false;
 
-uint32_t getThreadId() {
-	static_assert(sizeof(std::thread::id) == sizeof(uint32_t), "Sizeof std::thread::id is not equal to uint32_t");
+std::thread::id getThreadId() {
 	auto id = std::this_thread::get_id();
-	uint32_t* ptr = (uint32_t*)&id;
-	return (*ptr);
+	return id;
 }
 
 struct RequestStruct {

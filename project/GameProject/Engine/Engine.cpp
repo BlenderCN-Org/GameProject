@@ -112,9 +112,13 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	physicsThread = new std::thread(&CEngine::physicsLoop, this);
 
+	threadManager = new ThreadManager();
+
 }
 
 CEngine::~CEngine() {
+
+	delete threadManager;
 
 	physicsThread->join();
 	delete physicsThread;

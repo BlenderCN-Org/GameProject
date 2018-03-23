@@ -12,6 +12,8 @@ class PlaneShape : public IPhysicsShape {
 public:
 	virtual ~PlaneShape() {};
 
+	virtual PhysShapes getShapeType() const { return PhysShapes::PLANE; }
+
 	glm::vec3 normal;
 	float distance;
 

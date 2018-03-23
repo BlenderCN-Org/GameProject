@@ -166,7 +166,7 @@ namespace Engine {
 			KEYBIND_LEFT_ARROW,
 			KEYBIND_RIGHT_ARROW,
 			KEYBIND_SPACE,
-			KEYBINDS_LENGTH
+			KEYBINDS_LENGTH,
 		};
 
 		static const char* KeyBindsStrings[] =
@@ -175,13 +175,13 @@ namespace Engine {
 			"KeyAction_Left",
 			"KeyAction_Right",
 			"KeyAction_Enter",
-			"KeyAction_Mouse_L_Click"
-			"KeyAction_Mouse_WHEEL_Click"
-			"KeyAction_Arrow_UP"
-			"KeyAction_Arrow_DOWN"
-			"KeyAction_Arrow_LEFT"
-			"KeyAction_Arrow_RIGHT"
-			"KeyAction_Space"
+			"KeyAction_Mouse_L_Click",
+			"KeyAction_Mouse_WHEEL_Click",
+			"KeyAction_Arrow_UP",
+			"KeyAction_Arrow_DOWN",
+			"KeyAction_Arrow_LEFT",
+			"KeyAction_Arrow_RIGHT",
+			"KeyAction_Space",
 		};
 
 		static const char* KeyBindsDefault[] =
@@ -196,7 +196,7 @@ namespace Engine {
 			"80:0:0",
 			"75:0:0",
 			"77:0:0",
-			"57:0:0"
+			"57:0:0",
 		};
 
 		extern KeyBind KeyBindings[];

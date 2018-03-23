@@ -84,6 +84,9 @@ public:
 	int width;
 	int height;
 
+	int oldX;
+	int oldY;
+
 protected:
 	HWND windowHandle;
 	bool visible;

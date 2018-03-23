@@ -746,6 +746,7 @@ void Game::updateMenu(float dt) {
 		int pressedIndex = menu->buttonPressed();
 
 		if (pressedIndex == 0) {
+			engine->lockCursor(true);
 			currentState = GameState::PLAY;
 		} else if (pressedIndex == 1) {
 			currentState = GameState::EDIT;

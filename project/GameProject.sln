@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{E47A
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsEngine", "PhysicsEngine\PhysicsEngine.vcxproj", "{906CE184-42FC-43F7-A31F-4612E36F3DAC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -96,6 +98,14 @@ Global
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Release|x64.Build.0 = Release|x64
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Release|x86.ActiveCfg = Release|Win32
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Release|x86.Build.0 = Release|Win32
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Debug|x64.ActiveCfg = Debug|x64
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Debug|x64.Build.0 = Debug|x64
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Debug|x86.ActiveCfg = Debug|Win32
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Debug|x86.Build.0 = Debug|Win32
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x64.ActiveCfg = Release|x64
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x64.Build.0 = Release|x64
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x86.ActiveCfg = Release|Win32
+		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

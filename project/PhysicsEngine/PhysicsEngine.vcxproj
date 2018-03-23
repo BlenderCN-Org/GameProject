@@ -19,16 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionFuncs.hpp" />
     <ClInclude Include="PhysicsEngine.hpp" />
     <ClInclude Include="RigidBody.hpp" />
+    <ClInclude Include="SAT.hpp" />
+    <ClInclude Include="Shapes\AABBShape.hpp" />
     <ClInclude Include="Shapes\IPhysShape.hpp" />
+    <ClInclude Include="Shapes\OOBBShape.hpp" />
     <ClInclude Include="Shapes\PlaneShape.hpp" />
     <ClInclude Include="Shapes\ShapeGroup.hpp" />
     <ClInclude Include="Shapes\SphereShape.hpp" />
     <ClInclude Include="StaticObject.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionFuncs.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="SAT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Implementation steps.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

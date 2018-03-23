@@ -1,0 +1,36 @@
+
+
+Shape types
+
+	  Ray
+	  Plane
+	  Sphere
+	  AABB
+	  OOBB
+	  Triangle mesh
+
+Simulation Steps (Rigid vs Static ONLY)
+
+	STEP 0:
+	Update ALL Rigid Body objects (Can be threaded)
+		IF NOT body->frozen THEN
+			update velocity
+			copy position -> oldPosition
+			update position
+			add to Sim STEP 1
+			
+	STEP 1:
+	RayCast collision course
+		Find closest boundary group by check through octree
+			IF found boudary THEN
+				IF boundary distance - Rb radius < COLLIDE_BND_THRESHOLD
+					add to Sim STEP 2
+
+	STEP 2:
+	More detailed collision checking
+		if collided
+			add STEP 3
+
+	STEP 3:
+	IF COLLIDED
+		response

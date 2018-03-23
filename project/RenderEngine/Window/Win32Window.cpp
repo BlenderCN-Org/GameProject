@@ -426,7 +426,9 @@ void GLWindow::init() {
 			printf("making current failed\n");
 		} else {
 			activeThread = getThreadId();
-			printf("Making current on thread: %d\n", activeThread);
+			std::stringstream o;
+			o << activeThread;
+			printf("Making current on thread: %s\n", o.str().c_str());
 		}
 
 		if (wglSwapIntervalEXT)
@@ -458,6 +460,7 @@ void GLWindow::pollMessages() {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
 }
 
 void GLWindow::makeCurrent() {
@@ -465,7 +468,9 @@ void GLWindow::makeCurrent() {
 		printf("making current failed\n");
 	} else {
 		activeThread = getThreadId();
-		printf("Making current on thread: %d\n", activeThread);
+		std::stringstream o;
+		o << activeThread;
+		printf("Making current on thread: %s\n", o.str().c_str());
 	}
 }
 
