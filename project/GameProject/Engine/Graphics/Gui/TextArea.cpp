@@ -177,10 +177,10 @@ namespace Engine {
 							editCursorLine++;
 
 							if ((int)textData.size() <= editCursorLine) {
-								editCursorLine = textData.size() - 1;
+								editCursorLine = (int)textData.size() - 1;
 							}
 
-							int lineLength = (int)lineLength = textData[editCursorLine].getSize();
+							int lineLength = (int)lineLength = (int)textData[editCursorLine].getSize();
 
 							if (lineLength < editCursorChar) {
 								editCursorChar = lineLength;
@@ -195,7 +195,7 @@ namespace Engine {
 								if (editCursorLine) {
 									editCursorLine--;
 						
-									editCursorChar = textData[editCursorLine].getSize();
+									editCursorChar = (int)textData[editCursorLine].getSize();
 								}
 							}
 						}
@@ -207,8 +207,8 @@ namespace Engine {
 							if ((int)textData[editCursorLine].getSize() < editCursorChar) {
 								editCursorLine++;
 								if ((int)textData.size() <= editCursorLine) {
-									editCursorLine = textData.size() - 1;
-									editCursorChar = textData[editCursorLine].getSize();
+									editCursorLine = (int)textData.size() - 1;
+									editCursorChar = (int)textData[editCursorLine].getSize();
 								}
 							}
 						}

@@ -167,7 +167,7 @@ TEST(Physics, AABBVsOOBB_Test) {
 		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
 		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
 
-		ss.center = glm::vec3(0.0F, 2.0F, 0.0F);
+		ss.center = glm::vec3(0.0F, 20.0F, 0.0F);
 		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
 		ss.rotation = glm::vec3(0.0F);
 
