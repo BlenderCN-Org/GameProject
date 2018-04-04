@@ -114,9 +114,18 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	threadManager = new ThreadManager();
 
+	groundPlane = physEngine.createStaticObject();
+
+	PlaneShape* ps = new PlaneShape();
+	groundPlane->shape = ps;
+	ps->normal = glm::vec3(0, 1, 0);
+	ps->distance = -5.0F;
 }
 
 CEngine::~CEngine() {
+
+	delete groundPlane->shape;
+	physEngine.freeStaticObject(groundPlane);
 
 	delete threadManager;
 
@@ -168,6 +177,8 @@ void CEngine::update(const float dt) {
 	Input::Input::GetInput()->reset();
 
 	gameWindow->pollMessages();
+
+	physEngine.update(1.0F/60.0F);
 
 	if (Input::Input::GetInput()->sizeChange) {
 		int w = 0;
@@ -221,6 +232,10 @@ void CEngine::renderFullQuad() {
 
 Interfaces::IAssetManager* CEngine::getAssetManager() const {
 	return assetManager;
+}
+
+PhysicsEngine* CEngine::getPhysEngine() {
+	return &physEngine;
 }
 
 void CEngine::physicsLoop() {

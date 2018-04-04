@@ -41,9 +41,13 @@ namespace SAT {
 		return result;
 	}
 
-	Dist projectAABB(const AABBShape& shape, const Axis& a) {
+	float fltProj(glm::vec3 point, const Axis& axis) {
+		return (point.x * axis.x) + (point.y * axis.y) + (point.z * axis.z);
+	}
+	
+	Projection projectAABB(const AABBShape& shape, const Axis& a) {
 
-		Dist d;
+		Projection p;
 
 		glm::vec3 hs = shape.halfSize;
 
@@ -57,30 +61,30 @@ namespace SAT {
 		glm::vec3 p7 = shape.center + glm::vec3(-hs.x, -hs.y, +hs.z);
 		glm::vec3 p8 = shape.center + glm::vec3(-hs.x, -hs.y, -hs.z);
 
-		p1 = project(p1, a);
-		p2 = project(p2, a);
-		p3 = project(p3, a);
-		p4 = project(p4, a);
-		p5 = project(p5, a);
-		p6 = project(p6, a);
-		p7 = project(p7, a);
-		p8 = project(p8, a);
+		float fp1 = fltProj(p1, a);
+		float fp2 = fltProj(p2, a);
+		float fp3 = fltProj(p3, a);
+		float fp4 = fltProj(p4, a);
+		float fp5 = fltProj(p5, a);
+		float fp6 = fltProj(p6, a);
+		float fp7 = fltProj(p7, a);
+		float fp8 = fltProj(p8, a);
 
-		d.update(p1);
-		d.update(p2);
-		d.update(p3);
-		d.update(p4);
-		d.update(p5);
-		d.update(p6);
-		d.update(p7);
-		d.update(p8);
+		p.update(fp1);
+		p.update(fp2);
+		p.update(fp3);
+		p.update(fp4);
+		p.update(fp5);
+		p.update(fp6);
+		p.update(fp7);
+		p.update(fp8);
 
-		return d;
+		return p;
 	}
 
-	Dist projectOOBB(const OOBBShape& shape, const Axis& a) {
+	Projection projectOOBB(const OOBBShape& shape, const Axis& a) {
 
-		Dist d;
+		Projection p;
 
 		glm::quat qRot(glm::radians(shape.rotation));
 
@@ -107,46 +111,34 @@ namespace SAT {
 		p7 = glm::vec3(glm::vec4(p7, 1.0F) * rot);
 		p8 = glm::vec3(glm::vec4(p8, 1.0F) * rot);
 
-		p1 = project(p1, a);
-		p2 = project(p2, a);
-		p3 = project(p3, a);
-		p4 = project(p4, a);
-		p5 = project(p5, a);
-		p6 = project(p6, a);
-		p7 = project(p7, a);
-		p8 = project(p8, a);
+		float fp1 = fltProj(p1, a);
+		float fp2 = fltProj(p2, a);
+		float fp3 = fltProj(p3, a);
+		float fp4 = fltProj(p4, a);
+		float fp5 = fltProj(p5, a);
+		float fp6 = fltProj(p6, a);
+		float fp7 = fltProj(p7, a);
+		float fp8 = fltProj(p8, a);
 
-		d.update(p1);
-		d.update(p2);
-		d.update(p3);
-		d.update(p4);
-		d.update(p5);
-		d.update(p6);
-		d.update(p7);
-		d.update(p8);
+		p.update(fp1);
+		p.update(fp2);
+		p.update(fp3);
+		p.update(fp4);
+		p.update(fp5);
+		p.update(fp6);
+		p.update(fp7);
+		p.update(fp8);
 
-		return d;
+		return p;
+
 	}
 
-	bool isPointOnLine(glm::vec3 p, Dist line)
-	{
-		glm::vec3 l = glm::isnan(line.max);
-		glm::vec3 l2 = glm::isnan(line.min);
-		bool isNan = (l.x && l.y && l.z) || (l2.x && l2.y && l2.z);
+	bool projectionOverlap(const Projection &p1, const Projection &p2) {
 
-		/*
-		x1 < x < x2, assuming x1 < x2, or
-		y1 < y < y2, assuming y1 < y2, or
-		z1 < z < z2, assuming z1 < z2
-		*/
+		bool b = p1.max >= p2.min;
+		bool b2 = p2.max >= p1.min;
 
-		bool x = ((line.min.x <= p.x) && (p.x <= line.max.x));
-		bool y = ((line.min.y <= p.y) && (p.y <= line.max.y));
-		bool z = ((line.min.z <= p.z) && (p.z <= line.max.z));
-
-		return (x && y && z ) || isNan;
-
-
+		return b && b2;
 	}
 
 }

@@ -24,6 +24,8 @@
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 #include "../Engine/Graphics/Gui/TextureView.hpp"
 
+#include "PhysicsParticle.hpp"
+
 // Asteroid Temp
 
 #include "Asteroids/Ship.hpp"
@@ -145,6 +147,8 @@ private:
 	float dtOneSec;
 	int fps;
 	int fpsCounter;
+
+	std::vector<PhysicsParticle*> physParticles;
 
 	std::vector<Renderable*> frameObjects;
 

@@ -141,119 +141,119 @@ TEST(Physics, SatGetAxes_Test) {
 	}
 }
 
-TEST(Physics, PointProject)
-{
-	{
-		printf("Project point to axis 01\n");
+//TEST(Physics, PointProject)
+//{
+//	{
+//		printf("Project point to axis 01\n");
+//
+//		const glm::vec3 expectedPoint(0.0F);
+//
+//		glm::vec3 axis = glm::vec3(0.0F, 1.0F, 0.0F);
+//
+//		glm::vec3 result = SAT::project(glm::vec3(0, 0, 0), axis);
+//
+//		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
+//		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
+//		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
+//	}
+//
+//	{
+//		printf("Project point to axis 02\n");
+//
+//		const glm::vec3 expectedPoint(0.0F, 5.0F, 0.0F);
+//
+//		glm::vec3 axis = glm::vec3(0.0F, 1.0F, 0.0F);
+//
+//		glm::vec3 result = SAT::project(glm::vec3(20.0F, 5.0F, 0.0F), axis);
+//
+//		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
+//		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
+//		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
+//	}
+//
+//	{
+//		printf("Project point to axis 03\n");
+//
+//		const glm::vec3 expectedPoint(0.0F, 5.0F, 0.0F);
+//
+//		glm::vec3 axis = glm::normalize(glm::vec3(1.0F, 1.0F, 0.0F));
+//
+//		glm::vec3 result = SAT::project(glm::vec3(20.0F, 5.0F, 0.0F), axis);
+//
+//		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
+//		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
+//		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
+//	}
+//
+//}
 
-		const glm::vec3 expectedPoint(0.0F);
-
-		glm::vec3 axis = glm::vec3(0.0F, 1.0F, 0.0F);
-
-		glm::vec3 result = SAT::project(glm::vec3(0, 0, 0), axis);
-
-		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
-		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
-		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
-	}
-
-	{
-		printf("Project point to axis 02\n");
-
-		const glm::vec3 expectedPoint(0.0F, 5.0F, 0.0F);
-
-		glm::vec3 axis = glm::vec3(0.0F, 1.0F, 0.0F);
-
-		glm::vec3 result = SAT::project(glm::vec3(20.0F, 5.0F, 0.0F), axis);
-
-		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
-		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
-		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
-	}
-
-	{
-		printf("Project point to axis 03\n");
-
-		const glm::vec3 expectedPoint(0.0F, 5.0F, 0.0F);
-
-		glm::vec3 axis = glm::normalize(glm::vec3(1.0F, 1.0F, 0.0F));
-
-		glm::vec3 result = SAT::project(glm::vec3(20.0F, 5.0F, 0.0F), axis);
-
-		EXPECT_NEAR(result.x, expectedPoint.x, FLT_EPSILON);
-		EXPECT_NEAR(result.y, expectedPoint.y, FLT_EPSILON);
-		EXPECT_NEAR(result.z, expectedPoint.z, FLT_EPSILON);
-	}
-
-}
-
-TEST(Physics, IsPointOnLine)
-{
-	{
-		printf("Is point on line 01\n");
-
-		SAT::Dist line;
-		line.min.x = -1;
-		line.min.y = 0;
-		line.min.z = 0;
-
-		line.max.x = 1;
-		line.max.y = 0;
-		line.max.z = 0;
-
-		glm::vec3 point;
-
-		EXPECT_TRUE(SAT::isPointOnLine(point, line));
-	}
-
-	{
-		printf("Is point on line 02\n");
-
-		SAT::Dist line;
-		line.min.x = -1;
-		line.min.y = 0;
-		line.min.z = 0;
-
-		line.max.x = 1;
-		line.max.y = 0;
-		line.max.z = 0;
-
-		glm::vec3 point(0, 1, 0);
-
-		EXPECT_FALSE(SAT::isPointOnLine(point, line));
-	}
-
-	{
-		printf("Is point on line 03\n");
-
-		SAT::Dist line;
-		line.min.x = -1;
-		line.min.y = -1;
-		line.min.z = -1;
-
-		line.max.x = 1;
-		line.max.y = 1;
-		line.max.z = 1;
-
-		glm::vec3 point(0, 0, 0);
-
-		EXPECT_TRUE(SAT::isPointOnLine(point, line));
-	}
-
-	{
-		printf("Is point on line 04\n");
-
-		SAT::Dist line;
-		line.min.x = -1;
-		line.min.y = -1;
-		line.min.z = -1;
-
-		line.max.x = 1;
-		line.max.y = 1;
-		line.max.z = 1;
-
-		glm::vec3 point(0, 1, 0);
-
-		EXPECT_FALSE(SAT::isPointOnLine(point, line));
-	}
-}
+//TEST(Physics, IsPointOnLine)
+//{
+//	{
+//		printf("Is point on line 01\n");
+//
+//		SAT::Dist line;
+//		line.min.x = -1;
+//		line.min.y = 0;
+//		line.min.z = 0;
+//
+//		line.max.x = 1;
+//		line.max.y = 0;
+//		line.max.z = 0;
+//
+//		glm::vec3 point;
+//
+//		EXPECT_TRUE(SAT::isPointOnLine(point, line));
+//	}
+//
+//	{
+//		printf("Is point on line 02\n");
+//
+//		SAT::Dist line;
+//		line.min.x = -1;
+//		line.min.y = 0;
+//		line.min.z = 0;
+//
+//		line.max.x = 1;
+//		line.max.y = 0;
+//		line.max.z = 0;
+//
+//		glm::vec3 point(0, 1, 0);
+//
+//		EXPECT_FALSE(SAT::isPointOnLine(point, line));
+//	}
+//
+//	{
+//		printf("Is point on line 03\n");
+//
+//		SAT::Dist line;
+//		line.min.x = -1;
+//		line.min.y = -1;
+//		line.min.z = -1;
+//
+//		line.max.x = 1;
+//		line.max.y = 1;
+//		line.max.z = 1;
+//
+//		glm::vec3 point(0, 0, 0);
+//
+//		EXPECT_TRUE(SAT::isPointOnLine(point, line));
+//	}
+//
+//	{
+//		printf("Is point on line 04\n");
+//
+//		SAT::Dist line;
+//		line.min.x = -1;
+//		line.min.y = -1;
+//		line.min.z = -1;
+//
+//		line.max.x = 1;
+//		line.max.y = 1;
+//		line.max.z = 1;
+//
+//		glm::vec3 point(0, 1, 0);
+//
+//		EXPECT_FALSE(SAT::isPointOnLine(point, line));
+//	}
+//}

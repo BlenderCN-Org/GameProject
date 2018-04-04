@@ -15,6 +15,10 @@
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 
+#include <PhysicsEngine/PhysicsEngine.hpp>
+#include <PhysicsEngine/Shapes/PlaneShape.hpp>
+#include <PhysicsEngine/Shapes/SphereShape.hpp>
+
 /// Std Includes
 #include <map>
 #include <vector>
@@ -71,9 +75,14 @@ public:
 
 	Interfaces::IAssetManager* getAssetManager() const;
 
+	PhysicsEngine* getPhysEngine();
+
 private:
 
 	ThreadManager* threadManager;
+	PhysicsEngine physEngine;
+
+	StaticObject* groundPlane;
 
 	void physicsLoop();
 

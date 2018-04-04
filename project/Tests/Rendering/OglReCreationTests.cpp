@@ -2,6 +2,8 @@
 
 #include <RenderEngine/RenderEngine.hpp>
 
+#if _DEBUG
+
 TEST(CreationTests, opengl) {
 	
 	_CrtMemState mStateBeg;
@@ -87,3 +89,5 @@ TEST(CreationTests, opengl_do_leak_memory) {
 
 	EXPECT_EQ(found, TRUE);
 }
+
+#endif

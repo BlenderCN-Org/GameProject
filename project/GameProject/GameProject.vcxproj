@@ -240,6 +240,7 @@
     <ClCompile Include="Game\Loader\MapLoader.cpp" />
     <ClCompile Include="Game\MainMenu.cpp" />
     <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\PhysicsParticle.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\RenderBatch.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
@@ -275,11 +276,13 @@
     <ClInclude Include="Game\Loader\MapLoader.hpp" />
     <ClInclude Include="Game\MainMenu.hpp" />
     <ClInclude Include="Game\Map.hpp" />
+    <ClInclude Include="Game\PhysicsParticle.hpp" />
     <ClInclude Include="Game\Player.hpp" />
     <ClInclude Include="Game\RenderBatch.hpp" />
     <ClInclude Include="Game\Scene.hpp" />
     <ClInclude Include="Engine\Interfaces\IEditor.hpp" />
     <ClInclude Include="Game\Sky.hpp" />
+    <ClInclude Include="Engine\PhysicsShapesShader.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
     <ClInclude Include="Engine\Core\FormattedString.hpp" />

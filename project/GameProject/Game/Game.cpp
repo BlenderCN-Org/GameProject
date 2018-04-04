@@ -258,6 +258,9 @@ Game::Game(CEngine* _engine)
 	bulletMesh->setMeshData(&points, sizeof(points), MeshDataLayout::VERT_UV);
 
 	meshRotation = 0.0F;
+
+	physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
+
 }
 
 Game::~Game() {
@@ -323,6 +326,19 @@ Game::~Game() {
 }
 
 void Game::update(float dt, uint64_t clocks) {
+
+	for (size_t i = 0; i < physParticles.size(); i++) {
+		PhysicsParticle* p = physParticles[i];
+		if (p->sholdRemove()) {
+			auto it = std::find(physParticles.begin(), physParticles.end(), physParticles[i]);
+			physParticles.erase(it);
+			delete p;
+		}
+	}
+
+	for (size_t i = 0; i < 1000; i++) {
+		physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
+	}
 
 	size_t tUsed = ts.getUsed();
 
@@ -415,6 +431,8 @@ void Game::update(float dt, uint64_t clocks) {
 
 	str += "Last Key: " + std::string(ie.mouse ? "mouse " : "key ") + std::to_string(ie.code) + "\n";
 
+	str += "Particles: " + std::to_string(physParticles.size()) + "\n";
+
 	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
 	infoLabel->setText(str.c_str());
@@ -439,7 +457,35 @@ void Game::render() {
 
 		//renderSky();
 
+		gBufferShader->useShader();
+		gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
+		gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+		gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
+
+		aabbTest->bind();
+
+		uint32_t numRigidObjects = engine->getPhysEngine()->getNumRigidBodies();
+
+		const RigidBody* const* rbs = engine->getPhysEngine()->getRigidObjects();
+
+		for (uint32_t i = 0; i < numRigidObjects; i++) {
+
+			glm::vec3 pos = rbs[i]->position;
+
+			glm::mat4 obmat2 = glm::transpose(glm::translate(pos));
+			//obmat2 = glm::scale(obmat2, glm::vec3(0.1F));
+
+			obmat2[0][0] = 0.1F;
+			obmat2[1][1] = 0.1F;
+			obmat2[2][2] = 0.1F;
+			obmat2[3][3] = 0.1F;
+
+			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
+			aabbTest->render();
+		}
+
 		renderScene();
+
 
 		//gBuffer->resolveToScreen(index);
 		//gBuffer->resolveAllToScreen();

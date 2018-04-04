@@ -21,6 +21,7 @@ IPhysicsMemoryProfile* PhysicsEngine::getPhysicsMemoryProfile() {
 StaticObject* PhysicsEngine::createStaticObject() {
 
 	StaticObject* obj = new StaticObject();
+	obj->shape = nullptr;
 
 	staticObjects.push_back(obj);
 
@@ -30,6 +31,9 @@ StaticObject* PhysicsEngine::createStaticObject() {
 RigidBody* PhysicsEngine::createRigidBody() {
 
 	RigidBody* obj = new RigidBody();
+
+	obj->rsp = nullptr;
+	obj->shape = nullptr;
 
 	rigidBodys.push_back(obj);
 
@@ -41,10 +45,14 @@ void PhysicsEngine::freeStaticObject(StaticObject* objectId) {
 }
 
 void PhysicsEngine::freeRigidBody(RigidBody* objectId) {
+
+	std::vector<RigidBody*>::iterator it = std::find(rigidBodys.begin(), rigidBodys.end(), objectId);
+	rigidBodys.erase(it);
+
 	delete objectId;
 }
 
-void PhysicsEngine::update(float dt) {
+void PhysicsEngine::update(const float dt) {
 
 	pUpdate(dt);
 	checkCollisions();
@@ -52,20 +60,25 @@ void PhysicsEngine::update(float dt) {
 	checkConstraints();
 }
 
+uint32_t PhysicsEngine::getNumRigidBodies() const {
+	return (uint32_t)rigidBodys.size();
+}
+
+const RigidBody* const* PhysicsEngine::getRigidObjects() const {
+
+	return rigidBodys.data();
+}
+
 /**********************
 *  PRIVATE FUNCTIONS  *
 ***********************/
 
-void PhysicsEngine::pUpdate(float dt) {
+void PhysicsEngine::pUpdate(const float dt) {
 
 	for (size_t i = 0; i < rigidBodys.size(); i++) {
 		RigidBody* rb = rigidBodys[i];
-		rb->velocity -= gravity * dt;
-		rb->oldPos = rb->position;
-		rb->position += rb->velocity * dt;
-
-		printf("Pos %f\n", rb->position.y);
-
+		rigidBodyUpdate(rb, dt);
+		//printf("Pos %f\n", rb->position.y);
 	}
 
 }
@@ -77,8 +90,10 @@ void PhysicsEngine::checkCollisions() {
 		for (size_t r = 0; r < rigidBodys.size(); r++) {
 
 			if (isColliding(staticObjects[s]->shape, rigidBodys[r])) {
-				rigidBodys[r]->velocity *= -1;
-				printf("Collision\n");
+				//rigidBodys[r]->velocity *= -1;
+				rigidBodys[r]->velocity = glm::reflect(rigidBodys[r]->velocity, glm::vec3(0, 1, 0));
+				rigidBodys[r]->rsp->response();
+				//printf("Collision\n");
 			}
 		}
 	}
@@ -95,6 +110,11 @@ void PhysicsEngine::checkConstraints() {
 
 bool PhysicsEngine::isColliding(IPhysicsShape* s1, RigidBody* rb) {
 	bool collided = false;
+
+	PhysShapes shape1 = s1->getShapeType();
+	PhysShapes shape2 = rb->shape->getShapeType();
+
+
 
 	PlaneShape* ps = (PlaneShape*)s1;
 	SphereShape* ss = (SphereShape*)rb->shape;
@@ -121,4 +141,10 @@ bool PhysicsEngine::isColliding(IPhysicsShape* s1, RigidBody* rb) {
 	}
 
 	return collided;
+}
+
+inline void PhysicsEngine::rigidBodyUpdate(RigidBody* rb, float dt) {
+	rb->velocity -= gravity * dt;
+	rb->oldPos = rb->position;
+	rb->position += rb->velocity * dt;
 }

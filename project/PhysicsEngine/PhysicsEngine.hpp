@@ -41,16 +41,21 @@ public:
 	void freeStaticObject(StaticObject* objectId);
 	void freeRigidBody(RigidBody* objectId);
 
-	void update(float dt);
+	void update(const float dt);
+
+	uint32_t getNumRigidBodies() const;
+	const RigidBody* const* getRigidObjects() const;
 
 private:
 
-	void pUpdate(float dt);
+	void pUpdate(const float dt);
 	void checkCollisions();
 	void resolveCollisions();
 	void checkConstraints();
 
 	bool isColliding(IPhysicsShape* s1, RigidBody* rb);
+
+	inline void rigidBodyUpdate(RigidBody* rb, float dt);
 
 	std::vector<StaticObject*> staticObjects;
 	std::vector<RigidBody*> rigidBodys;

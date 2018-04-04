@@ -9,24 +9,23 @@ namespace SAT {
 
 	typedef glm::vec3 Axis;
 	
-	struct Dist
-	{
-		Dist()
-		{
-			min = glm::vec3(FLT_MAX);
-			max = glm::vec3(-FLT_MAX);
-		}
-		glm::vec3 min;
-		glm::vec3 max;
+	struct Projection {
 
-		void update(glm::vec3 v1)
-		{
-			min = glm::min(min, v1);
-			max = glm::max(max, v1);
+		Projection() {
+			min = FLT_MAX;
+			max = -FLT_MIN;
 		}
+
+		void update(float v) {
+			min = glm::min(min, v);
+			max = glm::max(max, v);
+		}
+
+		float min;
+		float max;
 
 	};
-
+	
 	void getAxes(const OOBBShape& shape, Axis(&axes)[3]);
 
 	// takes axis from two boxes and combine to make 9 complementary axis.
@@ -34,11 +33,13 @@ namespace SAT {
 
 	glm::vec3 project(glm::vec3 point, const Axis& axis);
 
-	Dist projectAABB(const AABBShape& shape, const Axis& a);
+	float fltProj(glm::vec3 point, const Axis& axis);
 
-	Dist projectOOBB(const OOBBShape& shape, const Axis& a);
+	Projection projectAABB(const AABBShape& shape, const Axis& a);
 
-	bool isPointOnLine(glm::vec3 p, Dist line);
+	Projection projectOOBB(const OOBBShape& shape, const Axis& a);
+
+	bool projectionOverlap(const Projection &p1, const Projection &p2);
 
 }
 #endif

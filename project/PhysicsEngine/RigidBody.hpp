@@ -9,6 +9,12 @@
 
 /// Std Includes
 
+class ICollisionResponse {
+public:
+	virtual ~ICollisionResponse() {};
+	virtual void response() = 0;
+};
+
 class RigidBody {
 public:
 
@@ -17,6 +23,7 @@ public:
 	glm::vec3 oldPos;
 
 	IPhysicsShape * shape;
+	ICollisionResponse* rsp;
 };
 
 #endif

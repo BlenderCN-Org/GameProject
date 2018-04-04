@@ -9,7 +9,7 @@
 TEST(Physics, PlaneVsSphere_Test) {
 
 	{
-		printf("Plane vs sphere test 1 (Collide)\n");
+		printf("Plane vs sphere test 1\n");
 		PlaneShape ps;
 		SphereShape ss;
 
@@ -23,7 +23,7 @@ TEST(Physics, PlaneVsSphere_Test) {
 	}
 
 	{
-		printf("Plane vs sphere test 2 (Miss)\n");
+		printf("Plane vs sphere test 2\n");
 		PlaneShape ps;
 		SphereShape ss;
 
@@ -37,7 +37,7 @@ TEST(Physics, PlaneVsSphere_Test) {
 	}
 
 	{
-		printf("Plane vs sphere test 3 (Miss)\n");
+		printf("Plane vs sphere test 3\n");
 		PlaneShape ps;
 		SphereShape ss;
 
@@ -54,7 +54,7 @@ TEST(Physics, PlaneVsSphere_Test) {
 TEST(Physics, SphereVsSphere_Test) {
 
 	{
-		printf("Sphere vs sphere test 1 (Collide)\n");
+		printf("Sphere vs sphere test 1\n");
 		SphereShape ps;
 		SphereShape ss;
 
@@ -68,7 +68,7 @@ TEST(Physics, SphereVsSphere_Test) {
 	}
 
 	{
-		printf("Sphere vs sphere test 2 (Miss)\n");
+		printf("Sphere vs sphere test 2\n");
 		SphereShape ps;
 		SphereShape ss;
 
@@ -82,7 +82,7 @@ TEST(Physics, SphereVsSphere_Test) {
 	}
 
 	{
-		printf("Sphere vs sphere test 3 (Miss)\n");
+		printf("Sphere vs sphere test 3\n");
 		SphereShape ps;
 		SphereShape ss;
 
@@ -99,7 +99,7 @@ TEST(Physics, SphereVsSphere_Test) {
 TEST(Physics, AABBVsAABB_Test) {
 
 	{
-		printf("AABB vs AABB test 1 (Collide)\n");
+		printf("AABB vs AABB test 1\n");
 		AABBShape ps;
 		AABBShape ss;
 
@@ -113,7 +113,7 @@ TEST(Physics, AABBVsAABB_Test) {
 	}
 
 	{
-		printf("AABB vs AABB test 2 (Miss)\n");
+		printf("AABB vs AABB test 2\n");
 		AABBShape ps;
 		AABBShape ss;
 
@@ -127,7 +127,7 @@ TEST(Physics, AABBVsAABB_Test) {
 	}
 
 	{
-		printf("AABB vs AABB test 3 (Miss)\n");
+		printf("AABB vs AABB test 3\n");
 		AABBShape ps;
 		AABBShape ss;
 
@@ -145,7 +145,7 @@ TEST(Physics, AABBVsAABB_Test) {
 TEST(Physics, AABBVsOOBB_Test) {
 
 	{
-		printf("AABB vs OOBB test 1 (Collide)\n");
+		printf("AABB vs OOBB test 1\n");
 		AABBShape ps;
 		OOBBShape ss;
 
@@ -160,7 +160,7 @@ TEST(Physics, AABBVsOOBB_Test) {
 	}
 
 	{
-		printf("AABB vs OOBB test 2 (Miss)\n");
+		printf("AABB vs OOBB test 2\n");
 		AABBShape ps;
 		OOBBShape ss;
 
@@ -175,7 +175,7 @@ TEST(Physics, AABBVsOOBB_Test) {
 	}
 
 	{
-		printf("AABB vs OOBB test 3 (Miss)\n");
+		printf("AABB vs OOBB test 3\n");
 		AABBShape ps;
 		OOBBShape ss;
 
@@ -188,4 +188,119 @@ TEST(Physics, AABBVsOOBB_Test) {
 
 		EXPECT_FALSE(AABBVsOOBB(ps, ss));
 	}
+
+	{
+		printf("AABB vs OOBB test 4\n");
+		AABBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+
+		ss.center = glm::vec3(0.0F, -1.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(0.0F, 0.0F, 0.0F);
+
+		EXPECT_TRUE(AABBVsOOBB(ps, ss));
+	}
+
+	{
+		printf("AABB vs OOBB test 5\n");
+		AABBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+
+		ss.center = glm::vec3(0.0F, -1.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(45.0F, 0.0F, 0.0F);
+
+		EXPECT_TRUE(AABBVsOOBB(ps, ss));
+	}
+
+}
+
+TEST(Physics, OOBBVsOOBB_Test) {
+
+	{
+		printf("OOBB vs OOBB test 1\n");
+		OOBBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ps.rotation = glm::vec3(0.0F);
+
+		ss.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(0.0F);
+
+		EXPECT_TRUE(OOBBVsOOBB(ps, ss));
+	}
+
+	{
+		printf("OOBB vs OOBB test 2\n");
+		OOBBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ps.rotation = glm::vec3(0.0F);
+
+		ss.center = glm::vec3(0.0F, 20.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(0.0F);
+
+		EXPECT_FALSE(OOBBVsOOBB(ps, ss));
+	}
+
+	{
+		printf("OOBB vs OOBB test 3\n");
+		OOBBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ps.rotation = glm::vec3(0.0F);
+
+		ss.center = glm::vec3(0.0F, -2.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(0.0F);
+
+		EXPECT_FALSE(OOBBVsOOBB(ps, ss));
+	}
+
+	{
+		printf("OOBB vs OOBB test 4\n");
+		OOBBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ps.rotation = glm::vec3(0.0F);
+
+		ss.center = glm::vec3(0.0F, -1.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(0.0F, 0.0F, 0.0F);
+
+		EXPECT_TRUE(OOBBVsOOBB(ps, ss));
+	}
+
+	{
+		printf("OOBB vs OOBB test 5\n");
+		OOBBShape ps;
+		OOBBShape ss;
+
+		ps.center = glm::vec3(0.0F, 0.0F, 0.0F);
+		ps.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ps.rotation = glm::vec3(0.0F);
+
+		ss.center = glm::vec3(0.0F, -1.0F, 0.0F);
+		ss.halfSize = glm::vec3(0.5F, 0.5F, 0.5F);
+		ss.rotation = glm::vec3(45.0F, 0.0F, 0.0F);
+
+		EXPECT_TRUE(OOBBVsOOBB(ps, ss));
+	}
+
 }

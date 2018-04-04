@@ -19,10 +19,6 @@
 
 #include "Game/Game.hpp"
 
-#include <PhysicsEngine/PhysicsEngine.hpp>
-#include <PhysicsEngine/Shapes/PlaneShape.hpp>
-#include <PhysicsEngine/Shapes/SphereShape.hpp>
-
 int main(int argc, char* argv[]) {
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -56,26 +52,8 @@ int main(int argc, char* argv[]) {
 
 	printf("starting loop\n");
 
-	PhysicsEngine physEng;
-
-	StaticObject* groundPlane = physEng.createStaticObject();
-
-	PlaneShape* ps = new PlaneShape();
-	groundPlane->shape = ps;
-	ps->normal = glm::vec3(0, 1, 0);
-	ps->distance = -50.0F;
-
-	RigidBody* collisionShape = physEng.createRigidBody();
-
-	SphereShape* ss = new SphereShape();
-	collisionShape->shape = ss;
-	ss->center = glm::vec3(0, 1, 0);
-	ss->radius= 1.0F;
-	
 	while (e->isRunning()) {
-
-		physEng.update(dt);
-
+		
 		game->update(dt, clocks);
 		e->clearBackBuffer();
 
@@ -91,13 +69,6 @@ int main(int argc, char* argv[]) {
 	delete game;
 
 	delete e;
-
-
-	delete ps;
-	delete ss;
-
-	physEng.freeStaticObject(groundPlane);
-	physEng.freeRigidBody(collisionShape);
 
 #if _DEBUG
 	renderDoc.unloadLibrary();
