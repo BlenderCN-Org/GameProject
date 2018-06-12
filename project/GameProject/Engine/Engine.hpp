@@ -22,14 +22,6 @@
 #include <vector>
 #include <thread>
 
-using namespace Engine;
-
-enum class DataParsersTypes {
-	MESH_PARSER,
-	TEXURE_PARSER,
-	// todo fill with more types
-};
-
 class CEngine {
 
 public:
@@ -57,7 +49,7 @@ public:
 
 	void renderFullQuad();
 
-	Interfaces::IAssetManager* getAssetManager() const;
+	Engine::Interfaces::IAssetManager* getAssetManager() const;
 
 	PhysicsEngine* getPhysEngine();
 
@@ -76,13 +68,13 @@ private:
 
 	void physicsLoop();
 
-	Core::Settings engineSettings;
+	Engine::Core::Settings engineSettings;
 
-	Core::Library renderEngineLib;
-	Core::Console* console;
+	Engine::Core::Library renderEngineLib;
+	Engine::Core::Console* console;
 	IRenderEngine* renderEngine;
 	IWindow* gameWindow;
-	AssetManager* assetManager;
+	Engine::AssetManager* assetManager;
 
 	int windowWidth;
 	int windowHeight;

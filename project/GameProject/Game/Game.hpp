@@ -2,20 +2,21 @@
 #define GAME_HPP
 
 ///Internal Includes
+#include "Asteroids/AsteroidsMap.hpp"
 #include "Camera.hpp"
 #include "CameraInput.hpp"
 #include "CameraPath.hpp"
 #include "Editor.hpp"
-#include "Loader/MapLoader.hpp"
-#include "Map.hpp"
 #include "MainMenu.hpp"
 #include "PhysicsParticle.hpp"
 #include "Player.hpp"
 #include "RenderBatch.hpp"
-#include "Sky.hpp"
 
-#include "Asteroids/AsteroidsMap.hpp"
+#include "MapObjects/Map.hpp"
+#include "MapObjects/Sky.hpp"
+
 #include "Editor/3dViewGizmo.hpp"
+#include "Loader/MapLoader.hpp"
 
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"

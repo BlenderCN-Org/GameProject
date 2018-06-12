@@ -144,9 +144,6 @@
     <ClCompile Include="Engine\Graphics\SkyDome.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -171,9 +168,6 @@
     <ClCompile Include="Game\Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Sky.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\TextureView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -187,12 +181,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ThreadManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Cell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\Loader\MapLoader.cpp">
@@ -223,6 +211,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MapObjects\Cell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MapObjects\Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MapObjects\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MapObjects\Sky.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -329,9 +329,6 @@
     <ClInclude Include="Engine\Graphics\SkyDome.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -377,9 +374,6 @@
     <ClInclude Include="Game\Editor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Sky.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\TextureView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -401,12 +395,6 @@
     <ClInclude Include="Engine\SafeQueue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Map.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Cell.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Loader\MapLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -425,9 +413,6 @@
     <ClInclude Include="Game\IPlayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\IMap.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Asteroids\AsteroidsMap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -441,6 +426,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debug.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\Cell.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\Map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\Scene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\Sky.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IMap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 
 /// Internal Includes
-#include "Camera.hpp"
 #include "Map.hpp"
+#include "../Camera.hpp"
 
 /// External Includes
 

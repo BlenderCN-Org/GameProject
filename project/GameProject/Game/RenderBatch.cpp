@@ -1,6 +1,6 @@
 ///Internal Includes
 #include "RenderBatch.hpp"
-#include "Sky.hpp"
+#include "MapObjects/Sky.hpp"
 #include "../Engine/Graphics/Graphics.hpp"
 
 /// External Includes

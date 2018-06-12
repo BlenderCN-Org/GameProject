@@ -88,12 +88,12 @@ bool Editor::mouseInGui() {
 		inGui = true;
 	}
 
-	Input::Input* in = Input::Input::GetInput();
-	if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK]) == false) {
+	Engine::Input::Input* in = Engine::Input::Input::GetInput();
+	if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_MOUSE_L_CLICK]) == false) {
 		mouseDownInGui = false;
 		pressing = false;
 	}
-	if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK])) {
+	if (in->wasPressedThisFrame(Engine::Input::KeyBindings[Engine::Input::KEYBIND_MOUSE_L_CLICK])) {
 		if (inGui) {
 			mouseDownInGui = true;
 		}

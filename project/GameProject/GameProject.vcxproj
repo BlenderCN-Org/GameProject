@@ -238,19 +238,19 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
-    <ClCompile Include="Game\Cell.cpp" />
+    <ClCompile Include="Game\MapObjects\Cell.cpp" />
     <ClCompile Include="Game\Editor.cpp" />
     <ClCompile Include="Game\Editor\3dViewGizmo.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\Loader\MapLoader.cpp" />
     <ClCompile Include="Game\MainMenu.cpp" />
-    <ClCompile Include="Game\Map.cpp" />
+    <ClCompile Include="Game\MapObjects\Map.cpp" />
     <ClCompile Include="Game\PhysicsParticle.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\RenderBatch.cpp" />
-    <ClCompile Include="Game\Scene.cpp" />
-    <ClCompile Include="Game\Sky.cpp" />
+    <ClCompile Include="Game\MapObjects\Scene.cpp" />
+    <ClCompile Include="Game\MapObjects\Sky.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -276,7 +276,7 @@
     <ClInclude Include="Game\Asteroids\AsteroidsMap.hpp" />
     <ClInclude Include="Game\Asteroids\Bullet.hpp" />
     <ClInclude Include="Game\Asteroids\Ship.hpp" />
-    <ClInclude Include="Game\Cell.hpp" />
+    <ClInclude Include="Game\MapObjects\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
     <ClInclude Include="Game\Editor\3dViewGizmo.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
@@ -284,13 +284,13 @@
     <ClInclude Include="Game\IPlayer.hpp" />
     <ClInclude Include="Game\Loader\MapLoader.hpp" />
     <ClInclude Include="Game\MainMenu.hpp" />
-    <ClInclude Include="Game\Map.hpp" />
+    <ClInclude Include="Game\MapObjects\Map.hpp" />
     <ClInclude Include="Game\PhysicsParticle.hpp" />
     <ClInclude Include="Game\Player.hpp" />
     <ClInclude Include="Game\RenderBatch.hpp" />
-    <ClInclude Include="Game\Scene.hpp" />
+    <ClInclude Include="Game\MapObjects\Scene.hpp" />
     <ClInclude Include="Engine\Interfaces\IEditor.hpp" />
-    <ClInclude Include="Game\Sky.hpp" />
+    <ClInclude Include="Game\MapObjects\Sky.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
     <ClInclude Include="Engine\Core\FormattedString.hpp" />

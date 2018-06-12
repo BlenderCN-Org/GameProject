@@ -291,10 +291,10 @@ void Game::update(float dt, uint64_t clocks) {
 
 	gameGui->update(dt);
 
-	if (Input::Input::GetInput()->sizeChange) {
+	if (Engine::Input::Input::GetInput()->sizeChange) {
 		int w = 0;
 		int h = 0;
-		Input::Input::GetInput()->getWindowSize(w, h);
+		Engine::Input::Input::GetInput()->getWindowSize(w, h);
 		gBuffer->resize(w, h);
 		gBuffer->setWindowSize(w, h);
 	}
@@ -363,7 +363,7 @@ void Game::update(float dt, uint64_t clocks) {
 	str += "Rotation: " + std::to_string(meshRotation * toDEGREE) + " (" + std::to_string((meshRotation * toDEGREE) / 360.0F) + ")\n";
 	str += "RotTime: " + std::to_string(rotTime) + "\n";
 
-	Input::InputEvent ie = Input::Input::GetInput()->lastPressed;
+	Engine::Input::InputEvent ie = Engine::Input::Input::GetInput()->lastPressed;
 
 	str += "Last Key: " + std::string(ie.mouse ? "mouse " : "key ") + std::to_string(ie.code) + "\n";
 
@@ -383,7 +383,7 @@ void Game::render() {
 
 	int w = 0;
 	int h = 0;
-	Input::Input::GetInput()->getWindowSize(w, h);
+	Engine::Input::Input::GetInput()->getWindowSize(w, h);
 	gRenderEngine->updateViewPort(w, h);
 
 	/*if (currentState != GameState::PLAY_ASTEROIDS) {
@@ -746,16 +746,16 @@ void Game::updatePlay(float dt) {
 		p->update(dt);
 	}
 
-	Input::Input* in = Input::Input::GetInput();
+	Engine::Input::Input* in = Engine::Input::Input::GetInput();
 
 	bool hadInput = false;
 
-	if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_LEFT_ARROW])) {
+	if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_LEFT_ARROW])) {
 		rotSpeed += 2.0F * dt;
 		hadInput = true;
 	}
 
-	if (in->isKeyBindPressed(Input::KeyBindings[Input::KEYBIND_RIGHT_ARROW])) {
+	if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_RIGHT_ARROW])) {
 		rotSpeed -= 2.0F * dt;
 		hadInput = true;
 	}

@@ -69,10 +69,10 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	gameWindow->setCursorVisibility(false);
 
-	console = new Core::Console();
+	console = new Engine::Core::Console();
 	console->updateSize(windowWidth, windowHeight);
 
-	Input::Input* input = Input::Input::GetInput();
+	Engine::Input::Input* input = Engine::Input::Input::GetInput();
 
 	input->setupCallbacks(gameWindow);
 	input->attachConsole(console);
@@ -111,7 +111,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
 
-	assetManager = new AssetManager();
+	assetManager = new Engine::AssetManager();
 
 	physicsThread = new std::thread(&CEngine::physicsLoop, this);
 
@@ -134,7 +134,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 	ps->normal = glm::vec3(0, 1, 0);
 	ps->distance = -5.0F;
 
-	cursorGui = new Graphics::CGui();
+	cursorGui = new Engine::Graphics::CGui();
 	cursorGui->setVisible(true);
 
 	cursor = new Engine::Graphics::Gui::Cursor();
@@ -169,7 +169,7 @@ CEngine::~CEngine() {
 
 	gRenderEngine = nullptr;
 
-	Input::Input::Release();
+	Engine::Input::Input::Release();
 
 	renderEngine->release();
 	renderEngineLib.unloadLibrary();
@@ -193,7 +193,7 @@ void CEngine::close() {
 
 bool CEngine::setAssetDataFolder(const char* folderPath) {
 	bool success = false;
-	if (System::folderExists(folderPath)) {
+	if (Engine::System::folderExists(folderPath)) {
 		gAssetDataPath = folderPath;
 		success = true;
 	}
@@ -205,16 +205,16 @@ const bool CEngine::isRunning() const {
 }
 
 void CEngine::update(const float dt) {
-	Input::Input::GetInput()->reset();
+	Engine::Input::Input::GetInput()->reset();
 
 	gameWindow->pollMessages();
 
 	physEngine->update(1.0F/60.0F);
 
-	if (Input::Input::GetInput()->sizeChange) {
+	if (Engine::Input::Input::GetInput()->sizeChange) {
 		int w = 0;
 		int h = 0;
-		Input::Input::GetInput()->getWindowSize(w, h);
+		Engine::Input::Input::GetInput()->getWindowSize(w, h);
 
 		renderEngine->updateViewPort(w, h);
 		gameWindow->setWindowSize(w, h);
@@ -265,7 +265,7 @@ void CEngine::renderFullQuad() {
 	fullQuad->render();
 }
 
-Interfaces::IAssetManager* CEngine::getAssetManager() const {
+Engine::Interfaces::IAssetManager* CEngine::getAssetManager() const {
 	return assetManager;
 }
 
@@ -279,7 +279,7 @@ ThreadManager* CEngine::getThreadManager() {
 
 void CEngine::physicsLoop() {
 
-	System::HighResClock clk;
+	Engine::System::HighResClock clk;
 
 	float dt = 0.0F;
 

@@ -2,7 +2,7 @@
 #define SCENE_HPP
 
 /// Internal Includes
-#include "GameObject.hpp"
+#include "../GameObject.hpp"
 
 /// External Includes
 

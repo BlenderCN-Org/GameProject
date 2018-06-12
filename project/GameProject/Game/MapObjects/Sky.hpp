@@ -2,8 +2,8 @@
 #define SKY_HPP
 
 /// Internal Includes
-#include "Loader/MapLoader.hpp"
-#include "../Engine/Graphics/SkyDome.hpp"
+#include "../Loader/MapLoader.hpp"
+#include "../../Engine/Graphics/SkyDome.hpp"
 
 /// External Includes
 #include <glm/glm.hpp>

@@ -3,11 +3,12 @@
 
 /// Internal Includes
 #include "Cell.hpp"
-#include "IMap.hpp"
-#include "Loader/MapLoader.hpp"
-#include "Player.hpp"
-#include "RenderBatch.hpp"
 #include "Sky.hpp"
+
+#include "../IMap.hpp"
+#include "../Player.hpp"
+#include "../RenderBatch.hpp"
+#include "../Loader/MapLoader.hpp"
 
 /// External Includes
 

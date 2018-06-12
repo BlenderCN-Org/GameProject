@@ -1,8 +1,8 @@
 
 /// Internal Includes
 #include "Sky.hpp"
-#include "../Engine/Graphics/Graphics.hpp"
-#include "../Engine/Core/System.hpp"
+#include "../../Engine/Graphics/Graphics.hpp"
+#include "../../Engine/Core/System.hpp"
 
 /// External Includes
 #include <glm/gtc/matrix_transform.hpp>
