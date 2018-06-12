@@ -2,9 +2,9 @@
 #define TEXT_AREA_HPP
 
 /// Internal Includes
+#include "ScrollBar.hpp"
 #include "Text.hpp"
 #include "../GuiItem.hpp"
-#include "ScrollBar.hpp"
 #include "../Textures/Texture2D.hpp"
 
 /// External Includes

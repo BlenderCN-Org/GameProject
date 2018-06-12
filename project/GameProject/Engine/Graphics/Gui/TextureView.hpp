@@ -1,12 +1,15 @@
 #ifndef TEXtURE_VIEW_HPP
 #define TEXtURE_VIEW_HPP
 
-#include "../GuiItem.hpp"
+/// Internal Includes
 #include "Panel.hpp"
 #include "ScrollBar.hpp"
+#include "../GuiItem.hpp"
 
+/// External Includes
 #include "../Textures/Texture2DReference.hpp"
 
+/// Std Includes
 
 namespace Engine {
 	namespace Graphics {

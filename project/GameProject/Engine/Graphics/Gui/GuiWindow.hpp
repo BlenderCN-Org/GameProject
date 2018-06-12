@@ -2,9 +2,9 @@
 #define GUI_WINDOW_HPP
 
 /// Internal Includes
-#include "../GuiItem.hpp"
 #include "Button.hpp"
 #include "Panel.hpp"
+#include "../GuiItem.hpp"
 #include "../Textures/Texture2D.hpp"
 
 /// External Includes

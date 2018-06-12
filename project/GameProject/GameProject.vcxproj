@@ -194,6 +194,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="Engine\Core\Camera.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Engine\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Console.cpp" />
     <ClCompile Include="Engine\Core\FormattedString.cpp" />
@@ -253,6 +254,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug.hpp" />
     <ClInclude Include="Engine\AssetManager.hpp" />
     <ClInclude Include="Engine\Core\Allocator.hpp" />
     <ClInclude Include="Engine\Core\Settings.hpp" />
@@ -266,9 +268,6 @@
     <ClInclude Include="Engine\Interfaces\IAssetManager.hpp" />
     <ClInclude Include="Engine\Interfaces\ICAnimation.hpp" />
     <ClInclude Include="Engine\Interfaces\ICMesh.hpp" />
-    <ClInclude Include="Engine\Interfaces\IReflected.hpp" />
-    <ClInclude Include="Engine\Reflection.hpp" />
-    <ClInclude Include="Engine\RefObject.hpp" />
     <ClInclude Include="Engine\SafeQueue.hpp" />
     <ClInclude Include="Engine\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\ThreadManager.hpp" />
@@ -292,7 +291,6 @@
     <ClInclude Include="Game\Scene.hpp" />
     <ClInclude Include="Engine\Interfaces\IEditor.hpp" />
     <ClInclude Include="Game\Sky.hpp" />
-    <ClInclude Include="Engine\PhysicsShapesShader.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />
     <ClInclude Include="Engine\Core\Console.hpp" />
     <ClInclude Include="Engine\Core\FormattedString.hpp" />
@@ -322,9 +320,7 @@
     <ClInclude Include="Engine\Graphics\SkyDome.hpp" />
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp" />
     <ClInclude Include="Engine\Input\Input.hpp" />
-    <ClInclude Include="Engine\Interfaces\IAssetData.hpp" />
     <ClInclude Include="Engine\Interfaces\ICamera.hpp" />
-    <ClInclude Include="Engine\Interfaces\IDataParser.hpp" />
     <ClInclude Include="Engine\Utils\MemoryBuffer.hpp" />
     <ClInclude Include="ExceptionHandling.hpp" />
     <ClInclude Include="Game\Camera.hpp" />

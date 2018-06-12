@@ -1,8 +1,12 @@
+/// Internal Includes
 #include "MirrorMesh.hpp"
 #include "../Graphics.hpp"
 
-#include <RenderEngine/IRenderEngine.hpp>
+/// External Includes
 #include <glm/gtx/vector_angle.hpp>
+#include <RenderEngine/IRenderEngine.hpp>
+
+/// Std Includes
 
 namespace Engine {
 	namespace Graphics {

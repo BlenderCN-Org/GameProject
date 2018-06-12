@@ -1,10 +1,11 @@
 ///Internal Includes
-
 #include "RenderBatch.hpp"
 #include "Sky.hpp"
-
 #include "../Engine/Graphics/Graphics.hpp"
 
+/// External Includes
+
+/// Std Includes
 
 ActiveFrameBufferCommand::ActiveFrameBufferCommand(IFrameBuffer* fbo, bool clear) : activeFbo(fbo), cls(clear) {}
 

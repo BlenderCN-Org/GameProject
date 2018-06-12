@@ -1,9 +1,13 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
+/// Internal Includes
+
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 #include <glm\glm.hpp>
+
+/// Std Includes
 
 class Camera {
 public:

@@ -1,16 +1,14 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP 
 /// Internal Includes
+#include "AssetManager.hpp"
+#include "ThreadManager.hpp"
+
 #include "Core/LibraryLoader.hpp"
 #include "Core/Console.hpp"
 #include "Core/Settings.hpp"
-#include "Interfaces/IDataParser.hpp"
 #include "Interfaces/IAssetManager.hpp"
 #include "Utils/MemoryBuffer.hpp"
-
-#include "AssetManager.hpp"
-
-#include "ThreadManager.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -39,22 +37,6 @@ public:
 	CEngine();
 	virtual ~CEngine();
 
-	void registerDataParser(Interfaces::IDataParser* parser, DataParsersTypes parserType);
-
-	//void testCallDataParsers() {
-	//	std::map<DataParsersTypes, std::vector<Interfaces::IDataParser*>>::iterator it = dataParsers.begin();
-	//	std::map<DataParsersTypes, std::vector<Interfaces::IDataParser*>>::iterator eit = dataParsers.end();
-
-	//	for (it; it != eit; it++) {
-	//		size_t size = it->second.size();
-
-	//		for (size_t i = 0; i < size; i++) {
-	//			Core::MemoryBuffer memBuff;
-	//			it->second[i]->load(memBuff, nullptr);
-	//		}
-	//	}
-	//}
-	
 	void setCursor(char* cursorImgPath);
 
 	void close();
@@ -101,8 +83,6 @@ private:
 	IRenderEngine* renderEngine;
 	IWindow* gameWindow;
 	AssetManager* assetManager;
-
-	std::map<DataParsersTypes, std::vector<Interfaces::IDataParser*>> dataParsers;
 
 	int windowWidth;
 	int windowHeight;

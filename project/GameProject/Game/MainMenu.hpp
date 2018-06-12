@@ -1,9 +1,14 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
+/// Internal Includes
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Gui/Button.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 class MainMenu {
 

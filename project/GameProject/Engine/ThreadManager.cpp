@@ -1,6 +1,11 @@
+
+/// Internal Includes
 #include "ThreadManager.hpp"
 #include "Core/System.hpp"
 
+/// External Includes
+
+/// Std Includes
 #include <memory>
 #include <chrono>
 
@@ -15,8 +20,6 @@ CEThread::~CEThread() {
 	thrd->join();
 	delete thrd;
 }
-
-
 
 void CEThread::stopThread() {
 	printf("Stopping thread with id %d\n", id);
@@ -75,7 +78,7 @@ ThreadManager::~ThreadManager() {
 	for (int i = 0; i < coreCount; i++) {
 		threads[i].stopThread();
 	}
-	
+
 	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	for (int i = 0; i < coreCount; i++) {

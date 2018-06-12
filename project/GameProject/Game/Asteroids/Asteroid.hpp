@@ -1,8 +1,13 @@
 #ifndef ASTEROID_HPP
 #define ASTEROID_HPP
 
+/// Internal Includes
+
+/// External Includes
 #include <glm/glm.hpp>
 #include <RenderEngine/IRenderEngine.hpp>
+
+/// Std Includes
 
 enum class ASTEROID_SIZE {
 	LARGE,

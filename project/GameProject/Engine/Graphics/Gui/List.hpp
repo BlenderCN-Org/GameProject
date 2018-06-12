@@ -2,9 +2,9 @@
 #define LIST_HPP
 
 /// Internal Includes
+#include "ScrollBar.hpp"
 #include "../GuiItem.hpp"
 #include "../Textures/Texture2D.hpp"
-#include "ScrollBar.hpp"
 #include "../../Core/String.hpp"
 
 /// External Includes

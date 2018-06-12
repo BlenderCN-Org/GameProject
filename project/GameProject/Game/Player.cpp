@@ -1,7 +1,6 @@
 
 /// Internal Includes
 #include "Player.hpp"
-
 #include "../Engine/Input/Input.hpp"
 
 /// External Includes

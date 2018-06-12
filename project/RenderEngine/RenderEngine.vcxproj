@@ -197,7 +197,6 @@
     <ClInclude Include="Assets\ThreadLock.hpp" />
     <ClInclude Include="BuildOptions.hpp" />
     <ClInclude Include="DataTypes\Colors.hpp" />
-    <ClInclude Include="DataTypes\Image.hpp" />
     <ClInclude Include="DataTypes\ShaderNodes.hpp" />
     <ClInclude Include="DataTypes\Vertex.hpp" />
     <ClInclude Include="IAnimatedMesh.hpp" />
@@ -233,7 +232,6 @@
     <ClCompile Include="Assets\Texture_gl.cpp" />
     <ClCompile Include="Assets\ThreadLock.cpp" />
     <ClCompile Include="DataTypes\Colors.cpp" />
-    <ClCompile Include="DataTypes\Image.cpp" />
     <ClCompile Include="DataTypes\Vertex.cpp" />
     <ClCompile Include="ReGlobal.cpp" />
     <ClCompile Include="RenderEngine.cpp" />

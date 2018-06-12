@@ -2,8 +2,8 @@
 #define STATIC_MESH_HPP
 
 /// Internal Includes
-#include "../../Interfaces/ICMesh.hpp"
 #include "Animation.hpp"
+#include "../../Interfaces/ICMesh.hpp"
 
 /// External Includes
 #include <RenderEngine/IMesh.hpp>

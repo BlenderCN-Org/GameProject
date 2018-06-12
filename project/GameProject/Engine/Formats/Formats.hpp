@@ -1,6 +1,11 @@
 #ifndef FORMATS_HPP
 #define FORMATS_HPP
 
+/// Internal Includes
+
+/// External Includes
+
+/// Std Includes
 #include <cstdint>
 
 namespace Engine {

@@ -2,8 +2,8 @@
 #define I_PLAYER_HPP
 
 /// Internal Includes
-#include "GameObject.hpp"
 #include "CameraInput.hpp"
+#include "GameObject.hpp"
 
 /// External Includes
 

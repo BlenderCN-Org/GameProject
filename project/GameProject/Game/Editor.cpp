@@ -1,5 +1,11 @@
+
+/// Internal Includes
 #include "Editor.hpp"
 #include "../Engine/Input/Input.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 Editor::Editor() : mouseDownInGui(false) {
 

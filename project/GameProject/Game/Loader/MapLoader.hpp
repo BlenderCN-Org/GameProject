@@ -7,8 +7,8 @@
 
 /// Std Includes
 #include <cstdint>
-#include <map>
 #include <fstream>
+#include <map>
 
 struct Tag {
 	char tag[4];

@@ -2,9 +2,9 @@
 #define LABEL_HPP
 
 /// Internal Includes
+#include "Text.hpp"
 #include "../GuiItem.hpp"
 #include "../Textures/Texture2D.hpp"
-#include "Text.hpp"
 
 /// External Includes
 

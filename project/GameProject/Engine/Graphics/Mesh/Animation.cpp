@@ -1,7 +1,12 @@
+/// Internal Includes
 #include "Animation.hpp"
 
-#include <vector>
+/// External Includes
+
+/// Std Includes
 #include <functional>
+#include <vector>
+
 
 namespace Engine {
 	namespace Graphics {

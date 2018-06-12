@@ -1,6 +1,11 @@
 #ifndef TEMPORARY_STORAGE_HPP
 #define TEMPORARY_STORAGE_HPP
 
+/// Internal Includes
+
+/// External Includes
+
+/// Std Includes
 #include <memory>
 
 #define KB 1024

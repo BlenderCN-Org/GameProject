@@ -7,9 +7,14 @@
 #define EDITOR_API _declspec(dllimport)
 #endif
 
+/// Internal Includes
 #include "IAssetManager.hpp"
+
+/// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 #include <RenderEngine/IWindow.hpp>
+
+/// Std Includes
 
 namespace Engine {
 	namespace Interfaces {

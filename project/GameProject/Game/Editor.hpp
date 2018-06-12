@@ -1,12 +1,16 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
+/// Internal Includes
 #include "Editor/3dViewGizmo.hpp"
 
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Gui/GuiWindow.hpp"
 
+/// External Includes
+
+/// Std Includes
 
 class Editor {
 

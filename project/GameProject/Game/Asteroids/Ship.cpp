@@ -1,8 +1,13 @@
 
+/// Internal Includes
 #include "Ship.hpp"
 
 #include "../../Engine/Graphics/Graphics.hpp"
 #include "../../Engine/Input/Input.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 Ship::Ship() {
 

@@ -9,8 +9,8 @@
 #include <glm/gtx/transform.hpp>
 
 /// Std Includes
-#include <string>
 #include <fstream>
+#include <string>
 
 Sky::Sky() {
 	setup();

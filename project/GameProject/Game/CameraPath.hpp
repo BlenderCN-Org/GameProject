@@ -1,8 +1,12 @@
 #ifndef CAMERA_PATH_HPP
 #define CAMERA_PATH_HPP
 
+/// Internal Includes
 #include "CameraInput.hpp"
 
+/// External Includes
+
+/// Std Includes
 #include <vector>
 
 struct CameraPathInfo

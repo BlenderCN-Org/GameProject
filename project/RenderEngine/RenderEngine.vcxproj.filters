@@ -78,9 +78,6 @@
     <ClInclude Include="DataTypes\Colors.hpp">
       <Filter>Source Files\DataTypes</Filter>
     </ClInclude>
-    <ClInclude Include="DataTypes\Image.hpp">
-      <Filter>Source Files\DataTypes</Filter>
-    </ClInclude>
     <ClInclude Include="DataTypes\Vertex.hpp">
       <Filter>Source Files\DataTypes</Filter>
     </ClInclude>
@@ -148,9 +145,6 @@
     </ClCompile>
     <ClCompile Include="Utils\ShelfPack.cpp">
       <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="DataTypes\Image.cpp">
-      <Filter>Source Files\DataTypes</Filter>
     </ClCompile>
     <ClCompile Include="Window\Win32Window.cpp">
       <Filter>Source Files\Window</Filter>

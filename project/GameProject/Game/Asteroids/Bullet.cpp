@@ -1,6 +1,11 @@
-#include "Bullet.hpp"
 
+/// Internal Includes
+#include "Bullet.hpp"
 #include "../../Engine/Input/Input.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 Bullet::Bullet(float startX, float startY, float dir) {
 	xPos = startX;

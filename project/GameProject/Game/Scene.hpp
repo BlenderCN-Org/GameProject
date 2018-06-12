@@ -9,8 +9,6 @@
 /// Std Includes
 #include <vector>
 
-
-
 class Scene {
 
 public:

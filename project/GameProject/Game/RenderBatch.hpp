@@ -1,11 +1,12 @@
 #ifndef RENDER_BATCH_HPP
 #define RENDER_BATCH_HPP
 
+/// Internal Includes
 #include "../Engine/TemporaryStorage.hpp"
 
 /// External Includes
-#include <RenderEngine/IRenderEngine.hpp>
 #include <glm/glm.hpp>
+#include <RenderEngine/IRenderEngine.hpp>
 
 class Sky;
 

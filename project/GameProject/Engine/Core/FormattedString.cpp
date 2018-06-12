@@ -1,6 +1,10 @@
+/// Internal Includes
 #include "FormattedString.hpp"
 #include "System.hpp"
 
+/// External Includes
+
+/// Std Includes
 #include <memory>
 
 namespace Engine {

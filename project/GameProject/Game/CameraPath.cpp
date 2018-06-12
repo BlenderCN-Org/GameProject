@@ -1,4 +1,10 @@
+
+/// Internal Includes
 #include "CameraPath.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 CameraPath::CameraPath()
 	: camInput(nullptr)

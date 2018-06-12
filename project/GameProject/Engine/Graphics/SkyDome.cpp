@@ -1,10 +1,18 @@
+
+/// Internal Includes
 #include "SkyDome.hpp"
 #include "Graphics.hpp"
 
+/// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+/// Internal Includes
+
+/// External Includes
+
+/// Std Includes
 #include <vector>
 
 struct Vertex {

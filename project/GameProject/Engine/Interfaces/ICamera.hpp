@@ -1,7 +1,12 @@
 #ifndef I_CAMERA_HPP
 #define I_CAMERA_HPP
 
+/// Internal Includes
+
+/// External Includes
 #include <glm/glm.hpp>
+
+/// Std Includes
 
 namespace Engine {
 

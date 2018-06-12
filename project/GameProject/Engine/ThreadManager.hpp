@@ -2,15 +2,15 @@
 #define THREAD_MANAGER_HPP
 
 /// Internal Includes
-#include "Core/System.hpp"
 #include "SafeQueue.hpp"
+#include "Core/System.hpp"
 
 /// External Includes
 #include <PhysicsEngine/PhysicsEngine.hpp>
 
 /// Std Includes
-#include <thread>
 #include <atomic>
+#include <thread>
 #include <string>
 
 class ThreadManager;

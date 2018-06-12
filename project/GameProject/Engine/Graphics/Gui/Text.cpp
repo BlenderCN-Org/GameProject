@@ -2,7 +2,9 @@
 #include "Text.hpp"
 #include "../Graphics.hpp"
 
-///
+/// External Includes
+
+/// Std Includes
 
 Text::Text() : font(nullptr), textMesh(nullptr), width(0), height(0) {
 	textMesh = gRenderEngine->createMesh();

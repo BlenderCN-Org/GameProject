@@ -1,12 +1,12 @@
 
 /// Internal Includess
 #include "Game.hpp"
-#include "../Engine/Graphics/Graphics.hpp"
 #include "../Engine/Core/System.hpp"
+#include "../Engine/Graphics/Graphics.hpp"
 
 /// External Includes
-#include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 /// Std Includes
 #include <fstream>
@@ -194,7 +194,7 @@ Game::Game(CEngine* _engine)
 
 	menu = new MainMenu();
 
-	editor = new Engine::RefObject<Editor>(5.0F);
+	editor = new Editor();
 
 	mapLoader.openMap("E:/GameProjectAssets/Data/GameMap.map");
 
@@ -287,7 +287,6 @@ void Game::update(float dt, uint64_t clocks) {
 	frameObjects.clear();
 
 	engine->update(dt);
-	editor->refUpdate(dt);
 	fpsCounter.update(dt);
 
 	gameGui->update(dt);
@@ -786,13 +785,13 @@ void Game::updateEdit(float dt) {
 
 	const bool freeCam = true;
 
-	(*editor)->update(dt);
+	editor->update(dt);
 
-	if ((*editor)->mouseInGui() == false) {
+	if (editor->mouseInGui() == false) {
 		camInput.update(dt, freeCam);
 	}
 
-	Renderable** rends = (*editor)->renderObjects(1);
+	Renderable** rends = editor->renderObjects(1);
 
 	frameObjects.push_back(rends[0]);
 }

@@ -1,11 +1,12 @@
 /// Internal Includes
 
 #include "Engine.hpp"
-#include "Input/Input.hpp"
 #include "Core/System.hpp"
 #include "Core/LibraryLoader.hpp"
 #include "Graphics/Graphics.hpp"
+#include "Input/Input.hpp"
 
+/// External Includes
 
 /// Std Includes
 #include <chrono>
@@ -41,7 +42,7 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	// Render Engine
 	if (renderEngineLib.loadLibrary("RenderEngine.dll\0")) {
-		//gConsole->print("Loaded RenderEngine.dll\n");
+		//console->print("Loaded RenderEngine.dll\n");
 	} else {
 		//gConsole->print("Failed to load Renderer\n");
 		throw;
@@ -188,10 +189,6 @@ void CEngine::setCursor(char* cursorImgPath) {
 
 void CEngine::close() {
 	gameWindow->showWindow(false);
-}
-
-void CEngine::registerDataParser(Interfaces::IDataParser* dataParser, DataParsersTypes parserType) {
-	dataParsers[parserType].push_back(dataParser);
 }
 
 bool CEngine::setAssetDataFolder(const char* folderPath) {

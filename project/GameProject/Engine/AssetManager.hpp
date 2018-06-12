@@ -2,10 +2,9 @@
 #define ASSET_MANAGER_HPP
 
 /// Internal Includes
+#include "Graphics/Textures/Texture2D.hpp"
 #include "Interfaces/IAssetManager.hpp"
 #include "Utils/MemoryBuffer.hpp"
-
-#include "Graphics/Textures/Texture2D.hpp"
 
 /// External Includes
 

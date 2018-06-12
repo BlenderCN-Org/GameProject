@@ -1,9 +1,12 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-// std includes
-#include <mutex>
+/// Internal Includes
+/// External Includes
+
+/// std includes
 #include <condition_variable>
+#include <mutex>
 #include <queue>
 
 template <class T>

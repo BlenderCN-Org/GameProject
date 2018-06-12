@@ -1,4 +1,10 @@
+
+/// Internal Includes
 #include "Settings.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 namespace Engine {
 	namespace Core {

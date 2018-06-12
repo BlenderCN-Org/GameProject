@@ -9,7 +9,6 @@
 /// Std Includes
 
 /// Constants
-
 const int GUI_WINDOW_TITLEBAR_HEIGHT = 30;
 
 namespace Engine {

@@ -5,7 +5,9 @@
 /// External Includes
 #include <glm\gtc\matrix_transform.hpp>
 
-using namespace glm;
+/// Std Includes
+
+using namespace glm; /// @ TODO remove using namespace
 
 void CameraInput::init(glm::mat4 * view) {
 	viewMat = view;

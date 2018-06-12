@@ -4,6 +4,9 @@
 /// Internal Includes
 #include "../Interfaces/ICamera.hpp"
 
+/// External Includes
+/// Std Includes
+
 namespace Engine {
 	namespace Core {
 		class Camera : public Interfaces::ICamera {

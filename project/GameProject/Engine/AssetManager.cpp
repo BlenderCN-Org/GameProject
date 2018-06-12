@@ -11,8 +11,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 /// Std Includes
-#include <vector>
 #include <functional>
+#include <vector>
 
 namespace Engine {
 

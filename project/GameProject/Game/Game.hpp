@@ -2,36 +2,28 @@
 #define GAME_HPP
 
 ///Internal Includes
-#include "CameraInput.hpp"
 #include "Camera.hpp"
+#include "CameraInput.hpp"
 #include "CameraPath.hpp"
-#include "Player.hpp"
 #include "Editor.hpp"
+#include "Loader/MapLoader.hpp"
+#include "Map.hpp"
+#include "MainMenu.hpp"
+#include "PhysicsParticle.hpp"
+#include "Player.hpp"
+#include "RenderBatch.hpp"
 #include "Sky.hpp"
 
-#include "Map.hpp"
+#include "Asteroids/AsteroidsMap.hpp"
+#include "Editor/3dViewGizmo.hpp"
 
-#include "RenderBatch.hpp"
-
-#include "MainMenu.hpp"
-
-#include "Loader/MapLoader.hpp"
-
-#include "../Engine/RefObject.hpp"
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Mesh/Mesh.hpp"
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 #include "../Engine/Graphics/Gui/TextureView.hpp"
 #include "../Engine/Graphics/Gui/Cursor.hpp"
-
-#include "PhysicsParticle.hpp"
-
-#include "Asteroids/AsteroidsMap.hpp"
-
 #include "../Engine/Utils/FPSCounter.hpp"
-
-#include "Editor/3dViewGizmo.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -88,7 +80,7 @@ private:
 
 	RenderBatch* batchTmp;
 
-	Engine::RefObject<Editor>* editor;
+	Editor* editor;
 
 	Engine::Graphics::CGui* gameGui;
 	Engine::Graphics::Gui::Panel* metrixPanel;

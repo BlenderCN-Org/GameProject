@@ -2,10 +2,10 @@
 #define GUI_HPP
 
 /// Internal Includes
-#include "../Interfaces/Renderable.hpp"
 #include "GuiItem.hpp"
 #include "ShaderContainer.hpp"
 #include "Gui/Cursor.hpp"
+#include "../Interfaces/Renderable.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>

@@ -1,11 +1,13 @@
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
+/// Internal Includes
 #include "../Interfaces/ISettings.hpp"
 
 /// External Includes
 #include <Config/Config.hpp>
 
+/// Std Includes
 
 namespace Engine {
 	namespace Core {

@@ -1,10 +1,14 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <RenderEngine/IWindow.hpp>
-#include <Config\Config.hpp>
+/// Internal Includes
 #include "../Core/Console.hpp"
 
+/// External Includes
+#include <Config\Config.hpp>
+#include <RenderEngine/IWindow.hpp>
+
+/// Std Includes
 #include <map>
 #include <sstream>
 

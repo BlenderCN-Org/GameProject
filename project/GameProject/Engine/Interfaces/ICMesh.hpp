@@ -1,7 +1,12 @@
 #ifndef I_CMESH_HPP
 #define I_CMESH_HPP
 
+/// Internal Includes
 #include "Renderable.hpp"
+
+/// External Includes
+
+/// Std Includes
 
 namespace Engine {
 	namespace Interfaces {

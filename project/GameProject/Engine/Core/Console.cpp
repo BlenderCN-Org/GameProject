@@ -1,7 +1,7 @@
 /// Internal Includes
 #include "Console.hpp"
-#include "../Input/Input.hpp"
 #include "../Graphics/Graphics.hpp"
+#include "../Input/Input.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>

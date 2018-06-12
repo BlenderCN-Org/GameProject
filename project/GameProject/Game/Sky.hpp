@@ -2,13 +2,14 @@
 #define SKY_HPP
 
 /// Internal Includes
+#include "Loader/MapLoader.hpp"
 #include "../Engine/Graphics/SkyDome.hpp"
 
-#include "Loader/MapLoader.hpp"
-
 /// External Includes
-#include <RenderEngine/IRenderEngine.hpp>
 #include <glm/glm.hpp>
+#include <RenderEngine/IRenderEngine.hpp>
+
+/// Std Includes
 
 struct SkyData {
 	float skyColorDay[3];

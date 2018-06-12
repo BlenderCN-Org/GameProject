@@ -1,11 +1,16 @@
 #ifndef SHIP_HPP
 #define SHIP_HPP
 
+/// Internal Includes
 #include "../IPlayer.hpp"
 
+/// External Includes
 #include <glm/glm.hpp>
 #include <RenderEngine/IRenderEngine.hpp>
 
+/// Std Includes
+
+/// Constant Variables
 const float ROTATION = 1.3F;
 const float ACCELERATION = 50.0F;
 const float MAX_VELOCITY = 400.0F;

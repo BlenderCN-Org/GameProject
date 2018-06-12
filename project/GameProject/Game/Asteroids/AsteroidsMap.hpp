@@ -2,13 +2,12 @@
 #define ASTEROIDS_MAP_HPP
 
 /// Internal Includes
-#include "../IMap.hpp"
 #include "Asteroid.hpp"
 #include "Bullet.hpp"
 #include "Ship.hpp"
-
 #include "../CameraInput.hpp"
 #include "../Camera.hpp"
+#include "../IMap.hpp"
 
 /// External Includes
 

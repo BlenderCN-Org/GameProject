@@ -1,13 +1,11 @@
 
 /// Internal Includes
-#include "Map.hpp"
 #include "Camera.hpp"
+#include "Map.hpp"
 
 /// External Includes
 
-/// Internal Includes
-
-
+/// Std Includes
 
 Map::Map(LoadedData& mapData, MapLoader& ldr)
 	: sky(nullptr)

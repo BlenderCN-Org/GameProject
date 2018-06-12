@@ -1,9 +1,13 @@
 
+/// Internal Includes
 #include "Asteroid.hpp"
 
 #include "../../Engine/Graphics/Graphics.hpp"
 #include "../../Engine/Input/Input.hpp"
 #include "../../Engine/Core/System.hpp"
+/// External Includes
+
+/// Std Includes
 
 
 Asteroid::Asteroid(ASTEROID_SIZE size, float ox, float oy) {
