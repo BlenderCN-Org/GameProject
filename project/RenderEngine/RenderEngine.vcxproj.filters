@@ -63,9 +63,6 @@
     <ClInclude Include="RenderEngine.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window\WindowSystem.hpp">
       <Filter>Source Files\Window</Filter>
     </ClInclude>

@@ -90,9 +90,6 @@
     <ClCompile Include="Engine\Graphics\Gui\ComboBox.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\Gui\Curor.cpp">
-      <Filter>Source Files\Engine\Graphics\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\Label.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClCompile>
@@ -213,6 +210,18 @@
     <ClCompile Include="Game\PhysicsParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Asteroids\AsteroidsMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\FPSCounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Gui\Cursor.cpp">
+      <Filter>Source Files\Engine\Graphics\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Editor\3dViewGizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -264,9 +273,6 @@
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\ComboBox.hpp">
-      <Filter>Source Files\Engine\Graphics\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Gui\Curor.hpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\Label.hpp">
@@ -429,6 +435,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game\PhysicsParticle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IPlayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Asteroids\AsteroidsMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\FPSCounter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Gui\Cursor.hpp">
+      <Filter>Source Files\Engine\Graphics\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editor\3dViewGizmo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

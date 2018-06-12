@@ -2,9 +2,11 @@
 #define MAP_HPP
 
 /// Internal Includes
+#include "IMap.hpp"
 #include "Sky.hpp"
 #include "Cell.hpp"
 #include "RenderBatch.hpp"
+#include "Player.hpp"
 
 #include "Loader/MapLoader.hpp"
 
@@ -19,29 +21,35 @@ struct MapData {
 	uint32_t cellsPointer;
 };
 
-class Map {
+class Map : public IMap {
 
 public:
 
 	Map(LoadedData& mapData, MapLoader& ldr);
 	virtual ~Map();
 
-	void update(float dt);
+	virtual Cell* getCurrentCell() const override;
+	virtual IPlayer* getPlayer() const override;
 
-	void updateRenderBatch(RenderBatch& batch);
+	virtual void update(float dt) override;
+	virtual void updateRenderBatch(RenderBatch& batch) override;
+
+	virtual void render() override {};
 
 private:
 
-	bool verifyData(LoadedData& data);
 
 	void createCells();
-
+	bool verifyData(LoadedData& data);
+	
 	Sky * sky;
 
 	uint32_t sizeX;
 	uint32_t sizeY;
 
 	Cell** cells;
+
+	Player* player;
 
 };
 

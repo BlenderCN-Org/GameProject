@@ -194,6 +194,8 @@ namespace Engine {
 
 			if (Input::Input::GetInput()->consoleKeyWasPressed()) {
 				Input::Input::GetInput()->toggleConsole();
+				memset(command, 0, sizeof(ConsoleString));
+				cmdTypeIndex = 0;
 				if (consoleTargetY == 0) {
 					consoleTargetY = float(-(height / 2));
 				} else {

@@ -88,7 +88,7 @@ namespace AssetLib {
 			if (uv) {
 				mdl.uvs = new AssetLib::Vector2f[mdl.numVertices];
 				void* uData = dataAtOffset(data, offset, sizeof(Vector2f) * mdl.numVertices, dataSize);
-				memcpy(mdl.vertexColors, uData, sizeof(Vector2f) * mdl.numVertices);
+				memcpy(mdl.uvs, uData, sizeof(Vector2f) * mdl.numVertices);
 			}
 			if (vWeights) {
 				mdl.vertexWeights = new AssetLib::VertexBoneWeight[mdl.numVertices];

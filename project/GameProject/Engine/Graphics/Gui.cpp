@@ -13,7 +13,8 @@ namespace Engine {
 		CGui::CGui()
 			: guiItems()
 			, shaders()
-			, visible(false) {
+			, visible(false)
+			, cur(nullptr) {
 
 			// create resources from renderEngine
 			shaders.guiElementShader = gRenderEngine->createShaderObject();
@@ -73,6 +74,10 @@ namespace Engine {
 			visible = _visible;
 		}
 
+		void CGui::setCursor(Gui::Cursor* cursor) {
+			cur = cursor;
+		}
+
 		void CGui::setPosition(int x, int y) {
 			pos = glm::ivec2(x, y);
 		}
@@ -117,6 +122,13 @@ namespace Engine {
 					(*it)->update(dt);
 				}
 			}
+
+			if (cur) {
+				int w = 0, h = 0;
+				Input::Input::GetInput()->getWindowSize(w, h);
+				cur->updateAbsoultePos(pos.x, pos.y, w, h);
+				cur->update(dt);
+			}
 		}
 
 		void CGui::render() {
@@ -150,6 +162,17 @@ namespace Engine {
 
 					gRenderEngine->setScissorTest(false);
 					(*it)->render(screenSize, shaders);
+				}
+
+				if (cur) {
+					screenSize[2].x = float(w);
+					screenSize[2].y = float(h);
+
+					screenSize[0].x = float(pos.x);
+					screenSize[0].y = float(pos.y);
+
+					gRenderEngine->setScissorTest(false);
+					cur->render(screenSize, shaders);
 				}
 
 				gRenderEngine->setDepthTest(true);

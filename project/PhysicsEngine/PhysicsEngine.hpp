@@ -21,16 +21,31 @@ public:
 
 };
 
+class IPhysicsTask {
+public:
+	virtual ~IPhysicsTask() {};
+	virtual void execute() = 0;
+};
+
+class IPhysThreadManager {
+public:
+	virtual ~IPhysThreadManager() {};
+	virtual void queueTask(IPhysicsTask* task) = 0;
+};
+
 struct PhysEngineCreateInfo {
 	bool threaded;
-
+	uint32_t maxTasks;
+	IPhysThreadManager* taskMgr;
 };
 
 class PhysicsEngine {
 
+	friend class PhysicsUpdateTask;
+
 public:
 
-	PhysicsEngine();
+	PhysicsEngine(PhysEngineCreateInfo &createInfo);
 	virtual ~PhysicsEngine();
 
 	IPhysicsMemoryProfile* getPhysicsMemoryProfile();
@@ -61,6 +76,8 @@ private:
 	std::vector<RigidBody*> rigidBodys;
 
 	glm::vec3 gravity;
+
+	PhysEngineCreateInfo engineInfo;
 
 };
 

@@ -164,6 +164,7 @@
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,6 +189,7 @@
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -205,7 +207,7 @@
     <ClCompile Include="Engine\Graphics\GuiItem.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Button.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\ComboBox.cpp" />
-    <ClCompile Include="Engine\Graphics\Gui\Curor.cpp" />
+    <ClCompile Include="Engine\Graphics\Gui\Cursor.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\GuiWindow.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\Label.cpp" />
     <ClCompile Include="Engine\Graphics\Gui\List.cpp" />
@@ -225,9 +227,11 @@
     <ClCompile Include="Engine\Graphics\Textures\Texture2DReference.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\ThreadManager.cpp" />
+    <ClCompile Include="Engine\Utils\FPSCounter.cpp" />
     <ClCompile Include="Engine\Utils\MemoryBuffer.cpp" />
     <ClCompile Include="ExceptionHandling.cpp" />
     <ClCompile Include="Game\Asteroids\Asteroid.cpp" />
+    <ClCompile Include="Game\Asteroids\AsteroidsMap.cpp" />
     <ClCompile Include="Game\Asteroids\Bullet.cpp" />
     <ClCompile Include="Game\Asteroids\Ship.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
@@ -235,6 +239,7 @@
     <ClCompile Include="Game\CameraPath.cpp" />
     <ClCompile Include="Game\Cell.cpp" />
     <ClCompile Include="Game\Editor.cpp" />
+    <ClCompile Include="Game\Editor\3dViewGizmo.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
     <ClCompile Include="Game\Loader\MapLoader.cpp" />
@@ -267,12 +272,17 @@
     <ClInclude Include="Engine\SafeQueue.hpp" />
     <ClInclude Include="Engine\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\ThreadManager.hpp" />
+    <ClInclude Include="Engine\Utils\FPSCounter.hpp" />
     <ClInclude Include="Game\Asteroids\Asteroid.hpp" />
+    <ClInclude Include="Game\Asteroids\AsteroidsMap.hpp" />
     <ClInclude Include="Game\Asteroids\Bullet.hpp" />
     <ClInclude Include="Game\Asteroids\Ship.hpp" />
     <ClInclude Include="Game\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
+    <ClInclude Include="Game\Editor\3dViewGizmo.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
+    <ClInclude Include="Game\IMap.hpp" />
+    <ClInclude Include="Game\IPlayer.hpp" />
     <ClInclude Include="Game\Loader\MapLoader.hpp" />
     <ClInclude Include="Game\MainMenu.hpp" />
     <ClInclude Include="Game\Map.hpp" />
@@ -296,7 +306,7 @@
     <ClInclude Include="Engine\Graphics\GuiShaders.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Button.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\ComboBox.hpp" />
-    <ClInclude Include="Engine\Graphics\Gui\Curor.hpp" />
+    <ClInclude Include="Engine\Graphics\Gui\Cursor.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Label.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\List.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\Panel.hpp" />

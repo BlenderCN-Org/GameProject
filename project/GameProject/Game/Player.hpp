@@ -2,10 +2,10 @@
 #define PLAYER_HPP
 
 /// Internal Includes
-#include "GameObject.hpp"
+#include "IPlayer.hpp"
 #include "CameraInput.hpp"
 
-class Player : public GameObject {
+class Player : public IPlayer {
 
 public:
 	

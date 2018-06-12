@@ -11,8 +11,6 @@
 
 #include "ReGlobal.hpp"
 
-#include "Shader.h"
-
 #ifdef _DEBUG
 extern "C"
 {

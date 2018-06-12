@@ -156,6 +156,7 @@
       <AdditionalDependencies>glew32.lib;opengl32.lib;freetype.lib;hid.lib;xinput.lib;dinput8.lib;dxguid.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,6 +180,7 @@
       <AdditionalDependencies>glew32.lib;opengl32.lib;freetype.lib;hid.lib;xinput.lib;dinput8.lib;dxguid.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -211,7 +213,6 @@
     <ClInclude Include="IWindow.hpp" />
     <ClInclude Include="ReGlobal.hpp" />
     <ClInclude Include="RenderEngine.hpp" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Utils\ShelfPack.hpp" />
     <ClInclude Include="Window\InputHandling.hpp" />
     <ClInclude Include="Window\InputHelper.hpp" />

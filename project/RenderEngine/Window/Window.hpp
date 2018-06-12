@@ -56,6 +56,9 @@ public:
 
 	virtual void* getNativeWindowHandle();
 
+	virtual void setCursorVisibility(bool visible);
+
+
 	//private:
 	IDirectInput8* dinput8dev;
 	IDirectInputDevice8* inputDevice;
@@ -87,8 +90,10 @@ public:
 	int oldX;
 	int oldY;
 
+	bool cursorVisible;
 protected:
 	HWND windowHandle;
+	HCURSOR orgCursor;
 	bool visible;
 };
 

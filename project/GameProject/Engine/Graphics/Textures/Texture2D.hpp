@@ -21,6 +21,8 @@ namespace Engine {
 
 				void singleColor(float r, float g, float b, float a);
 
+				void setData(int x, int y, int numComponents, void* data);
+
 				void bind();
 
 			private:

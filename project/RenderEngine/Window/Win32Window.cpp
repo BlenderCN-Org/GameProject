@@ -139,6 +139,21 @@ LRESULT WINAPI WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		SetParent(hWnd, NULL);
 		break;
 	}
+
+	case WM_SETCURSOR:
+	{
+		if (wnd) {
+			if (!wnd->cursorVisible) {
+
+				if (LOWORD(lParam) == HTCLIENT) {
+					SetCursor(NULL);
+
+					return TRUE;
+				}
+			}
+		}
+		break;
+	}
 	case WM_SIZE:
 	{
 		if (wnd) {
@@ -314,7 +329,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 			WGL_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB, GL_LOSE_CONTEXT_ON_RESET,
 			WGL_CONTEXT_RELEASE_BEHAVIOR_ARB, WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB,
 			0
-		};
+};
 
 		renderingContext = wglCreateContextAttribsARB(windowDC, NULL, contextAttributes);
 	} else {
@@ -401,6 +416,18 @@ void BaseWindow::setTitle(const char * title) {
 
 void * BaseWindow::getNativeWindowHandle() {
 	return windowHandle;
+}
+
+void BaseWindow::setCursorVisibility(bool visible) {
+
+	cursorVisible = visible;
+
+	if (visible) {
+		ShowCursor(TRUE);
+	} else {
+		ShowCursor(FALSE);
+	}
+
 }
 
 HWND BaseWindow::getWindowHandle() {

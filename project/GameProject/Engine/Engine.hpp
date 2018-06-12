@@ -54,6 +54,8 @@ public:
 	//		}
 	//	}
 	//}
+	
+	void setCursor(char* cursorImgPath);
 
 	void close();
 
@@ -77,10 +79,16 @@ public:
 
 	PhysicsEngine* getPhysEngine();
 
+	ThreadManager* getThreadManager();
+
 private:
 
+	Engine::Graphics::CGui* cursorGui;
+	Engine::Graphics::Gui::Cursor* cursor;
+	Engine::Graphics::Texture::Texture2D* cursorTexture;
+
 	ThreadManager* threadManager;
-	PhysicsEngine physEngine;
+	PhysicsEngine* physEngine;
 
 	StaticObject* groundPlane;
 

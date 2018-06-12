@@ -31,6 +31,7 @@ public:
 	virtual void swapBuffers() override;
 	virtual void setTitle(const char * title) override;
 	virtual void * getNativeWindowHandle() override;
+	virtual void setCursorVisibility(bool visible) override {};
 
 	WindowResizeCallback_t* resizeCallback = 0;
 	WindowMouseMoveCallback_t* mouseMoveCallback = 0;

@@ -66,6 +66,8 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	gameWindow = renderEngine->getMainWindow();
 
+	gameWindow->setCursorVisibility(false);
+
 	console = new Core::Console();
 	console->updateSize(windowWidth, windowHeight);
 
@@ -114,23 +116,49 @@ CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr
 
 	threadManager = new ThreadManager();
 
-	groundPlane = physEngine.createStaticObject();
+	PhysEngineCreateInfo peci;
+
+	peci.threaded = true;
+	peci.taskMgr = threadManager;
+	//peci.maxTasks = System::getLogicalProcessorCount();
+
+	peci.maxTasks = 8;
+
+	physEngine = new PhysicsEngine(peci);
+
+	groundPlane = physEngine->createStaticObject();
 
 	PlaneShape* ps = new PlaneShape();
 	groundPlane->shape = ps;
 	ps->normal = glm::vec3(0, 1, 0);
 	ps->distance = -5.0F;
+
+	cursorGui = new Graphics::CGui();
+	cursorGui->setVisible(true);
+
+	cursor = new Engine::Graphics::Gui::Cursor();
+	cursor->setSize(25, 25);
+	cursor->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
+	cursor->setVisible(true);
+	
+	cursorGui->setCursor(cursor);
+
 }
 
 CEngine::~CEngine() {
 
+	delete cursor;
+	delete cursorGui;
+
 	delete groundPlane->shape;
-	physEngine.freeStaticObject(groundPlane);
+	physEngine->freeStaticObject(groundPlane);
 
 	delete threadManager;
 
 	physicsThread->join();
 	delete physicsThread;
+
+	delete physEngine;
 
 	delete assetManager;
 
@@ -150,6 +178,12 @@ CEngine::~CEngine() {
 	console = nullptr;
 	renderEngine = nullptr;
 	gameWindow = nullptr;
+}
+
+void CEngine::setCursor(char* cursorImgPath) {
+
+	cursorTexture = assetManager->loadTexture(cursorImgPath);
+	cursor->setTexture(cursorTexture);
 }
 
 void CEngine::close() {
@@ -178,7 +212,7 @@ void CEngine::update(const float dt) {
 
 	gameWindow->pollMessages();
 
-	physEngine.update(1.0F/60.0F);
+	physEngine->update(1.0F/60.0F);
 
 	if (Input::Input::GetInput()->sizeChange) {
 		int w = 0;
@@ -196,6 +230,9 @@ void CEngine::update(const float dt) {
 	}
 
 	console->update(dt);
+
+	cursorGui->update(dt);
+
 	running = gameWindow->isVisible();
 }
 
@@ -215,6 +252,7 @@ void CEngine::clearDebug() {
 
 void CEngine::presentFrame() {
 	console->render();
+	cursorGui->render();
 	gameWindow->swapBuffers();
 }
 
@@ -235,7 +273,11 @@ Interfaces::IAssetManager* CEngine::getAssetManager() const {
 }
 
 PhysicsEngine* CEngine::getPhysEngine() {
-	return &physEngine;
+	return physEngine;
+}
+
+ThreadManager* CEngine::getThreadManager() {
+	return threadManager;
 }
 
 void CEngine::physicsLoop() {
@@ -251,6 +293,4 @@ void CEngine::physicsLoop() {
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
 	}
-
-
 }

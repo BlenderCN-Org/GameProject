@@ -19,7 +19,11 @@ BaseWindow::BaseWindow()
 	, modkeys(0)
 	, inputProcessedByControllers(false)
 	, width(0)
-	, height(0) {}
+	, height(0)
+	, cursorVisible(true) {
+
+	orgCursor = GetCursor();
+}
 
 void BaseWindow::lockCursor(bool _cursorLock) {
 	cursorLock = _cursorLock;

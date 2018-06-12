@@ -60,6 +60,8 @@ RenderBatch::RenderBatch(size_t maxCommands, TemporaryStorage* tempStorage) {
 
 	renderCommands = tempStorage->allocateNoNew<RenderCommand*>(maxRenderCommands);
 
+	tempStore = tempStorage;
+
 }
 
 void RenderBatch::addCommand(RenderCommand* command) {
@@ -75,4 +77,16 @@ void RenderBatch::executeBatch() {
 		renderCommands[i]->execute();
 	}
 
+}
+
+TemporaryStorage* RenderBatch::getBatchTempStorage() const {
+	return tempStore;
+}
+
+void RenderBatch::setCameraSettings(CameraSettings camSett) {
+	cameraSettings = camSett;
+}
+
+CameraSettings RenderBatch::getCameraSettings() {
+	return cameraSettings;
 }

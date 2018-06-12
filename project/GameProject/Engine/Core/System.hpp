@@ -8,6 +8,7 @@
 /// Std Includes
 #include <cstdint>
 #include <chrono>
+#include <string>
 
 /*
 *	System file
@@ -54,6 +55,8 @@ namespace Engine {
 			float seconds();
 
 		};
+
+		std::string readShader(const char *filePath);
 
 	}
 }

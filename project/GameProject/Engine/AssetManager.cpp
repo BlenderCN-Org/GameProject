@@ -18,6 +18,34 @@ namespace Engine {
 
 	typedef Graphics::Mesh::Animation::BindPoseInfo BindPoseInfo;
 
+	AssetManager::~AssetManager() {
+
+		auto asit = loadedAssets.begin();
+		auto aseit = loadedAssets.end();
+
+		while (asit != aseit) {
+
+			if (asit->second) {
+				delete asit->second;
+				asit->second = nullptr;
+			}
+			asit++;
+		}
+
+		auto tit = loadedTextures.begin();
+		auto teit = loadedTextures.end();
+
+		while (tit != teit) {
+
+			if (tit->second) {
+				delete tit->second;
+				tit->second = nullptr;
+			}
+			tit++;
+		}
+
+	}
+
 	Interfaces::ICMesh* AssetManager::loadMesh(const char* model) {
 
 		std::string mdl = "";
@@ -41,6 +69,40 @@ namespace Engine {
 		}
 
 		return mesh;
+	}
+
+	Graphics::Texture::Texture2D* AssetManager::loadTexture(const char* texture) {
+
+		std::string tex = "";
+
+		if (gAssetDataPath) {
+			tex = gAssetDataPath;
+		}
+
+		tex += texture;
+
+
+		if (loadedTextures.count(tex) > 0) {
+			return loadedTextures[tex];
+		}
+
+		Graphics::Texture::Texture2D* t = new Graphics::Texture::Texture2D();
+
+		int32_t x, y, c;
+
+		x = y = c = 0;
+
+		void* data = AssetLib::loadTexture(tex.c_str(), x, y, c);
+		t->setData(x, y, c, data);
+
+		AssetLib::freeImageData(data);
+
+
+		if (t) {
+			loadedTextures[tex] = t;
+		}
+
+		return t;
 	}
 
 	// static functions

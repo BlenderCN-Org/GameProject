@@ -1,17 +1,34 @@
 
 /// Internal Includes
 #include "Map.hpp"
+#include "Camera.hpp"
+
+/// External Includes
+
+/// Internal Includes
+
 
 
 Map::Map(LoadedData& mapData, MapLoader& ldr)
 	: sky(nullptr)
 	, sizeX(0)
 	, sizeY(0)
-	, cells(nullptr) {
+	, cells(nullptr)
+	, player(nullptr) {
 
 	if (verifyData(mapData)) {
 
 		MapData* md = (MapData*)mapData.data;
+
+		uint32_t skyId = md->skyId;
+
+		if (skyId != 0) {
+			LoadedData skyData = ldr.loadDataEntry(skyId);
+
+			sky = new Sky(skyData);
+
+			ldr.freeData(skyData);
+		}
 
 		uint32_t* ids = &md->cellsPointer;
 
@@ -28,7 +45,7 @@ Map::Map(LoadedData& mapData, MapLoader& ldr)
 			for (uint32_t j = 0; j < md->cellsY; j++) {
 				LoadedData data = ldr.loadDataEntry(ids[i]);
 				cells[i][j].load(data);
-				free(data.data);
+				ldr.freeData(data);
 			}
 		}
 
@@ -42,9 +59,13 @@ Map::Map(LoadedData& mapData, MapLoader& ldr)
 
 	}
 
+	player = new Player();
+
 }
 
 Map::~Map() {
+
+	delete player;
 
 	if (sky) {
 		delete sky;
@@ -60,9 +81,42 @@ Map::~Map() {
 	}
 }
 
-void Map::update(float dt) {}
+Cell* Map::getCurrentCell() const {
+	return nullptr;
+}
 
-void Map::updateRenderBatch(RenderBatch& batch) {}
+IPlayer* Map::getPlayer() const {
+	return player;
+}
+
+void Map::update(float dt) {
+	if (sky) {
+		sky->update(dt);
+	}
+
+
+
+}
+
+void Map::updateRenderBatch(RenderBatch& batch) {
+	
+	TemporaryStorage* ts = batch.getBatchTempStorage();
+
+	CameraSettings camSettings = batch.getCameraSettings();
+	
+	SkyCommand* sc = ts->allocate<SkyCommand>(1, sky, camSettings.vpMat, camSettings.cameraPosition, camSettings.cameraDirection, nullptr);
+	batch.addCommand(sc);
+
+}
+
+
+/********************************************
+*											*
+*			PRIVATE FUNCTIONS				*
+*											*
+*********************************************/
+
+void Map::createCells() {}
 
 bool Map::verifyData(LoadedData& data) {
 
@@ -85,5 +139,3 @@ bool Map::verifyData(LoadedData& data) {
 
 	return dataOk;
 }
-
-void Map::createCells() {}

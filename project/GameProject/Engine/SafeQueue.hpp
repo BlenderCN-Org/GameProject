@@ -7,8 +7,7 @@
 #include <queue>
 
 template <class T>
-class SafeQueue
-{
+class SafeQueue {
 public:
 
 	SafeQueue(void)
@@ -26,13 +25,18 @@ public:
 
 	T dequeue(void) {
 		std::unique_lock<std::mutex> lock(m);
-		while ( q.empty() ) {
+		while (q.empty()) {
 			c.wait(lock);
 		}
 		T val = q.front();
 		q.pop();
 		return val;
 	}
+
+	const bool empty() const {
+		return q.empty();
+	}
+
 private:
 
 	std::queue<T> q;

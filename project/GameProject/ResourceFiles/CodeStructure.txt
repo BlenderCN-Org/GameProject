@@ -37,11 +37,11 @@ game::update()
 	core->update(dt);
 
 	// logic for different mode, update what to render
-	if state main_menu logic for menu
-	if state game_running logic for game
-	if state editor logic for editor
-	if state pause pause game
-	if state loading show loading screen
+	if state main_menu, logic for menu
+	if state game_running, logic for game
+	if state editor, logic for editor
+	if state pause, pause game
+	if state loading, show loading screen
 
 	core->syncThreads();
 

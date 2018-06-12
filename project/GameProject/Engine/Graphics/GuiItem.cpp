@@ -159,14 +159,20 @@ namespace Engine {
 			const float uv1x = uvCoords[0];
 			const float uv1y = uvCoords[1];
 
-			const float uv2x = uvCoords[2];
-			const float uv2y = uvCoords[1];
+			//const float uv2x = uvCoords[2];
+			//const float uv2y = uvCoords[1];
+
+			const float uv2x = uvCoords[0];
+			const float uv2y = uvCoords[3];
 
 			const float uv3x = uvCoords[2];
 			const float uv3y = uvCoords[3];
 
-			const float uv4x = uvCoords[0];
-			const float uv4y = uvCoords[3];
+			//const float uv4x = uvCoords[0];
+			//const float uv4y = uvCoords[3];
+
+			const float uv4x = uvCoords[2];
+			const float uv4y = uvCoords[1];
 
 			const float x = float(absoulutePosition.x);
 			const float y = float(absoulutePosition.y);

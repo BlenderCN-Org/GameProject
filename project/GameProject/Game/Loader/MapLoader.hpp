@@ -54,6 +54,7 @@ public:
 
 	LoadedData loadDataEntry(uint32_t entryId);
 
+	void freeData(LoadedData& ld);
 
 private:
 

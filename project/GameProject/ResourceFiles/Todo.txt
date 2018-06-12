@@ -2,9 +2,43 @@
 
 /*************************************
 *									 *
+*		Daily Reminder list			 *
+*									 *
+**************************************/
+
+- Todo
+	- Shader cache
+	- One gui in engine
+	- Add editor gui settings box to change sky settings
+	- Add editor gui to add and remove data from map file.
+
+- Done
+	- Fix physics engine update with multiple threads
+	- Hide windows cursor
+	- Implement a custom cursor using the Engine Gui
+	- Load Custom cursor texture
+	- Load textures into asset manager cache
+	- Fixed uv coordinates on gui items
+	- Asset manager now handles asset deletion
+	- move cursor to engine and render it last of everything
+	- add sky to map loading process
+	- Make use of sky settings
+	- Send sky settings to shader
+	- Remove sky from game.hpp/game.cpp
+	- Removed duplicate code in game.cpp
+	- Render sky in map (using render batch)
+	- Added camera view direction gizmo to editor
+
+	
+/*************************************
+*									 *
 *				TODO's				 *
 *									 *
 **************************************/
+
+- Remove all shaders from Game.hpp / Game.cpp
+- Add loader functionality to create and store shaders in the Map object
+- Implement basic shader node system in RenderEngine project
 
 - Simple Internal Editor
 

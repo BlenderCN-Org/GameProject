@@ -82,6 +82,14 @@ public:
 	glm::mat4* reflect;
 };
 
+struct CameraSettings {
+
+	glm::mat4 vpMat;
+	glm::vec3 cameraPosition;
+	glm::vec3 cameraDirection;
+
+};
+
 class RenderBatch {
 
 public:
@@ -93,12 +101,22 @@ public:
 
 	void executeBatch();
 
+	TemporaryStorage* getBatchTempStorage() const;
+
+	void setCameraSettings(CameraSettings camSett);
+	CameraSettings getCameraSettings();
+
 private:
+
+	CameraSettings cameraSettings;
 
 	size_t numRenderCommands;
 	size_t maxRenderCommands;
 
 	RenderCommand** renderCommands;
+
+	TemporaryStorage* tempStore;
+
 
 };
 

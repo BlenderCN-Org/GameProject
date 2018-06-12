@@ -5,6 +5,7 @@
 #include "../Interfaces/Renderable.hpp"
 #include "GuiItem.hpp"
 #include "ShaderContainer.hpp"
+#include "Gui/Cursor.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -23,6 +24,8 @@ namespace Engine {
 
 			void setVisible(bool _visible);
 
+			void setCursor(Gui::Cursor* cursor);
+
 			void setPosition(int x, int y);
 
 			void addGuiItem(GuiItem* guiItem);
@@ -32,6 +35,7 @@ namespace Engine {
 			void render();
 
 		private:
+			Gui::Cursor* cur;
 			std::vector<GuiItem*> guiItems;
 
 			GuiShaderContainer shaders;

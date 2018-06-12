@@ -4,17 +4,25 @@
 /// Internal Includes
 #include "../Engine/Graphics/SkyDome.hpp"
 
+#include "Loader/MapLoader.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
 #include <glm/glm.hpp>
 
+struct SkyData {
+	float skyColorDay[3];
+	float skyColorNight[3];
+
+	float cycleTime;
+};
 
 class Sky {
 
 public:
 
 	Sky();
+	Sky(LoadedData &skyData);
 	~Sky();
 
 	void update(float dt);
@@ -22,6 +30,10 @@ public:
 	void render(glm::mat4& vpMat, glm::vec3& cameraPos, glm::vec3& cameraDir, glm::mat4* reflect = nullptr);
 
 private:
+
+	void setup();
+
+	bool verifyData(LoadedData &data);
 
 	SkyDome *skyDome;
 
@@ -34,8 +46,17 @@ private:
 	int skydomeEyeDir;
 	int skydomeSunMoon;
 
+	int skyDayColorLoc;
+	int skyNightColorLoc;
+
 	float skyTime;
+	float skyTimeScaled;
 	glm::vec3 sunMoonDir;
+
+	glm::vec3 skyColorDay;
+	glm::vec3 skyColorNight;
+
+	float cycleTime;
 
 };
 

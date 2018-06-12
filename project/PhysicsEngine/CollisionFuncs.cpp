@@ -10,7 +10,8 @@ bool PlaneVsSphere(const PlaneShape& p, const SphereShape& s) {
 	glm::vec3 po = p.normal * p.distance;
 	glm::vec3 sp = s.center;// +rb->position;
 
-	float d = abs(glm::dot(sp - po, p.normal));
+	float d = (float)fabs(double(glm::dot(sp - po, p.normal)));
+	//float d = fabsf(glm::dot(sp - po, p.normal));
 
 	collided = (d < s.radius);
 

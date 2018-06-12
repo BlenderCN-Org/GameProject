@@ -22,7 +22,7 @@ void Scene::render() {
 	std::vector<GameObject*>::const_iterator eit = gameObjects.end();
 
 	for (it; it != eit; it++) {
-
+		//(*it)
 	}
 
 }

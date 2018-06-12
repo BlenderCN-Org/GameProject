@@ -13,24 +13,6 @@
 #include <string>
 
 // @temporary
-inline std::string readShader(const char *filePath) {
-	std::string content;
-	std::ifstream fileStream(filePath, std::ios::in);
-
-	if (!fileStream.is_open()) {
-		//Debug::DebugOutput("Could not open file %s", filePath);
-		return "";
-	}
-
-	std::string line = "";
-	while (!fileStream.eof()) {
-		std::getline(fileStream, line);
-		content.append(line + "\n");
-	}
-
-	fileStream.close();
-	return content;
-}
 
 TemporaryStorage ts(16 * KB);
 
@@ -40,24 +22,22 @@ Game::Game(CEngine* _engine)
 	: gameGui(nullptr)
 	, engine(_engine)
 	, mesh(nullptr)
-	, dtOneSec(0.0F)
-	, fps(0)
-	, fpsCounter(0)
 	, batchTmp(nullptr) {
 
 	currentState = GameState::MAIN_MENU;
 	lastState = GameState::MAIN_MENU;
 
-	player = new Player();
-
 	camInput.init((glm::mat4*)camera.getViewMatrix());
-	camInput.setCam(glm::vec3(5, 1, 0), glm::vec3(-1, 0, 0));
+	camInput.setCam(glm::vec3(0, 0, -5), glm::vec3(0, 0, 1));
 
-	player->setCamera(&camInput);
+	//player = new Player();
+	//player->setCamera(&camInput);
 
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
-	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/HollowCylinder.mesh");
+	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/Test_exteriorScene_vColor1.mesh");
+	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/Creature.mesh");
+	//aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/Test_exteriorScene_vColor1.mesh");
 	aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/HalfCube.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/untitled.dae");
@@ -66,21 +46,27 @@ Game::Game(CEngine* _engine)
 	//mesh = new Engine::Graphics::Mesh::CMesh();
 	//mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
 	//mesh->loadMesh("Data/Meshes/newFmat.skel");
+
+	viewGizmo = new ViewGizmo(engine);
+
+	engine->setCursor("Data/Textures/Gui/Cursor2.png");
+
 	gameGui = new Engine::Graphics::CGui();
 	gameGui->setVisible(true);
 
 	panelTexture = new Engine::Graphics::Texture::Texture2D();
 	panelTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
 
+
 	metrixPanel = new Engine::Graphics::Gui::Panel();
 	metrixPanel->setPosition(-10, 10);
-	metrixPanel->setSize(300, 150);
+	metrixPanel->setSize(400, 200);
 	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_RIGHT);
 	metrixPanel->setVisible(true);
 	metrixPanel->setTexture(panelTexture);
 
 	infoLabel = new Engine::Graphics::Gui::Label();
-	infoLabel->setSize(300, 150);
+	infoLabel->setSize(400, 200);
 	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	infoLabel->setVisible(true);
 	infoLabel->setText("test");
@@ -91,9 +77,9 @@ Game::Game(CEngine* _engine)
 	shader = gRenderEngine->createShaderObject();
 	shader->init();
 
-	std::string vs = readShader("data/shaders/default.vs.glsl");
-	std::string gs = readShader("data/shaders/default.gs.glsl");
-	std::string fs = readShader("data/shaders/default.fs.glsl");
+	std::string vs = Engine::System::readShader("data/shaders/default.vs.glsl");
+	std::string gs = Engine::System::readShader("data/shaders/default.gs.glsl");
+	std::string fs = Engine::System::readShader("data/shaders/default.fs.glsl");
 
 	shader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
 	shader->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
@@ -132,9 +118,9 @@ Game::Game(CEngine* _engine)
 	gBufferShader = gRenderEngine->createShaderObject();
 	gBufferShader->init();
 
-	vs = readShader("data/shaders/gbuffer.vs.glsl");
-	gs = readShader("data/shaders/gbuffer.gs.glsl");
-	fs = readShader("data/shaders/gbuffer.fs.glsl");
+	vs = Engine::System::readShader("data/shaders/gbuffer.vs.glsl");
+	gs = Engine::System::readShader("data/shaders/gbuffer.gs.glsl");
+	fs = Engine::System::readShader("data/shaders/gbuffer.fs.glsl");
 
 	gBufferShader->setShaderCode(ShaderStages::VERTEX_STAGE, (char*)vs.c_str());
 	gBufferShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, (char*)gs.c_str());
@@ -151,16 +137,13 @@ Game::Game(CEngine* _engine)
 	clipPlane = gBufferShader->getShaderUniform("clipPlane");
 	skinArray = gBufferShader->getShaderUniform("skinMatrices");
 
-	camPath.init(&camInput);
-	camPath.followPaths(false);
-
-	sky = new Sky();
+	//sky = new Sky();
 
 	gBufferBlit = gRenderEngine->createShaderObject();
 	gBufferBlit->init();
 
-	vs = readShader("data/shaders/BlitShader.vs.glsl");
-	fs = readShader("data/shaders/BlitShader.fs.glsl");
+	vs = Engine::System::readShader("data/shaders/BlitShader.vs.glsl");
+	fs = Engine::System::readShader("data/shaders/BlitShader.fs.glsl");
 
 	char* cvs = (char*)vs.c_str();
 	char* cfs = (char*)fs.c_str();
@@ -196,8 +179,8 @@ Game::Game(CEngine* _engine)
 	shadowShader = gRenderEngine->createShaderObject();
 	shadowShader->init();
 
-	vs = readShader("data/shaders/shadow.vs.glsl");
-	fs = readShader("data/shaders/shadow.fs.glsl");
+	vs = Engine::System::readShader("data/shaders/shadow.vs.glsl");
+	fs = Engine::System::readShader("data/shaders/shadow.fs.glsl");
 
 	shadowShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs.c_str());
 	shadowShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
@@ -221,88 +204,43 @@ Game::Game(CEngine* _engine)
 
 	free(data.data);
 
-	asteroidShip = new Ship();
-
-	asteroidShader = gRenderEngine->createShaderObject();
-	asteroidShader->init();
-
-	vs = readShader("data/shaders/asteroids/ast.vs.glsl");
-	fs = readShader("data/shaders/asteroids/ast.fs.glsl");
-
-	asteroidShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs.c_str());
-	asteroidShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
-	asteroidShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs.c_str());
-
-	if (!asteroidShader->buildShader()) {
-		assert(0 && "asteroidShader failed to build");
-	}
-
-	asteroidVP = asteroidShader->getShaderUniform("viewProjMatrix");
-	asteroidMdl = asteroidShader->getShaderUniform("worldMat");
-	asteroidColor = asteroidShader->getShaderUniform("selectedColor");
-
-	bulletMesh = gRenderEngine->createMesh();
-	bulletMesh->init(MeshPrimitiveType::TRIANGLE);
-
-	float points[] = {
-		+2.0F * 1.0F, 0.0F, +2.0F * 1.0F, 0.0F, 0.0F,
-		+2.0F * 1.0F, 0.0F, -2.0F * 1.0F, 0.0F, 0.0F,
-		-2.0F * 1.0F, 0.0F, -2.0F * 1.0F, 0.0F, 0.0F,
-
-		-2.0F * 1.0F, 0.0F, +2.0F * 1.0F, 0.0F, 0.0F,
-		+2.0F * 1.0F, 0.0F, +2.0F * 1.0F, 0.0F, 0.0F,
-		-2.0F * 1.0F, 0.0F, -2.0F * 1.0F, 0.0F, 0.0F,
-
-	};
-
-	bulletMesh->setMeshData(&points, sizeof(points), MeshDataLayout::VERT_UV);
-
 	meshRotation = 0.0F;
 
 	physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
+
+	testShader = gRenderEngine->createShaderObject();
+
+	vs = Engine::System::readShader("data/shaders/test/test.vs.glsl");
+	fs = Engine::System::readShader("data/shaders/test/test.fs.glsl");
+
+	testShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs.c_str());
+	testShader->setShaderCode(ShaderStages::GEOMETRY_STAGE, nullptr);
+	testShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs.c_str());
+
+	if (!testShader->buildShader()) {
+		assert(0 && "shader failed to build");
+	}
 
 }
 
 Game::~Game() {
 
-	auto bit = bullets.begin();
-	auto beit = bullets.end();
+	delete viewGizmo;
 
-	while (bit != beit) {
-		Bullet* b = *bit;
+	testShader->release();
 
-		delete b;
-		bit = bullets.erase(bit);
-		beit = bullets.end();
+	for (size_t i = 0; i < physParticles.size(); i++) {
+		PhysicsParticle* p = physParticles[i];
+		delete p;
 	}
 
-	auto ait = asteroids.begin();
-	auto aeit = asteroids.end();
-
-	while (ait != aeit) {
-		Asteroid* a = *ait;
-
-		delete a;
-		ait = asteroids.erase(ait);
-		aeit = asteroids.end();
-	}
-
-	bulletMesh->release();
-	asteroidShader->release();
-	delete asteroidShip;
+	physParticles.empty();
 
 	delete map;
 
 	delete editor;
 
 	delete menu;
-
-	delete aabbTest;
-
-	if (mesh) {
-		delete mesh;
-		mesh = nullptr;
-	}
 
 	delete mirror;
 
@@ -320,9 +258,9 @@ Game::~Game() {
 	delete metrixPanel;
 	delete infoLabel;
 	delete panelTexture;
-	delete sky;
+	//delete sky;
 
-	delete player;
+	//delete player;
 }
 
 void Game::update(float dt, uint64_t clocks) {
@@ -336,7 +274,7 @@ void Game::update(float dt, uint64_t clocks) {
 		}
 	}
 
-	for (size_t i = 0; i < 1000; i++) {
+	for (size_t i = 0; i < 0; i++) {
 		physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
 	}
 
@@ -350,7 +288,7 @@ void Game::update(float dt, uint64_t clocks) {
 
 	engine->update(dt);
 	editor->refUpdate(dt);
-	updateFps(dt);
+	fpsCounter.update(dt);
 
 	gameGui->update(dt);
 
@@ -368,6 +306,8 @@ void Game::update(float dt, uint64_t clocks) {
 
 	ActiveFrameBufferCommand* fbCmd = ts.allocate<ActiveFrameBufferCommand>(1, gBuffer, clear);
 	batchTmp->addCommand(fbCmd);
+
+	batchTmp->setCameraSettings({ vpMat, camera.getPos(), camInput.direction() });
 
 	//ActiveShaderCommand* asc = ts.allocate<ActiveShaderCommand>(1, gBufferShader);
 	//batchTmp->addCommand(asc);
@@ -394,10 +334,7 @@ void Game::update(float dt, uint64_t clocks) {
 
 	vpMat = camera.viewProjection();
 
-	camPath.update(dt);
-
-	sky->update(dt);
-
+	//sky->update(dt);
 
 	float x = r * glm::sin(a);
 	float z = r * glm::cos(a);
@@ -409,14 +346,14 @@ void Game::update(float dt, uint64_t clocks) {
 	mirror->setSize(glm::vec2(10, 5));
 
 
-	std::string str = "FPS: " + std::to_string(fps) + "\n";
+	std::string str = "FPS: " + std::to_string(fpsCounter.getFPS()) + "\n";
 	str += "Dt: " + std::to_string(dt) + "\n";
 
 	glm::vec3 pos = camera.getPos();
-	str += "Pos: (" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + "\n";
+	str += "Pos: ( X:" + std::to_string(pos.x) + ", Y:" + std::to_string(pos.y) + ", Z:" + std::to_string(pos.z) + ")\n";
 
 	glm::vec3 dir = camInput.direction();
-	str += "Dir: (" + std::to_string(dir.x) + ", " + std::to_string(dir.y) + ", " + std::to_string(dir.z) + "\n";
+	str += "Dir: ( X:" + std::to_string(dir.x) + ", Y:" + std::to_string(dir.y) + ", Z:" + std::to_string(dir.z) + ")\n";
 
 	str += "TempUsed: " + std::to_string(tUsed) + " Bytes\n";
 
@@ -433,6 +370,11 @@ void Game::update(float dt, uint64_t clocks) {
 
 	str += "Particles: " + std::to_string(physParticles.size()) + "\n";
 
+	str += engine->getThreadManager()->getThreadInfo(0) + " / " + engine->getThreadManager()->getThreadInfo(1) + " / ";
+	str += engine->getThreadManager()->getThreadInfo(2) + "\n" + engine->getThreadManager()->getThreadInfo(3) + " / ";
+	str += engine->getThreadManager()->getThreadInfo(4) + " / " + engine->getThreadManager()->getThreadInfo(5) + "\n";
+	str += engine->getThreadManager()->getThreadInfo(6) + " / " + engine->getThreadManager()->getThreadInfo(7) + "\n";
+
 	//str += "SkyTime: " + std::to_string(skyTime) + "\n";
 
 	infoLabel->setText(str.c_str());
@@ -440,13 +382,14 @@ void Game::update(float dt, uint64_t clocks) {
 
 void Game::render() {
 
-	if (currentState != GameState::PLAY_ASTEROIDS) {
+	int w = 0;
+	int h = 0;
+	Input::Input::GetInput()->getWindowSize(w, h);
+	gRenderEngine->updateViewPort(w, h);
+
+	/*if (currentState != GameState::PLAY_ASTEROIDS) {
 
 		//renderShadowMap();
-		int w = 0;
-		int h = 0;
-		Input::Input::GetInput()->getWindowSize(w, h);
-		gRenderEngine->updateViewPort(w, h);
 
 		//gBuffer->bind();
 		//gBuffer->clear();
@@ -472,85 +415,101 @@ void Game::render() {
 
 			glm::vec3 pos = rbs[i]->position;
 
-			glm::mat4 obmat2 = glm::transpose(glm::translate(pos));
+			glm::mat4 obmat2;
+			//glm::mat4 obmat2 = glm::transpose(glm::translate(pos));
 			//obmat2 = glm::scale(obmat2, glm::vec3(0.1F));
+
+			obmat2[0][3] = pos.x;
+			obmat2[1][3] = pos.y;
+			obmat2[2][3] = pos.z;
 
 			obmat2[0][0] = 0.1F;
 			obmat2[1][1] = 0.1F;
 			obmat2[2][2] = 0.1F;
-			obmat2[3][3] = 0.1F;
 
 			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &obmat2);
 			aabbTest->render();
 		}
 
 		renderScene();
+		*/
+	if (currentState != GameState::PLAY_ASTEROIDS) {
+		gBuffer->bind();
+		gBuffer->clear();
+
+		map->updateRenderBatch(*batchTmp);
+
+		batchTmp->executeBatch();
+
+		map->render();
+
+		if (currentState == GameState::EDIT) {
+			
+			viewGizmo->gizmoMesh->bind();
+
+			glm::mat4 viewRot = *(glm::mat4*)camera.getViewMatrix();
+
+			viewRot = glm::inverse(viewRot);
+			viewRot[3][0] = 0.0F;
+			viewRot[3][1] = 0.0F;
+			viewRot[3][2] = 0.0F;
+
+			glm::mat4 objMat = glm::mat4();
+
+			glm::vec3 camPos = camera.getPos();
+			glm::vec3 dir = camInput.direction() ;
+
+			viewRot = glm::inverse(viewRot);
+
+			objMat[3][0] = camPos.x + (dir.x * 5);
+			objMat[3][1] = camPos.y + (dir.y * 5);
+			objMat[3][2] = camPos.z + (dir.z * 5);
 
 
-		//gBuffer->resolveToScreen(index);
-		//gBuffer->resolveAllToScreen();
+			objMat = glm::scale(objMat, glm::vec3(0.3F));
 
-		int tex = 0;
-		gBufferBlit->useShader();
-		gBufferBlit->bindData(blitTexDiff, UniformDataType::UNI_INT, &tex);
-		tex = 1;
-		gBufferBlit->bindData(blitTexNorm, UniformDataType::UNI_INT, &tex);
-		tex = 2;
-		gBufferBlit->bindData(blitTexWPos, UniformDataType::UNI_INT, &tex);
-		tex = 3;
-		gBufferBlit->bindData(blitTextShadow, UniformDataType::UNI_INT, &tex);
+			objMat = glm::transpose(objMat);
 
-		glm::vec3 lightDir = glm::vec3(1, 0, 0);//sunMoonDir;
+			glm::mat4 moveMat;
+			moveMat[3][0] = -0.9F;
+			moveMat[3][1] = -0.9F;
 
-		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -50, 10);
-		glm::mat4 depthViewMatrix = glm::lookAt(-lightDir, glm::vec3(0), glm::vec3(0, 1, 0));
-		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix;
 
-		glm::mat4 biasMatrix(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0
-		);
+			glm::mat4 finalTranspose = moveMat * vpMat;
 
-		glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
-		gBufferBlit->bindData(blitDepthMvp, UniformDataType::UNI_MATRIX4X4, &depthBiasMVP);
+			gBufferShader->useShader();
+			gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &finalTranspose);
+			gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
+			gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
+			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &objMat);
 
-		gBufferBlit->bindData(blitEyePos, UniformDataType::UNI_FLOAT3, &camera.getPos());
+			viewGizmo->gizmoMesh->render();
 
-		//gRenderEngine->activeTexture(0);
-		//gBuffer->bindAttachment(0);
-		//gRenderEngine->activeTexture(1);
-		//gBuffer->bindAttachment(1);
-		//gRenderEngine->activeTexture(2);
-		//gBuffer->bindAttachment(2);
-		//gRenderEngine->activeTexture(3);
-		//shadowMap->bindAttachment(1);
-		//
-		//gRenderEngine->bindDefaultFrameBuffer();
-		//engine->renderFullQuad();
-		//
-		//gRenderEngine->activeTexture(0);
+			gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
+			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
 
-		gBuffer->resolveToScreen();
+			viewGizmo->gizmoMesh->render();
 
-		gameGui->render();
-
-		auto it = frameObjects.begin();
-		auto eit = frameObjects.end();
-
-		for (it; it != eit; it++) {
-			(*it)->render();
 		}
+
 	} else {
 		renderAsteroids();
 	}
+
+	present();
+
 }
 
+/*
+
+Private Functions
+
+*/
+
 void Game::renderSky() {
-	SkyCommand* sc = ts.allocate<SkyCommand>(1, sky, vpMat, camera.getPos(), camInput.direction(), nullptr);
-	batchTmp->addCommand(sc);
+	//SkyCommand* sc = ts.allocate<SkyCommand>(1, sky, vpMat, camera.getPos(), camInput.direction(), nullptr);
+	//batchTmp->addCommand(sc);
 	//sky->render(vpMat, camera.getPos(), camInput.direction());
 }
 
@@ -610,7 +569,7 @@ void Game::renderScene() {
 	gRenderEngine->forceWriteDepth(false);
 
 	// reflect the sky
-	sky->render(vpMat, camera.getPos(), camInput.direction(), &mirror->reflectionMatrix());
+	//sky->render(vpMat, camera.getPos(), camInput.direction(), &mirror->reflectionMatrix());
 
 	// render reflected scene
 	glm::mat4 mirrorMat = mirror->reflectionMatrix();
@@ -674,47 +633,11 @@ void Game::renderAsteroids() {
 
 	gRenderEngine->setDepthTest(false);
 
-	// ACTUAL RENDERING
+	map->render();
 
-	glm::vec3 white(1.0F);
+}
 
-	glm::mat4 mdlMat(1.0F);
-
-	mdlMat *= glm::rotate(asteroidShip->rot, glm::vec3(0, 1, 0));
-
-	mdlMat *= glm::transpose(glm::translate(glm::mat4(), glm::vec3(asteroidShip->xPos, 0, asteroidShip->yPos)));
-
-	//mdlMat = glm::scale(mdlMat, glm::vec3(10.0F));
-
-	asteroidShader->useShader();
-	asteroidShader->bindData(asteroidVP, UniformDataType::UNI_MATRIX4X4, &vpMat);
-	asteroidShader->bindData(asteroidMdl, UniformDataType::UNI_MATRIX4X4, &mdlMat);
-	asteroidShader->bindData(asteroidColor, UniformDataType::UNI_FLOAT3, &white);
-
-	asteroidShip->render();
-
-	bulletMesh->bind();
-
-	size_t nBullets = bullets.size();
-	for (size_t i = 0; i < nBullets; i++) {
-
-		mdlMat = glm::transpose(glm::translate(glm::mat4(), glm::vec3(bullets[i]->xPos, 0, bullets[i]->yPos)));
-		asteroidShader->bindData(asteroidMdl, UniformDataType::UNI_MATRIX4X4, &mdlMat);
-		bulletMesh->render();
-	}
-
-	size_t nAsteroids = asteroids.size();
-
-	for (size_t i = 0; i < nAsteroids; i++) {
-		mdlMat = glm::mat4();
-		mdlMat *= glm::rotate(asteroids[i]->rot, glm::vec3(0, 1, 0));
-		mdlMat *= glm::transpose(glm::translate(glm::mat4(), glm::vec3(asteroids[i]->xPos, 0, asteroids[i]->yPos)));
-		asteroidShader->bindData(asteroidMdl, UniformDataType::UNI_MATRIX4X4, &mdlMat);
-		asteroids[i]->render();
-	}
-
-	// END ACTUAL RENDERING
-
+void Game::present() {
 
 	int tex = 0;
 	gBufferBlit->useShader();
@@ -756,33 +679,23 @@ void Game::renderAsteroids() {
 	//
 	//gRenderEngine->bindDefaultFrameBuffer();
 	//engine->renderFullQuad();
+	//
+	//gRenderEngine->activeTexture(0);
 
 	gBuffer->resolveToScreen();
 
-	gRenderEngine->activeTexture(0);
 
-	//gBuffer->resolveToScreen();
+	auto it = frameObjects.begin();
+	auto eit = frameObjects.end();
+
+	for (it; it != eit; it++) {
+		(*it)->render();
+	}
 
 	gameGui->render();
 
 }
 
-/*
-
-Private Functions
-
-*/
-
-void Game::updateFps(float dt) {
-	dtOneSec += dt;
-	fpsCounter++;
-
-	if (dtOneSec > 1.0F) {
-		fps = fpsCounter;
-		fpsCounter = 0;
-		dtOneSec -= 1.0F;
-	}
-}
 
 void Game::updateMenu(float dt) {
 
@@ -794,6 +707,9 @@ void Game::updateMenu(float dt) {
 		if (pressedIndex == 0) {
 			engine->lockCursor(true);
 			currentState = GameState::PLAY;
+
+			//map->getPlayer()->setCamera(&camInput);
+
 		} else if (pressedIndex == 1) {
 			currentState = GameState::EDIT;
 		} else if (pressedIndex == 2) {
@@ -801,26 +717,18 @@ void Game::updateMenu(float dt) {
 		} else if (pressedIndex == 3) {
 			currentState = GameState::PLAY_ASTEROIDS;
 
-			camInput.setCam(glm::vec3(0, 1, 0), glm::vec3(0, -1, 0));
-
-			int w = 0;
-			int h = 0;
-			Input::Input::GetInput()->getWindowSize(w, h);
-
-			*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::ortho(float(-w), float(w), float(-h), float(h));
-
-			//			*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::ortho(-100.0F, 100.0F, -100.0F, 100.0F);
-
-			gRenderEngine->setClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-
-			for (size_t i = 0; i < 3; i++) {
-				Asteroid* a = new Asteroid(ASTEROID_SIZE::LARGE);
-				asteroids.push_back(a);
+			if (map) {
+				delete map;
 			}
+
+			map = new AsteroidsMap(camInput, camera);
+
 		}
 
 		frameObjects.push_back(menu->getRenderable());
 	}
+
+	map->update(dt);
 
 }
 
@@ -830,7 +738,14 @@ void Game::updatePlay(float dt) {
 
 	camInput.update(dt);
 
-	player->update(dt);
+	//player->update(dt);
+
+	map->update(dt);
+	IPlayer* p = map->getPlayer();
+
+	if (p) {
+		p->update(dt);
+	}
 
 	Input::Input* in = Input::Input::GetInput();
 
@@ -883,94 +798,7 @@ void Game::updateEdit(float dt) {
 }
 
 void Game::updateAsteroids(float dt) {
-	//camInput.update(dt);
-
-	asteroidShip->update(dt);
-
-	size_t nBullets = bullets.size();
-
-	for (size_t i = 0; i < nBullets; i++) {
-		bullets[i]->update(dt);
-	}
-
-	auto it = bullets.begin();
-	auto eit = bullets.end();
-
-	while (it != eit) {
-		Bullet* b = *it;
-
-		if (b->dead()) {
-			delete b;
-			it = bullets.erase(it);
-			eit = bullets.end();
-		} else {
-			it++;
-		}
-	}
-
-	size_t nAsteroids = asteroids.size();
-
-	for (size_t i = 0; i < nAsteroids; i++) {
-		asteroids[i]->update(dt);
-	}
-
-	nBullets = bullets.size();
-
-	for (size_t i = 0; i < nAsteroids; i++) {
-
-		for (size_t j = 0; j < nBullets; j++) {
-
-			if (asteroids[i]->collide(bullets[j]->xPos, bullets[j]->yPos)) {
-
-				bullets[j]->ttl = -1.0F;
-
-				printf("Collision\n");
-
-			}
-		}
-	}
-
-	auto ait = asteroids.begin();
-	auto aeit = asteroids.end();
-
-	while (ait != aeit) {
-		Asteroid* a = *ait;
-
-		if (a->isDead()) {
-			ait = asteroids.erase(ait);
-
-			if (a->mSize == ASTEROID_SIZE::LARGE) {
-				for (size_t i = 0; i < 3; i++) {
-					Asteroid* ad = new Asteroid(ASTEROID_SIZE::MEDIUM, a->xPos, a->yPos);
-					asteroids.push_back(ad);
-				}
-			}
-
-			if (a->mSize == ASTEROID_SIZE::MEDIUM) {
-				for (size_t i = 0; i < 3; i++) {
-					Asteroid* ad = new Asteroid(ASTEROID_SIZE::SMALL, a->xPos, a->yPos);
-					asteroids.push_back(ad);
-				}
-			}
-
-			delete a;
-			ait = asteroids.begin();
-			aeit = asteroids.end();
-		} else {
-			ait++;
-		}
-	}
-
-	float sx = 0, sy = 0;
-
-	if (asteroidShip->getShootPoint(sx, sy)) {
-
-		Bullet* b = new Bullet(sx, sy, asteroidShip->rot);
-
-		bullets.push_back(b);
-
-	}
-
+	map->update(dt);
 }
 
 

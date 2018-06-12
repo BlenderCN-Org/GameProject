@@ -11,6 +11,8 @@ namespace Engine {
 
 		public:
 
+			virtual ~IAssetManager() {};
+
 			virtual ICMesh* loadMesh(const char* model) = 0;
 		};
 	}

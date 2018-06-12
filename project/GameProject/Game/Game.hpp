@@ -23,16 +23,15 @@
 #include "../Engine/Graphics/Mesh/Mesh.hpp"
 #include "../Engine/Graphics/Mesh/MirrorMesh.hpp"
 #include "../Engine/Graphics/Gui/TextureView.hpp"
+#include "../Engine/Graphics/Gui/Cursor.hpp"
 
 #include "PhysicsParticle.hpp"
 
-// Asteroid Temp
+#include "Asteroids/AsteroidsMap.hpp"
 
-#include "Asteroids/Ship.hpp"
-#include "Asteroids/Asteroid.hpp"
-#include "Asteroids/Bullet.hpp"
+#include "../Engine/Utils/FPSCounter.hpp"
 
-// Eng Asteroid Temp
+#include "Editor/3dViewGizmo.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
@@ -59,19 +58,19 @@ public:
 	void render();
 
 private:
-
-	MapLoader mapLoader;
-
 	CEngine * engine;
-	CameraInput camInput;
-	Camera camera;
+	IMap* map;
+	MainMenu* menu;
 
-	Map* map;
+	Engine::Core::FPSCounter fpsCounter;
 
 	GameState currentState;
 	GameState lastState;
 
-	void updateFps(float dt);
+	MapLoader mapLoader;
+
+	CameraInput camInput;
+	Camera camera;
 
 	void updateMenu(float dt);
 	void updatePlay(float dt);
@@ -83,11 +82,11 @@ private:
 	void renderScene();
 	void renderShadowMap();
 
+	void present();
+
 	void renderAsteroids();
 
 	RenderBatch* batchTmp;
-
-	MainMenu* menu;
 
 	Engine::RefObject<Editor>* editor;
 
@@ -95,10 +94,8 @@ private:
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
 	Engine::Graphics::Texture::Texture2D* panelTexture;
-
-	CameraPath camPath;
-
-	Player* player;
+	
+	//Player* player;
 
 	glm::mat4 vpMat;
 
@@ -108,7 +105,7 @@ private:
 
 	Engine::Graphics::Mesh::CMesh* mesh;
 	Engine::Graphics::Mesh::MirrorMesh* mirror;
-	Sky* sky;
+	//Sky* sky;
 
 	float r;
 	float a;
@@ -144,28 +141,14 @@ private:
 
 	int shadowMVP;
 
-	float dtOneSec;
-	int fps;
-	int fpsCounter;
+	IShaderObject* testShader;
 
 	std::vector<PhysicsParticle*> physParticles;
 
 	std::vector<Renderable*> frameObjects;
 
-	// Asteroid Temp
-	Ship* asteroidShip;
 
-	std::vector<Asteroid*> asteroids;
-	std::vector<Bullet*> bullets;
-
-	IShaderObject* asteroidShader;
-	int asteroidVP;
-	int asteroidMdl;
-	int asteroidColor;
-
-	IMesh* bulletMesh;
-
-	// Eng Asteroid Temp
+	ViewGizmo* viewGizmo;
 
 };
 
