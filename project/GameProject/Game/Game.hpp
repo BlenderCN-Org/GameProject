@@ -12,11 +12,10 @@
 #include "Player.hpp"
 #include "RenderBatch.hpp"
 
-#include "MapObjects/Map.hpp"
-#include "MapObjects/Sky.hpp"
-
 #include "Editor/3dViewGizmo.hpp"
 #include "Loader/MapLoader.hpp"
+#include "MapObjects/Map.hpp"
+#include "MapObjects/Sky.hpp"
 
 #include "../Engine/Engine.hpp"
 #include "../Engine/Graphics/Gui.hpp"

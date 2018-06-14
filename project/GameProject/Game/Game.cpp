@@ -1,6 +1,7 @@
 
 /// Internal Includess
 #include "Game.hpp"
+#include "Loader/EditLoader.hpp"
 #include "../Engine/Core/System.hpp"
 #include "../Engine/Graphics/Graphics.hpp"
 
@@ -471,7 +472,7 @@ void Game::render() {
 
 			glm::mat4 moveMat;
 			moveMat[3][0] = -0.9F;
-			moveMat[3][1] = -0.9F;
+			moveMat[3][1] = -0.85F;
 
 
 			glm::mat4 finalTranspose = moveMat * vpMat;
@@ -711,6 +712,8 @@ void Game::updateMenu(float dt) {
 
 		} else if (pressedIndex == 1) {
 			currentState = GameState::EDIT;
+			editor->start(new EditLoader(), &map);
+
 		} else if (pressedIndex == 2) {
 			engine->close();
 		} else if (pressedIndex == 3) {

@@ -2,6 +2,10 @@
 #define EDITOR_HPP
 
 /// Internal Includes
+#include "IEdit.hpp"
+#include "IMap.hpp"
+
+#include "Editor/EditorKeyBinds.hpp"
 #include "Editor/3dViewGizmo.hpp"
 
 #include "../Engine/Engine.hpp"
@@ -18,6 +22,8 @@ public:
 
 	Editor();
 	~Editor();
+
+	void start(IEdit* pEditClass, IMap** ppMap);
 
 	bool mouseInGui();
 	void update(float dt);
@@ -43,6 +49,9 @@ private:
 	Engine::Graphics::Gui::TextArea* textArea;
 
 	Engine::Graphics::Gui::GuiWindow* guiWindow;
+
+	IEdit* pGameEditAccess;
+	IMap** ppActiveMap;
 
 };
 

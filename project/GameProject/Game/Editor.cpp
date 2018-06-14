@@ -7,7 +7,9 @@
 
 /// Std Includes
 
-Editor::Editor() : mouseDownInGui(false) {
+Editor::Editor()
+	: mouseDownInGui(false)
+	, pGameEditAccess(nullptr) {
 
 	editorGui = new Engine::Graphics::CGui();
 
@@ -61,6 +63,10 @@ Editor::Editor() : mouseDownInGui(false) {
 
 Editor::~Editor() {
 
+	if (nullptr != pGameEditAccess) {
+		delete pGameEditAccess;
+	}
+
 	delete textArea;
 	delete editorGui;
 	delete toolbar;
@@ -71,6 +77,16 @@ Editor::~Editor() {
 	delete buttonPressTexture;
 
 	delete guiWindow;
+
+}
+
+void Editor::start(IEdit* pEditClass, IMap** ppMap) {
+
+	if (nullptr != pGameEditAccess) {
+		delete pGameEditAccess;
+	}
+	pGameEditAccess = pEditClass;
+	ppActiveMap = ppMap;
 
 }
 
@@ -99,7 +115,7 @@ bool Editor::mouseInGui() {
 		}
 		pressing = true;
 	}
-	
+
 	if (showButton->wasPressed()) {
 		guiWindow->setVisible(true);
 	}
@@ -109,6 +125,15 @@ bool Editor::mouseInGui() {
 
 void Editor::update(float dt) {
 	editorGui->update(dt);
+
+	Engine::Input::Input* in = Engine::Input::Input::GetInput();
+
+	// @ TODO add check for moving around to not tirgger by accedent
+	if (in->releasedThisFrame(EditorKeyBinds::editorSave)) {
+		pGameEditAccess->save();
+		printf("Saving changes\n");
+	}
+
 }
 
 Renderable** Editor::renderObjects(uint32_t count) {

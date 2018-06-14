@@ -238,6 +238,7 @@
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
+    <ClCompile Include="Game\Loader\EditLoader.cpp" />
     <ClCompile Include="Game\MapObjects\Cell.cpp" />
     <ClCompile Include="Game\Editor.cpp" />
     <ClCompile Include="Game\Editor\3dViewGizmo.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="Engine\Graphics\Gui\TextureView.hpp" />
     <ClInclude Include="Engine\Graphics\Mesh\Animation.hpp" />
     <ClInclude Include="Engine\Graphics\Textures\Texture2DReference.hpp" />
+    <ClInclude Include="Engine\Input\ScanCodes.hpp" />
     <ClInclude Include="Engine\Interfaces\ISettings.hpp" />
     <ClInclude Include="Engine\Interfaces\Renderable.hpp" />
     <ClInclude Include="Engine\Interfaces\IAssetManager.hpp" />
@@ -276,6 +278,10 @@
     <ClInclude Include="Game\Asteroids\AsteroidsMap.hpp" />
     <ClInclude Include="Game\Asteroids\Bullet.hpp" />
     <ClInclude Include="Game\Asteroids\Ship.hpp" />
+    <ClInclude Include="Game\Editor\EditorKeyBinds.hpp" />
+    <ClInclude Include="Game\IEdit.hpp" />
+    <ClInclude Include="Game\Loader\DataTags.hpp" />
+    <ClInclude Include="Game\Loader\EditLoader.hpp" />
     <ClInclude Include="Game\MapObjects\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
     <ClInclude Include="Game\Editor\3dViewGizmo.hpp" />

@@ -225,6 +225,9 @@
     <ClCompile Include="Game\MapObjects\Sky.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Loader\EditLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandling.hpp">
@@ -441,6 +444,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game\IMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IEdit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editor\EditorKeyBinds.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Loader\EditLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Loader\DataTags.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Input\ScanCodes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
