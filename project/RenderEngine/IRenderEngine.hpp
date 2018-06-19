@@ -81,7 +81,7 @@ public:
 
 	virtual void init(RenderEngineCreateInfo &createInfo) = 0;
 	virtual void release() = 0;
-	virtual void renderDebugFrame() = 0;
+	virtual void clearDebug() = 0;
 	virtual void clear() = 0;
 
 	virtual void enableCulling(bool enable, bool backFace = true) = 0;

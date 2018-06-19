@@ -40,6 +40,8 @@ namespace Engine {
 			Console();
 			virtual ~Console();
 
+			void initGraphics(Engine::Graphics::CGui* gui);
+
 			void setVisible(bool visible);
 
 			bool isVisible() const;
@@ -51,14 +53,14 @@ namespace Engine {
 			void update(float dt);
 			void updateSize(int w, int h);
 
-			void render();
-
 			void print(FormattedString str, LogSeverity severity = LogSeverity::LOG_INFO);
 
 			const FormattedString getCommandString() const;
 			const std::vector<FormattedString>& getConsoleLog() const;
 
 		private:
+
+			bool initialized;
 
 			void updateCursor(float dt);
 			void checkToggle();
@@ -76,10 +78,9 @@ namespace Engine {
 			float cursorBlinkSpeed;
 			bool cursorVisible;
 
-			Engine::Graphics::CGui* consoleGui;
+			Engine::Graphics::CGui* pGui;
 			Engine::Graphics::Gui::Panel* consolePanel;
 			Engine::Graphics::Gui::TextArea* consoleTextArea;
-			Engine::Graphics::Gui::Label* consoleHistory;
 			Engine::Graphics::Gui::Label* consoleText;
 
 			Engine::Graphics::Texture::Texture2D* consoleBg;
@@ -91,6 +92,9 @@ namespace Engine {
 			int height;
 
 		};
+
+		extern Console* gConsole;
+
 	}
 }
 

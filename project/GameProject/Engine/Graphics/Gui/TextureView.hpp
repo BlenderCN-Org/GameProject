@@ -24,7 +24,7 @@ namespace Engine {
 
 				void setTexture(Texture::Texture2DReference* textureRef);
 
-				virtual void update(float dt);
+				virtual void update(float dt, GuiHitInfo& hitInfo);
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
 
 			private:

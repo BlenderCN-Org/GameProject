@@ -17,8 +17,12 @@ namespace Engine {
 		namespace Gui {
 
 			class ListItem : public GuiItem {
-
+			public:
+				Core::String identifier;
 			};
+
+			// returns true when a listItem has been matched
+			typedef bool(*ListSearchFunction) (Core::String&, ListItem*);
 
 			class List : public GuiItem {
 			public:
@@ -29,9 +33,9 @@ namespace Engine {
 
 				void addListItem(ListItem* listItem);
 
-				void search(Core::String str);
+				void search(Core::String str, ListSearchFunction searchFunc);
 
-				virtual void update(float dt) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

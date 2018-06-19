@@ -14,18 +14,16 @@ class MainMenu {
 
 public:
 
-	MainMenu();
+	MainMenu(Engine::Graphics::CGui* gui);
 	virtual ~MainMenu();
 
 	void update(float dt);
 
 	int buttonPressed();
 
-	Renderable* getRenderable();
-
 private:
 
-	Engine::Graphics::CGui* mainMenu;
+	Engine::Graphics::CGui* pGui;
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
 	Engine::Graphics::Texture::Texture2D* panelTexture;

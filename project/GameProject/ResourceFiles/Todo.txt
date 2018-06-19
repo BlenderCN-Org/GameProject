@@ -12,6 +12,8 @@
 	- Add editor gui settings box to change sky settings
 	- Add editor gui to add and remove data from map file.
 
+	- Move writeDepthShader to Graphics utils
+
 - Done
 	- Fix physics engine update with multiple threads
 	- Hide windows cursor
@@ -28,6 +30,7 @@
 	- Removed duplicate code in game.cpp
 	- Render sky in map (using render batch)
 	- Added camera view direction gizmo to editor
+	- Added FullscreenQuad class into Graphics namespace
 
 	
 /*************************************

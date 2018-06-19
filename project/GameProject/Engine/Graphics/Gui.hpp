@@ -29,6 +29,7 @@ namespace Engine {
 			void setPosition(int x, int y);
 
 			void addGuiItem(GuiItem* guiItem);
+			void removeGuiItem(GuiItem* itemRef);
 			
 			bool mouseHitGui() const;
 			void update(float dt);
@@ -37,6 +38,8 @@ namespace Engine {
 		private:
 			Gui::Cursor* cur;
 			std::vector<GuiItem*> guiItems;
+
+			GuiItem* focusedItem;
 
 			GuiShaderContainer shaders;
 			bool visible;

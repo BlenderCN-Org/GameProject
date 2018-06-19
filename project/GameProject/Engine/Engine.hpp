@@ -7,6 +7,7 @@
 #include "Core/LibraryLoader.hpp"
 #include "Core/Console.hpp"
 #include "Core/Settings.hpp"
+#include "Graphics/FullscreenQuad.hpp"
 #include "Interfaces/IAssetManager.hpp"
 #include "Utils/MemoryBuffer.hpp"
 
@@ -33,6 +34,8 @@ public:
 
 	void close();
 
+	Engine::Graphics::CGui* getGui() const;
+
 	bool setAssetDataFolder(const char* folderPath);
 
 	const bool isRunning() const;
@@ -57,7 +60,16 @@ public:
 
 private:
 
-	Engine::Graphics::CGui* cursorGui;
+	inline void loadRenderEngine();
+	inline void loadSettings();
+	inline void createGameWindow();
+	inline void setupInput(IWindow* window, Engine::Core::Console* console);
+	inline void setupCursor();
+	inline void handleWindowSizeChange();
+	inline void createDepthShader();
+	inline void setupPhysicsEngine();
+
+	Engine::Graphics::CGui* gui;
 	Engine::Graphics::Gui::Cursor* cursor;
 	Engine::Graphics::Texture::Texture2D* cursorTexture;
 
@@ -66,7 +78,6 @@ private:
 
 	StaticObject* groundPlane;
 
-	void physicsLoop();
 
 	Engine::Core::Settings engineSettings;
 
@@ -86,10 +97,8 @@ private:
 	int depthValueLoc;
 	int depthVpMatLoc;
 	int depthMdlMatLoc;
-
-	IMesh* fullQuad;
-
-	std::thread* physicsThread;
+	
+	Engine::Graphics::FullscreenQuad* fullscreenQuad;
 
 };
 

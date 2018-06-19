@@ -49,6 +49,10 @@ namespace Engine {
 				delete cursorTexture;
 			}
 
+			void TextArea::setMultiLine(bool multiLine) {
+
+			}
+
 			void TextArea::setEditMode(bool edit) {
 				allowEdit = edit;
 				if (!edit) {
@@ -83,8 +87,7 @@ namespace Engine {
 			}
 
 			void TextArea::addText(const Engine::Core::FormattedString& str) {
-				//textData += str;
-
+				
 				int idx = 0;
 				int oldIdx = 0;
 				while (true) {
@@ -104,7 +107,19 @@ namespace Engine {
 
 			}
 
-			void TextArea::update(float dt) {
+			Engine::Core::FormattedString TextArea::getText() const {
+
+				Engine::Core::FormattedString text = "";
+
+				for (size_t i = 0; i < textData.size(); i++) {
+					text += textData[i];
+				}
+
+				return text;
+			}
+
+			// @TODO refactor
+			void TextArea::update(float dt, GuiHitInfo& hitInfo) {
 
 				if (allowEdit) {
 					if (isMouseInside()) {
@@ -194,16 +209,16 @@ namespace Engine {
 							} else {
 								if (editCursorLine) {
 									editCursorLine--;
-						
+
 									editCursorChar = (int)textData[editCursorLine].getSize();
 								}
 							}
 						}
-						
+
 						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_RIGHT_ARROW])) {
-							
+
 							editCursorChar++;
-						
+
 							if ((int)textData[editCursorLine].getSize() < editCursorChar) {
 								editCursorLine++;
 								if ((int)textData.size() <= editCursorLine) {
@@ -245,7 +260,7 @@ namespace Engine {
 				sizeYClipp = elementsPerScreen * fntSize;
 
 				verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-				verticalScroll->update(dt);
+				verticalScroll->update(dt, hitInfo);
 
 				int32_t selectedIndex = verticalScroll->getSelectedElement();
 

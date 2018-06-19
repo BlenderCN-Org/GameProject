@@ -90,6 +90,8 @@ namespace Engine {
 			void insertAt(int position, FormattedChar chr);
 			void remoteAt(int position);
 
+			String toString() const;
+
 		private:
 
 			size_t size;
@@ -100,9 +102,7 @@ namespace Engine {
 			void formattedCharMemcpy(FormattedChar* dest, const char* src, const size_t size);
 
 		};
-
-		FormattedString toFString(uint32_t value, uint8_t charPadding);
-
+		
 	}
 }
 

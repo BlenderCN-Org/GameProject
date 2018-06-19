@@ -193,20 +193,18 @@ Game::Game(CEngine* _engine)
 
 	shadowMVP = shadowShader->getShaderUniform("depthMVP");
 
-	menu = new MainMenu();
+	menu = new MainMenu(engine->getGui());
 
 	editor = new Editor();
 
 	mapLoader.openMap("E:/GameProjectAssets/Data/GameMap.map");
 
-	LoadedData data = mapLoader.loadDataEntry(1);
+	LoadedData data = mapLoader.loadEntry(1);
 
 	map = new Map(data, mapLoader);
 
-	free(data.data);
-
-	meshRotation = 0.0F;
-
+	mapLoader.freeEntry(data);
+	
 	physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
 
 	testShader = gRenderEngine->createShaderObject();
@@ -359,11 +357,6 @@ void Game::update(float dt, uint64_t clocks) {
 
 	str += "Clocks: " + std::to_string(clocks) + "\n";
 
-	str += "RotationSpeed: " + std::to_string(rotSpeed) + "\n";
-
-	str += "Rotation: " + std::to_string(meshRotation * toDEGREE) + " (" + std::to_string((meshRotation * toDEGREE) / 360.0F) + ")\n";
-	str += "RotTime: " + std::to_string(rotTime) + "\n";
-
 	Engine::Input::InputEvent ie = Engine::Input::Input::GetInput()->lastPressed;
 
 	str += "Last Key: " + std::string(ie.mouse ? "mouse " : "key ") + std::to_string(ie.code) + "\n";
@@ -486,10 +479,7 @@ void Game::render() {
 
 			viewGizmo->gizmoMesh->render();
 
-			gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &vpMat);
-			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-
-			viewGizmo->gizmoMesh->render();
+			editor->render();
 
 		}
 
@@ -517,7 +507,7 @@ void Game::renderScene() {
 
 	glm::mat4 objMat;
 
-	objMat = glm::rotate(meshRotation, glm::vec3(0, 0, 1));
+	//objMat = glm::rotate(meshRotation, glm::vec3(0, 0, 1));
 
 	// render scene as normal
 	gBufferShader->useShader();
@@ -726,15 +716,11 @@ void Game::updateMenu(float dt) {
 			map = new AsteroidsMap(camInput, camera);
 
 		}
-
-		frameObjects.push_back(menu->getRenderable());
 	}
 
 	map->update(dt);
 
 }
-
-const float MAX_ROT_SPEED = toRADIAN * 36.0F;
 
 void Game::updatePlay(float dt) {
 
@@ -748,40 +734,6 @@ void Game::updatePlay(float dt) {
 	if (p) {
 		p->update(dt);
 	}
-
-	Engine::Input::Input* in = Engine::Input::Input::GetInput();
-
-	bool hadInput = false;
-
-	if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_LEFT_ARROW])) {
-		rotSpeed += 2.0F * dt;
-		hadInput = true;
-	}
-
-	if (in->isKeyBindPressed(Engine::Input::KeyBindings[Engine::Input::KEYBIND_RIGHT_ARROW])) {
-		rotSpeed -= 2.0F * dt;
-		hadInput = true;
-	}
-
-	if (!hadInput) {
-
-		if (abs(rotSpeed) < 0.01F) {
-			rotSpeed = 0.0F;
-		} else {
-			if (rotSpeed > 0.0) {
-				rotSpeed -= dt;
-			} else {
-				rotSpeed += dt;
-			}
-		}
-	} else {
-		rotTime += dt;
-	}
-
-	rotSpeed = min(max(rotSpeed, -MAX_ROT_SPEED), MAX_ROT_SPEED);
-
-	meshRotation += rotSpeed * dt;
-
 }
 
 void Game::updateEdit(float dt) {
@@ -794,15 +746,11 @@ void Game::updateEdit(float dt) {
 		camInput.update(dt, freeCam);
 	}
 
-	Renderable** rends = editor->renderObjects(1);
-
-	frameObjects.push_back(rends[0]);
 }
 
 void Game::updateAsteroids(float dt) {
 	map->update(dt);
 }
-
 
 void Game::updatePaused(float dt) {
 

@@ -7,43 +7,35 @@
 
 /// Std Includes
 
-Map::Map(LoadedData& mapData, MapLoader& ldr)
+Map::Map(LoadedData& loadedData, MapLoader& loader)
 	: sky(nullptr)
 	, sizeX(0)
 	, sizeY(0)
 	, cells(nullptr)
 	, player(nullptr) {
 
-	if (verifyData(mapData)) {
+	if (verifyData(loadedData)) {
 
-		MapData* md = (MapData*)mapData.data;
+		MapData* mapData = (MapData*)loadedData.data;
 
-		uint32_t skyId = md->skyId;
+		loadSky(mapData->skyId, loader);
 
-		if (skyId != 0) {
-			LoadedData skyData = ldr.loadDataEntry(skyId);
+		uint32_t* ids = &mapData->cellsPointer;
 
-			sky = new Sky(skyData);
+		sizeX = mapData->cellsX;
+		sizeY = mapData->cellsY;
 
-			ldr.freeData(skyData);
-		}
+		size_t s = mapData->cellsX * mapData->cellsY;
 
-		uint32_t* ids = &md->cellsPointer;
+		cells = new Cell*[mapData->cellsX];
 
-		sizeX = md->cellsX;
-		sizeY = md->cellsY;
+		for (uint32_t i = 0; i < mapData->cellsX; i++) {
+			cells[i] = new Cell[mapData->cellsY];
 
-		size_t s = md->cellsX * md->cellsY;
-
-		cells = new Cell*[md->cellsX];
-
-		for (uint32_t i = 0; i < md->cellsX; i++) {
-			cells[i] = new Cell[md->cellsY];
-
-			for (uint32_t j = 0; j < md->cellsY; j++) {
-				LoadedData data = ldr.loadDataEntry(ids[i]);
+			for (uint32_t j = 0; j < mapData->cellsY; j++) {
+				LoadedData data = loader.loadEntry(ids[i]);
 				cells[i][j].load(data);
-				ldr.freeData(data);
+				loader.freeEntry(data);
 			}
 		}
 
@@ -113,6 +105,17 @@ void Map::updateRenderBatch(RenderBatch& batch) {
 *			PRIVATE FUNCTIONS				*
 *											*
 *********************************************/
+
+void Map::loadSky(uint32_t skyId, MapLoader& loader) {
+	
+	if (skyId != 0) {
+		LoadedData skyData = loader.loadEntry(skyId);
+
+		sky = new Sky(skyData);
+
+		loader.freeEntry(skyData);
+	}
+}
 
 void Map::createCells() {}
 

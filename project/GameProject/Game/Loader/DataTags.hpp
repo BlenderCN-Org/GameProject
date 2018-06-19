@@ -14,6 +14,7 @@ struct Tag {
 		return false;
 	}
 };
+
 /// Constants
 const Tag NULL_TAG { 'N', 'U', 'L', 'L' };
 const Tag MAP_TAG { 'M', 'A', 'P', ' ' };

@@ -76,6 +76,7 @@ TEST(CreationTests, opengl_do_leak_memory) {
 		FAIL();
 	}
 
+	// this is intentional
 	//re->release();
 
 	_CrtMemCheckpoint(&mStateEnd);

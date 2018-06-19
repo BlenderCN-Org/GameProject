@@ -25,7 +25,7 @@ class Map : public IMap {
 
 public:
 
-	Map(LoadedData& mapData, MapLoader& ldr);
+	Map(LoadedData& loadedData, MapLoader& loader);
 	virtual ~Map();
 
 	virtual Cell* getCurrentCell() const override;
@@ -38,6 +38,7 @@ public:
 
 private:
 
+	void loadSky(uint32_t skyId, MapLoader& loader);
 
 	void createCells();
 	bool verifyData(LoadedData& data);

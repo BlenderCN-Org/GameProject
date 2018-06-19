@@ -22,7 +22,7 @@ namespace Engine {
 
 				void addGuiItem(GuiItem* guiItem);
 
-				virtual void update(float dt) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

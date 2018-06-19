@@ -32,9 +32,9 @@ public:
 
 	void openMap(const char* file);
 
-	LoadedData loadDataEntry(uint32_t entryId);
+	LoadedData loadEntry(uint32_t entryId);
 
-	void freeData(LoadedData& ld);
+	void freeEntry(LoadedData& ld);
 
 private:
 

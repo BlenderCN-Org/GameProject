@@ -108,7 +108,35 @@ namespace Engine {
 					usedSize = totalSize;
 				}
 			}
+		}
 
+		void String::operator+=(const char chr) {
+
+			size_t stringLength = 1;
+
+			size_t totalSize = stringLength + usedSize;
+
+			// we can append to the current array
+			if (stringLength != 0) {
+				if (size > totalSize) {
+
+					text[usedSize] = chr;
+
+					usedSize = totalSize;
+				}
+				// we cannot append to the array so we are going to make a new one
+				else {
+					char* temp = text;
+
+					text = new char[totalSize];
+					memcpy(text, temp, usedSize);
+					delete temp;
+					text[usedSize] = chr;
+
+					size = totalSize;
+					usedSize = totalSize;
+				}
+			}
 		}
 
 		void String::operator=(const String _text) {

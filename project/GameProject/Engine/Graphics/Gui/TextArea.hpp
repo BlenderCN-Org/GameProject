@@ -21,13 +21,16 @@ namespace Engine {
 				TextArea();
 				virtual ~TextArea();
 
+				void setMultiLine(bool multiLine);
 				void setEditMode(bool edit);
 
 				void showLineNumbers(bool show);
 				void setText(const Engine::Core::FormattedString& str);
 				void addText(const Engine::Core::FormattedString& str);
 
-				virtual void update(float dt) override;
+				Engine::Core::FormattedString getText() const;
+
+				virtual void update(float dt, GuiHitInfo& hitInfo) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

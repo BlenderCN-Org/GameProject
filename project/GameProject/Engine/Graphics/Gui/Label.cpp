@@ -25,8 +25,10 @@ namespace Engine {
 				text.setText(str);
 			}
 
-			void Label::update(float dt) {
-				int br = 0;
+			void Label::update(float dt, GuiHitInfo& hitInfo) {
+				if (isMouseInside()) {
+					hitInfo.mouseHit = true;
+				}
 			}
 
 			void Label::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {

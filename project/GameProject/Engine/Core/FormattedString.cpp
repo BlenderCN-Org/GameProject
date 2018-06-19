@@ -323,6 +323,17 @@ namespace Engine {
 
 		}
 
+		String FormattedString::toString() const {
+
+			String str = "";
+
+			for (size_t i = 0; i < usedSize; i++) {
+				str += text[i].c;
+			}
+
+			return str;
+		}
+
 		void FormattedString::formattedCharMemcpy(FormattedChar* dst, const char* src, const size_t size) {
 
 			for (size_t i = 0; i < size; i++) {

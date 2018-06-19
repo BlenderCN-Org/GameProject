@@ -50,10 +50,7 @@ namespace Engine {
 				lbl->setSize(lbl->calcTextWidth(), size.y / 2);
 			}
 
-			void Button::update(float dt) {
-
-				lbl->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-				lbl->update(dt);
+			void Button::update(float dt, GuiHitInfo& hitInfo) {
 
 				Input::Input* in = Input::Input::GetInput();
 
@@ -80,6 +77,9 @@ namespace Engine {
 					}
 
 				}
+				if (true == hitInfo.mouseHit) {
+					hovering = false;
+				}
 
 				if (in->releasedThisFrame(Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK])) {
 
@@ -91,6 +91,13 @@ namespace Engine {
 					}
 
 				}
+
+				if (isMouseInside()) {
+					hitInfo.mouseHit = true;
+				}
+
+				lbl->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+				lbl->update(dt, hitInfo);
 
 			}
 

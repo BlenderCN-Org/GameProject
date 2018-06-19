@@ -147,7 +147,7 @@ void RenderEngine::release() {
 	delete this;
 }
 
-void RenderEngine::renderDebugFrame() {
+void RenderEngine::clearDebug() {
 	counter += 20;
 
 	if (counter > 32 * KB) {
@@ -167,6 +167,7 @@ void RenderEngine::renderDebugFrame() {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 }
+
 void RenderEngine::clear() {
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

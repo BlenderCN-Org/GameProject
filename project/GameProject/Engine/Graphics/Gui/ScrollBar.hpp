@@ -36,7 +36,7 @@ namespace Engine {
 				void setBackgroundTexture(Texture::Texture2D* texture);
 				void setScrollbarTexture(Texture::Texture2D* texture);
 
-				virtual void update(float dt) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

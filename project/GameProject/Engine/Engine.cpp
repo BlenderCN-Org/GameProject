@@ -11,7 +11,7 @@
 /// Std Includes
 #include <chrono>
 
-const char* vs = ""
+const char* vertexShader = ""
 "#version 410\n"
 "\n"
 "layout(location = 0) in vec3 vertexPos;\n"
@@ -25,7 +25,7 @@ const char* vs = ""
 "}\n"
 "\n";
 
-const char* fs = ""
+const char* fragmentShader = ""
 "#version 410\n"
 "\n"
 "out float gl_FragDepth;\n"
@@ -36,136 +36,66 @@ const char* fs = ""
 "}\n"
 "\n";
 
-CEngine::CEngine() : console(nullptr), renderEngine(nullptr), gameWindow(nullptr) {
+CEngine::CEngine()
+	: console(nullptr)
+	, renderEngine(nullptr)
+	, gameWindow(nullptr)
+	, running(true) {
+
+	console = new Engine::Core::Console();
+	Engine::Core::gConsole = console;
 
 	Engine::System::initSys();
 
-	// Render Engine
-	if (renderEngineLib.loadLibrary("RenderEngine.dll\0")) {
-		//console->print("Loaded RenderEngine.dll\n");
-	} else {
-		//gConsole->print("Failed to load Renderer\n");
-		throw;
-	}
+	// this must be called before using renderEngine
+	loadRenderEngine();
+	loadSettings();
 
-	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
+	createGameWindow();
+	setupCursor();
 
-	windowWidth = engineSettings.resolution().width;
-	windowHeight = engineSettings.resolution().height;
-
-	RenderEngineCreateInfo reci;
-	reci.stype = SType::sRenderEngineCreateInfo;
-	reci.createRenderWindow = true;
-	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
-	reci.pNext = nullptr;
-
-	renderEngine = rProc();
-	renderEngine->init(reci);
-	renderEngine->updateViewPort(windowWidth, windowHeight);
-
-	gRenderEngine = renderEngine;
-
-	gameWindow = renderEngine->getMainWindow();
+	console->initGraphics(gui);
+	console->updateSize(windowWidth, windowHeight);
 
 	gameWindow->setCursorVisibility(false);
 
-	console = new Engine::Core::Console();
-	console->updateSize(windowWidth, windowHeight);
+	setupInput(gameWindow, console);
 
-	Engine::Input::Input* input = Engine::Input::Input::GetInput();
-
-	input->setupCallbacks(gameWindow);
-	input->attachConsole(console);
-
-	gameWindow->setWindowSize(windowWidth, windowHeight);
-	gameWindow->setVsync(engineSettings.vSync());
 	//gameWindow->lockCursor(true);
-	running = true;
 
-	depthWriteShader = gRenderEngine->createShaderObject();
-	depthWriteShader->init();
+	createDepthShader();
 
-	depthWriteShader->setShaderCode(ShaderStages::VERTEX_STAGE, vs);
-	depthWriteShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fs);
-
-	if (!depthWriteShader->buildShader()) {
-		assert(0 && "Failed to build ClearDepth shader!");
-	}
-
-	depthValueLoc = depthWriteShader->getShaderUniform("depthValue");
-	depthVpMatLoc = depthWriteShader->getShaderUniform("vp");
-	depthMdlMatLoc = depthWriteShader->getShaderUniform("mdl");
-
-	fullQuad = gRenderEngine->createMesh();
-	fullQuad->init(MeshPrimitiveType::TRIANGLE);
-
-	float vertex[6][5] {
-		{ 0 - 1, 0 - 1, 0, 0, 0 },
-		{ 0 - 1, 0 + 1, 0, 0, 1 },
-		{ 0 + 1, 0 + 1, 0, 1, 1 },
-
-		{ 0 - 1, 0 - 1, 0, 0, 0 },
-		{ 0 + 1, 0 + 1, 0, 1, 1 },
-		{ 0 + 1, 0 - 1, 0, 1, 0 },
-	};
-
-	fullQuad->setMeshData(vertex, sizeof(vertex), MeshDataLayout::VERT_UV);
+	fullscreenQuad = new Engine::Graphics::FullscreenQuad();
 
 	assetManager = new Engine::AssetManager();
 
-	physicsThread = new std::thread(&CEngine::physicsLoop, this);
-
 	threadManager = new ThreadManager();
 
-	PhysEngineCreateInfo peci;
+	setupPhysicsEngine();
 
-	peci.threaded = true;
-	peci.taskMgr = threadManager;
-	//peci.maxTasks = System::getLogicalProcessorCount();
-
-	peci.maxTasks = 8;
-
-	physEngine = new PhysicsEngine(peci);
-
-	groundPlane = physEngine->createStaticObject();
-
-	PlaneShape* ps = new PlaneShape();
-	groundPlane->shape = ps;
-	ps->normal = glm::vec3(0, 1, 0);
-	ps->distance = -5.0F;
-
-	cursorGui = new Engine::Graphics::CGui();
-	cursorGui->setVisible(true);
-
-	cursor = new Engine::Graphics::Gui::Cursor();
-	cursor->setSize(25, 25);
-	cursor->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
-	cursor->setVisible(true);
-	
-	cursorGui->setCursor(cursor);
 
 }
 
 CEngine::~CEngine() {
 
-	delete cursor;
-	delete cursorGui;
 
 	delete groundPlane->shape;
 	physEngine->freeStaticObject(groundPlane);
 
 	delete threadManager;
 
-	physicsThread->join();
-	delete physicsThread;
-
 	delete physEngine;
 
 	delete assetManager;
 
 	depthWriteShader->release();
-	fullQuad->release();
+
+	delete fullscreenQuad;
+
 	delete console;
+
+	delete cursor;
+	delete gui;
 
 	gRenderEngine = nullptr;
 
@@ -191,6 +121,10 @@ void CEngine::close() {
 	gameWindow->showWindow(false);
 }
 
+Engine::Graphics::CGui* CEngine::getGui() const {
+	return gui;
+}
+
 bool CEngine::setAssetDataFolder(const char* folderPath) {
 	bool success = false;
 	if (Engine::System::folderExists(folderPath)) {
@@ -209,26 +143,12 @@ void CEngine::update(const float dt) {
 
 	gameWindow->pollMessages();
 
-	physEngine->update(1.0F/60.0F);
+	physEngine->update(1.0F / 60.0F);
 
-	if (Engine::Input::Input::GetInput()->sizeChange) {
-		int w = 0;
-		int h = 0;
-		Engine::Input::Input::GetInput()->getWindowSize(w, h);
-
-		renderEngine->updateViewPort(w, h);
-		gameWindow->setWindowSize(w, h);
-
-		console->updateSize(w, h);
-
-		windowHeight = h;
-		windowWidth = w;
-
-	}
+	handleWindowSizeChange();
 
 	console->update(dt);
-
-	cursorGui->update(dt);
+	gui->update(dt);
 
 	running = gameWindow->isVisible();
 }
@@ -244,12 +164,11 @@ void CEngine::clearBackBuffer() {
 
 void CEngine::clearDebug() {
 	renderEngine->bindDefaultFrameBuffer();
-	renderEngine->renderDebugFrame();
+	renderEngine->clearDebug();
 }
 
 void CEngine::presentFrame() {
-	console->render();
-	cursorGui->render();
+	gui->render();
 	gameWindow->swapBuffers();
 }
 
@@ -261,8 +180,7 @@ void CEngine::writeDepth(float depthValue, glm::mat4 vpMat, glm::mat4 mdl) {
 }
 
 void CEngine::renderFullQuad() {
-	fullQuad->bind();
-	fullQuad->render();
+	fullscreenQuad->render();
 }
 
 Engine::Interfaces::IAssetManager* CEngine::getAssetManager() const {
@@ -277,17 +195,112 @@ ThreadManager* CEngine::getThreadManager() {
 	return threadManager;
 }
 
-void CEngine::physicsLoop() {
+void CEngine::loadRenderEngine() {
 
-	Engine::System::HighResClock clk;
-
-	float dt = 0.0F;
-
-	while (running) {
-
-		clk.tick();
-		dt = clk.seconds();
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
+	if (renderEngineLib.loadLibrary("RenderEngine.dll\0")) {
+		Engine::Core::gConsole->print("Loaded RenderEngine.dll");
+	} else {
+		Engine::Core::gConsole->print("Failed to load Renderer");
+		throw;
 	}
+}
+
+void CEngine::loadSettings() {
+	windowWidth = engineSettings.resolution().width;
+	windowHeight = engineSettings.resolution().height;
+}
+
+void CEngine::createGameWindow() {
+
+	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
+
+	RenderEngineCreateInfo reci;
+	reci.stype = SType::sRenderEngineCreateInfo;
+	reci.createRenderWindow = true;
+	reci.renderEngineType = RenderEngineType::eRenderOpenGL;
+	reci.pNext = nullptr;
+
+	renderEngine = rProc();
+	renderEngine->init(reci);
+	renderEngine->updateViewPort(windowWidth, windowHeight);
+
+	gRenderEngine = renderEngine;
+
+	gameWindow = renderEngine->getMainWindow();
+
+	gameWindow->setWindowSize(windowWidth, windowHeight);
+	gameWindow->setVsync(engineSettings.vSync());
+}
+
+void CEngine::setupInput(IWindow* window, Engine::Core::Console* console) {
+
+	Engine::Input::Input* input = Engine::Input::Input::GetInput();
+
+	input->setupCallbacks(window);
+	input->attachConsole(console);
+}
+
+void CEngine::setupCursor() {
+
+	gui = new Engine::Graphics::CGui();
+	gui->setVisible(true);
+
+	cursor = new Engine::Graphics::Gui::Cursor();
+	cursor->setSize(25, 25);
+	cursor->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
+	cursor->setVisible(true);
+
+	gui->setCursor(cursor);
+}
+
+void CEngine::handleWindowSizeChange() {
+
+	if (Engine::Input::Input::GetInput()->sizeChange) {
+		int w = 0;
+		int h = 0;
+		Engine::Input::Input::GetInput()->getWindowSize(w, h);
+
+		renderEngine->updateViewPort(w, h);
+		gameWindow->setWindowSize(w, h);
+
+		console->updateSize(w, h);
+
+		windowHeight = h;
+		windowWidth = w;
+	}
+}
+
+void CEngine::createDepthShader() {
+
+	depthWriteShader = gRenderEngine->createShaderObject();
+	depthWriteShader->init();
+
+	depthWriteShader->setShaderCode(ShaderStages::VERTEX_STAGE, vertexShader);
+	depthWriteShader->setShaderCode(ShaderStages::FRAGMENT_STAGE, fragmentShader);
+
+	if (!depthWriteShader->buildShader()) {
+		assert(0 && "Failed to build ClearDepth shader!");
+	}
+
+	depthValueLoc = depthWriteShader->getShaderUniform("depthValue");
+	depthVpMatLoc = depthWriteShader->getShaderUniform("vp");
+	depthMdlMatLoc = depthWriteShader->getShaderUniform("mdl");
+}
+
+void CEngine::setupPhysicsEngine() {
+	PhysEngineCreateInfo peci;
+
+	peci.threaded = true;
+	peci.taskMgr = threadManager;
+	//peci.maxTasks = System::getLogicalProcessorCount();
+	peci.maxTasks = 8;
+
+	physEngine = new PhysicsEngine(peci);
+
+	groundPlane = physEngine->createStaticObject();
+
+	PlaneShape* ps = new PlaneShape();
+	groundPlane->shape = ps;
+	ps->normal = glm::vec3(0, 1, 0);
+	ps->distance = -5.0F;
 }

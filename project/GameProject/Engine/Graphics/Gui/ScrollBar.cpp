@@ -115,58 +115,64 @@ namespace Engine {
 				scrollbarTexture = texture;
 			}
 
-			void ScrollBar::update(float dt) {
+			void ScrollBar::update(float dt, GuiHitInfo& hitInfo) {
 
-				// if we cannot scroll always select first element
-				if (numElements <= minElements) {
-					scrollbarScreenPosition = 0;
-					selectedElement = 0;
-					if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
-						scrollbarThickness = size.x;
-					} else {
-						scrollbarThickness = size.y;
-					}
-
-				} else {
-
-					Input::Input* in = Input::Input::GetInput();
-
-					// check for input
-					if (holdingBar) { //is scrollbar being held
-
-						if (in->releasedThisFrame(Input::KeyBindings[Input::KEYBINDS_NAME::KEYBIND_MOUSE_L_CLICK], false)) {
-							holdingBar = false;
+				if (visible) {
+					// if we cannot scroll always select first element
+					if (numElements <= minElements) {
+						scrollbarScreenPosition = 0;
+						selectedElement = 0;
+						if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
+							scrollbarThickness = size.x;
+						} else {
+							scrollbarThickness = size.y;
 						}
 
-						int mx = 0;
-						int my = 0;
-						in->getMousePos(mx, my);
-
-						updateBarPosition(mx, my);
-
 					} else {
 
-						if (forceUpdate) {
+						Input::Input* in = Input::Input::GetInput();
 
-							if (autoScrollLastElement) {
-								int32_t p = 0x7FFFFFFF;
-								updateBarPosition(p, p);
-							} else {
-								updateBarPosition(0, 0);
+						// check for input
+						if (holdingBar) { //is scrollbar being held
+
+							if (in->releasedThisFrame(Input::KeyBindings[Input::KEYBINDS_NAME::KEYBIND_MOUSE_L_CLICK], false)) {
+								holdingBar = false;
 							}
-
-							forceUpdate = false;
-						}
-
-						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBINDS_NAME::KEYBIND_MOUSE_L_CLICK], false)) {
 
 							int mx = 0;
 							int my = 0;
 							in->getMousePos(mx, my);
-							if (posInItem(mx, my)) {
-								holdingBar = true;
+
+							updateBarPosition(mx, my);
+
+						} else {
+
+							if (forceUpdate) {
+
+								if (autoScrollLastElement) {
+									int32_t p = 0x7FFFFFFF;
+									updateBarPosition(p, p);
+								} else {
+									updateBarPosition(0, 0);
+								}
+
+								forceUpdate = false;
+							}
+
+							if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBINDS_NAME::KEYBIND_MOUSE_L_CLICK], false)) {
+
+								int mx = 0;
+								int my = 0;
+								in->getMousePos(mx, my);
+								if (posInItem(mx, my)) {
+									holdingBar = true;
+								}
 							}
 						}
+					}
+
+					if (isMouseInside()) {
+						hitInfo.mouseHit = true;
 					}
 				}
 			}

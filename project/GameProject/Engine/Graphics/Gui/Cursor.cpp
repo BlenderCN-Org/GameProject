@@ -17,7 +17,7 @@ namespace Engine {
 				tex = texture;
 			}
 
-			void Cursor::update(float dt) {
+			void Cursor::update(float dt, GuiHitInfo& hitInfo) {
 
 				Input::Input::GetInput()->getMousePos(position.x, position.y);
 

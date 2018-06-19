@@ -75,7 +75,7 @@ namespace Engine {
 				itemPanel->addGuiItem(guiItem);
 			}
 
-			void GuiWindow::update(float dt) {
+			void GuiWindow::update(float dt, GuiHitInfo& hitInfo) {
 				if (visible) {
 
 					if (!closeButton->isMouseInside()) {
@@ -135,12 +135,12 @@ namespace Engine {
 
 					setAnchorPoint(GuiAnchor::TOP_LEFT);
 
-					std::vector<GuiItem*>::iterator it = subItems.begin();
-					std::vector<GuiItem*>::iterator eit = subItems.end();
+					std::vector<GuiItem*>::reverse_iterator it = subItems.rbegin();
+					std::vector<GuiItem*>::reverse_iterator eit = subItems.rend();
 
 					for (it; it != eit; it++) {
 						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-						(*it)->update(dt);
+						(*it)->update(dt, hitInfo);
 					}
 				}
 			}

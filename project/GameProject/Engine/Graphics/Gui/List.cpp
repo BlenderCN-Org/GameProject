@@ -22,7 +22,9 @@ namespace Engine {
 				verticalScroll->setScrollbarTexture(nullptr);
 				verticalScroll->setAutoScroll(false);
 			}
-			List::~List() {}
+			List::~List() {
+				delete verticalScroll;
+			}
 
 			void List::setTexture(Texture::Texture2D* texture) {
 				tex = texture;
@@ -32,14 +34,25 @@ namespace Engine {
 				listItems.push_back(listItem);
 			}
 
-			void List::update(float dt) {
+			void List::search(Core::String str, ListSearchFunction searchFunc) {
+
+				if (0 == str.getSize() || nullptr == searchFunc) {
+					// @TODO clear the resulting list
+					return;
+				}
+
+
+
+			}
+
+			void List::update(float dt, GuiHitInfo& hitInfo) {
 				if (visible) {
 					std::vector<ListItem*>::iterator it = listItems.begin();
 					std::vector<ListItem*>::iterator eit = listItems.end();
 
 					for (it; it != eit; it++) {
 						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-						(*it)->update(dt);
+						(*it)->update(dt, hitInfo);
 					}
 
 					verticalScroll->setSize(15, size.y);

@@ -102,7 +102,7 @@ void Font_gl::genFontTexture() {
 
 	l.sort(cmp);
 
-	ShelfPack sp(256, 512);
+	ShelfPack sp(512, 512);
 
 	for (std::list<Character>::const_iterator iterator = l.begin(), end = l.end(); iterator != end; ++iterator) {
 		int w = iterator->size.x;

@@ -1,4 +1,5 @@
 /// Internal Includes
+#include "Console.hpp"
 #include "System.hpp"
 
 /// External Includes
@@ -26,10 +27,10 @@ namespace Engine {
 
 
 		void initSys() {
-			//gConsole->print("Initializing System (Windows OS)\n");
+			Engine::Core::gConsole->print("Initializing System (Windows OS)");
 
 			srand((unsigned int)time(nullptr));
-
+			
 			cpuCore = new PDH_HCOUNTER[getLogicalProcessorCount()];
 
 			PdhOpenQuery(NULL, NULL, &cpuQuery);

@@ -90,11 +90,7 @@ private:
 	//Player* player;
 
 	glm::mat4 vpMat;
-
-	float rotSpeed;
-	float meshRotation;
-	float rotTime;
-
+	
 	Engine::Graphics::Mesh::CMesh* mesh;
 	Engine::Graphics::Mesh::MirrorMesh* mirror;
 	//Sky* sky;

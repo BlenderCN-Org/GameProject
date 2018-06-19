@@ -51,12 +51,9 @@ Sky::~Sky() {
 void Sky::update(float dt) {
 
 	skyTime += dt;
-	//skyTime += dt * 0.001F;
 	if (skyTime > cycleTime) {
 		skyTime -= cycleTime;
 	}
-	//skyTime = 0.5F;
-	//a += 0.3F * dt;
 
 	skyTimeScaled = skyTime / cycleTime;
 
@@ -146,14 +143,13 @@ bool Sky::verifyData(LoadedData &data) {
 
 	bool dataOk = false;
 
-	// it is a map
 	if (data.tag == SKY_TAG) {
 
 		SkyData* sk = (SkyData*)data.data;
 
 		uint32_t calcSize = sizeof(sk->cycleTime) + sizeof(sk->skyColorDay) + sizeof(sk->skyColorNight);
 
-		// add checks for nan and negative values
+		// @ TODO add checks for nan and negative values
 
 		if (calcSize == data.size) {
 			dataOk = true;

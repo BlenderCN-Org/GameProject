@@ -67,7 +67,7 @@ namespace Engine {
 
 			}
 
-			void TextureView::update(float dt) {
+			void TextureView::update(float dt, GuiHitInfo& hitInfo) {
 				if (visible) {
 
 					vertBar->setMinElements(size.y - SCROLLBAR_SIZE);
@@ -79,8 +79,8 @@ namespace Engine {
 					vertBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 					horzBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 
-					vertBar->update(dt);
-					horzBar->update(dt);
+					vertBar->update(dt, hitInfo);
+					horzBar->update(dt, hitInfo);
 
 					Input::Input* in = Input::Input::GetInput();
 					int x = 0, y = 0;
@@ -105,6 +105,10 @@ namespace Engine {
 
 					offsetY = vertBar->getSelectedElement();
 					offsetX = horzBar->getSelectedElement();
+
+					if (isMouseInside()) {
+						hitInfo.mouseHit = true;
+					}
 
 				}
 			}

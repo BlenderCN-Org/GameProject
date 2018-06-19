@@ -42,7 +42,7 @@ public:
 
 	virtual void init(RenderEngineCreateInfo &createInfo);
 	virtual void release();
-	virtual void renderDebugFrame();
+	virtual void clearDebug();
 	virtual void clear();
 	virtual void bindDefaultFrameBuffer();
 

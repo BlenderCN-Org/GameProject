@@ -22,7 +22,7 @@ enum MeshDataLayout {
 };
 
 /**
- elements to mapp data.
+ elements to map data.
  if offset is 0 it will be calculated depending on previous elements
 */
 

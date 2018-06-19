@@ -24,23 +24,34 @@ namespace Engine {
 			BOTTOM_RIGHT,
 		};
 
+		struct GuiHitInfo {
+			bool mouseHit;
+			int zIndex;
+			int xPos;
+			int yPos;
+		};
+
 		class GuiItem {
 		public:
 			GuiItem();
 			virtual ~GuiItem();
 
+			int getZIndex() const;
+
 			bool isMouseInside() const;
 
+			void setAnchorPoint(GuiAnchor anchor);
 			void setPosition(int x, int y);
 			void setSize(int w, int h);
 
 			void setVisible(bool visibilityFlag);
-
-			void setAnchorPoint(GuiAnchor anchor);
-			virtual void update(float dt);
-			virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
+			void setZIndex(int zIndex);
 
 			void updateAbsoultePos(const int xOff, const int yOff, const int xSize, const int ySize);
+
+			virtual void update(float dt, GuiHitInfo& hitInfo);
+			virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
+
 
 		protected:
 
@@ -50,6 +61,8 @@ namespace Engine {
 			bool posInItem(int x, int y) const;
 
 			glm::vec4 positionAndSizeFromMatrix(const glm::mat4 &positionMatrix);
+
+			int zIndex;
 
 			glm::ivec2 position;
 			glm::ivec2 size;

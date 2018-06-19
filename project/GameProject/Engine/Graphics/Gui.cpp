@@ -7,8 +7,15 @@
 /// External Includes
 #include <glm/gtc/matrix_transform.hpp>
 
+/// Std Includes
+#include <algorithm>
+
 namespace Engine {
 	namespace Graphics {
+
+		bool zIndexSortFunc(GuiItem* left, GuiItem* right) {
+			return left->getZIndex() < right->getZIndex();
+		}
 
 		CGui::CGui()
 			: guiItems()
@@ -84,6 +91,15 @@ namespace Engine {
 
 		void CGui::addGuiItem(GuiItem* guiItem) {
 			guiItems.push_back(guiItem);
+
+			std::sort(guiItems.begin(), guiItems.end(), zIndexSortFunc);
+		}
+
+		void CGui::removeGuiItem(GuiItem* itemRef) {
+
+			guiItems.erase(std::remove(guiItems.begin(), guiItems.end(), itemRef), guiItems.end());
+			std::sort(guiItems.begin(), guiItems.end(), zIndexSortFunc);
+
 		}
 
 		bool CGui::mouseHitGui() const {
@@ -91,8 +107,8 @@ namespace Engine {
 			bool hit = false;
 
 			if (visible) {
-				std::vector<GuiItem*>::const_iterator it = guiItems.begin();
-				std::vector<GuiItem*>::const_iterator eit = guiItems.end();
+				std::vector<GuiItem*>::const_reverse_iterator it = guiItems.rbegin();
+				std::vector<GuiItem*>::const_reverse_iterator eit = guiItems.rend();
 
 				for (it; it != eit; it++) {
 					hit = (*it)->isMouseInside();
@@ -100,7 +116,6 @@ namespace Engine {
 						break;
 					}
 				}
-
 			}
 
 			return hit;
@@ -108,8 +123,21 @@ namespace Engine {
 
 		void CGui::update(float dt) {
 			if (visible) {
-				std::vector<GuiItem*>::const_iterator it = guiItems.begin();
-				std::vector<GuiItem*>::const_iterator eit = guiItems.end();
+
+				int mX = 0;
+				int mY = 0;
+
+				Input::Input::GetInput()->getMousePos(mX, mY);
+
+				GuiHitInfo hitInfo;
+
+				hitInfo.mouseHit = false;
+				hitInfo.zIndex = 0;
+				hitInfo.xPos = mX;
+				hitInfo.yPos = mY;
+
+				std::vector<GuiItem*>::const_reverse_iterator it = guiItems.rbegin();
+				std::vector<GuiItem*>::const_reverse_iterator eit = guiItems.rend();
 
 				int w = 0, h = 0;
 
@@ -119,7 +147,10 @@ namespace Engine {
 					int cw = w;
 					int ch = h;
 					(*it)->updateAbsoultePos(pos.x, pos.y, cw, ch);
-					(*it)->update(dt);
+					(*it)->update(dt, hitInfo);
+					if (hitInfo.mouseHit) {
+						hitInfo.zIndex = (*it)->getZIndex();
+					}
 				}
 			}
 
@@ -127,7 +158,8 @@ namespace Engine {
 				int w = 0, h = 0;
 				Input::Input::GetInput()->getWindowSize(w, h);
 				cur->updateAbsoultePos(pos.x, pos.y, w, h);
-				cur->update(dt);
+				GuiHitInfo hitInfo;
+				cur->update(dt, hitInfo);
 			}
 		}
 

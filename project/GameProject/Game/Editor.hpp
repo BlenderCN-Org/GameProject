@@ -12,6 +12,8 @@
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Gui/GuiWindow.hpp"
 
+#include "Editor/Toolbox/ObjectList.hpp"
+
 /// External Includes
 
 /// Std Includes
@@ -28,7 +30,7 @@ public:
 	bool mouseInGui();
 	void update(float dt);
 
-	Renderable** renderObjects(uint32_t count);
+	void render();
 
 private:
 
@@ -38,7 +40,7 @@ private:
 	uint32_t renderObjectCount;
 
 	Engine::Graphics::CGui* editorGui;
-
+	/*
 	Engine::Graphics::Texture::Texture2D* buttonHoverTexture;
 	Engine::Graphics::Texture::Texture2D* buttonPressTexture;
 
@@ -49,6 +51,9 @@ private:
 	Engine::Graphics::Gui::TextArea* textArea;
 
 	Engine::Graphics::Gui::GuiWindow* guiWindow;
+	*/
+
+	ObjectList* objList;
 
 	IEdit* pGameEditAccess;
 	IMap** ppActiveMap;

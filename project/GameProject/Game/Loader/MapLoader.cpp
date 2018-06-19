@@ -33,7 +33,7 @@ void MapLoader::openMap(const char* file) {
 
 }
 
-LoadedData MapLoader::loadDataEntry(uint32_t entryId) {
+LoadedData MapLoader::loadEntry(uint32_t entryId) {
 
 	LoadedData ret;
 
@@ -71,7 +71,7 @@ LoadedData MapLoader::loadDataEntry(uint32_t entryId) {
 	return ret;
 }
 
-void MapLoader::freeData(LoadedData& ld) {
+void MapLoader::freeEntry(LoadedData& ld) {
 	free(ld.data);
 }
 

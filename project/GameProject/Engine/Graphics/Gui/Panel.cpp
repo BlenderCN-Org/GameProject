@@ -30,14 +30,18 @@ namespace Engine {
 				subItems.push_back(guiItem);
 			}
 
-			void Panel::update(float dt) {
+			void Panel::update(float dt, GuiHitInfo& hitInfo) {
 				if (visible) {
-					std::vector<GuiItem*>::iterator it = subItems.begin();
-					std::vector<GuiItem*>::iterator eit = subItems.end();
+					std::vector<GuiItem*>::reverse_iterator it = subItems.rbegin();
+					std::vector<GuiItem*>::reverse_iterator eit = subItems.rend();
 
 					for (it; it != eit; it++) {
 						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-						(*it)->update(dt);
+						(*it)->update(dt, hitInfo);
+					}
+
+					if (isMouseInside()) {
+						hitInfo.mouseHit = true;
 					}
 
 				}
@@ -58,10 +62,10 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
 					if (tex) {
 						tex->bind();
-					}
 
-					shaderContainer.standardQuad->bind();
-					shaderContainer.standardQuad->render();
+						shaderContainer.standardQuad->bind();
+						shaderContainer.standardQuad->render();
+					}
 
 					std::vector<GuiItem*>::iterator it = subItems.begin();
 					std::vector<GuiItem*>::iterator eit = subItems.end();

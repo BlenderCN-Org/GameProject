@@ -13,6 +13,8 @@
 namespace Engine {
 	namespace Core {
 
+		Console* gConsole = nullptr;
+
 		Console::Console()
 			: consoleVisible(false)
 			, cmdTypeIndex(0U)
@@ -21,77 +23,78 @@ namespace Engine {
 			, cursorBlinkSpeed(0)
 			, cursorVisible(false)
 			, consoleBg(nullptr)
-			, consoleGui(nullptr)
-			, consoleHistory(nullptr)
+			, pGui(nullptr)
 			, consolePanel(nullptr)
 			, consoleText(nullptr)
 			, width(0)
 			, height(0)
 			, consolePosY(-100)
-			, consoleTargetY(-100) {
-
-			consoleGui = new Engine::Graphics::CGui();
-			consolePanel = new Engine::Graphics::Gui::Panel();
-			consoleTextArea = new Engine::Graphics::Gui::TextArea();
-			consoleHistory = new Engine::Graphics::Gui::Label();
-			consoleText = new Engine::Graphics::Gui::Label();
-
-			consoleBg = new Engine::Graphics::Texture::Texture2D();
-			consoleBg->singleColor(0.192869F, 0.246195F, 0.168075F, 0.900000F);
-
-			consolePanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
-			consoleTextArea->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
-			consoleHistory->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
-			consoleText->setAnchorPoint(Engine::Graphics::GuiAnchor::BOTTOM);
-
-			consoleGui->setVisible(true);
-			consoleGui->setPosition(0, int(consolePosY));
-
-			consolePanel->setPosition(0, 0);
-			consolePanel->setSize(0, 0);
-			consolePanel->setVisible(true);
-			consolePanel->setTexture(consoleBg);
-
-			consoleHistory->setPosition(0, 0);
-			consoleHistory->setSize(0, 0);
-			consoleHistory->setVisible(true);
-
-			consoleTextArea->setPosition(0, 0);
-			consoleTextArea->setSize(0, 0);
-			consoleTextArea->setVisible(true);
-
-			consoleText->setPosition(0, 0);
-			consoleText->setSize(0, 0);
-			consoleText->setVisible(true);
-
-			consoleGui->addGuiItem(consolePanel);
-			consolePanel->addGuiItem(consoleTextArea);
-			//consolePanel->addGuiItem(consoleHistory);
-			consolePanel->addGuiItem(consoleText);
-
-			Core::FormattedString str = "Foobar";
-			str.formatString(0, 6, glm::vec4(1, 0, 0, 0));
-
-			str += " This is a test";
-
-			consoleText->setText(str);
+			, consoleTargetY(-100)
+			, initialized(false)
+		{
 
 		}
 
 		Console::~Console() {
-			delete consoleBg;
-			delete consoleGui;
-			delete consoleTextArea;
-			delete consoleHistory;
-			delete consolePanel;
-			delete consoleText;
 
-			consoleBg = nullptr;
-			consoleGui = nullptr;
-			consoleHistory = nullptr;
-			consolePanel = nullptr;
-			consoleText = nullptr;
+			if (pGui) {
+				pGui->removeGuiItem(consolePanel);
+			}
 
+			if (initialized) {
+				delete consoleBg;
+				delete consoleTextArea;
+				delete consolePanel;
+				delete consoleText;
+
+				consoleBg = nullptr;
+				consolePanel = nullptr;
+				consoleText = nullptr;
+			}
+
+		}
+
+		void Console::initGraphics(Engine::Graphics::CGui* gui) {
+
+			if (gui) {
+				consolePanel = new Engine::Graphics::Gui::Panel();
+				consoleTextArea = new Engine::Graphics::Gui::TextArea();
+				consoleText = new Engine::Graphics::Gui::Label();
+
+				consoleBg = new Engine::Graphics::Texture::Texture2D();
+				consoleBg->singleColor(0.192869F, 0.246195F, 0.168075F, 0.900000F);
+
+				consolePanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
+				consoleTextArea->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
+				consoleText->setAnchorPoint(Engine::Graphics::GuiAnchor::BOTTOM);
+
+				consolePanel->setPosition(0, int(consolePosY));
+				consolePanel->setSize(0, 0);
+				consolePanel->setVisible(false);
+				consolePanel->setTexture(consoleBg);
+				consolePanel->setZIndex(1000);
+
+				consoleTextArea->setPosition(0, 0);
+				consoleTextArea->setSize(0, 0);
+				consoleTextArea->setVisible(true);
+
+				consoleText->setPosition(0, 0);
+				consoleText->setSize(0, 0);
+				consoleText->setVisible(true);
+
+				consolePanel->addGuiItem(consoleTextArea);
+				consolePanel->addGuiItem(consoleText);
+
+				for (size_t i = 0; i < consoleLog.size(); i++) {
+					consoleTextArea->addText(consoleLog[i]);
+				}
+
+				gui->addGuiItem(consolePanel);
+
+				pGui = gui;
+
+				initialized = true;
+			}
 		}
 
 		void Console::setVisible(bool visible) {
@@ -135,8 +138,10 @@ namespace Engine {
 				str.formatString(0, -1, CONSOLE_CRITICAL_COLOR);
 			}
 
-			//consoleLog.push_back(str);
-			consoleTextArea->addText(str);
+			consoleLog.push_back(str);
+			if (consoleTextArea) {
+				consoleTextArea->addText(str);
+			}
 		}
 
 		void Console::update(float dt) {
@@ -145,28 +150,22 @@ namespace Engine {
 
 			checkToggle();
 
+			consolePanel->setVisible(consoleVisible);
+
 			if (consoleVisible) {
-				consoleGui->update(dt);
 				updateGraphics();
 			}
 		}
 
 		void Console::updateSize(int w, int h) {
 			consolePanel->setSize(w, (h / 2));
-			consoleHistory->setSize(w, (h / 2) - 30);
 			consoleTextArea->setSize(w, (h / 2) - 30);
 			consoleText->setSize(w, 30);
 
 			width = w;
 			height = h;
 		}
-
-		void Console::render() {
-			if (consoleVisible) {
-				consoleGui->render();
-			}
-		}
-
+		
 		const FormattedString Console::getCommandString() const {
 			FormattedString fString = "> ";
 			fString += command;
@@ -216,7 +215,9 @@ namespace Engine {
 					}
 				}
 
-				consoleGui->setPosition(0, (int)consolePosY);
+				updateSize(width, height);
+				consolePanel->setSize(width, (height / 2) + (int)consolePosY);
+
 			} else {
 				setVisible(Input::Input::GetInput()->consoleIsActive());
 			}
@@ -230,8 +231,6 @@ namespace Engine {
 				fString += log[i];
 				fString += "\n";
 			}
-			//consoleTextArea->setText(fString);
-			//consoleHistory->setText(fString);
 			consoleText->setText(getCommandString());
 		}
 

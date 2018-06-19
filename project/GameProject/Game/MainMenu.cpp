@@ -6,11 +6,8 @@
 
 /// Std Includes
 
-MainMenu::MainMenu() : mainMenu(nullptr) {
-
-	mainMenu = new Engine::Graphics::CGui();
-	mainMenu->setVisible(true);
-
+MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
+	
 	buttonHoverTexture = new Engine::Graphics::Texture::Texture2D();
 	buttonHoverTexture->singleColor(0.5F, 0.0F, 0.0F, 1.0F);
 
@@ -74,8 +71,7 @@ MainMenu::MainMenu() : mainMenu(nullptr) {
 	asteroids->setHoverTexture(buttonHoverTexture);
 	asteroids->setPressTexture(buttonPressTexture);
 
-
-	mainMenu->addGuiItem(metrixPanel);
+	gui->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
 	metrixPanel->addGuiItem(newGameButton);
 	metrixPanel->addGuiItem(editorButton);
@@ -84,7 +80,9 @@ MainMenu::MainMenu() : mainMenu(nullptr) {
 }
 
 MainMenu::~MainMenu() {
-	delete mainMenu;
+	
+	pGui->removeGuiItem(metrixPanel);
+
 	delete panelTexture;
 	delete buttonHoverTexture;
 	delete buttonPressTexture;
@@ -97,7 +95,6 @@ MainMenu::~MainMenu() {
 }
 
 void MainMenu::update(float dt) {
-	mainMenu->update(dt);
 
 }
 
@@ -126,8 +123,4 @@ int MainMenu::buttonPressed() {
 	}
 
 	return index;
-}
-
-Renderable* MainMenu::getRenderable() {
-	return mainMenu;
 }

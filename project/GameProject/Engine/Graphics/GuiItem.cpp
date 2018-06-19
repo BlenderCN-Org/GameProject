@@ -16,6 +16,7 @@ namespace Engine {
 			size = glm::ivec2(0);
 			anchorPoint = GuiAnchor::CENTER;
 			uvCoords = glm::vec4(0.0F, 0.0F, 1.0F, 1.0F);
+			zIndex = 0;
 		}
 
 		GuiItem::~GuiItem() {}
@@ -32,6 +33,14 @@ namespace Engine {
 			return inside;
 		}
 
+		int GuiItem::getZIndex() const {
+			return zIndex;
+		}
+
+		void GuiItem::setAnchorPoint(GuiAnchor anchor) {
+			anchorPoint = anchor;
+		}
+
 		void GuiItem::setPosition(int x, int y) {
 			position = glm::ivec2(x, y);
 		}
@@ -44,23 +53,14 @@ namespace Engine {
 			visible = visibilityFlag;
 		}
 
-		void GuiItem::setAnchorPoint(GuiAnchor anchor) {
-			anchorPoint = anchor;
-		}
-
-		void GuiItem::update(float dt) {
-			// do nothing
-		}
-
-		void GuiItem::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
-			// do nothing
+		void GuiItem::setZIndex(int _zIndex) {
+			zIndex = _zIndex;
 		}
 
 		void GuiItem::updateAbsoultePos(const int xOff, const int yOff, const int xSize, const int ySize) {
 
 			const int ox = xOff;
 			const int oy = yOff;
-
 
 			if (size.x > xSize)
 				size.x = xSize;
@@ -75,14 +75,12 @@ namespace Engine {
 			int aX;
 			int aY;
 
-
 			if (anchorPoint == GuiAnchor::CENTER) {
 				x /= 2;
 				y /= 2;
 
 				aX = x - realSize.x;
 				aY = y - realSize.y;
-
 
 			} else if (anchorPoint == GuiAnchor::TOP) {
 				x /= 2;
@@ -152,6 +150,19 @@ namespace Engine {
 			absoulutePosition.x = aX;
 			absoulutePosition.y = aY;
 
+		}
+
+		void GuiItem::update(float dt, GuiHitInfo& hitInfo) {
+			// do nothing
+			if (visible) {
+				if (isMouseInside()) {
+					hitInfo.mouseHit = true;
+				}
+			}
+		}
+
+		void GuiItem::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
+			// do nothing
 		}
 
 		void GuiItem::calculatePoints(glm::mat4 &positionMatrix) {

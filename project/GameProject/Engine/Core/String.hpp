@@ -20,6 +20,7 @@ namespace Engine {
 
 			void operator=(const char* text);
 			void operator+=(const char* text);
+			void operator+=(const char chr);
 
 			void operator=(const String text);
 			void operator+=(const String text);
