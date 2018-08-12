@@ -8,6 +8,7 @@
 #include "../Interfaces/Renderable.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/IAssetManager.hpp>
 #include <RenderEngine/IRenderEngine.hpp>
 
 /// Std Includes
@@ -19,7 +20,7 @@ namespace Engine {
 		class CGui : public Renderable {
 		public:
 
-			CGui();
+			CGui(Engine::AssetHandling::IAssetManager* assetManager);
 			virtual ~CGui();
 
 			void setVisible(bool _visible);
@@ -35,7 +36,12 @@ namespace Engine {
 			void update(float dt);
 			void render();
 
+			Engine::AssetHandling::IAssetManager* getAssetManager() const;
+
 		private:
+
+			Engine::AssetHandling::IAssetManager* pAssetManager;
+
 			Gui::Cursor* cur;
 			std::vector<GuiItem*> guiItems;
 

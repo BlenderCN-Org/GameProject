@@ -18,7 +18,7 @@ namespace Engine {
 
 			public:
 
-				Button();
+				Button(GuiInfo& info);
 				virtual ~Button();
 				
 				bool wasPressed();
@@ -29,7 +29,9 @@ namespace Engine {
 
 				void setText(const Engine::Core::FormattedString& str);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo) override;
+				virtual bool isFocusable() const override;
+				virtual bool hasFocusableItems() const override;
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

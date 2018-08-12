@@ -3,6 +3,11 @@
 #include <wbemidl.h>
 #include <oleauto.h>
 #include <cwchar>
+#include <cmath>
+
+#include <glm/glm.hpp>
+
+#include <iostream>
 
 template <typename T>
 void SafeRealease(T** p) {
@@ -113,9 +118,51 @@ LCleanup:
 	return bIsXinputDevice;
 }
 
+bool getControllerState(int id, ControllerState& state) {
+
+	XINPUT_STATE xState;
+	if (XInputGetState(0, &xState) == ERROR_SUCCESS) {
+
+		state.buttons = xState.Gamepad.wButtons;
+		state.lTrigger = xState.Gamepad.bLeftTrigger;
+		state.rTrigger = xState.Gamepad.bRightTrigger;
+
+		state.lThumb = glm::vec2(xState.Gamepad.sThumbLX, xState.Gamepad.sThumbLY) / 32767.0F;
+		state.rThumb = glm::vec2(xState.Gamepad.sThumbRX, xState.Gamepad.sThumbRY) / 32767.0F;
+
+		return true;
+	}
+
+	return false;
+}
+
+// @ TODO - Cleanup
+
+bool RadialDeadZoneCompare(glm::vec2& axis, glm::vec2 oldAxis, float deadzone) {
+
+	float newAxisLenAbs = glm::abs(glm::length(axis));
+	float oldAxisLenAbs = glm::abs(glm::length(oldAxis));
+
+	//printf("D: %f - %f =%f\n", newAxisLenAbs, oldAxisLenAbs, newAxisLenAbs - oldAxisLenAbs);
+	if (newAxisLenAbs > deadzone) {
+		axis = glm::normalize(axis) * ((glm::length(axis) - deadzone) / (1.0F - deadzone));
+		return true;
+	}
+
+	axis = glm::vec2(0);
+	if (oldAxisLenAbs > deadzone && newAxisLenAbs < deadzone) {
+		return true;
+	}
+	
+
+	return false;
+}
+
+// @ TODO - Cleanup
 bool OutsideDeadZoneCompare(SHORT oldValue, SHORT &newValue, SHORT deadzone) {
-	SHORT oldAbs = abs(oldValue);
-	SHORT newAbs = abs(newValue);
+
+	INT oldAbs = abs(oldValue);
+	INT newAbs = abs(newValue);
 
 	// new value outsize of deadzone detect as input
 	if (newAbs > deadzone) {
@@ -131,39 +178,61 @@ bool OutsideDeadZoneCompare(SHORT oldValue, SHORT &newValue, SHORT deadzone) {
 	return false;
 }
 
-bool XInputStateChangedThisFrame(PXINPUT_STATE oldState, PXINPUT_STATE newState) {
+// @ TODO - Cleanup
+bool XInputStateChangedThisFrame(ControllerState* oldState, ControllerState* newState) {
 	bool buttonStateChange = false;
 	bool axisStateChange = false;
+	bool completeStateChange = false;
 
-	_XINPUT_GAMEPAD oState = oldState->Gamepad;
-	_XINPUT_GAMEPAD nState = newState->Gamepad;
-
-	if (oState.wButtons != nState.wButtons) {
+	if (oldState->buttons != newState->buttons) {
 		buttonStateChange = true;
 	}
 
-	if (oState.bLeftTrigger != nState.bLeftTrigger) {
+	if (oldState->lTrigger != oldState->lTrigger) {
 		axisStateChange = true;
 	}
-	if (oState.bRightTrigger != nState.bRightTrigger) {
-		axisStateChange = true;
-	}
-
-	if (OutsideDeadZoneCompare(oState.sThumbLX, nState.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
-		axisStateChange = true;
-	}
-	if (OutsideDeadZoneCompare(oState.sThumbLY, nState.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+	if (oldState->rTrigger != oldState->rTrigger) {
 		axisStateChange = true;
 	}
 
-	if (OutsideDeadZoneCompare(oState.sThumbRX, nState.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
-		axisStateChange = true;
-	}
-	if (OutsideDeadZoneCompare(oState.sThumbRY, nState.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+	const float deadzone = 0.25F;
+
+	if (RadialDeadZoneCompare(newState->rThumb, oldState->rThumb, deadzone)) {
 		axisStateChange = true;
 	}
 
-	newState->Gamepad = nState;
-	oldState->Gamepad = newState->Gamepad;
-	return (buttonStateChange || axisStateChange);
+	if (RadialDeadZoneCompare(newState->lThumb, oldState->lThumb, deadzone)) {
+		axisStateChange = true;
+	}
+
+	if (isnan(newState->rThumb.x)) {
+		throw "fatal error";
+	}
+
+
+	//if (OutsideDeadZoneCompare(oState.sThumbLX, nState.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+	//	axisStateChange = true;
+	//}
+	//if (OutsideDeadZoneCompare(oState.sThumbLY, nState.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+	//	axisStateChange = true;
+	//}
+	//
+	//if (OutsideDeadZoneCompare(oState.sThumbRX, nState.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+	//	axisStateChange = true;
+	//}
+	//if (OutsideDeadZoneCompare(oState.sThumbRY, nState.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+	//	axisStateChange = true;
+	//}
+
+	newState->lastSent = (buttonStateChange || axisStateChange);
+
+	if (oldState->lastSent != newState->lastSent) {
+		completeStateChange = true;
+	}
+
+	*oldState = *newState;
+
+	//newState->Gamepad = nState;
+	//oldState->Gamepad = newState->Gamepad;
+	return (buttonStateChange || axisStateChange || completeStateChange);
 }

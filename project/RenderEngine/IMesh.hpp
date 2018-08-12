@@ -8,6 +8,7 @@ The layout specify what components are in the dataset
 enum class MeshPrimitiveType {
 	POINT,
 	LINE,
+	LINE_STRIP,
 	TRIANGLE,
 	TRIANGLE_STRIP,
 	QUAD,

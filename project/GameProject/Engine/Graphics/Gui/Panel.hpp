@@ -15,14 +15,16 @@ namespace Engine {
 		namespace Gui {
 			class Panel : public GuiItem {
 			public:
-				Panel();
+				Panel(GuiInfo& info);
 				virtual ~Panel();
 				
 				void setTexture(Texture::Texture2D* texture);
 
 				void addGuiItem(GuiItem* guiItem);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo) override;
+				virtual bool isFocusable() const override;
+				virtual bool hasFocusableItems() const override;
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

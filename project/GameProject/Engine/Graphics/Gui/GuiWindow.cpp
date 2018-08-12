@@ -15,19 +15,19 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			GuiWindow::GuiWindow() {
+			GuiWindow::GuiWindow(GuiInfo& info) : GuiItem(info) {
 
 				setAnchorPoint(GuiAnchor::TOP_LEFT);
 
 				background = new Texture::Texture2D();
 				titleBar = new Texture::Texture2D();
-				closeButton = new Button();
+				closeButton = new Button(info);
 
 				buttonTexture = new Texture::Texture2D();
 				buttonHover = new Texture::Texture2D();
 				buttonPress = new Texture::Texture2D();
 
-				itemPanel = new Panel();
+				itemPanel = new Panel(info);
 
 				itemPanel->setVisible(true);
 				itemPanel->setAnchorPoint(GuiAnchor::TOP);
@@ -75,7 +75,7 @@ namespace Engine {
 				itemPanel->addGuiItem(guiItem);
 			}
 
-			void GuiWindow::update(float dt, GuiHitInfo& hitInfo) {
+			void GuiWindow::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 				if (visible) {
 
 					if (!closeButton->isMouseInside()) {
@@ -140,7 +140,7 @@ namespace Engine {
 
 					for (it; it != eit; it++) {
 						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-						(*it)->update(dt, hitInfo);
+						(*it)->update(dt, hitInfo, currentFocus);
 					}
 				}
 			}

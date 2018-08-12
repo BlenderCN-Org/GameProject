@@ -18,19 +18,22 @@ namespace Engine {
 			class TextArea : public GuiItem {
 			public:
 
-				TextArea();
+				TextArea(GuiInfo& info);
 				virtual ~TextArea();
 
 				void setMultiLine(bool multiLine);
 				void setEditMode(bool edit);
+				void setOnlyNumbers(bool onlyNum);
 
 				void showLineNumbers(bool show);
 				void setText(const Engine::Core::FormattedString& str);
 				void addText(const Engine::Core::FormattedString& str);
+				
+				void setPassiveText(const Engine::Core::FormattedString& str);
 
 				Engine::Core::FormattedString getText() const;
 
-				virtual void update(float dt, GuiHitInfo& hitInfo) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:
@@ -46,6 +49,11 @@ namespace Engine {
 				int cursorHeight;
 
 				bool lineNumbers;
+				bool multiLineEdit;
+				bool isFocused;
+				bool onlyNumbers;
+
+				bool textUpdated;
 
 				std::vector<Engine::Core::FormattedString> textData;
 
@@ -57,6 +65,9 @@ namespace Engine {
 
 				Texture::Texture2D* cursorTexture;
 				Text text;
+
+				Engine::Core::FormattedString passiveText;
+
 			};
 		}
 	}

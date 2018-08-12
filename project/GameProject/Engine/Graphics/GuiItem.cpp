@@ -11,12 +11,14 @@ namespace Engine {
 	namespace Graphics {
 
 
-		GuiItem::GuiItem() {
+		GuiItem::GuiItem(GuiInfo& info) : guiInfo(info) {
 			position = glm::ivec2(0);
 			size = glm::ivec2(0);
 			anchorPoint = GuiAnchor::CENTER;
 			uvCoords = glm::vec4(0.0F, 0.0F, 1.0F, 1.0F);
 			zIndex = 0;
+			hitTest = true;
+			themeOverride = nullptr;
 		}
 
 		GuiItem::~GuiItem() {}
@@ -24,11 +26,13 @@ namespace Engine {
 		bool GuiItem::isMouseInside() const {
 
 			bool inside = false;
-			if (visible) {
-				Input::Input* in = Input::Input::GetInput();
-				int x, y;
-				in->getMousePos(x, y);
-				inside = posInItem(x, y);
+			if (true == hitTest) {
+				if (visible) {
+					Input::Input* in = Input::Input::GetInput();
+					int x, y;
+					in->getMousePos(x, y);
+					inside = posInItem(x, y);
+				}
 			}
 			return inside;
 		}
@@ -49,12 +53,20 @@ namespace Engine {
 			size = glm::ivec2(w, h);
 		}
 
+		bool GuiItem::isVisible() const {
+			return visible;
+		}
+
 		void GuiItem::setVisible(bool visibilityFlag) {
 			visible = visibilityFlag;
 		}
 
 		void GuiItem::setZIndex(int _zIndex) {
 			zIndex = _zIndex;
+		}
+
+		void GuiItem::setHitTest(bool enable) {
+			hitTest = enable;
 		}
 
 		void GuiItem::updateAbsoultePos(const int xOff, const int yOff, const int xSize, const int ySize) {
@@ -151,8 +163,15 @@ namespace Engine {
 			absoulutePosition.y = aY;
 
 		}
+		bool GuiItem::isFocusable() const {
+			return false;
+		}
 
-		void GuiItem::update(float dt, GuiHitInfo& hitInfo) {
+		bool GuiItem::hasFocusableItems() const {
+			return false;
+		}
+
+		void GuiItem::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 			// do nothing
 			if (visible) {
 				if (isMouseInside()) {
@@ -165,22 +184,20 @@ namespace Engine {
 			// do nothing
 		}
 
+		void GuiItem::setThemeOverride(Theme::GuiTheme* theme) {
+			themeOverride = theme;
+		}
+
 		void GuiItem::calculatePoints(glm::mat4 &positionMatrix) {
 
 			const float uv1x = uvCoords[0];
 			const float uv1y = uvCoords[1];
-
-			//const float uv2x = uvCoords[2];
-			//const float uv2y = uvCoords[1];
 
 			const float uv2x = uvCoords[0];
 			const float uv2y = uvCoords[3];
 
 			const float uv3x = uvCoords[2];
 			const float uv3y = uvCoords[3];
-
-			//const float uv4x = uvCoords[0];
-			//const float uv4y = uvCoords[3];
 
 			const float uv4x = uvCoords[2];
 			const float uv4y = uvCoords[1];
@@ -198,6 +215,37 @@ namespace Engine {
 			positionMatrix[2] = p2;
 			positionMatrix[3] = p3;
 
+		}
+
+		glm::mat4 GuiItem::genFromPosSize(glm::vec4 posSize) {
+
+			glm::mat4 mat;
+
+			const float uv1x = uvCoords[0];
+			const float uv1y = uvCoords[1];
+
+			const float uv2x = uvCoords[0];
+			const float uv2y = uvCoords[3];
+
+			const float uv3x = uvCoords[2];
+			const float uv3y = uvCoords[3];
+
+			const float uv4x = uvCoords[2];
+			const float uv4y = uvCoords[1];
+
+			const float x = float(posSize.x);
+			const float y = float(posSize.y);
+			
+			glm::vec4 p0 = glm::vec4(x, y, uv1x, uv1y);
+			glm::vec4 p1 = glm::vec4(x, y + posSize.w, uv2x, uv2y);
+			glm::vec4 p2 = glm::vec4(x + posSize.z, y + posSize.w, uv3x, uv3y);
+			glm::vec4 p3 = glm::vec4(x + posSize.z, y, uv4x, uv4y);
+
+			mat[0] = p0;
+			mat[1] = p1;
+			mat[2] = p2;
+			mat[3] = p3;
+			return mat;
 		}
 
 		glm::vec4 GuiItem::clipRegion(glm::vec4 element, glm::vec4 region) {

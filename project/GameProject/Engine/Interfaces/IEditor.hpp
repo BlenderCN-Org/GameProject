@@ -8,9 +8,10 @@
 #endif
 
 /// Internal Includes
-#include "IAssetManager.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/IAssetManager.hpp>
+
 #include <RenderEngine/IRenderEngine.hpp>
 #include <RenderEngine/IWindow.hpp>
 

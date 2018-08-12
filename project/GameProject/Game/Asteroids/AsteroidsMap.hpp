@@ -24,14 +24,17 @@ public:
 	virtual Cell* getCurrentCell() const override { return nullptr; };
 	virtual IPlayer * getPlayer() const override;
 
+	virtual void reloadCheck() override {};
 	virtual void update(float dt) override;
 
 	virtual void updateRenderBatch(RenderBatch & batch) override;
 
 	virtual void render() override;
 
-private:
+	virtual Grid<Cell>* getCellGrid() override { return nullptr; };
 
+private:
+	
 	CameraInput& camInput;
 	Camera& camera;
 

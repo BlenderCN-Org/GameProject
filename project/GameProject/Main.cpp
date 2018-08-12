@@ -8,7 +8,6 @@
 #include "Engine/Graphics/Gui/Label.hpp"
 #include "Engine/Graphics/Gui/ProgressBar.hpp"
 #include "Engine/Graphics/Gui/ScrollBar.hpp"
-#include "Engine/Core/System.hpp"
 #include "Game/Game.hpp"
 #include "Debug.hpp"
 
@@ -24,24 +23,24 @@ void gameLoop() {
 	CEngine* e = new CEngine();
 
 	e->setAssetDataFolder("E:/GameProjectAssets/");
-
+	
 	Game* game = new Game(e);
-
+	
 	printf("starting loop\n");
-
+	
 	while (e->isRunning()) {
-
+	
 		game->update(dt, clocks);
 		e->clearBackBuffer();
-
+	
 		game->render();
-
+	
 		e->presentFrame();
-
+	
 		clocks = clock.tick();
 		dt = clock.seconds();
 	}
-
+	
 	printf("finished execution\n");
 	delete game;
 

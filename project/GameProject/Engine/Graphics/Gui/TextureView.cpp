@@ -14,7 +14,7 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			TextureView::TextureView() {
+			TextureView::TextureView(GuiInfo& info) : GuiItem(info) {
 
 				tex = nullptr;
 
@@ -27,7 +27,7 @@ namespace Engine {
 				scrollBg->singleColor(0.7F, 0.7F, 0.7F, 1.0F);
 				scrollBar->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
 
-				vertBar = new ScrollBar();
+				vertBar = new ScrollBar(info);
 				vertBar->setAnchorPoint(GuiAnchor::RIGHT);
 				vertBar->setScrollDirection(ScrollBarDirection::SCROLL_VERTICAL);
 				vertBar->setVisible(true);
@@ -36,7 +36,7 @@ namespace Engine {
 				vertBar->setAutoScroll(false);
 				vertBar->setPosition(0, -SCROLLBAR_HALF_SIZE);
 
-				horzBar = new ScrollBar();
+				horzBar = new ScrollBar(info);
 				horzBar->setAnchorPoint(GuiAnchor::BOTTOM);
 				horzBar->setScrollDirection(ScrollBarDirection::SCROLL_HORIZONTAL);
 				horzBar->setVisible(true);
@@ -67,7 +67,7 @@ namespace Engine {
 
 			}
 
-			void TextureView::update(float dt, GuiHitInfo& hitInfo) {
+			void TextureView::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 				if (visible) {
 
 					vertBar->setMinElements(size.y - SCROLLBAR_SIZE);
@@ -79,8 +79,8 @@ namespace Engine {
 					vertBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 					horzBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
 
-					vertBar->update(dt, hitInfo);
-					horzBar->update(dt, hitInfo);
+					vertBar->update(dt, hitInfo, currentFocus);
+					horzBar->update(dt, hitInfo, currentFocus);
 
 					Input::Input* in = Input::Input::GetInput();
 					int x = 0, y = 0;
@@ -116,6 +116,12 @@ namespace Engine {
 			void TextureView::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 
 				if (visible) {
+
+					Theme::GuiTheme* theme = gTheme;
+
+					if (nullptr != themeOverride) {
+						theme = themeOverride;
+					}
 
 					calculatePoints(vpMatRef);
 

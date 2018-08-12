@@ -10,14 +10,14 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			Cursor::Cursor() {}
+			Cursor::Cursor(GuiInfo& info) : GuiItem(info) {}
 			Cursor::~Cursor() {}
 
 			void Cursor::setTexture(Texture::Texture2D* texture) {
 				tex = texture;
 			}
 
-			void Cursor::update(float dt, GuiHitInfo& hitInfo) {
+			void Cursor::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 
 				Input::Input::GetInput()->getMousePos(position.x, position.y);
 

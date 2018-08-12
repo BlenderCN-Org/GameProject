@@ -1,17 +1,19 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP 
 /// Internal Includes
-#include "AssetManager.hpp"
+//#include "AssetManager.hpp"
 #include "ThreadManager.hpp"
 
-#include "Core/LibraryLoader.hpp"
 #include "Core/Console.hpp"
 #include "Core/Settings.hpp"
 #include "Graphics/FullscreenQuad.hpp"
-#include "Interfaces/IAssetManager.hpp"
+//#include "Interfaces/IAssetManager.hpp"
 #include "Utils/MemoryBuffer.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/AssetManager.hpp>
+#include <EngineCore/Core/LibraryLoader.hpp>
+
 #include <RenderEngine/IRenderEngine.hpp>
 
 #include <PhysicsEngine/PhysicsEngine.hpp>
@@ -19,9 +21,6 @@
 #include <PhysicsEngine/Shapes/SphereShape.hpp>
 
 /// Std Includes
-#include <map>
-#include <vector>
-#include <thread>
 
 class CEngine {
 
@@ -52,7 +51,7 @@ public:
 
 	void renderFullQuad();
 
-	Engine::Interfaces::IAssetManager* getAssetManager() const;
+	Engine::AssetHandling::IAssetManager* getAssetManager() const;
 
 	PhysicsEngine* getPhysEngine();
 
@@ -64,11 +63,15 @@ private:
 	inline void loadSettings();
 	inline void createGameWindow();
 	inline void setupInput(IWindow* window, Engine::Core::Console* console);
-	inline void setupCursor();
+	inline void setupGui(Engine::AssetHandling::AssetManager* assetManager);
 	inline void handleWindowSizeChange();
 	inline void createDepthShader();
 	inline void setupPhysicsEngine();
 
+	inline void initTheme();
+	inline void cleanupTheme();
+
+	Engine::Graphics::GuiInfo guiInfo;
 	Engine::Graphics::CGui* gui;
 	Engine::Graphics::Gui::Cursor* cursor;
 	Engine::Graphics::Texture::Texture2D* cursorTexture;
@@ -85,7 +88,7 @@ private:
 	Engine::Core::Console* console;
 	IRenderEngine* renderEngine;
 	IWindow* gameWindow;
-	Engine::AssetManager* assetManager;
+	Engine::AssetHandling::AssetManager* assetManager;
 
 	int windowWidth;
 	int windowHeight;

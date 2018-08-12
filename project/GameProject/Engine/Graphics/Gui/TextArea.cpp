@@ -13,7 +13,7 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			TextArea::TextArea() : verticalScroll(nullptr), scrollBg(nullptr), scrollBar(nullptr) {
+			TextArea::TextArea(GuiInfo& info) : GuiItem(info), verticalScroll(nullptr), scrollBg(nullptr), scrollBar(nullptr), text(info.pAssetManager) {
 				text.setText("Test");
 
 				scrollBg = new Texture::Texture2D();
@@ -22,7 +22,7 @@ namespace Engine {
 				scrollBg->singleColor(0.7F, 0.7F, 0.7F, 1.0F);
 				scrollBar->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
 
-				verticalScroll = new ScrollBar();
+				verticalScroll = new ScrollBar(info);
 				verticalScroll->setAnchorPoint(GuiAnchor::RIGHT);
 				verticalScroll->setScrollDirection(ScrollBarDirection::SCROLL_VERTICAL);
 				verticalScroll->setVisible(true);
@@ -34,7 +34,11 @@ namespace Engine {
 				editCursorChar = 0;
 				editCursorLine = 0;
 				renderCursor = false;
+				multiLineEdit = true;
+				isFocused = false;
+				onlyNumbers = false;
 
+				textUpdated = false;
 
 				cursorTexture = new Texture::Texture2D();
 				float cursorColor = 0.8F;
@@ -50,7 +54,8 @@ namespace Engine {
 			}
 
 			void TextArea::setMultiLine(bool multiLine) {
-
+				multiLineEdit = multiLine;
+				verticalScroll->setVisible(multiLineEdit);
 			}
 
 			void TextArea::setEditMode(bool edit) {
@@ -58,6 +63,10 @@ namespace Engine {
 				if (!edit) {
 					renderCursor = false;
 				}
+			}
+			
+			void TextArea::setOnlyNumbers(bool onlyNum) {
+				onlyNumbers = onlyNum;
 			}
 
 			void TextArea::showLineNumbers(bool show) {
@@ -84,10 +93,11 @@ namespace Engine {
 						idx++;
 					}
 				}
+				textUpdated = true;
 			}
 
 			void TextArea::addText(const Engine::Core::FormattedString& str) {
-				
+
 				int idx = 0;
 				int oldIdx = 0;
 				while (true) {
@@ -104,7 +114,13 @@ namespace Engine {
 						idx++;
 					}
 				}
+				textUpdated = true;
+			}
 
+			void TextArea::setPassiveText(const Engine::Core::FormattedString& str) {
+				passiveText = str;
+
+				textUpdated = true;
 			}
 
 			Engine::Core::FormattedString TextArea::getText() const {
@@ -119,22 +135,44 @@ namespace Engine {
 			}
 
 			// @TODO refactor
-			void TextArea::update(float dt, GuiHitInfo& hitInfo) {
+			void TextArea::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 
 				if (allowEdit) {
-					if (isMouseInside()) {
+					Input::Input* in = Input::Input::GetInput();
 
-						Input::Input* in = Input::Input::GetInput();
+					Input::KeyBind mouseClick = Input::KeyBindings[Input::KEYBIND_MOUSE_L_CLICK];
+					if (in->releasedThisFrame(mouseClick, false)) {
+						if (isMouseInside()) {
+							isFocused = true;
+						} else {
+							isFocused = false;
+						}
+					}
 
+					if (isFocused) {
+
+						textUpdated = true;
 						if (in->characterRecieved) {
 
 							char c = (char)in->characterThisFrame;
 
-							textData[editCursorLine].insertAt(editCursorChar++, c);
+							if (onlyNumbers) {
+
+								if (c == '0' || c == '1' || c == '2' || 
+									c == '3' || c == '4' || c == '5' ||
+									c == '6' || c == '7' || c == '8' ||
+									c == '9'
+									) {
+									textData[editCursorLine].insertAt(editCursorChar++, c);
+								}
+
+							} else {
+								textData[editCursorLine].insertAt(editCursorChar++, c);
+							}
 
 						}
 
-						if (in->returnPressed) {
+						if (in->returnPressed && multiLineEdit) {
 
 							Engine::Core::FormattedString fString = textData[editCursorLine];
 							Engine::Core::FormattedString str2;
@@ -152,7 +190,6 @@ namespace Engine {
 
 							editCursorLine++;
 							editCursorChar = 0;
-
 						}
 
 						if (in->backspacePressed) {
@@ -184,7 +221,6 @@ namespace Engine {
 							if (lineLength < editCursorChar) {
 								editCursorChar = lineLength;
 							}
-
 						}
 
 						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_DOWN_ARROW])) {
@@ -200,7 +236,6 @@ namespace Engine {
 							if (lineLength < editCursorChar) {
 								editCursorChar = lineLength;
 							}
-
 						}
 
 						if (in->wasPressedThisFrame(Input::KeyBindings[Input::KEYBIND_LEFT_ARROW])) {
@@ -231,9 +266,9 @@ namespace Engine {
 
 					if (editCursorChar) {
 						Engine::Core::FormattedString tmpStr = textData[editCursorLine].subString(0, editCursorChar);
-						text.setText(tmpStr);
+						cursorRenderXOffset = text.calcTextWidth(tmpStr) + 2;
 					} else {
-						text.setText("");
+						cursorRenderXOffset = text.calcTextWidth("") + 2;
 					}
 
 					cursorTimer -= dt;
@@ -243,76 +278,122 @@ namespace Engine {
 						cursorTimer += 0.4F;
 					}
 
-					cursorRenderXOffset = text.getTextWidth();
-
 				}
 
+				if (textUpdated) {
+					// @ TODO investigate num items to be displayed
+					const int fntSize = text.getFontSize() + 2;
+					cursorHeight = fntSize;
+					const int elementsPerScreen = size.y / (fntSize - 2);
+					const int32_t vectorSize = (int32_t)textData.size();
 
-				const int fntSize = text.getFontSize();
-				cursorHeight = fntSize;
-				const int elementsPerScreen = size.y / fntSize;
-				const int32_t vectorSize = (int32_t)textData.size();
+					verticalScroll->setSize(15, size.y);
+					verticalScroll->setMinElements(elementsPerScreen);
+					verticalScroll->setNumElements(vectorSize);
 
-				verticalScroll->setSize(15, size.y);
-				verticalScroll->setMinElements(elementsPerScreen);
-				verticalScroll->setNumElements(vectorSize);
+					sizeYClipp = elementsPerScreen * fntSize;
 
-				sizeYClipp = elementsPerScreen * fntSize;
+					verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+					verticalScroll->update(dt, hitInfo, currentFocus);
 
-				verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-				verticalScroll->update(dt, hitInfo);
+					int32_t selectedIndex = verticalScroll->getSelectedElement();
 
-				int32_t selectedIndex = verticalScroll->getSelectedElement();
+					Engine::Core::FormattedString fString;
 
-				Engine::Core::FormattedString fString;
+					std::string maxLinCnt = std::to_string(vectorSize);
 
-				std::string maxLinCnt = std::to_string(vectorSize);
+					cursorRenderYOffset = cursorHeight * -1;
 
-				cursorRenderYOffset = cursorHeight * -1;
 
-				for (int i = 0; i < elementsPerScreen; i++) {
-					if (selectedIndex + i >= vectorSize) {
-						break;
-					}
-
-					if (selectedIndex + i == editCursorLine) {
-						cursorRenderYOffset = cursorHeight * i;
-					}
-
-					std::string s = std::to_string(selectedIndex + i);
-
-					if (lineNumbers) {
-						Engine::Core::FormattedString lineNumber;
-
-						for (size_t i = 0; i < maxLinCnt.size() - s.size(); i++) {
-							lineNumber += "0";
+					for (int i = 0; i < elementsPerScreen; i++) {
+						if (selectedIndex + i >= vectorSize) {
+							break;
 						}
 
-						lineNumber += s.c_str();
-						lineNumber += ": ";
+						if (selectedIndex + i == editCursorLine) {
+							cursorRenderYOffset = cursorHeight * i;
+						}
 
-						lineNumber.formatString(0, -1, glm::vec4(0.418924, 0.573681, 0.626665, 1.000000));
+						std::string s = std::to_string(selectedIndex + i);
 
-						fString += lineNumber;
+						if (lineNumbers) {
+							Engine::Core::FormattedString lineNumber;
+
+							for (size_t i = 0; i < maxLinCnt.size() - s.size(); i++) {
+								lineNumber += "0";
+							}
+
+							lineNumber += s.c_str();
+							lineNumber += ": ";
+
+							lineNumber.formatString(0, -1, glm::vec4(0.418924, 0.573681, 0.626665, 1.000000));
+
+							fString += lineNumber;
+						}
+
+						fString += textData[selectedIndex + i];
+						if (fString.getSize() != 0) {
+							fString += "\n";
+						}
 					}
 
-					fString += textData[selectedIndex + i];
-					fString += "\n";
+					if (fString.getSize() != 0) {
+						text.setText(fString);
+					} else {
+						text.setText(passiveText);
+					}
+					textUpdated = false;
 				}
-
-				text.setText(fString);
-
 			}
 
 			void TextArea::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 
 				if (visible) {
 
+					Theme::GuiTheme* theme = gTheme;
+
+					if (nullptr != themeOverride) {
+						theme = themeOverride;
+					}
+
+					calculatePoints(vpMatRef);
+					int textureSlot = 0;
+
+					// setup shader
+					shaderContainer.guiElementShader->useShader();
+					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
+					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
+					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
+
+					if (theme->textArea.textureBackground) {
+						theme->textArea.textureBackground->bind();
+						shaderContainer.standardQuad->bind();
+						shaderContainer.standardQuad->render();
+					}
+
+					if (isFocused) {
+
+						cursorTexture->bind();
+
+						shaderContainer.standardQuad->bind();
+
+						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, 1, size.y);
+						shaderContainer.standardQuad->render();
+
+						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x, 1);
+						shaderContainer.standardQuad->render();
+
+						gRenderEngine->setScissorRegion(absoulutePosition.x + size.x - 1, absoulutePosition.y, 1, size.y);
+						shaderContainer.standardQuad->render();
+
+						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y + size.y - 1, size.x, 1);
+						shaderContainer.standardQuad->render();
+
+					}
+
 					verticalScroll->render(vpMatRef, shaderContainer);
 
 					calculatePoints(vpMatRef);
-
-					int textureSlot = 0;
 
 					shaderContainer.guiTextShader->useShader();
 					shaderContainer.guiTextShader->bindData(shaderContainer.textVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
@@ -323,7 +404,7 @@ namespace Engine {
 					gRenderEngine->setScissorTest(true);
 					text.render(textureSlot);
 
-					if (renderCursor) {
+					if (renderCursor && isFocused) {
 
 						cursorTexture->bind();
 

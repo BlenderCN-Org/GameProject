@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameProject", "GameProject\GameProject.vcxproj", "{10C07DBD-0327-490F-BF78-9134BE3B59FB}"
 	ProjectSection(ProjectDependencies) = postProject
+		{63716110-CD61-422E-9A95-9A82093632AF} = {63716110-CD61-422E-9A95-9A82093632AF}
 		{43BCD417-67D4-4DCE-9A57-D098220CA4DE} = {43BCD417-67D4-4DCE-9A57-D098220CA4DE}
 		{1875FA21-A2AF-4CCB-A9F2-A898E2288B94} = {1875FA21-A2AF-4CCB-A9F2-A898E2288B94}
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438} = {D8E90A23-ACD7-49B9-94A0-105D2CC11438}
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC} = {906CE184-42FC-43F7-A31F-4612E36F3DAC}
 		{BFA22FFD-6C34-41F9-9D49-7004D1B7AFC1} = {BFA22FFD-6C34-41F9-9D49-7004D1B7AFC1}
 	EndProjectSection
@@ -20,20 +20,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Allocators", "Allocators\Al
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetLib", "AssetLib\AssetLib.vcxproj", "{43BCD417-67D4-4DCE-9A57-D098220CA4DE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor_Wrapper", "Editor_Wrapper\Editor_Wrapper.vcxproj", "{D8E90A23-ACD7-49B9-94A0-105D2CC11438}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{DA006573-7035-4E70-9477-A882077F3504}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsEngine", "PhysicsEngine\PhysicsEngine.vcxproj", "{906CE184-42FC-43F7-A31F-4612E36F3DAC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63716110-CD61-422E-9A95-9A82093632AF} = {63716110-CD61-422E-9A95-9A82093632AF}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineCore", "EngineCore\EngineCore.vcxproj", "{63716110-CD61-422E-9A95-9A82093632AF}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -77,22 +75,6 @@ Global
 		{43BCD417-67D4-4DCE-9A57-D098220CA4DE}.Release|x64.Build.0 = Release|x64
 		{43BCD417-67D4-4DCE-9A57-D098220CA4DE}.Release|x86.ActiveCfg = Release|Win32
 		{43BCD417-67D4-4DCE-9A57-D098220CA4DE}.Release|x86.Build.0 = Release|Win32
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Debug|x64.ActiveCfg = Debug|x64
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Debug|x64.Build.0 = Debug|x64
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Debug|x86.ActiveCfg = Debug|Win32
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Debug|x86.Build.0 = Debug|Win32
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Release|x64.ActiveCfg = Release|x64
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Release|x64.Build.0 = Release|x64
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Release|x86.ActiveCfg = Release|Win32
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438}.Release|x86.Build.0 = Release|Win32
-		{DA006573-7035-4E70-9477-A882077F3504}.Debug|x64.ActiveCfg = Debug|x64
-		{DA006573-7035-4E70-9477-A882077F3504}.Debug|x64.Build.0 = Debug|x64
-		{DA006573-7035-4E70-9477-A882077F3504}.Debug|x86.ActiveCfg = Debug|x86
-		{DA006573-7035-4E70-9477-A882077F3504}.Debug|x86.Build.0 = Debug|x86
-		{DA006573-7035-4E70-9477-A882077F3504}.Release|x64.ActiveCfg = Release|x64
-		{DA006573-7035-4E70-9477-A882077F3504}.Release|x64.Build.0 = Release|x64
-		{DA006573-7035-4E70-9477-A882077F3504}.Release|x86.ActiveCfg = Release|x86
-		{DA006573-7035-4E70-9477-A882077F3504}.Release|x86.Build.0 = Release|x86
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Debug|x64.ActiveCfg = Debug|x64
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Debug|x64.Build.0 = Debug|x64
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC}.Debug|x86.ActiveCfg = Debug|Win32
@@ -109,6 +91,14 @@ Global
 		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x64.Build.0 = Release|x64
 		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x86.ActiveCfg = Release|Win32
 		{0EE0E4C7-6337-4E4C-9200-8B44B8E298BE}.Release|x86.Build.0 = Release|Win32
+		{63716110-CD61-422E-9A95-9A82093632AF}.Debug|x64.ActiveCfg = Debug|x64
+		{63716110-CD61-422E-9A95-9A82093632AF}.Debug|x64.Build.0 = Debug|x64
+		{63716110-CD61-422E-9A95-9A82093632AF}.Debug|x86.ActiveCfg = Debug|Win32
+		{63716110-CD61-422E-9A95-9A82093632AF}.Debug|x86.Build.0 = Debug|Win32
+		{63716110-CD61-422E-9A95-9A82093632AF}.Release|x64.ActiveCfg = Release|x64
+		{63716110-CD61-422E-9A95-9A82093632AF}.Release|x64.Build.0 = Release|x64
+		{63716110-CD61-422E-9A95-9A82093632AF}.Release|x86.ActiveCfg = Release|Win32
+		{63716110-CD61-422E-9A95-9A82093632AF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,12 +109,23 @@ Global
 		{BFA22FFD-6C34-41F9-9D49-7004D1B7AFC1} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
 		{6476E60A-9EE6-4873-8782-BA9F0F4EFDFC} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
 		{43BCD417-67D4-4DCE-9A57-D098220CA4DE} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
-		{D8E90A23-ACD7-49B9-94A0-105D2CC11438} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
-		{DA006573-7035-4E70-9477-A882077F3504} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
 		{906CE184-42FC-43F7-A31F-4612E36F3DAC} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
+		{63716110-CD61-422E-9A95-9A82093632AF} = {E47A5C53-8DA7-46AF-8247-4AE0B96E4D51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2DAEF0A2-9224-4D19-ADC4-7E24F05E46EE}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

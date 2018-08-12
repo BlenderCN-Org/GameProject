@@ -21,7 +21,7 @@ namespace Engine {
 			class ScrollBar : public GuiItem {
 			public:
 
-				ScrollBar();
+				ScrollBar(GuiInfo& info);
 				virtual ~ScrollBar();
 
 				void setAutoScroll(bool autoScroll);
@@ -36,7 +36,7 @@ namespace Engine {
 				void setBackgroundTexture(Texture::Texture2D* texture);
 				void setScrollbarTexture(Texture::Texture2D* texture);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

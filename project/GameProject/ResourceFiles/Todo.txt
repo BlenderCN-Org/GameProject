@@ -7,30 +7,78 @@
 **************************************/
 
 - Todo
+
+	- rewrite gui to be stack based when it comes to focus
+
+	- Rewrite gamepad support logic
+	- Cleanup input class
+
+	- Create color chooser
+	- Fix bug when pressing other gui items causing list to change selected item.
+
+	- File dialog add field for selected file name
+	- Make it possible to add header for list
+	- Make it possible to use custom list items
+	- Add multicolumn support to list rendering (E.g File name and file size)
+
+	- Add directory navigation to FileDialog
+	
+	- Cleanup gui implementation
+	- Improve gui visuals
+	- More optimization to gui list
+
+	- Gui scaling
+
+	- Update All map objects to use new loading principle
+	- Add loading of meshes and texture to new AssetManager via resouce type
+	- Add referenc counting to loaded entries/Resources
+
 	- Shader cache
-	- One gui in engine
 	- Add editor gui settings box to change sky settings
 	- Add editor gui to add and remove data from map file.
 
 	- Move writeDepthShader to Graphics utils
 
 - Done
-	- Fix physics engine update with multiple threads
-	- Hide windows cursor
-	- Implement a custom cursor using the Engine Gui
-	- Load Custom cursor texture
-	- Load textures into asset manager cache
-	- Fixed uv coordinates on gui items
-	- Asset manager now handles asset deletion
-	- move cursor to engine and render it last of everything
-	- add sky to map loading process
-	- Make use of sky settings
-	- Send sky settings to shader
-	- Remove sky from game.hpp/game.cpp
-	- Removed duplicate code in game.cpp
-	- Render sky in map (using render batch)
-	- Added camera view direction gizmo to editor
-	- Added FullscreenQuad class into Graphics namespace
+	
+	- Add input schemes so that one can change from keyboard to gamepad input on the fly (sorta like all other games does while they are running :) )
+	- Always send gamepad input events and keyboard events it is up to the game to decide what input to use
+	- Fixed gamepad input to become smoother by rewriting the deadzone checking
+
+	- Add option to TextArea to only allow numbers or text
+	- Fixed listing files on 32bit version
+
+	- Loading and saving changes to map and sky object ( via hotkey)
+	- Some bug fixes
+	- Updated edit loader to force load all asset atleast once
+	- Added reference counter to all loaded entries
+
+	- Added states to editor
+	- Added file size info to listFiles in directory
+	- Changed file dialog to use Core::String instead of char*
+
+	- Added icon support to listItems
+	- File/Directory icon to file browser list items
+	- Sort files and directories in order
+	- Reimplemented font loading and generating code
+	- Make font load once using assetmanager
+	- Finish select so that it remains after loosing focus on gui list
+
+	- Add select to gui list
+	- Optimized textArea to only calculate new text when changes detected
+	- Optimized list rendering to only render items in view
+	- Fix bug with string contains ("aabbcc")->contains("ab");
+	- Removed resource handle leak related to font loading
+	- Added tests for string contains function
+	- Added contains function to String class
+	- Added search functionality to gui list
+	- Implemented gui list
+	- Update gui items so they can contain a reference to a theme, or use overriden textures/colors
+	- Add indicator to highligth selected gui item.
+	- Add focus to gui, so that one does not have to hover over item to type into it.
+	- Add passive text to textArea
+	- multi line edit toggle on textArea
+	- One gui in engine
 
 	
 /*************************************

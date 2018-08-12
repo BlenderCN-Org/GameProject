@@ -9,10 +9,10 @@
 #define MODKEY_ALT 0x0004
 #define MODKEY_SUPER 0x0008
 
-#define GAMEPAD_AXIS_X       0x0001
-#define GAMEPAD_AXIS_Y       0x0002
-#define GAMEPAD_AXIS_L       0x0004
-#define GAMEPAD_AXIS_R       0x0008
+#define GAMEPAD_AXIS_RX      0x0001
+#define GAMEPAD_AXIS_RY      0x0002
+#define GAMEPAD_AXIS_LX      0x0004
+#define GAMEPAD_AXIS_LY      0x0008
 #define GAMEPAD_AXIS_RT      0x0010
 #define GAMEPAD_AXIS_LT      0x0020
 

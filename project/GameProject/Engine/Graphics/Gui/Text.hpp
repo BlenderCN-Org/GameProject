@@ -2,20 +2,24 @@
 #define TEXT_HPP
 
 /// Internal Includes
-#include "../../Core/FormattedString.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/IAssetManager.hpp>
+#include <EngineCore/Core/FormattedString.hpp>
+
 #include <RenderEngine/IRenderEngine.hpp>
 
 class Text {
 
 public:
-	Text();
+	Text(Engine::AssetHandling::IAssetManager* assetMan);
 	virtual ~Text();
 
+	int calcTextWidth(const Engine::Core::FormattedString& text);
 	void setText(const Engine::Core::FormattedString& text);
 
-	int getTextWidth();
+	int getTextWidth() const;
+	int getTextHeight() const;
 	int getFontSize() const;
 
 	void render(int textureSlot);

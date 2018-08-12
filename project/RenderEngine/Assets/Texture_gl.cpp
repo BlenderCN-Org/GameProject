@@ -44,10 +44,10 @@ void Texture_gl::init(int _internalComponents, bool compress) {
 				internalFormat = GL_RG;
 				break;
 			case 3:
-				internalFormat = GL_RGB;
+				internalFormat = GL_SRGB;
 				break;
 			case 4:
-				internalFormat = GL_RGBA;
+				internalFormat = GL_SRGB_ALPHA;
 				break;
 			default:
 				break;

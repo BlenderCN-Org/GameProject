@@ -8,9 +8,11 @@
 #include "../IMap.hpp"
 #include "../Player.hpp"
 #include "../RenderBatch.hpp"
-#include "../Loader/MapLoader.hpp"
+//#include "../Loader/MapLoader.hpp"
+#include "../../Engine/Core/Grid.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/Loader/MapLoader.hpp>
 
 /// Std Includes
 
@@ -25,30 +27,36 @@ class Map : public IMap {
 
 public:
 
-	Map(LoadedData& loadedData, MapLoader& loader);
+	Map(Engine::DataLoader::ILoader** loader, uint32_t mapId);
 	virtual ~Map();
 
 	virtual Cell* getCurrentCell() const override;
 	virtual IPlayer* getPlayer() const override;
+
+	virtual void reloadCheck() override;
 
 	virtual void update(float dt) override;
 	virtual void updateRenderBatch(RenderBatch& batch) override;
 
 	virtual void render() override {};
 
+	virtual Grid<Cell>* getCellGrid() override;
+
 private:
 
-	void loadSky(uint32_t skyId, MapLoader& loader);
+	Engine::DataLoader::ILoader** ppLoader;
+	Engine::AssetHandling::EntryData mapData;
 
-	void createCells();
-	bool verifyData(LoadedData& data);
+	void loadSky(uint32_t skyId);
+
+	bool verifyData(Engine::AssetHandling::EntryData& data, uint32_t mapId);
 	
-	Sky * sky;
+	Sky* sky;
+
+	Grid<Cell> cellGrid;
 
 	uint32_t sizeX;
 	uint32_t sizeY;
-
-	Cell** cells;
 
 	Player* player;
 

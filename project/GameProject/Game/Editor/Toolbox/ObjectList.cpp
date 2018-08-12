@@ -15,9 +15,9 @@ bool search(Engine::Core::String& searchStr, Engine::Graphics::Gui::ListItem* li
 	return false;
 }
 
-ObjectList::ObjectList() {
-	objectList = new Engine::Graphics::Gui::List();
-	searchField = new Engine::Graphics::Gui::TextArea();
+ObjectList::ObjectList(Engine::Graphics::GuiInfo& info) : Panel(info) {
+	objectList = new Engine::Graphics::Gui::List(info);
+	searchField = new Engine::Graphics::Gui::TextArea(info);
 
 	setupComponents();
 
@@ -28,13 +28,13 @@ ObjectList::~ObjectList() {
 	delete searchField;
 }
 
-void ObjectList::update(float dt, Engine::Graphics::GuiHitInfo& hitInfo) {
+void ObjectList::update(float dt, Engine::Graphics::GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 
 	if (visible) {
 
 		searchField->setSize(size.x - 2, SEARCH_FIELD_HEIGHT - 2);
 		objectList->setSize(size.x, size.y - SEARCH_FIELD_HEIGHT);
-		Panel::update(dt, hitInfo);
+		Panel::update(dt, hitInfo, currentFocus);
 
 		objectList->search(searchField->getText().toString(), search);
 

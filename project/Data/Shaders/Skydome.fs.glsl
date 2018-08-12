@@ -70,7 +70,8 @@ void main()
 {
 	vec3 light = normalize(sunMoonDir);	
 	
-	fragmentColor = vec4(sky(light, normalize(cameraPos - pos)), 1.0); 
+	//fragmentColor = pow(vec4(sky(light, normalize(cameraPos - pos)), 1.0), vec4(2.2)); 
+	fragmentColor = pow(vec4(sky(light, normalize(cameraPos - pos)), 1.0), vec4(2.2)); 
 	normalColor = vec4(norm, 1.0);
 	
 	vec3 dir = normalize(pos - cameraPos);

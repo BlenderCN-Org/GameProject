@@ -13,7 +13,7 @@
 #include "RenderBatch.hpp"
 
 #include "Editor/3dViewGizmo.hpp"
-#include "Loader/MapLoader.hpp"
+//#include "Loader/MapLoader.hpp"
 #include "MapObjects/Map.hpp"
 #include "MapObjects/Sky.hpp"
 
@@ -26,6 +26,8 @@
 #include "../Engine/Utils/FPSCounter.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/Loader/MapLoader.hpp>
+#include <EngineCore/AssetHandling/Loader/EditLoader.hpp>
 #include <RenderEngine/IRenderEngine.hpp>
 
 /// Std Includes
@@ -59,7 +61,9 @@ private:
 	GameState currentState;
 	GameState lastState;
 
-	MapLoader mapLoader;
+	Engine::DataLoader::MapLoader* mapLoader;
+	Engine::DataLoader::EditLoader* editLoader;
+	Engine::DataLoader::ILoader* activeLoader;
 
 	CameraInput camInput;
 	Camera camera;
@@ -82,7 +86,8 @@ private:
 
 	Editor* editor;
 
-	Engine::Graphics::CGui* gameGui;
+	Engine::Graphics::GuiInfo guiInfo;
+
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
 	Engine::Graphics::Texture::Texture2D* panelTexture;
@@ -134,10 +139,7 @@ private:
 	std::vector<PhysicsParticle*> physParticles;
 
 	std::vector<Renderable*> frameObjects;
-
-
-	ViewGizmo* viewGizmo;
-
+	
 };
 
 

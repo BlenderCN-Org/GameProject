@@ -2,12 +2,16 @@
 /// Internal Includes
 #include "MainMenu.hpp"
 
+#include "../Engine/Input/Input.hpp"
+
 /// External Includes
 
 /// Std Includes
 
 MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
-	
+
+	guiInfo.pAssetManager = gui->getAssetManager();
+
 	buttonHoverTexture = new Engine::Graphics::Texture::Texture2D();
 	buttonHoverTexture->singleColor(0.5F, 0.0F, 0.0F, 1.0F);
 
@@ -17,21 +21,21 @@ MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
 	panelTexture = new Engine::Graphics::Texture::Texture2D();
 	panelTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
 
-	metrixPanel = new Engine::Graphics::Gui::Panel();
-	metrixPanel->setPosition(10, 0);
-	metrixPanel->setSize(200, 300);
-	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::LEFT);
-	metrixPanel->setVisible(true);
-	metrixPanel->setTexture(panelTexture);
+	menuPanel = new Engine::Graphics::Gui::Panel(guiInfo);
+	menuPanel->setPosition(10, 0);
+	menuPanel->setSize(200, 300);
+	menuPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::LEFT);
+	menuPanel->setVisible(true);
+	menuPanel->setTexture(panelTexture);
 
-	infoLabel = new Engine::Graphics::Gui::Label();
-	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
-	infoLabel->setVisible(true);
-	infoLabel->setText("Main Menu");
+	menuLabel = new Engine::Graphics::Gui::Label(guiInfo);
+	menuLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
+	menuLabel->setVisible(true);
+	menuLabel->setText("Main Menu");
 
-	infoLabel->setSize(infoLabel->calcTextWidth(), 100);
+	menuLabel->setSize(menuLabel->calcTextWidth(), 100);
 
-	newGameButton = new Engine::Graphics::Gui::Button();
+	newGameButton = new Engine::Graphics::Gui::Button(guiInfo);
 	newGameButton->setSize(190, 30);
 	newGameButton->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
 	newGameButton->setPosition(0, 30);
@@ -41,7 +45,7 @@ MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
 	newGameButton->setHoverTexture(buttonHoverTexture);
 	newGameButton->setPressTexture(buttonPressTexture);
 
-	editorButton = new Engine::Graphics::Gui::Button();
+	editorButton = new Engine::Graphics::Gui::Button(guiInfo);
 	editorButton->setSize(190, 30);
 	editorButton->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
 	editorButton->setPosition(0, 70);
@@ -51,7 +55,7 @@ MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
 	editorButton->setHoverTexture(buttonHoverTexture);
 	editorButton->setPressTexture(buttonPressTexture);
 
-	exitButton = new Engine::Graphics::Gui::Button();
+	exitButton = new Engine::Graphics::Gui::Button(guiInfo);
 	exitButton->setSize(190, 30);
 	exitButton->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
 	exitButton->setPosition(0, 110);
@@ -61,7 +65,7 @@ MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
 	exitButton->setHoverTexture(buttonHoverTexture);
 	exitButton->setPressTexture(buttonPressTexture);
 
-	asteroids = new Engine::Graphics::Gui::Button();
+	asteroids = new Engine::Graphics::Gui::Button(guiInfo);
 	asteroids->setSize(190, 30);
 	asteroids->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP);
 	asteroids->setPosition(0, 150);
@@ -71,23 +75,23 @@ MainMenu::MainMenu(Engine::Graphics::CGui* gui) : pGui(gui) {
 	asteroids->setHoverTexture(buttonHoverTexture);
 	asteroids->setPressTexture(buttonPressTexture);
 
-	gui->addGuiItem(metrixPanel);
-	metrixPanel->addGuiItem(infoLabel);
-	metrixPanel->addGuiItem(newGameButton);
-	metrixPanel->addGuiItem(editorButton);
-	metrixPanel->addGuiItem(exitButton);
-	metrixPanel->addGuiItem(asteroids);
+	gui->addGuiItem(menuPanel);
+	menuPanel->addGuiItem(menuLabel);
+	menuPanel->addGuiItem(newGameButton);
+	menuPanel->addGuiItem(editorButton);
+	menuPanel->addGuiItem(exitButton);
+	menuPanel->addGuiItem(asteroids);
 }
 
 MainMenu::~MainMenu() {
-	
-	pGui->removeGuiItem(metrixPanel);
+
+	pGui->removeGuiItem(menuPanel);
 
 	delete panelTexture;
 	delete buttonHoverTexture;
 	delete buttonPressTexture;
-	delete metrixPanel;
-	delete infoLabel;
+	delete menuPanel;
+	delete menuLabel;
 	delete newGameButton;
 	delete editorButton;
 	delete exitButton;
@@ -95,7 +99,10 @@ MainMenu::~MainMenu() {
 }
 
 void MainMenu::update(float dt) {
+}
 
+void MainMenu::setVisible(bool visible) {
+	menuPanel->setVisible(visible);
 }
 
 int MainMenu::buttonPressed() {

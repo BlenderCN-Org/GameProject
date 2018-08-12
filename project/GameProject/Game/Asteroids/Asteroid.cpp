@@ -4,8 +4,9 @@
 
 #include "../../Engine/Graphics/Graphics.hpp"
 #include "../../Engine/Input/Input.hpp"
-#include "../../Engine/Core/System.hpp"
+
 /// External Includes
+#include <EngineCore/Core/System.hpp>
 
 /// Std Includes
 
@@ -21,7 +22,7 @@ Asteroid::Asteroid(ASTEROID_SIZE size, float ox, float oy) {
 	mSize = size;
 
 	asteroid = gRenderEngine->createMesh();
-	asteroid->init(MeshPrimitiveType::LINE);
+	asteroid->init(MeshPrimitiveType::LINE_STRIP);
 
 	if (size == ASTEROID_SIZE::LARGE) {
 		xPos = (Engine::System::randomFloat(0.0F, 2.0F * wndX) - wndX);

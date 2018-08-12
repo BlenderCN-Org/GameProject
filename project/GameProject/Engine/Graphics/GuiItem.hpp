@@ -3,8 +3,10 @@
 
 /// Internal Includes
 #include "ShaderContainer.hpp"
+#include "GuiTheme.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/IAssetManager.hpp>
 #include <glm/glm.hpp>
 
 /// Std Includes
@@ -31,9 +33,13 @@ namespace Engine {
 			int yPos;
 		};
 
+		struct GuiInfo {
+			Engine::AssetHandling::IAssetManager* pAssetManager;
+		};
+
 		class GuiItem {
 		public:
-			GuiItem();
+			GuiItem(GuiInfo& info);
 			virtual ~GuiItem();
 
 			int getZIndex() const;
@@ -44,18 +50,29 @@ namespace Engine {
 			void setPosition(int x, int y);
 			void setSize(int w, int h);
 
+			bool isVisible() const;
+
 			void setVisible(bool visibilityFlag);
 			void setZIndex(int zIndex);
 
+			void setHitTest(bool enable);
+
 			void updateAbsoultePos(const int xOff, const int yOff, const int xSize, const int ySize);
 
-			virtual void update(float dt, GuiHitInfo& hitInfo);
+			virtual bool isFocusable() const;
+			virtual bool hasFocusableItems() const;
+
+
+
+			virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus);
 			virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
 
+			void setThemeOverride(Theme::GuiTheme* theme);
 
 		protected:
 
 			void calculatePoints(glm::mat4 &positionMatrix);
+			glm::mat4 genFromPosSize(glm::vec4 posSize);
 			glm::vec4 clipRegion(glm::vec4 element, glm::vec4 region);
 
 			bool posInItem(int x, int y) const;
@@ -73,6 +90,13 @@ namespace Engine {
 			GuiAnchor anchorPoint;
 
 			bool visible;
+			bool hitTest;
+
+			Theme::GuiTheme* themeOverride;
+
+			GuiInfo& guiInfo;
+
+			bool hasFocus;
 		};
 	}
 }

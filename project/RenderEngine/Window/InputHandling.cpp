@@ -2,6 +2,8 @@
 #include "InputHandling.hpp"
 #include "InputHelper.hpp"
 
+#include <glm/glm.hpp>
+
 // std includes
 #include <iostream>
 #include <vector>
@@ -23,68 +25,68 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 		int action = 0;
 		int mods = wnd->modkeys;
 		switch (mouseEvents.usButtonFlags) {
-			case(RI_MOUSE_BUTTON_1_DOWN):
-			{
-				button = 0;
-				action = ACTION_BUTTON_DOWN;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_1_UP):
-			{
-				button = 0;
-				action = ACTION_BUTTON_UP;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_2_DOWN):
-			{
-				button = 1;
-				action = ACTION_BUTTON_DOWN;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_2_UP):
-			{
-				button = 1;
-				action = ACTION_BUTTON_UP;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_3_DOWN):
-			{
-				button = 2;
-				action = ACTION_BUTTON_DOWN;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_3_UP):
-			{
-				button = 2;
-				action = ACTION_BUTTON_UP;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_4_DOWN):
-			{
-				button = 3;
-				action = ACTION_BUTTON_DOWN;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_4_UP):
-			{
-				button = 3;
-				action = ACTION_BUTTON_UP;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_5_DOWN):
-			{
-				button = 4;
-				action = ACTION_BUTTON_DOWN;
-				break;
-			}
-			case(RI_MOUSE_BUTTON_5_UP):
-			{
-				button = 4;
-				action = ACTION_BUTTON_UP;
-				break;
-			}
-			default:
-				break;
+		case(RI_MOUSE_BUTTON_1_DOWN):
+		{
+			button = 0;
+			action = ACTION_BUTTON_DOWN;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_1_UP):
+		{
+			button = 0;
+			action = ACTION_BUTTON_UP;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_2_DOWN):
+		{
+			button = 1;
+			action = ACTION_BUTTON_DOWN;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_2_UP):
+		{
+			button = 1;
+			action = ACTION_BUTTON_UP;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_3_DOWN):
+		{
+			button = 2;
+			action = ACTION_BUTTON_DOWN;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_3_UP):
+		{
+			button = 2;
+			action = ACTION_BUTTON_UP;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_4_DOWN):
+		{
+			button = 3;
+			action = ACTION_BUTTON_DOWN;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_4_UP):
+		{
+			button = 3;
+			action = ACTION_BUTTON_UP;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_5_DOWN):
+		{
+			button = 4;
+			action = ACTION_BUTTON_DOWN;
+			break;
+		}
+		case(RI_MOUSE_BUTTON_5_UP):
+		{
+			button = 4;
+			action = ACTION_BUTTON_UP;
+			break;
+		}
+		default:
+			break;
 		}
 		if (button != -1)
 			wnd->mouseButtonCallback(wnd, button, action, mods);
@@ -104,7 +106,7 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 	}
 
 	if (wnd->mouseDeltaCallback) {
-		
+
 		float mouseDX = (float)mouseEvents.lLastX;
 		float mouseDY = (float)mouseEvents.lLastY;
 
@@ -129,13 +131,13 @@ void processRawMouseEvents(BaseWindow * wnd, RAWMOUSE mouseEvents) {
 	if (wnd->cursorLock && wnd->hasFocus) {
 		RECT rec;
 		GetWindowRect(wnd->getWindowHandle(), &rec);
-	
+
 		int posX = (rec.right - rec.left) / 2;
 		posX += rec.left;
-	
+
 		int posY = (rec.bottom - rec.top) / 2;
 		posY += rec.top;
-	
+
 		SetCursorPos(posX, posY);
 	}
 }
@@ -229,6 +231,7 @@ void enableXinput(bool enable) {
 	XInputEnable(enable);
 }
 
+// @ TODO - Cleanup
 void processXInput(BaseWindow * wnd) {
 	wnd->inputProcessedByControllers = false;
 
@@ -237,20 +240,65 @@ void processXInput(BaseWindow * wnd) {
 	//XInputGetCapabilities(0, 0, &caps);
 
 	// makes sure xinput device is always priority
-	if (true || wnd->controllerAxisCallback && wnd->controllerButtonCallback) {
-		XINPUT_STATE state;
-		if (XInputGetState(0, &state) == ERROR_SUCCESS) {
+	if (wnd->controllerAxisCallback && wnd->controllerButtonCallback) {
+		ControllerState state;
+		if (getControllerState(0, state) == true) {
 			if (XInputStateChangedThisFrame(&wnd->lastState, &state)) {
-				std::cout << "State changed!" << std::endl;
 				wnd->inputProcessedByControllers = true;
+				//std::cout << "State changed!" << std::endl;
 
-				std::cout << "Button State: " << state.Gamepad.wButtons << std::endl;
-				std::cout << "Left Trigger: " << (int)state.Gamepad.bLeftTrigger << std::endl;
-				std::cout << "Right Trigger: " << (int)state.Gamepad.bRightTrigger << std::endl;
-				std::cout << "R Thumb X: " << (float)(state.Gamepad.sThumbRX) / 32767.0 << std::endl;
-				std::cout << "R Thumb Y: " << (float)(state.Gamepad.sThumbRY) / 32767.0 << std::endl;
-				std::cout << "L Thumb X: " << (float)(state.Gamepad.sThumbLX) / 32767.0 << std::endl;
-				std::cout << "L Thumb Y: " << (float)(state.Gamepad.sThumbLY) / 32767.0 << std::endl;
+				//std::cout << "Button State: " << state.Gamepad.wButtons << std::endl;
+				//std::cout << "Left Trigger: " << (int)state.Gamepad.bLeftTrigger << std::endl;
+				//std::cout << "Right Trigger: " << (int)state.Gamepad.bRightTrigger << std::endl;
+				//std::cout << "R Thumb X: " << (float)(state.Gamepad.sThumbRX) / 32767.0F << std::endl;
+				//std::cout << "R Thumb Y: " << (float)(state.Gamepad.sThumbRY) / 32767.0F << std::endl;
+				//std::cout << "L Thumb X: " << (float)(state.Gamepad.sThumbLX) / 32767.0F << std::endl;
+				//std::cout << "L Thumb Y: " << (float)(state.Gamepad.sThumbLY) / 32767.0F << std::endl;
+
+				//std::cout << "R Thumb X: " << state.rThumb.x * 255.0F << std::endl;
+				//std::cout << "R Thumb Y: " << state.rThumb.y * 255.0F << std::endl;
+				//std::cout << "L Thumb X: " << state.lThumb.x * 255.0F << std::endl;
+				//std::cout << "L Thumb Y: " << state.lThumb.y * 255.0F << std::endl;
+
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_RX, state.rThumb.x * 255.0F);
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_RY, state.rThumb.y * 255.0F);
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_LX, state.lThumb.x * 255.0F);
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_LY, state.lThumb.y * 255.0F);
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_LT, state.lTrigger);
+				wnd->controllerAxisCallback(wnd, GAMEPAD_AXIS_RT, state.rTrigger);
+
+				//std::cout << std::hex << state.buttons ;
+				//
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_A));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_B));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_X));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_Y));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_START));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_BACK));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_D_UP));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_D_DOWN));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_D_LEFT) );
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_D_RIGHT) );
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_BUMP_LEFT));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_BUMP_RIGHT));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_THUMB_LEFT));
+				//std::cout << std::endl << ((state.buttons & XBoneMapping::BTN_THUMB_RIGHT));
+				//std::cout << std::endl;
+
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_A, (state.buttons & XBoneMapping::BTN_A) == XBoneMapping::BTN_A);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_B, (state.buttons & XBoneMapping::BTN_B) == XBoneMapping::BTN_B);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_X, (state.buttons & XBoneMapping::BTN_X) == XBoneMapping::BTN_X);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_Y, (state.buttons & XBoneMapping::BTN_Y) == XBoneMapping::BTN_Y);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_START, (state.buttons & XBoneMapping::BTN_START) == XBoneMapping::BTN_START);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_BACK, (state.buttons & XBoneMapping::BTN_BACK) == XBoneMapping::BTN_BACK);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_DP_UP, (state.buttons & XBoneMapping::BTN_D_UP) == XBoneMapping::BTN_D_UP);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_DP_DOWN, (state.buttons & XBoneMapping::BTN_D_DOWN) == XBoneMapping::BTN_D_DOWN);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_DP_LEFT, (state.buttons & XBoneMapping::BTN_D_LEFT) == XBoneMapping::BTN_D_LEFT);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_DP_RIGHT, (state.buttons & XBoneMapping::BTN_D_RIGHT) == XBoneMapping::BTN_D_RIGHT);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_LT, (state.buttons & XBoneMapping::BTN_BUMP_LEFT) == XBoneMapping::BTN_BUMP_LEFT);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_RT, (state.buttons & XBoneMapping::BTN_BUMP_RIGHT) == XBoneMapping::BTN_BUMP_RIGHT);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_L_THUMB, (state.buttons & XBoneMapping::BTN_THUMB_LEFT) == XBoneMapping::BTN_THUMB_LEFT);
+				wnd->controllerButtonCallback(wnd, GAMEPAD_BTN_R_THUMB, (state.buttons & XBoneMapping::BTN_THUMB_RIGHT) == XBoneMapping::BTN_THUMB_RIGHT);
 			}
 
 			// return to prevent double controller processing
@@ -263,7 +311,7 @@ void processXInput(BaseWindow * wnd) {
 
 			wnd->inputDevice->Poll();
 
-			DIJOYSTATE2 state{ 0 };
+			DIJOYSTATE2 state { 0 };
 
 			wnd->inputDevice->GetDeviceState(sizeof(DIJOYSTATE2), &state);
 

@@ -11,21 +11,25 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			Label::Label() {
+			Label::Label(GuiInfo info) : GuiItem(info), text(info.pAssetManager) {
 				text.setText("Test");
 			}
 
 			Label::~Label() {}
 
-			int Label::calcTextWidth() {
+			int Label::calcTextWidth() const {
 				return text.getTextWidth();
+			}
+
+			int Label::calcTextHeight() const {
+				return text.getTextHeight();
 			}
 
 			void Label::setText(const Engine::Core::FormattedString& str) {
 				text.setText(str);
 			}
 
-			void Label::update(float dt, GuiHitInfo& hitInfo) {
+			void Label::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 				if (isMouseInside()) {
 					hitInfo.mouseHit = true;
 				}

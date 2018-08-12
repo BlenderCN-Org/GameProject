@@ -12,8 +12,9 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			Panel::Panel()
-				: subItems()
+			Panel::Panel(GuiInfo& info)
+				: GuiItem(info)
+				, subItems()
 				, tex(nullptr) {
 
 			}
@@ -30,14 +31,35 @@ namespace Engine {
 				subItems.push_back(guiItem);
 			}
 
-			void Panel::update(float dt, GuiHitInfo& hitInfo) {
+			bool Panel::isFocusable() const {
+				return false;
+			}
+			bool Panel::hasFocusableItems() const {
+
+				bool subFocus = false;
+
+				std::vector<GuiItem*>::const_reverse_iterator it = subItems.rbegin();
+				std::vector<GuiItem*>::const_reverse_iterator eit = subItems.rend();
+
+				for (it; it != eit && !subFocus; it++) {
+					subFocus = (*it)->isFocusable();
+				}
+
+				for (it; it != eit && !subFocus; it++) {
+					subFocus = (*it)->hasFocusableItems();
+				}
+
+				return subFocus;
+			}
+
+			void Panel::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 				if (visible) {
 					std::vector<GuiItem*>::reverse_iterator it = subItems.rbegin();
 					std::vector<GuiItem*>::reverse_iterator eit = subItems.rend();
 
 					for (it; it != eit; it++) {
 						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-						(*it)->update(dt, hitInfo);
+						(*it)->update(dt, hitInfo, currentFocus);
 					}
 
 					if (isMouseInside()) {
@@ -49,6 +71,13 @@ namespace Engine {
 
 			void Panel::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 				if (visible) {
+					
+					Theme::GuiTheme* theme = gTheme;
+
+					if (nullptr != themeOverride) {
+						theme = themeOverride;
+					}
+
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
 					calculatePoints(vpMatRef);
@@ -60,9 +89,11 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
-					if (tex) {
-						tex->bind();
-
+					
+					//if (tex) {
+					//	tex->bind();
+					if (theme->panel.textureNormal) {
+						theme->panel.textureNormal->bind();
 						shaderContainer.standardQuad->bind();
 						shaderContainer.standardQuad->render();
 					}

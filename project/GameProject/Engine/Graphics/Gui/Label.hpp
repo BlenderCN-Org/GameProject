@@ -16,14 +16,15 @@ namespace Engine {
 		namespace Gui {
 			class Label : public GuiItem {
 			public:
-				Label();
+				Label(GuiInfo info);
 				virtual ~Label();
 
-				int calcTextWidth();
+				int calcTextWidth() const;
+				int calcTextHeight() const;
 
 				void setText(const Engine::Core::FormattedString& str);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo) override;
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:

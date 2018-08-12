@@ -6,13 +6,15 @@
 
 /// Std Includes
 
-Text::Text() : font(nullptr), textMesh(nullptr), width(0), height(0) {
+Text::Text(Engine::AssetHandling::IAssetManager* assetMan) : font(nullptr), textMesh(nullptr), width(0), height(0) {
 	textMesh = gRenderEngine->createMesh();
-	font = gRenderEngine->createFont();
 
-	if (font) {
-		font->init("C:/Windows/Fonts/Arialbd.ttf", 13);
-	}
+	//font = gRenderEngine->createFont();
+	font = (IReFont*)assetMan->loadFont("C:/Windows/Fonts/Arialbd.ttf", 13);
+
+	//if (font) {
+	//	font->init("C:/Windows/Fonts/Arialbd.ttf", 13);
+	//}
 
 	if (textMesh) {
 		textMesh->init(MeshPrimitiveType::TRIANGLE);
@@ -20,13 +22,70 @@ Text::Text() : font(nullptr), textMesh(nullptr), width(0), height(0) {
 
 }
 Text::~Text() {
-	if (font) {
-		font->release();
-	}
+	//if (font) {
+	//	font->release();
+	//}
 
 	if (textMesh) {
 		textMesh->release();
 	}
+}
+
+int Text::calcTextWidth(const Engine::Core::FormattedString& text) {
+	int _width = 0;
+	int _height = 0;
+
+	const Engine::Core::FormattedChar* cStr = text.cStr();
+	size_t len = text.getSize();
+
+	Engine::Core::FormattedChar c = '\0';
+	Character chr;
+	
+	float x = 0;
+	float y = (float)font->getFontSize();
+	float scale = 1.0F;
+
+	float dx = 0;
+
+	float yAdv = 0;
+	float oldYAdv = 0;
+
+	int fSize = font->getFontSize() + 1;
+
+	for (size_t i = 0; i < len; i++) {
+
+		c = cStr[i];
+		chr = font->getCharacter(c);
+
+		if (c == '\n') {
+			if (yAdv) {
+				y += (fSize);
+				oldYAdv = (float)fSize;
+			} else {
+				y += fSize;
+			}
+			yAdv = 0;
+			x = dx;
+			continue;
+		} else if (c == '\t') {
+			x += (chr.size.x * scale * 2.0f);
+			continue;
+		} else if (c == '\0') {
+			continue;
+		}
+
+		float h = chr.size.y * scale;
+
+		yAdv = glm::max(yAdv, h);
+								
+		x += (chr.advance >> 6) * scale;
+		
+		_width = glm::max(_width, int(x));
+		_height = glm::max(_height, int(y));
+
+	}
+
+	return _width;
 }
 
 void Text::setText(const Engine::Core::FormattedString& text) {
@@ -50,8 +109,8 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 
 		float* verts = new float[arraySize];
 
-		float x = 0;
-		float y = 10;
+		float x = 2;
+		float y = (float)font->getFontSize();
 		float scale = 1.0F;
 
 		float dx = 0;
@@ -139,8 +198,12 @@ void Text::setText(const Engine::Core::FormattedString& text) {
 	}
 }
 
-int Text::getTextWidth() {
+int Text::getTextWidth() const {
 	return width;
+}
+
+int Text::getTextHeight() const {
+	return height;
 }
 
 int Text::getFontSize() const {

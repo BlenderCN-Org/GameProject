@@ -2,8 +2,9 @@
 #define EDITOR_HPP
 
 /// Internal Includes
-#include "IEdit.hpp"
 #include "IMap.hpp"
+
+#include "ShaderSettings.hpp"
 
 #include "Editor/EditorKeyBinds.hpp"
 #include "Editor/3dViewGizmo.hpp"
@@ -13,50 +14,66 @@
 #include "../Engine/Graphics/Gui/GuiWindow.hpp"
 
 #include "Editor/Toolbox/ObjectList.hpp"
+#include "Editor/FileDialog.hpp"
+#include "Editor/Toolbox/SkyEdit.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/Loader/IEditLoader.hpp>
 
 /// Std Includes
+
+enum class EditState {
+
+	NO_MAP,
+	LOADING,
+	EDITING,
+	SAVING,
+	CLOSING,
+};
 
 class Editor {
 
 public:
 
-	Editor();
+	Editor(CEngine* engine);
 	~Editor();
 
-	void start(IEdit* pEditClass, IMap** ppMap);
+	void start(Engine::DataLoader::IEditLoader* pEditClass, IMap** ppMap);
 
-	bool mouseInGui();
 	void update(float dt);
 
-	void render();
+	void render(ShaderSettings& shaderSettings);
 
 private:
 
-	bool mouseDownInGui;
-	bool pressing;
+	void updateWaitForMapState(float dt);
+	void updateLoadingState(float dt);
+	void updateEditing(float dt);
+	void updateSaving(float dt);
+	void updateClosing(float dt);
 
-	uint32_t renderObjectCount;
+	void renderCellBorders(ShaderSettings& shaderSettings, Grid<Cell>* cellGrid);
+	void renderGizmo(ShaderSettings& shaderSettings);
 
-	Engine::Graphics::CGui* editorGui;
-	/*
-	Engine::Graphics::Texture::Texture2D* buttonHoverTexture;
-	Engine::Graphics::Texture::Texture2D* buttonPressTexture;
+	EditState eState;
 
-	Engine::Graphics::Texture::Texture2D* toolbarTexture;
-	Engine::Graphics::Gui::Panel* toolbar;
-	Engine::Graphics::Gui::Button* showButton;
-
-	Engine::Graphics::Gui::TextArea* textArea;
-
-	Engine::Graphics::Gui::GuiWindow* guiWindow;
-	*/
+	CEngine* pEngine;
+	Engine::Graphics::GuiInfo guiInfo;
 
 	ObjectList* objList;
+	FileDialog* fileDialog;
+	SkyEdit* skyEdit;
 
-	IEdit* pGameEditAccess;
+	Engine::DataLoader::IEditLoader* pGameEditAccess;
 	IMap** ppActiveMap;
+
+	ViewGizmo* viewGizmo;
+
+	IMesh* cellBorderMesh;
+
+	IShaderObject* editorBasicShader;
+	int editorViewProjLoc;
+	int editorModelMatLoc;
 
 };
 

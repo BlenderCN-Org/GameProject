@@ -15,6 +15,27 @@
 namespace Engine {
 	namespace Input {
 
+		struct InputMapping {
+			//GameInput primary;
+			//GameInput secondary;
+			int keyboard;
+			int mouse;
+			int gamepad;
+			int moveDir;
+		};
+
+		enum class InputStateType {
+			E_STATE_NONE,
+			E_STATE_PRESSED,
+			E_STATE_RELEASED,
+			E_STATE_HOLDING,
+		};
+
+		struct InputState {
+			InputStateType state;
+			float value;
+		};
+
 		struct InputEvent {
 			int code;
 			bool mouse;
@@ -67,6 +88,16 @@ namespace Engine {
 			}
 		};
 
+		enum class InputDevice {
+			E_DEVICE_MOUSE_KEYBOARD,
+			E_DEVICE_GAMEPAD,
+		};
+
+		struct Axis {
+			float x;
+			float y;
+		};
+
 		class Input {
 		public:
 			Input();
@@ -76,11 +107,13 @@ namespace Engine {
 
 			void attachConsole(Core::Console* con);
 			void clearCallbacks();
-			void setupCallbacks(IWindow* wnd); //Must call this when window is created to make GLFW callback functions work!
+			void setupCallbacks(IWindow* wnd); //Must call this when window is created to make callback functions work!
 
 			bool isKeyBindPressed(const KeyBind &keyBind, bool includeMods = true);
 			bool releasedThisFrame(const KeyBind &keyBind, bool includeMods = true);
 			bool wasPressedThisFrame(const KeyBind &keyBind, bool includeMods = true);
+
+			InputState checkInputMapping(InputMapping &mapping);
 
 			void getCursorDelta(float &x, float &y);
 
@@ -88,11 +121,11 @@ namespace Engine {
 			void toggleConsole();
 			bool consoleIsActive();
 
+			InputDevice getLastInputDevice() const;
+
 			void reset();
 
 			void getWindowSize(int &w, int &h);
-
-			bool sizeChange;
 
 			void getMousePos(int &x, int &y);
 
@@ -100,6 +133,9 @@ namespace Engine {
 
 			void print();
 
+			void getMovingVector(float &x, float &y);
+
+			bool sizeChange;
 			bool characterRecieved;
 			unsigned int characterThisFrame;
 			bool returnPressed;
@@ -109,6 +145,8 @@ namespace Engine {
 
 			InputEvent lastPressed;
 		private:
+
+			InputDevice lastInputDevice;
 
 			Config keyConf;
 			bool consoleActive;
@@ -125,6 +163,10 @@ namespace Engine {
 			std::map<InputEvent, bool> releaseMap;
 			std::map<InputEvent, bool> pressedMap;
 			int modkey;
+			
+			std::map<int, InputState> keyboardMap;
+			std::map<int, InputState> mouseMap;
+			std::map<int, InputState> gamepadMap;
 
 			int xPos;
 			int yPos;
@@ -155,6 +197,13 @@ namespace Engine {
 			static void focusCallback(IWindow* window, bool focus);
 
 			static void mouseDeltaCallback(IWindow* window, float dx, float dy);
+
+			static void controllerAxisCallback(IWindow* window, unsigned int axis, float axisValue);
+			static void controllerButtonCallback(IWindow* window, unsigned int button, int action);
+
+			Axis rThumb;
+			Axis lThumb;
+			Axis triggers;
 		};
 
 		enum KEYBINDS_NAME {
@@ -173,8 +222,8 @@ namespace Engine {
 			KEYBINDS_LENGTH,
 		};
 
-		static const char* KeyBindsStrings[] =
-		{ "KeyAction_Forward",
+		static const char* KeyBindsStrings[] = {
+			"KeyAction_Forward",
 			"KeyAction_Backward",
 			"KeyAction_Left",
 			"KeyAction_Right",
@@ -188,8 +237,8 @@ namespace Engine {
 			"KeyAction_Space",
 		};
 
-		static const char* KeyBindsDefault[] =
-		{	"17:0:0",
+		static const char* KeyBindsDefault[] = {
+			"17:0:0",
 			"31:0:0",
 			"30:0:0",
 			"32:0:0",

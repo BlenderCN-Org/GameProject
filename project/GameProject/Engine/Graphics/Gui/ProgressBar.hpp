@@ -17,8 +17,8 @@ namespace Engine {
 
 			public:
 
-				ProgressBar();
-				ProgressBar(uint32_t _min, uint32_t _max, uint32_t _value);
+				ProgressBar(GuiInfo& info);
+				ProgressBar(GuiInfo& info, uint32_t _min, uint32_t _max, uint32_t _value);
 
 				void setBackgorundTexture(Texture::Texture2D* texture);
 				void setProgressTexture(Texture::Texture2D* texture);
@@ -26,7 +26,7 @@ namespace Engine {
 				void setValue(uint32_t _value);
 				void setRange(uint32_t _min, uint32_t _max);
 
-				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
+				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:
 

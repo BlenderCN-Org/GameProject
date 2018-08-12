@@ -242,7 +242,7 @@ void setPixelFormatOGL(HDC windowDC) {
 		HGLRC rc = wglCreateContext(dc);
 		wglMakeCurrent(dc, rc);
 
-		//glewInit();
+		glewInit();
 		wglewInit();
 
 		wglMakeCurrent(0, 0);
@@ -257,7 +257,7 @@ void setPixelFormatOGL(HDC windowDC) {
 		WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
 		WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
 		WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-		WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB, TRUE,
+		WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB, GL_TRUE,
 		WGL_COLOR_BITS_ARB, 24,
 		WGL_ALPHA_BITS_ARB, 8,
 		WGL_DEPTH_BITS_ARB, 24,
@@ -329,7 +329,7 @@ HGLRC createOpenGLContext(HDC windowDC) {
 			WGL_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB, GL_LOSE_CONTEXT_ON_RESET,
 			WGL_CONTEXT_RELEASE_BEHAVIOR_ARB, WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB,
 			0
-};
+		};
 
 		renderingContext = wglCreateContextAttribsARB(windowDC, NULL, contextAttributes);
 	} else {
@@ -452,6 +452,23 @@ void GLWindow::init() {
 		if (wglMakeCurrent(deviceContext, openglRenderContext) == FALSE) {
 			printf("making current failed\n");
 		} else {
+
+			if (nullptr != glGetFramebufferAttachmentParameteriv) {
+				printf("Checking color encoding!\n");
+				GLint enc = 0;
+				
+				glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_FRONT, GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING, &enc);
+
+				if (enc == GL_LINEAR) {
+					printf("Linear buffer\n");
+				} else if (enc == GL_SRGB) {
+					printf("Srgb buffer\n");
+				}
+
+			} else {
+				printf("function \"glGetFramebufferAttachmentParameteriv\" Not available!\n");
+			}
+
 			activeThread = getThreadId();
 			std::stringstream o;
 			o << activeThread;

@@ -12,9 +12,9 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			Button::Button() {
+			Button::Button(GuiInfo& info) : GuiItem(info) {
 
-				lbl = new Label();
+				lbl = new Label(info);
 
 				lbl->setAnchorPoint(GuiAnchor::CENTER);
 				lbl->setVisible(true);
@@ -47,10 +47,18 @@ namespace Engine {
 
 			void Button::setText(const Engine::Core::FormattedString& str) {
 				lbl->setText(str);
-				lbl->setSize(lbl->calcTextWidth(), size.y / 2);
+				lbl->setSize(lbl->calcTextWidth(), lbl->calcTextHeight() + 3);
 			}
 
-			void Button::update(float dt, GuiHitInfo& hitInfo) {
+			bool Button::isFocusable() const {
+				return true;
+			}
+
+			bool Button::hasFocusableItems() const {
+				return false;
+			}
+
+			void Button::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 
 				Input::Input* in = Input::Input::GetInput();
 
@@ -97,13 +105,20 @@ namespace Engine {
 				}
 
 				lbl->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-				lbl->update(dt, hitInfo);
+				lbl->update(dt, hitInfo, currentFocus);
 
 			}
 
 			void Button::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 
 				if (visible) {
+
+					Theme::GuiTheme* theme = gTheme;
+
+					if (nullptr != themeOverride) {
+						theme = themeOverride;
+					}
+
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
 					calculatePoints(vpMatRef);
@@ -115,25 +130,34 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
+					
+					Texture::Texture2D* texture = theme->button.textureNormal;
 
-					if (tex) {
-						tex->bind();
-					}
+					//if (tex) {
+					//	tex->bind();
+					//}
 
 					if (hovering) {
 						if (pressing) {
-							if (pressTex) {
-								pressTex->bind();
-							}
+							texture = theme->button.texturePressing;
+							//if (pressTex) {
+							//	pressTex->bind();
+							//}
 						} else {
-							if (hovTex) {
-								hovTex->bind();
-							}
+							texture = theme->button.textureHovering;
+							//if (hovTex) {
+							//	hovTex->bind();
+							//}
 						}
 					}
 
-					shaderContainer.standardQuad->bind();
-					shaderContainer.standardQuad->render();
+					// only render if there is an actual texture
+					if(texture != nullptr)
+					{
+						texture->bind();
+						shaderContainer.standardQuad->bind();
+						shaderContainer.standardQuad->render();
+					}
 
 					posAndSize = positionAndSizeFromMatrix(vpMatRef);
 					// render all subitems

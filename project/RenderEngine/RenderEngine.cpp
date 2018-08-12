@@ -82,7 +82,6 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 
 			glWindow.showWindow(true);
 		}
-		glewInit();
 
 #ifdef _DEBUG
 		if (glDebugMessageCallback) {
@@ -111,7 +110,7 @@ void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CLIP_DISTANCE0);
 		glEnable(GL_MULTISAMPLE);
-		//glEnable(GL_FRAMEBUFFER_SRGB);
+		glEnable(GL_FRAMEBUFFER_SRGB);
 
 		//glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);

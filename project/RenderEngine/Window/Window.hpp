@@ -4,6 +4,7 @@
 #include "../BuildOptions.hpp"
 
 #include "../IWindow.hpp"
+#include "InputHelper.hpp"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -62,7 +63,7 @@ public:
 	//private:
 	IDirectInput8* dinput8dev;
 	IDirectInputDevice8* inputDevice;
-	XINPUT_STATE lastState;
+	ControllerState lastState;
 	HWND getWindowHandle();
 
 	WindowResizeCallback_t* resizeCallback;

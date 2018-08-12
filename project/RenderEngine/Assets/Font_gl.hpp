@@ -42,11 +42,13 @@ public:
 
 private:
 
+	void loadAndGenerateFont();
 	void genFontTexture();
 
 	FT_Library fontLib;
 	FT_Face face;
 
+	const char* fontFile;
 	int fontSize;
 };
 

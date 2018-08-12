@@ -31,7 +31,7 @@ void CameraInput::update(float dt, bool freecam) {
 	float y = 0.0f;
 
 	input->getCursorDelta(x, y);
-
+	
 	Engine::Input::KeyBind kb;
 	kb.code = 0;
 	kb.mod = 0;
@@ -39,6 +39,7 @@ void CameraInput::update(float dt, bool freecam) {
 	if (input->isKeyBindPressed(kb, false) || !freecam) {
 		//printf("Mouse pan\n");
 		mousepan(x, y);
+		//printf("%f, %f\n", x, y);
 	}
 
 	if (freecam) {
@@ -78,6 +79,7 @@ void CameraInput::mousepan(float x, float y) {
 		sin(rotateRad), 0.0f, cos(rotateRad));
 	view = rotH * view;
 	dir = normalize(view);
+
 }
 
 void CameraInput::keypan(float dt) {
@@ -96,22 +98,32 @@ void CameraInput::keypan(float dt) {
 	}
 	camSpeed *= dt;
 
-	if (input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false))
-		pos += dir * camSpeed;
+	float x, y;
 
-	if (input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD], false))
-		pos -= dir * camSpeed;
+	input->getMovingVector(x, y);
 
-	if (input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT], false)) {
-		vec3 left = cross(vec3(0, 1, 0), dir);
-		left = normalize(left);
-		pos += left * camSpeed;
-	}
-	if (input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT], false)) {
-		vec3 left = cross(dir, vec3(0, 1, 0));
-		left = normalize(left);
-		pos += left * camSpeed;
-	}
+	glm::vec3 tDir = dir * y;
+	vec3 left = cross(vec3(0, 1, 0), dir);
+	
+	pos += (tDir + (normalize(left) * x)) * camSpeed;
+	
+	//if (input->isKeyBindPressed(KeyBindings[KEYBIND_FORWARD], false))
+	//	pos += dir * camSpeed;
+	//
+	//if (input->isKeyBindPressed(KeyBindings[KEYBIND_BACKWARD], false))
+	//	pos -= dir * camSpeed;
+	//
+	//if (input->isKeyBindPressed(KeyBindings[KEYBIND_LEFT], false)) {
+	//	vec3 left = cross(vec3(0, 1, 0), dir);
+	//	left = normalize(left);
+	//	pos += left * camSpeed;
+	//}
+	//if (input->isKeyBindPressed(KeyBindings[KEYBIND_RIGHT], false)) {
+	//	vec3 left = cross(dir, vec3(0, 1, 0));
+	//	left = normalize(left);
+	//	pos += left * camSpeed;
+	//}
+
 	//if (i->getKeyInfo(GLFW_KEY_SPACE))
 	//	pos.y += camSpeed;
 	//

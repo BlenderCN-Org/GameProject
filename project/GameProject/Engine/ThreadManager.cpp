@@ -1,7 +1,6 @@
 
 /// Internal Includes
 #include "ThreadManager.hpp"
-#include "Core/System.hpp"
 
 /// External Includes
 

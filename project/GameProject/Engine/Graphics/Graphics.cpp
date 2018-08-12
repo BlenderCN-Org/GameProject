@@ -7,3 +7,4 @@
 
 IRenderEngine* gRenderEngine = nullptr;
 const char* gAssetDataPath = nullptr;
+Engine::Theme::GuiTheme* gTheme = nullptr;

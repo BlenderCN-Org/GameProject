@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>EngineCore.lib;Config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
@@ -134,7 +134,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>EngineCore.lib;Config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
@@ -160,7 +160,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>EngineCore.lib;Config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -185,7 +185,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>EngineCore.lib;Config.lib;AssetLib.lib;PhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -195,13 +195,8 @@
   <ItemGroup>
     <Text Include="Engine\Core\Camera.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="Engine\AssetManager.cpp" />
     <ClCompile Include="Engine\Core\Console.cpp" />
-    <ClCompile Include="Engine\Core\FormattedString.cpp" />
-    <ClCompile Include="Engine\Core\LibraryLoader.cpp" />
     <ClCompile Include="Engine\Core\Settings.cpp" />
-    <ClCompile Include="Engine\Core\String.cpp" />
-    <ClCompile Include="Engine\Core\System.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Graphics\FullscreenQuad.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
@@ -240,17 +235,18 @@
     <ClCompile Include="Game\CameraInput.cpp" />
     <ClCompile Include="Game\CameraPath.cpp" />
     <ClCompile Include="Game\Editor\EditorToolbox.cpp" />
+    <ClCompile Include="Game\Editor\FileDialog.cpp" />
     <ClCompile Include="Game\Editor\Toolbox\MapHierarchy.cpp" />
     <ClCompile Include="Game\Editor\Toolbox\ObjectList.cpp" />
-    <ClCompile Include="Game\Loader\EditLoader.cpp" />
+    <ClCompile Include="Game\Editor\Toolbox\SkyEdit.cpp" />
     <ClCompile Include="Game\MapObjects\Cell.cpp" />
     <ClCompile Include="Game\Editor.cpp" />
     <ClCompile Include="Game\Editor\3dViewGizmo.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameObject.cpp" />
-    <ClCompile Include="Game\Loader\MapLoader.cpp" />
     <ClCompile Include="Game\MainMenu.cpp" />
     <ClCompile Include="Game\MapObjects\Map.cpp" />
+    <ClCompile Include="Game\MapObjects\Terrain.cpp" />
     <ClCompile Include="Game\PhysicsParticle.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\RenderBatch.cpp" />
@@ -260,11 +256,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.hpp" />
-    <ClInclude Include="Engine\AssetManager.hpp" />
     <ClInclude Include="Engine\Core\Allocator.hpp" />
+    <ClInclude Include="Engine\Core\Console.hpp" />
+    <ClInclude Include="Engine\Core\Grid.hpp" />
     <ClInclude Include="Engine\Core\Settings.hpp" />
     <ClInclude Include="Engine\Formats\Formats.hpp" />
     <ClInclude Include="Engine\Graphics\FullscreenQuad.hpp" />
+    <ClInclude Include="Engine\Graphics\GuiInputMapping.hpp" />
+    <ClInclude Include="Engine\Graphics\GuiTheme.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\GuiWindow.hpp" />
     <ClInclude Include="Engine\Graphics\Gui\TextureView.hpp" />
     <ClInclude Include="Engine\Graphics\Mesh\Animation.hpp" />
@@ -272,10 +271,8 @@
     <ClInclude Include="Engine\Input\ScanCodes.hpp" />
     <ClInclude Include="Engine\Interfaces\ISettings.hpp" />
     <ClInclude Include="Engine\Interfaces\Renderable.hpp" />
-    <ClInclude Include="Engine\Interfaces\IAssetManager.hpp" />
     <ClInclude Include="Engine\Interfaces\ICAnimation.hpp" />
     <ClInclude Include="Engine\Interfaces\ICMesh.hpp" />
-    <ClInclude Include="Engine\SafeQueue.hpp" />
     <ClInclude Include="Engine\TemporaryStorage.hpp" />
     <ClInclude Include="Engine\ThreadManager.hpp" />
     <ClInclude Include="Engine\Utils\FPSCounter.hpp" />
@@ -285,32 +282,28 @@
     <ClInclude Include="Game\Asteroids\Ship.hpp" />
     <ClInclude Include="Game\Editor\EditorKeyBinds.hpp" />
     <ClInclude Include="Game\Editor\EditorToolbox.hpp" />
+    <ClInclude Include="Game\Editor\FileDialog.hpp" />
     <ClInclude Include="Game\Editor\Toolbox\MapHierarchy.hpp" />
     <ClInclude Include="Game\Editor\Toolbox\ObjectList.hpp" />
-    <ClInclude Include="Game\IEdit.hpp" />
-    <ClInclude Include="Game\Loader\DataTags.hpp" />
-    <ClInclude Include="Game\Loader\EditLoader.hpp" />
+    <ClInclude Include="Game\Editor\Toolbox\SkyEdit.hpp" />
+    <ClInclude Include="Game\MapObjects\DataTags.hpp" />
     <ClInclude Include="Game\MapObjects\Cell.hpp" />
     <ClInclude Include="Game\Editor.hpp" />
     <ClInclude Include="Game\Editor\3dViewGizmo.hpp" />
     <ClInclude Include="Game\GameObject.hpp" />
     <ClInclude Include="Game\IMap.hpp" />
     <ClInclude Include="Game\IPlayer.hpp" />
-    <ClInclude Include="Game\Loader\MapLoader.hpp" />
     <ClInclude Include="Game\MainMenu.hpp" />
     <ClInclude Include="Game\MapObjects\Map.hpp" />
+    <ClInclude Include="Game\MapObjects\Terrain.hpp" />
     <ClInclude Include="Game\PhysicsParticle.hpp" />
     <ClInclude Include="Game\Player.hpp" />
     <ClInclude Include="Game\RenderBatch.hpp" />
     <ClInclude Include="Game\MapObjects\Scene.hpp" />
     <ClInclude Include="Engine\Interfaces\IEditor.hpp" />
     <ClInclude Include="Game\MapObjects\Sky.hpp" />
+    <ClInclude Include="Game\ShaderSettings.hpp" />
     <Text Include="Engine\Core\Camera.hpp" />
-    <ClInclude Include="Engine\Core\Console.hpp" />
-    <ClInclude Include="Engine\Core\FormattedString.hpp" />
-    <ClInclude Include="Engine\Core\LibraryLoader.hpp" />
-    <ClInclude Include="Engine\Core\String.hpp" />
-    <ClInclude Include="Engine\Core\System.hpp" />
     <ClInclude Include="Engine\Engine.hpp" />
     <ClInclude Include="Engine\Graphics\Graphics.hpp" />
     <ClInclude Include="Engine\Graphics\Gui.hpp" />

@@ -19,12 +19,12 @@ namespace Engine {
 
 			public:
 
-				TextureView();
+				TextureView(GuiInfo& info);
 				virtual ~TextureView();
 
 				void setTexture(Texture::Texture2DReference* textureRef);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo);
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus);
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
 
 			private:

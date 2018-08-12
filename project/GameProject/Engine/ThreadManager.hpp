@@ -2,10 +2,11 @@
 #define THREAD_MANAGER_HPP
 
 /// Internal Includes
-#include "SafeQueue.hpp"
-#include "Core/System.hpp"
 
 /// External Includes
+#include <EngineCore/Core/SafeQueue.hpp>
+#include <EngineCore/Core/System.hpp>
+
 #include <PhysicsEngine/PhysicsEngine.hpp>
 
 /// Std Includes

@@ -1,9 +1,9 @@
 
 /// Project Includes
 #include "PhysicsParticle.hpp"
-#include "../Engine/Core/System.hpp"
 
 /// External Includes
+#include <EngineCore/Core/System.hpp>
 #include <PhysicsEngine/Shapes/SphereShape.hpp>
 
 /// Std Includes

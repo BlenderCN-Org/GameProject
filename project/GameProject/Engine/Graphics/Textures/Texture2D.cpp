@@ -31,7 +31,11 @@ namespace Engine {
 				texture->setTextureData(1, 1, 4, colors);
 			}
 
-			void Texture2D::setData(int x, int y, int numComponents, void* data) {
+			void Texture2D::getSize(unsigned int& x, unsigned int& y) {
+				texture->getTextureSize(x, y);
+			}
+
+			void Texture2D::setData(unsigned int x, unsigned int y, unsigned int numComponents, void* data) {
 				texture->setTextureData(x, y, numComponents, data);
 			}
 

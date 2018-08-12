@@ -2,7 +2,6 @@
 #define CONSOLE_HPP
 
 /// Internal Includes
-#include "FormattedString.hpp"
 #include "../Graphics/Gui.hpp"
 #include "../Graphics/Gui/Panel.hpp"
 #include "../Graphics/Gui/Label.hpp"
@@ -10,9 +9,11 @@
 #include "../Graphics/Textures/Texture2D.hpp"
 
 /// External Includes
+#include <EngineCore/Core/FormattedString.hpp>
 
 /// Std Includes
 #include <vector>
+#include <map>
 
 namespace Engine {
 	namespace Core {
@@ -34,6 +35,14 @@ namespace Engine {
 			LOG_CRITICAL
 		};
 
+		typedef void(*_pfnConFunc)(int argc, char *argv[]);
+
+		struct ConsoleCommand {
+			char* command;
+			char* description;
+			_pfnConFunc func;
+		};
+
 		class Console {
 		public:
 
@@ -50,6 +59,8 @@ namespace Engine {
 			void backSpace();
 			void execute();
 
+			void registerCommand(ConsoleCommand conCmd);
+
 			void update(float dt);
 			void updateSize(int w, int h);
 
@@ -61,6 +72,9 @@ namespace Engine {
 		private:
 
 			bool initialized;
+
+			int countCharacters(ConsoleString& cmd, char c);
+			void processCommand(int argc, char *argv[]);
 
 			void updateCursor(float dt);
 			void checkToggle();
@@ -74,9 +88,12 @@ namespace Engine {
 
 			ConsoleString command;
 			std::vector<FormattedString> consoleLog;
+			std::map<std::string, ConsoleCommand> consoleCommands;
 
 			float cursorBlinkSpeed;
 			bool cursorVisible;
+
+			Engine::Theme::GuiTheme* themeOverride;
 
 			Engine::Graphics::CGui* pGui;
 			Engine::Graphics::Gui::Panel* consolePanel;

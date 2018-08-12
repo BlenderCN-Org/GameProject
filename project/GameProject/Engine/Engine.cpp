@@ -1,15 +1,15 @@
 /// Internal Includes
 
 #include "Engine.hpp"
-#include "Core/System.hpp"
-#include "Core/LibraryLoader.hpp"
 #include "Graphics/Graphics.hpp"
 #include "Input/Input.hpp"
+#include "Graphics/GuiTheme.hpp"
 
 /// External Includes
+#include <EngineCore/Core/LibraryLoader.hpp>
+#include <EngineCore/Core/System.hpp>
 
 /// Std Includes
-#include <chrono>
 
 const char* vertexShader = ""
 "#version 410\n"
@@ -50,14 +50,16 @@ CEngine::CEngine()
 	// this must be called before using renderEngine
 	loadRenderEngine();
 	loadSettings();
-
+	
 	createGameWindow();
-	setupCursor();
+
+	assetManager = new Engine::AssetHandling::AssetManager(renderEngine);
+	setupGui(assetManager);
 
 	console->initGraphics(gui);
 	console->updateSize(windowWidth, windowHeight);
 
-	gameWindow->setCursorVisibility(false);
+	//gameWindow->setCursorVisibility(false);
 
 	setupInput(gameWindow, console);
 
@@ -67,13 +69,13 @@ CEngine::CEngine()
 
 	fullscreenQuad = new Engine::Graphics::FullscreenQuad();
 
-	assetManager = new Engine::AssetManager();
 
 	threadManager = new ThreadManager();
 
 	setupPhysicsEngine();
 
-
+	gTheme = nullptr;
+	initTheme();
 }
 
 CEngine::~CEngine() {
@@ -96,6 +98,7 @@ CEngine::~CEngine() {
 
 	delete cursor;
 	delete gui;
+	cleanupTheme();
 
 	gRenderEngine = nullptr;
 
@@ -113,8 +116,8 @@ CEngine::~CEngine() {
 
 void CEngine::setCursor(char* cursorImgPath) {
 
-	cursorTexture = assetManager->loadTexture(cursorImgPath);
-	cursor->setTexture(cursorTexture);
+	//cursorTexture = assetManager->loadTexture(cursorImgPath);
+	//cursor->setTexture(cursorTexture);
 }
 
 void CEngine::close() {
@@ -183,7 +186,7 @@ void CEngine::renderFullQuad() {
 	fullscreenQuad->render();
 }
 
-Engine::Interfaces::IAssetManager* CEngine::getAssetManager() const {
+Engine::AssetHandling::IAssetManager* CEngine::getAssetManager() const {
 	return assetManager;
 }
 
@@ -195,7 +198,7 @@ ThreadManager* CEngine::getThreadManager() {
 	return threadManager;
 }
 
-void CEngine::loadRenderEngine() {
+inline void CEngine::loadRenderEngine() {
 
 	if (renderEngineLib.loadLibrary("RenderEngine.dll\0")) {
 		Engine::Core::gConsole->print("Loaded RenderEngine.dll");
@@ -205,12 +208,12 @@ void CEngine::loadRenderEngine() {
 	}
 }
 
-void CEngine::loadSettings() {
+inline void CEngine::loadSettings() {
 	windowWidth = engineSettings.resolution().width;
 	windowHeight = engineSettings.resolution().height;
 }
 
-void CEngine::createGameWindow() {
+inline void CEngine::createGameWindow() {
 
 	CreateRenderEngineProc rProc = (CreateRenderEngineProc)renderEngineLib.getProcAddress("CreateRenderEngine");
 
@@ -230,9 +233,10 @@ void CEngine::createGameWindow() {
 
 	gameWindow->setWindowSize(windowWidth, windowHeight);
 	gameWindow->setVsync(engineSettings.vSync());
+	gameWindow->setVsync(false);
 }
 
-void CEngine::setupInput(IWindow* window, Engine::Core::Console* console) {
+inline void CEngine::setupInput(IWindow* window, Engine::Core::Console* console) {
 
 	Engine::Input::Input* input = Engine::Input::Input::GetInput();
 
@@ -240,20 +244,22 @@ void CEngine::setupInput(IWindow* window, Engine::Core::Console* console) {
 	input->attachConsole(console);
 }
 
-void CEngine::setupCursor() {
+inline void CEngine::setupGui(Engine::AssetHandling::AssetManager* assetManager) {
 
-	gui = new Engine::Graphics::CGui();
+	guiInfo.pAssetManager = assetManager;
+
+	gui = new Engine::Graphics::CGui(assetManager);
 	gui->setVisible(true);
 
-	cursor = new Engine::Graphics::Gui::Cursor();
+	cursor = new Engine::Graphics::Gui::Cursor(guiInfo);
 	cursor->setSize(25, 25);
 	cursor->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
-	cursor->setVisible(true);
+	cursor->setVisible(false);
 
 	gui->setCursor(cursor);
 }
 
-void CEngine::handleWindowSizeChange() {
+inline void CEngine::handleWindowSizeChange() {
 
 	if (Engine::Input::Input::GetInput()->sizeChange) {
 		int w = 0;
@@ -270,7 +276,7 @@ void CEngine::handleWindowSizeChange() {
 	}
 }
 
-void CEngine::createDepthShader() {
+inline void CEngine::createDepthShader() {
 
 	depthWriteShader = gRenderEngine->createShaderObject();
 	depthWriteShader->init();
@@ -287,7 +293,7 @@ void CEngine::createDepthShader() {
 	depthMdlMatLoc = depthWriteShader->getShaderUniform("mdl");
 }
 
-void CEngine::setupPhysicsEngine() {
+inline void CEngine::setupPhysicsEngine() {
 	PhysEngineCreateInfo peci;
 
 	peci.threaded = true;
@@ -303,4 +309,85 @@ void CEngine::setupPhysicsEngine() {
 	groundPlane->shape = ps;
 	ps->normal = glm::vec3(0, 1, 0);
 	ps->distance = -5.0F;
+}
+
+inline void CEngine::initTheme() {
+
+	gTheme = new Engine::Theme::GuiTheme();
+
+	gTheme->button.textureNormal = new Engine::Graphics::Texture::Texture2D();
+	gTheme->button.textureHovering = new Engine::Graphics::Texture::Texture2D();
+	gTheme->button.texturePressing = new Engine::Graphics::Texture::Texture2D();
+	gTheme->button.textureNormal->singleColor(0.6F, 0.6F, 0.6F, 1.0F);
+	gTheme->button.textureHovering->singleColor(0.55F, 0.55F, 0.55F, 1.0F);
+	gTheme->button.texturePressing->singleColor(0.046F, 0.51F, 1.0F, 1.0F);
+
+	gTheme->comboBox.textureNormal = new Engine::Graphics::Texture::Texture2D();
+
+	gTheme->list.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->list.textureItem = new Engine::Graphics::Texture::Texture2D();
+	gTheme->list.textureSelectedItem = new Engine::Graphics::Texture::Texture2D();
+	gTheme->list.areaScroll.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->list.areaScroll.textureBar = new Engine::Graphics::Texture::Texture2D();
+	gTheme->list.textureBackground->singleColor(0.65F, 0.65F, 0.65F, 1.0F);
+	gTheme->list.textureSelectedItem->singleColor(0.046F, 0.51F, 1.0F, 1.0F);
+	gTheme->list.textureItem->singleColor(0.60F, 0.60F, 0.60F, 1.0F);
+
+	gTheme->panel.textureNormal = new Engine::Graphics::Texture::Texture2D();
+	gTheme->panel.textureNormal->singleColor(0.5F, 0.5F, 0.5F, 1.0F);
+
+	gTheme->progressBar.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->progressBar.textureBar = new Engine::Graphics::Texture::Texture2D();
+
+	gTheme->scrollBar.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->scrollBar.textureBar = new Engine::Graphics::Texture::Texture2D();
+
+	gTheme->scrollBar.textureBackground->singleColor(0.7F, 0.7F, 0.7F, 1.0F);
+	gTheme->scrollBar.textureBar->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
+
+	gTheme->textArea.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->textArea.areaScroll.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->textArea.areaScroll.textureBar = new Engine::Graphics::Texture::Texture2D();
+
+	gTheme->textArea.textureBackground->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
+	gTheme->textArea.areaScroll.textureBackground->singleColor(1.0F, 1.0F, 1.0F, 1.0F);
+	gTheme->textArea.areaScroll.textureBar->singleColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+
+}
+
+template<typename T>
+inline void deleteAndNullify(T** ptr) {
+	delete *ptr;
+	*ptr = nullptr;
+}
+
+inline void CEngine::cleanupTheme() {
+
+	if (gTheme != nullptr) {
+		deleteAndNullify(&gTheme->button.textureNormal);
+		deleteAndNullify(&gTheme->button.textureHovering);
+		deleteAndNullify(&gTheme->button.texturePressing);
+
+		deleteAndNullify(&gTheme->comboBox.textureNormal);
+
+		deleteAndNullify(&gTheme->list.textureBackground);
+		deleteAndNullify(&gTheme->list.textureItem);
+		deleteAndNullify(&gTheme->list.textureSelectedItem);
+		deleteAndNullify(&gTheme->list.areaScroll.textureBackground);
+		deleteAndNullify(&gTheme->list.areaScroll.textureBar);
+
+		deleteAndNullify(&gTheme->panel.textureNormal);
+
+		deleteAndNullify(&gTheme->progressBar.textureBackground);
+		deleteAndNullify(&gTheme->progressBar.textureBar);
+
+		deleteAndNullify(&gTheme->scrollBar.textureBackground);
+		deleteAndNullify(&gTheme->scrollBar.textureBar);
+
+		deleteAndNullify(&gTheme->textArea.textureBackground);
+		deleteAndNullify(&gTheme->textArea.areaScroll.textureBackground);
+		deleteAndNullify(&gTheme->textArea.areaScroll.textureBar);
+	}
+	deleteAndNullify(&gTheme);
 }

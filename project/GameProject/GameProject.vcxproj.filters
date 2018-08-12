@@ -66,15 +66,6 @@
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Source Files\Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\LibraryLoader.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Core\System.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Core\Console.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\Panel.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClCompile>
@@ -111,9 +102,6 @@
     <ClCompile Include="Engine\Graphics\Textures\Texture2D.cpp">
       <Filter>Source Files\Engine\Graphics\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\String.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\Text.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClCompile>
@@ -122,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="Game\Game.cpp">
       <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Core\FormattedString.cpp">
-      <Filter>Source Files\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Gui\ScrollBar.cpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
@@ -153,9 +138,6 @@
     <ClCompile Include="Engine\Graphics\Mesh\Mesh.cpp">
       <Filter>Source Files\Engine\Graphics\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\AssetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Mesh\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -181,9 +163,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ThreadManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Loader\MapLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\Asteroids\Ship.cpp">
@@ -225,9 +204,6 @@
     <ClCompile Include="Game\MapObjects\Sky.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Loader\EditLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\FullscreenQuad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -238,6 +214,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game\Editor\Toolbox\MapHierarchy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MapObjects\Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Editor\FileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Editor\Toolbox\SkyEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -256,15 +244,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Interfaces\ICamera.hpp">
       <Filter>Source Files\Engine\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\LibraryLoader.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\System.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\Console.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\List.hpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
@@ -308,9 +287,6 @@
     <ClInclude Include="Engine\Graphics\Textures\Texture2D.hpp">
       <Filter>Source Files\Engine\Graphics\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\String.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\Text.hpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
     </ClInclude>
@@ -319,9 +295,6 @@
     </ClInclude>
     <ClInclude Include="Game\Game.hpp">
       <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\FormattedString.hpp">
-      <Filter>Source Files\Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Gui\ScrollBar.hpp">
       <Filter>Source Files\Engine\Graphics\Gui</Filter>
@@ -355,12 +328,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Mesh\Mesh.hpp">
       <Filter>Source Files\Engine\Graphics\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Interfaces\IAssetManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\AssetManager.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Interfaces\ICMesh.hpp">
       <Filter>Header Files</Filter>
@@ -405,12 +372,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ThreadManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SafeQueue.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Loader\MapLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game\Asteroids\Ship.hpp">
@@ -458,16 +419,7 @@
     <ClInclude Include="Game\IMap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\IEdit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Editor\EditorKeyBinds.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Loader\EditLoader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Loader\DataTags.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input\ScanCodes.hpp">
@@ -483,6 +435,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game\Editor\Toolbox\MapHierarchy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Grid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ShaderSettings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\Terrain.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Console.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MapObjects\DataTags.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editor\FileDialog.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GuiTheme.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Editor\Toolbox\SkyEdit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GuiInputMapping.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

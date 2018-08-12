@@ -19,12 +19,12 @@ namespace Engine {
 			class GuiWindow : public GuiItem {
 
 			public:
-				GuiWindow();
+				GuiWindow(GuiInfo& info);
 				virtual ~GuiWindow();
 
 				void addGuiItem(GuiItem* item);
 
-				virtual void update(float dt, GuiHitInfo& hitInfo);
+				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus);
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
 
 			private:

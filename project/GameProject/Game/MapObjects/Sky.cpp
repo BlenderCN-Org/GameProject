@@ -1,10 +1,12 @@
 
 /// Internal Includes
+#include "DataTags.hpp"
 #include "Sky.hpp"
 #include "../../Engine/Graphics/Graphics.hpp"
-#include "../../Engine/Core/System.hpp"
 
 /// External Includes
+#include <EngineCore/Core/System.hpp>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -12,18 +14,20 @@
 #include <fstream>
 #include <string>
 
-Sky::Sky() {
+//Sky::Sky() {
+//	setup();
+//
+//	skyColorDay = glm::vec3(0.3F, 0.55F, 0.8F);
+//	skyColorDay = glm::vec3(0.3F, 0.0F, 0.8F);
+//	skyColorNight = glm::vec3(0.024422F, 0.088654F, 0.147314F);
+//
+//	cycleTime = 120.0F;
+//}
+
+Sky::Sky(Engine::DataLoader::ILoader** loader, uint32_t skyId) : ppLoader(loader) {
 	setup();
 
-	skyColorDay = glm::vec3(0.3F, 0.55F, 0.8F);
-	skyColorDay = glm::vec3(0.3F, 0.0F, 0.8F);
-	skyColorNight = glm::vec3(0.024422F, 0.088654F, 0.147314F);
-
-	cycleTime = 120.0F;
-}
-
-Sky::Sky(LoadedData & skyData) {
-	setup();
+	skyData = (*ppLoader)->loadEntry(skyId);
 
 	if (verifyData(skyData)) {
 
@@ -43,9 +47,33 @@ Sky::Sky(LoadedData & skyData) {
 }
 
 Sky::~Sky() {
+
+	(*ppLoader)->freeEntry(skyData);
+
 	delete skyDome;
 
 	skyDomeShader->release();
+}
+
+void Sky::reloadCheck() {
+
+	Engine::AssetHandling::EntryData temp = (*ppLoader)->loadEntry(skyData.entryId);
+	if (skyData.engineFlagsLow != temp.engineFlagsLow || skyData.engineFlagsHigh != temp.engineFlagsHigh) {
+
+		Engine::AssetHandling::EntryData newData = temp;
+		temp = skyData;
+		skyData = newData;
+
+		SkyData* sk = (SkyData*)skyData.data;
+
+		skyColorDay = glm::vec3(sk->skyColorDay[0], sk->skyColorDay[1], sk->skyColorDay[2]);
+		skyColorNight = glm::vec3(sk->skyColorNight[0], sk->skyColorNight[1], sk->skyColorNight[2]);
+
+		cycleTime = sk->cycleTime;
+	}
+
+	(*ppLoader)->freeEntry(temp);
+	
 }
 
 void Sky::update(float dt) {
@@ -139,7 +167,7 @@ void Sky::setup() {
 
 }
 
-bool Sky::verifyData(LoadedData &data) {
+bool Sky::verifyData(Engine::AssetHandling::EntryData &data) {
 
 	bool dataOk = false;
 
@@ -154,7 +182,7 @@ bool Sky::verifyData(LoadedData &data) {
 		if (calcSize == data.size) {
 			dataOk = true;
 		}
-		
+
 	}
 
 	return dataOk;

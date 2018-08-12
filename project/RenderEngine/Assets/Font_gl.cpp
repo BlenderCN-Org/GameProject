@@ -13,17 +13,16 @@ Font_gl::Font_gl(FT_Library &_fontLib) {
 }
 
 void Font_gl::init(char * font, int size) {
-	FT_New_Face(fontLib, font, 0, &face);
-	fontSize = size;
-	FT_Set_Pixel_Sizes(face, 0, size);
 
+	fontFile = font;
+	fontSize = size;
+	
 	glGenTextures(1, &fontTexture);
 
-	genFontTexture();
+	loadAndGenerateFont();
 }
 
 void Font_gl::release() {
-	FT_Done_Face(face);
 
 	glDeleteTextures(1, &fontTexture);
 	delete this;
@@ -31,15 +30,12 @@ void Font_gl::release() {
 
 void Font_gl::setFontSize(int size) {
 	fontSize = size;
-	FT_Set_Pixel_Sizes(face, 0, size);
-	genFontTexture();
+	loadAndGenerateFont();
 }
 
 void Font_gl::setFont(char * font) {
-	if (face)
-		FT_Done_Face(face);
-	FT_New_Face(fontLib, font, 0, &face);
-	genFontTexture();
+	fontFile = font;
+	loadAndGenerateFont();
 }
 
 int Font_gl::getFontSize() const {
@@ -66,6 +62,14 @@ void Font_gl::getTextureInfo(int & x, int & y) {
 // comparison, not case sensitive.
 bool cmp(const Character& first, const Character& second) {
 	return (first.size.y > second.size.y);
+}
+
+void Font_gl::loadAndGenerateFont() {
+	FT_New_Face(fontLib, fontFile, 0, &face);
+	FT_Set_Pixel_Sizes(face, 0, fontSize);
+
+	genFontTexture();
+	FT_Done_Face(face);
 }
 
 void Font_gl::genFontTexture() {

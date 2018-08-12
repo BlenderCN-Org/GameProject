@@ -4,6 +4,8 @@
 #include "GuiShaders.hpp"
 #include "../Input/Input.hpp"
 
+#include "GuiInputMapping.hpp"
+
 /// External Includes
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -17,8 +19,9 @@ namespace Engine {
 			return left->getZIndex() < right->getZIndex();
 		}
 
-		CGui::CGui()
-			: guiItems()
+		CGui::CGui(Engine::AssetHandling::IAssetManager* assetManager)
+			: pAssetManager(assetManager)
+			, guiItems()
 			, shaders()
 			, visible(false)
 			, cur(nullptr) {
@@ -122,6 +125,13 @@ namespace Engine {
 		}
 
 		void CGui::update(float dt) {
+
+			//if (Input::Input::GetInput()->checkInputMapping(GuiInput::INPUT_ENTER).state == Input::InputStateType::E_STATE_PRESSED) {
+			//	setVisible(false);
+			//} else {
+			//	setVisible(true);
+			//}
+
 			if (visible) {
 
 				int mX = 0;
@@ -142,12 +152,19 @@ namespace Engine {
 				int w = 0, h = 0;
 
 				Input::Input::GetInput()->getWindowSize(w, h);
-
+				
 				for (it; it != eit; it++) {
+
+					if (focusedItem == nullptr) {
+						if (((*it)->isFocusable() || (*it)->hasFocusableItems()) && (*it)->isVisible()) {
+							focusedItem = *it;
+						}
+					}
+
 					int cw = w;
 					int ch = h;
 					(*it)->updateAbsoultePos(pos.x, pos.y, cw, ch);
-					(*it)->update(dt, hitInfo);
+					(*it)->update(dt, hitInfo, focusedItem);
 					if (hitInfo.mouseHit) {
 						hitInfo.zIndex = (*it)->getZIndex();
 					}
@@ -159,7 +176,7 @@ namespace Engine {
 				Input::Input::GetInput()->getWindowSize(w, h);
 				cur->updateAbsoultePos(pos.x, pos.y, w, h);
 				GuiHitInfo hitInfo;
-				cur->update(dt, hitInfo);
+				cur->update(dt, hitInfo, focusedItem);
 			}
 		}
 
@@ -210,6 +227,10 @@ namespace Engine {
 				gRenderEngine->setDepthTest(true);
 				gRenderEngine->setBlending(false);
 			}
+		}
+
+		Engine::AssetHandling::IAssetManager* CGui::getAssetManager() const {
+			return pAssetManager;
 		}
 	}
 }

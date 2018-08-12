@@ -2,10 +2,11 @@
 #define SKY_HPP
 
 /// Internal Includes
-#include "../Loader/MapLoader.hpp"
 #include "../../Engine/Graphics/SkyDome.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/Loader/MapLoader.hpp>
+
 #include <glm/glm.hpp>
 #include <RenderEngine/IRenderEngine.hpp>
 
@@ -22,9 +23,11 @@ class Sky {
 
 public:
 
-	Sky();
-	Sky(LoadedData &skyData);
-	~Sky();
+	//Sky();
+	Sky(Engine::DataLoader::ILoader** loader, uint32_t skyId);
+	virtual ~Sky();
+
+	void reloadCheck();
 
 	void update(float dt);
 
@@ -32,9 +35,12 @@ public:
 
 private:
 
+	Engine::DataLoader::ILoader** ppLoader;
+	Engine::AssetHandling::EntryData skyData;
+
 	void setup();
 
-	bool verifyData(LoadedData &data);
+	bool verifyData(Engine::AssetHandling::EntryData &data);
 
 	SkyDome *skyDome;
 

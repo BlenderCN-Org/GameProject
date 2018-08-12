@@ -21,7 +21,8 @@ namespace Engine {
 
 				void singleColor(float r, float g, float b, float a);
 
-				void setData(int x, int y, int numComponents, void* data);
+				void getSize(unsigned int& x, unsigned int& y);
+				void setData(unsigned int x, unsigned int y, unsigned int numComponents, void* data);
 
 				void bind();
 

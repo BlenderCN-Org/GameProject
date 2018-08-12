@@ -17,11 +17,11 @@ class ObjectList : public Engine::Graphics::Gui::Panel {
 
 public:
 	
-	ObjectList();
+	ObjectList(Engine::Graphics::GuiInfo& info);
 	virtual ~ObjectList();
 
-	virtual void update(float dt, Engine::Graphics::GuiHitInfo& hitInfo);
-	virtual void render(glm::mat4 &vpMatRef, Engine::Graphics::GuiShaderContainer& shaderContainer);
+	virtual void update(float dt, Engine::Graphics::GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
+	virtual void render(glm::mat4 &vpMatRef, Engine::Graphics::GuiShaderContainer& shaderContainer) override;
 
 
 private:

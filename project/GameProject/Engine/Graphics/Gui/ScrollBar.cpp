@@ -1,9 +1,10 @@
 /// Internal Includes
 #include "ScrollBar.hpp"
 #include "../../Input/Input.hpp"
-#include "../../Core/System.hpp"
+#include "../Graphics.hpp"
 
 /// External Includes
+#include <EngineCore/Core/System.hpp>
 
 /// Std Includes
 
@@ -11,10 +12,10 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			ScrollBar::ScrollBar()
-				: scrollDir(ScrollBarDirection::SCROLL_VERTICAL)
-				, numElements(0)
-				, minElements(0)
+			ScrollBar::ScrollBar(GuiInfo& info) : GuiItem(info)
+				, scrollDir(ScrollBarDirection::SCROLL_VERTICAL)
+				, numElements(1)
+				, minElements(1)
 				, selectedElement(0)
 				, autoScrollLastElement(false)
 				, scrollbarScreenPosition(0)
@@ -115,9 +116,11 @@ namespace Engine {
 				scrollbarTexture = texture;
 			}
 
-			void ScrollBar::update(float dt, GuiHitInfo& hitInfo) {
+			void ScrollBar::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
 
 				if (visible) {
+
+
 					// if we cannot scroll always select first element
 					if (numElements <= minElements) {
 						scrollbarScreenPosition = 0;
@@ -129,6 +132,14 @@ namespace Engine {
 						}
 
 					} else {
+
+						if (forceUpdate) {
+							if (scrollDir == ScrollBarDirection::SCROLL_HORIZONTAL) {
+								scrollbarThickness = size.x;
+							} else {
+								scrollbarThickness = size.y;
+							}
+						}
 
 						Input::Input* in = Input::Input::GetInput();
 
@@ -180,6 +191,13 @@ namespace Engine {
 			void ScrollBar::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
 
 				if (visible) {
+
+					Theme::GuiTheme* theme = gTheme;
+
+					if (nullptr != themeOverride) {
+						theme = themeOverride;
+					}
+
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
 					calculatePoints(vpMatRef);
@@ -193,11 +211,12 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
-					if (backgroundTexture) {
-						backgroundTexture->bind();
+
+					if (theme->scrollBar.textureBackground) {
+						theme->scrollBar.textureBackground->bind();
+						// render background
+						shaderContainer.standardQuad->render();
 					}
-					// render background
-					shaderContainer.standardQuad->render();
 
 					glm::vec4 scrollAreaSize = positionAndSizeFromMatrix(vpMatRef);
 
@@ -232,12 +251,11 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
-					if (scrollbarTexture) {
-						scrollbarTexture->bind();
+					if (theme->scrollBar.textureBar) {
+						theme->scrollBar.textureBar->bind();
+						// render bar
+						shaderContainer.standardQuad->render();
 					}
-
-					// render bar
-					shaderContainer.standardQuad->render();
 
 				}
 			}

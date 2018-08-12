@@ -1,11 +1,11 @@
 
 /// Internal Includess
 #include "Game.hpp"
-#include "Loader/EditLoader.hpp"
-#include "../Engine/Core/System.hpp"
 #include "../Engine/Graphics/Graphics.hpp"
 
 /// External Includes
+#include <EngineCore/AssetHandling/AssetManager.hpp>
+#include <EngineCore/AssetHandling/Loader/EditLoader.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -20,10 +20,10 @@ TemporaryStorage ts(16 * KB);
 // @temporary end
 
 Game::Game(CEngine* _engine)
-	: gameGui(nullptr)
-	, engine(_engine)
+	: engine(_engine)
 	, mesh(nullptr)
-	, batchTmp(nullptr) {
+	, batchTmp(nullptr)
+	, mapLoader(nullptr) {
 
 	currentState = GameState::MAIN_MENU;
 	lastState = GameState::MAIN_MENU;
@@ -36,10 +36,10 @@ Game::Game(CEngine* _engine)
 
 	*(glm::mat4*)(camera.getPerspectiveMatrix()) = glm::perspectiveFov(glm::radians(45.0F), 1280.0F, 720.0F, 0.1F, 100.0F);
 
-	mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/Test_exteriorScene_vColor1.mesh");
+	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/Test_exteriorScene_vColor1.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/Creature.mesh");
 	//aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/Test_exteriorScene_vColor1.mesh");
-	aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/HalfCube.mesh");
+	//aabbTest = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/V2/HalfCube.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/newFmat.mesh");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadMesh("Data/Meshes/untitled.dae");
 	//mesh = (Engine::Graphics::Mesh::CMesh*)engine->getAssetManager()->loadDea("Data/Meshes/untitled.dae");
@@ -48,31 +48,28 @@ Game::Game(CEngine* _engine)
 	//mesh->loadMesh("Data/Meshes/Test_exteriorScene_vColor.mesh");
 	//mesh->loadMesh("Data/Meshes/newFmat.skel");
 
-	viewGizmo = new ViewGizmo(engine);
-
 	engine->setCursor("Data/Textures/Gui/Cursor2.png");
-
-	gameGui = new Engine::Graphics::CGui();
-	gameGui->setVisible(true);
 
 	panelTexture = new Engine::Graphics::Texture::Texture2D();
 	panelTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
 
+	guiInfo.pAssetManager = engine->getAssetManager();
 
-	metrixPanel = new Engine::Graphics::Gui::Panel();
+	metrixPanel = new Engine::Graphics::Gui::Panel(guiInfo);
+	metrixPanel->setHitTest(false);
 	metrixPanel->setPosition(-10, 10);
 	metrixPanel->setSize(400, 200);
 	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_RIGHT);
 	metrixPanel->setVisible(true);
 	metrixPanel->setTexture(panelTexture);
 
-	infoLabel = new Engine::Graphics::Gui::Label();
+	infoLabel = new Engine::Graphics::Gui::Label(guiInfo);
 	infoLabel->setSize(400, 200);
 	infoLabel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	infoLabel->setVisible(true);
 	infoLabel->setText("test");
 
-	gameGui->addGuiItem(metrixPanel);
+	engine->getGui()->addGuiItem(metrixPanel);
 	metrixPanel->addGuiItem(infoLabel);
 
 	shader = gRenderEngine->createShaderObject();
@@ -195,16 +192,17 @@ Game::Game(CEngine* _engine)
 
 	menu = new MainMenu(engine->getGui());
 
-	editor = new Editor();
+	editor = new Editor(engine);
 
-	mapLoader.openMap("E:/GameProjectAssets/Data/GameMap.map");
+	mapLoader = new Engine::DataLoader::MapLoader(*engine->getAssetManager());
+	editLoader = new Engine::DataLoader::EditLoader(*engine->getAssetManager());
 
-	LoadedData data = mapLoader.loadEntry(1);
+	mapLoader->openFile("E:/GameProjectAssets/Data/GameMap.map");
 
-	map = new Map(data, mapLoader);
+	activeLoader = mapLoader;
 
-	mapLoader.freeEntry(data);
-	
+	map = new Map(&activeLoader, 1);
+
 	physParticles.push_back(new PhysicsParticle(engine->getPhysEngine()));
 
 	testShader = gRenderEngine->createShaderObject();
@@ -224,7 +222,6 @@ Game::Game(CEngine* _engine)
 
 Game::~Game() {
 
-	delete viewGizmo;
 
 	testShader->release();
 
@@ -250,13 +247,15 @@ Game::~Game() {
 	shadowMap->release();
 	shadowShader->release();
 
-	if (gameGui) {
-		delete gameGui;
-		gameGui = nullptr;
-	}
+	engine->getGui()->removeGuiItem(metrixPanel);
+
 	delete metrixPanel;
 	delete infoLabel;
 	delete panelTexture;
+
+	delete mapLoader;
+	delete editLoader;
+
 	//delete sky;
 
 	//delete player;
@@ -287,8 +286,6 @@ void Game::update(float dt, uint64_t clocks) {
 
 	engine->update(dt);
 	fpsCounter.update(dt);
-
-	gameGui->update(dt);
 
 	if (Engine::Input::Input::GetInput()->sizeChange) {
 		int w = 0;
@@ -362,6 +359,10 @@ void Game::update(float dt, uint64_t clocks) {
 	str += "Last Key: " + std::string(ie.mouse ? "mouse " : "key ") + std::to_string(ie.code) + "\n";
 
 	str += "Particles: " + std::to_string(physParticles.size()) + "\n";
+
+	Engine::Input::InputDevice idev = Engine::Input::Input::GetInput()->getLastInputDevice();
+
+	str += "Input Device: " + std::string((idev == Engine::Input::InputDevice::E_DEVICE_MOUSE_KEYBOARD) ? "Mouse/Keyboard\n" : "Gamepad\n");
 
 	str += engine->getThreadManager()->getThreadInfo(0) + " / " + engine->getThreadManager()->getThreadInfo(1) + " / ";
 	str += engine->getThreadManager()->getThreadInfo(2) + "\n" + engine->getThreadManager()->getThreadInfo(3) + " / ";
@@ -437,49 +438,19 @@ void Game::render() {
 		map->render();
 
 		if (currentState == GameState::EDIT) {
-			
-			viewGizmo->gizmoMesh->bind();
 
-			glm::mat4 viewRot = *(glm::mat4*)camera.getViewMatrix();
+			ShaderSettings shSettings;
+			shSettings.activeShader = gBufferShader;
+			shSettings.cameraDirection = camInput.direction();
+			shSettings.cameraPosition = camera.getPos();
+			shSettings.clipPlaneLocation = clipPlane;
+			shSettings.modelMatrixLocation = matLocationGBuff;
+			shSettings.viewProjectionLocation = vpLocationGBuff;
+			shSettings.reflectionMatrixLocation = refMatLocationGBuff;
+			shSettings.viewProjectionMatrix = vpMat;
+			shSettings.viewMatrix = *(glm::mat4*)camera.getViewMatrix();
 
-			viewRot = glm::inverse(viewRot);
-			viewRot[3][0] = 0.0F;
-			viewRot[3][1] = 0.0F;
-			viewRot[3][2] = 0.0F;
-
-			glm::mat4 objMat = glm::mat4();
-
-			glm::vec3 camPos = camera.getPos();
-			glm::vec3 dir = camInput.direction() ;
-
-			viewRot = glm::inverse(viewRot);
-
-			objMat[3][0] = camPos.x + (dir.x * 5);
-			objMat[3][1] = camPos.y + (dir.y * 5);
-			objMat[3][2] = camPos.z + (dir.z * 5);
-
-
-			objMat = glm::scale(objMat, glm::vec3(0.3F));
-
-			objMat = glm::transpose(objMat);
-
-			glm::mat4 moveMat;
-			moveMat[3][0] = -0.9F;
-			moveMat[3][1] = -0.85F;
-
-
-			glm::mat4 finalTranspose = moveMat * vpMat;
-
-
-			gBufferShader->useShader();
-			gBufferShader->bindData(vpLocationGBuff, UniformDataType::UNI_MATRIX4X4, &finalTranspose);
-			gBufferShader->bindData(refMatLocationGBuff, UniformDataType::UNI_MATRIX4X4, &glm::mat4());
-			gBufferShader->bindData(clipPlane, UniformDataType::UNI_FLOAT4, &glm::vec4());
-			gBufferShader->bindData(matLocationGBuff, UniformDataType::UNI_MATRIX4X4, &objMat);
-
-			viewGizmo->gizmoMesh->render();
-
-			editor->render();
+			editor->render(shSettings);
 
 		}
 
@@ -682,8 +653,6 @@ void Game::present() {
 		(*it)->render();
 	}
 
-	gameGui->render();
-
 }
 
 
@@ -694,6 +663,12 @@ void Game::updateMenu(float dt) {
 
 		int pressedIndex = menu->buttonPressed();
 
+		if (pressedIndex != -1) {
+			menu->setVisible(false);
+		} else {
+			menu->setVisible(true);
+		}
+
 		if (pressedIndex == 0) {
 			engine->lockCursor(true);
 			currentState = GameState::PLAY;
@@ -702,7 +677,11 @@ void Game::updateMenu(float dt) {
 
 		} else if (pressedIndex == 1) {
 			currentState = GameState::EDIT;
-			editor->start(new EditLoader(), &map);
+
+			activeLoader->closeFile();
+			activeLoader = editLoader;
+
+			editor->start(editLoader, &map);
 
 		} else if (pressedIndex == 2) {
 			engine->close();
@@ -714,7 +693,6 @@ void Game::updateMenu(float dt) {
 			}
 
 			map = new AsteroidsMap(camInput, camera);
-
 		}
 	}
 
@@ -742,9 +720,11 @@ void Game::updateEdit(float dt) {
 
 	editor->update(dt);
 
-	if (editor->mouseInGui() == false) {
+	if (engine->getGui()->mouseHitGui() == false) {
 		camInput.update(dt, freeCam);
 	}
+
+	map->update(dt);
 
 }
 
