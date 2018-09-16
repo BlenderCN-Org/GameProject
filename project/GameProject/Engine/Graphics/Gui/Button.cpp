@@ -20,6 +20,7 @@ namespace Engine {
 				lbl->setVisible(true);
 				lbl->setPosition(0, 0);
 				lbl->setSize(190, 50);
+				enabled = true;
 			}
 
 			Button::~Button() {
@@ -33,16 +34,17 @@ namespace Engine {
 				return click;
 			}
 
-			void Button::setTexture(Texture::Texture2D* texture) {
-				tex = texture;
+			void Button::setEnabled(bool enable) {
+				enabled = enable;
 			}
 
-			void Button::setHoverTexture(Texture::Texture2D* texture) {
-				hovTex = texture;
+			bool Button::getEnabled() const {
+				return enabled;
 			}
-
-			void Button::setPressTexture(Texture::Texture2D* texture) {
-				pressTex = texture;
+			
+			void Button::setIcon(Engine::Graphics::Texture::Texture2D* ico) {
+				lbl->setIcon(ico);
+				lbl->setSize(lbl->calcTextWidth(), lbl->calcTextHeight() + 3);
 			}
 
 			void Button::setText(const Engine::Core::FormattedString& str) {
@@ -104,7 +106,7 @@ namespace Engine {
 					hitInfo.mouseHit = true;
 				}
 
-				lbl->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+				lbl->updateAbsoultePos(absolutePosition.x, absolutePosition.y, absoluteSize.x, absoluteSize.y);
 				lbl->update(dt, hitInfo, currentFocus);
 
 			}
@@ -132,22 +134,12 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
 					
 					Texture::Texture2D* texture = theme->button.textureNormal;
-
-					//if (tex) {
-					//	tex->bind();
-					//}
-
-					if (hovering) {
+					
+					if (hovering && enabled) {
 						if (pressing) {
 							texture = theme->button.texturePressing;
-							//if (pressTex) {
-							//	pressTex->bind();
-							//}
 						} else {
 							texture = theme->button.textureHovering;
-							//if (hovTex) {
-							//	hovTex->bind();
-							//}
 						}
 					}
 
@@ -158,14 +150,13 @@ namespace Engine {
 						shaderContainer.standardQuad->bind();
 						shaderContainer.standardQuad->render();
 					}
-
+					
 					posAndSize = positionAndSizeFromMatrix(vpMatRef);
 					// render all subitems
 					glm::mat4 cpy = vpMatRef;
-					gRenderEngine->setScissorTest(true);
-					gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
 					lbl->render(cpy, shaderContainer);
-					gRenderEngine->setScissorTest(false);
+					gRenderEngine->popScissorRegion(scinfo);
 
 				}
 

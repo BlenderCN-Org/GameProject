@@ -11,9 +11,13 @@
 #include "Game/Game.hpp"
 #include "Debug.hpp"
 
+#include <EngineCore/Core/LibraryLoader.hpp>
+
 /// External Includes
 
 /// Std Includes
+
+typedef void(*fn)(ULONG);
 
 void gameLoop() {
 	float dt = 0;

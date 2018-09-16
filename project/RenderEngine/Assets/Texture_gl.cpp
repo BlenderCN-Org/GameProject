@@ -1,6 +1,5 @@
 #include "Texture_gl.hpp"
 
-#include "../Utils/MemoryManager.hpp"
 #include <memory>
 
 void Texture_gl::init(int _internalComponents, bool compress) {

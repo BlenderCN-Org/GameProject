@@ -94,7 +94,6 @@ namespace Engine {
 				consolePanel->setThemeOverride(themeOverride);
 				consolePanel->setSize(0, 0);
 				consolePanel->setVisible(false);
-				consolePanel->setTexture(consoleBg);
 				consolePanel->setZIndex(1000);
 
 				consoleTextArea->setPosition(0, 0);

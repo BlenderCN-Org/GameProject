@@ -56,7 +56,7 @@ namespace Engine {
 
 			Header h;
 			h.version = 0x1000;
-			h.numEntries = entryList.size();
+			h.numEntries = static_cast<uint32_t>(entryList.size());
 
 			writeHelper(outFile, &h, sizeof(Header));
 
@@ -300,11 +300,11 @@ namespace Engine {
 		void EditLoader::writeOffsets(std::ofstream &outFile, const std::vector<AssetHandling::EntryData> &entries) {
 
 			const uint32_t headerSize = sizeof(Header);
-			const uint32_t offsetTableSize = sizeof(OffsetData) * entries.size();
+			const uint32_t offsetTableSize = sizeof(OffsetData) * static_cast<uint32_t>(entries.size());
 
 			uint32_t entrySizez = 0;
 
-			for (size_t i = 0; i < entries.size(); i++) {
+			for (size_t i = 0; i < static_cast<uint32_t>(entries.size()); i++) {
 				AssetHandling::EntryData ed = entries[i];
 				OffsetData offData;
 				offData.entry = ed.entryId;

@@ -37,7 +37,6 @@ namespace Engine {
 				std::vector<GuiItem*> subItems;
 				Panel* itemPanel;
 
-				Texture::Texture2D* background;
 				Texture::Texture2D* titleBar;
 				Button* closeButton;
 

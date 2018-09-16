@@ -76,6 +76,12 @@ enum class StencilOp :int {
 	KEEP,
 };
 
+struct ScissorInfo {
+	int enableCtr;
+	int x, y;
+	int w, h;
+};
+
 class IRenderEngine {
 public:
 
@@ -94,8 +100,11 @@ public:
 
 	virtual void colorMask(bool r, bool g, bool b, bool a) = 0;
 
-	virtual void setScissorTest(bool enable) = 0;
-	virtual void setScissorRegion(int x, int y, int width, int height) = 0;
+	//virtual void setScissorTest(bool enable) = 0;
+	//virtual void setScissorRegion(int x, int y, int width, int height) = 0;
+
+	virtual const ScissorInfo pushScissorRegion(int x, int y, int width, int height) = 0;
+	virtual void popScissorRegion(const ScissorInfo prevScissor) = 0;
 
 	virtual void clearStencil() = 0;
 

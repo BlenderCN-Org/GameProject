@@ -444,7 +444,6 @@ namespace AssetLib {
 		Model m;
 
 		if (endsWithCaseInsensitive(fileName, ".mesh")) {
-
 			createFromMesh(m, fileName);
 		} else if (endsWithCaseInsensitive(fileName, ".dae")) {
 			createFromDae(m, fileName);

@@ -72,6 +72,9 @@ extern "C"
 #endif
 
 void RenderEngine::init(RenderEngineCreateInfo &createInfo) {
+	
+	memset(&scissorInfo, 0, sizeof(ScissorInfo));
+
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	reci = createInfo;
 	if (reci.renderEngineType == RenderEngineType::eRenderOpenGL) {
@@ -241,6 +244,42 @@ void RenderEngine::setScissorRegion(int x, int y, int width, int height) {
 		glWindow.getWindowSize(wx, wy);
 
 		glScissor(x, wy - (y + height), width, height);
+	}
+}
+
+const ScissorInfo RenderEngine::pushScissorRegion(int x, int y, int width, int height) {
+	ScissorInfo orgScissor = scissorInfo;
+	scissorInfo.enableCtr++;
+	scissorInfo.x = x;
+	scissorInfo.y = y;
+	scissorInfo.w = width;
+	scissorInfo.h = height;
+
+	setScissorRegion(x, y, width, height);
+
+	if (orgScissor.enableCtr == 0){
+		setScissorTest(true);
+	}
+
+	return orgScissor;
+}
+
+void RenderEngine::popScissorRegion(const ScissorInfo prevScissor) {
+
+	if (scissorInfo.enableCtr == prevScissor.enableCtr + 1) {
+		scissorInfo = prevScissor;
+		int wx = 0;
+		int wy = 0;
+		glWindow.getWindowSize(wx, wy);
+
+		glScissor(prevScissor.x, wy - (prevScissor.y + prevScissor.h), prevScissor.w, prevScissor.h);
+
+		if (prevScissor.enableCtr == 0) {
+			setScissorTest(false);
+		}
+	} else {
+		printf("Invalid previous scissor struct!\n");
+		setScissorTest(false);
 	}
 }
 

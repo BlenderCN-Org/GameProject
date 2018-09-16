@@ -23,9 +23,10 @@ namespace Engine {
 				
 				bool wasPressed();
 
-				void setTexture(Texture::Texture2D* texture);
-				void setHoverTexture(Texture::Texture2D* texture);
-				void setPressTexture(Texture::Texture2D* texture);
+				void setEnabled(bool enable);
+				bool getEnabled() const;
+
+				void setIcon(Engine::Graphics::Texture::Texture2D* ico);
 
 				void setText(const Engine::Core::FormattedString& str);
 
@@ -36,15 +37,13 @@ namespace Engine {
 
 			private:
 				
-				Texture::Texture2D* tex;
-				Texture::Texture2D* hovTex;
-				Texture::Texture2D* pressTex;
-
 				Label* lbl;
 
 				bool hovering;
 				bool pressing;
 				bool clicked;
+
+				bool enabled;
 
 			};
 		}

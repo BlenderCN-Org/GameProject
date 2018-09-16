@@ -1,7 +1,5 @@
 #include "ShelfPack.hpp"
 
-#include "FrameAllocator_static.hpp"
-
 ShelfPack::ShelfPack(int x, int y) {
 	width = x;
 	height = y;

@@ -113,7 +113,7 @@ namespace Engine {
 			bool releasedThisFrame(const KeyBind &keyBind, bool includeMods = true);
 			bool wasPressedThisFrame(const KeyBind &keyBind, bool includeMods = true);
 
-			InputState checkInputMapping(InputMapping &mapping);
+			InputState checkInputMapping(const InputMapping &mapping);
 
 			void getCursorDelta(float &x, float &y);
 

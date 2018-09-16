@@ -14,11 +14,11 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 			
-			ProgressBar::ProgressBar(GuiInfo& info) : GuiItem(info) , min(0U), max(0U), value(0U), backTex(nullptr), progTex(nullptr) {
+			ProgressBar::ProgressBar(GuiInfo& info) : GuiItem(info) , min(0U), max(0U), value(0U) {
 
 			}
 
-			ProgressBar::ProgressBar(GuiInfo& info, uint32_t _min, uint32_t _max, uint32_t _value) : GuiItem(info), backTex(nullptr), progTex(nullptr) {
+			ProgressBar::ProgressBar(GuiInfo& info, uint32_t _min, uint32_t _max, uint32_t _value) : GuiItem(info){
 				min = _min;
 				max = _max;
 				value = _value;
@@ -31,14 +31,6 @@ namespace Engine {
 			void ProgressBar::setRange(uint32_t _min, uint32_t _max) {
 				min = _min;
 				max = _max;
-			}
-
-			void ProgressBar::setBackgorundTexture(Texture::Texture2D* texture) {
-				backTex = texture;
-			}
-
-			void ProgressBar::setProgressTexture(Texture::Texture2D* texture) {
-				progTex = texture;
 			}
 
 			void ProgressBar::render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) {
@@ -76,15 +68,14 @@ namespace Engine {
 
 					float percentage = System::percentageInRange(min, max, value);
 
-					gRenderEngine->setScissorTest(true);
-					gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)(posAndSize.z * percentage), (int)posAndSize.w);
-
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)(posAndSize.z * percentage), (int)posAndSize.w);
+					
 					if (theme->progressBar.textureBar) {
 						theme->progressBar.textureBar->bind();
 
 						shaderContainer.standardQuad->render();
 					}
-					gRenderEngine->setScissorTest(false);
+					gRenderEngine->popScissorRegion(scinfo);
 
 				}
 

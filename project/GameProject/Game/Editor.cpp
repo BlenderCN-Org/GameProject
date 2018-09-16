@@ -71,14 +71,39 @@ Editor::Editor(CEngine* engine)
 	skyEdit->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_LEFT);
 	skyEdit->setSize(200, 200);
 
+	statusBar = new Engine::Graphics::Gui::StatusBar(guiInfo);
+	cameraStatus = new CameraStatusInfo(guiInfo);
+
+	cameraStatus->setAnchorPoint(EGraphics::GuiAnchor::LEFT);
+	cameraStatus->setSize(200, 50);
+	cameraStatus->setPosition(1, 1);
+	cameraStatus->setVisible(true);
+
+	statusBar->addStatusItem(cameraStatus);
+
+	toolSelector = new ToolSelector(guiInfo);
+	toolSelector->setAnchorPoint(EGraphics::GuiAnchor::CENTER);
+	toolSelector->setSize(0, 0);
+	toolSelector->setPosition(0, 0);
+	toolSelector->setVisible(false);
+
+	envEditor = new EnvironmentEditor(guiInfo);
+	envEditor->setAnchorPoint(EGraphics::GuiAnchor::TOP_LEFT);
+	envEditor->setSize(300, 500);
+	envEditor->setPosition(10, 10);
+	envEditor->setVisible(false);
+
 	engine->getGui()->addGuiItem(fileDialog);
 	engine->getGui()->addGuiItem(skyEdit);
+	engine->getGui()->addGuiItem(toolSelector);
+	engine->getGui()->addGuiItem(envEditor);
 }
 
 Editor::~Editor() {
 
 	pEngine->getGui()->removeGuiItem(fileDialog);
 	pEngine->getGui()->removeGuiItem(skyEdit);
+	pEngine->getGui()->removeGuiItem(toolSelector);
 	cellBorderMesh->release();
 	editorBasicShader->release();
 
@@ -87,6 +112,12 @@ Editor::~Editor() {
 	delete objList;
 	delete fileDialog;
 	delete skyEdit;
+
+	delete statusBar;
+	delete cameraStatus;
+
+	delete toolSelector;
+	delete envEditor;
 
 	pEngine = nullptr;
 }
@@ -100,7 +131,7 @@ void Editor::start(Engine::DataLoader::IEditLoader* pEditClass, IMap** ppMap) {
 	assetString += "/Data/";
 
 	fileDialog->showDialog(assetString, true);
-
+	pEngine->getGui()->setStatusBar(statusBar);
 }
 
 void Editor::update(float dt) {
@@ -160,6 +191,7 @@ void Editor::updateWaitForMapState(float dt) {
 		pGameEditAccess->openFile(selectedFile.cStr());
 		fileDialog->setVisible(false);
 		skyEdit->setVisible(true);
+		envEditor->setVisible(true);
 	}
 	if (SelectStatus::SELECT_STATUS_CANCEL == fileDialog->getSelectStatus()) {
 		printf("Open Canceled\n");
@@ -183,6 +215,17 @@ void Editor::updateEditing(float dt) {
 		path += "Data/Test.map";
 		pGameEditAccess->save(path.c_str());
 		printf("Saving changes\n");
+	}
+
+	if (in->checkInputMapping(EditorKeyBinds::editorToolSelect).state == Engine::Input::InputStateType::E_STATE_PRESSED) {
+		toolSelector->setVisible(true);
+	} else {
+		toolSelector->setVisible(false);
+	}
+
+	if (in->checkInputMapping(EditorKeyBinds::editorToolSelect).state == Engine::Input::InputStateType::E_STATE_RELEASED) {
+		// update to new selected editor
+		printf("Changing editor!\n");
 	}
 
 	if (true == in->releasedThisFrame(EditorKeyBinds::editorOpen)) {
@@ -211,8 +254,8 @@ void Editor::updateEditing(float dt) {
 		map.cellsX = 9;
 		map.cellsY = 9;
 		map.cellsPointer = 0;
-		
-		uint32_t size = sizeof(MapData) + ((map.cellsX * map.cellsY) - 1) * sizeof(uint32_t) ;
+
+		uint32_t size = sizeof(MapData) + ((map.cellsX * map.cellsY) - 1) * sizeof(uint32_t);
 
 		entry.data = malloc(size);
 

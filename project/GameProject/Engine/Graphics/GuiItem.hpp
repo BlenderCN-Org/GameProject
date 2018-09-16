@@ -50,6 +50,8 @@ namespace Engine {
 			void setPosition(int x, int y);
 			void setSize(int w, int h);
 
+			void getSize(int &w, int &h);
+
 			bool isVisible() const;
 
 			void setVisible(bool visibilityFlag);
@@ -61,9 +63,7 @@ namespace Engine {
 
 			virtual bool isFocusable() const;
 			virtual bool hasFocusableItems() const;
-
-
-
+			
 			virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus);
 			virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer);
 
@@ -83,7 +83,8 @@ namespace Engine {
 
 			glm::ivec2 position;
 			glm::ivec2 size;
-			glm::ivec2 absoulutePosition;
+			glm::ivec2 absolutePosition;
+			glm::ivec2 absoluteSize;
 
 			glm::vec4 uvCoords;
 

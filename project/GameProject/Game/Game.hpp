@@ -90,7 +90,6 @@ private:
 
 	Engine::Graphics::Gui::Panel* metrixPanel;
 	Engine::Graphics::Gui::Label* infoLabel;
-	Engine::Graphics::Texture::Texture2D* panelTexture;
 	
 	//Player* player;
 

@@ -11,6 +11,7 @@ enum class MeshPrimitiveType {
 	LINE_STRIP,
 	TRIANGLE,
 	TRIANGLE_STRIP,
+	TRIANGLE_FAN,
 	QUAD,
 };
 

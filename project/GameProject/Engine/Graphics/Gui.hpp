@@ -5,6 +5,7 @@
 #include "GuiItem.hpp"
 #include "ShaderContainer.hpp"
 #include "Gui/Cursor.hpp"
+#include "Gui/StatusBar.hpp"
 #include "../Interfaces/Renderable.hpp"
 
 /// External Includes
@@ -27,6 +28,8 @@ namespace Engine {
 
 			void setCursor(Gui::Cursor* cursor);
 
+			void setStatusBar(Gui::StatusBar* status);
+
 			void setPosition(int x, int y);
 
 			void addGuiItem(GuiItem* guiItem);
@@ -43,6 +46,7 @@ namespace Engine {
 			Engine::AssetHandling::IAssetManager* pAssetManager;
 
 			Gui::Cursor* cur;
+			Gui::StatusBar* statusBar;
 			std::vector<GuiItem*> guiItems;
 
 			GuiItem* focusedItem;

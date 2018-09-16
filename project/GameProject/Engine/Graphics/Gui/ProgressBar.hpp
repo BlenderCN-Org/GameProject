@@ -20,9 +20,6 @@ namespace Engine {
 				ProgressBar(GuiInfo& info);
 				ProgressBar(GuiInfo& info, uint32_t _min, uint32_t _max, uint32_t _value);
 
-				void setBackgorundTexture(Texture::Texture2D* texture);
-				void setProgressTexture(Texture::Texture2D* texture);
-
 				void setValue(uint32_t _value);
 				void setRange(uint32_t _min, uint32_t _max);
 
@@ -33,9 +30,6 @@ namespace Engine {
 				uint32_t min;
 				uint32_t max;
 				uint32_t value;
-
-				Texture::Texture2D* backTex;
-				Texture::Texture2D* progTex;
 
 			};
 		}

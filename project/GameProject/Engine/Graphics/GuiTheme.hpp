@@ -48,6 +48,16 @@ namespace Engine {
 			ScrollBarTheme areaScroll;
 		};
 
+		struct StatusBarTheme {
+			Engine::Graphics::Texture::Texture2D* textureBackground;
+		};
+
+		struct TabViewTheme {
+			Engine::Graphics::Texture::Texture2D* background;
+			Engine::Graphics::Texture::Texture2D* icoNext;
+			Engine::Graphics::Texture::Texture2D* icoPrev;
+		};
+
 		struct GuiTheme {
 
 			glm::vec4 textColor;
@@ -58,7 +68,8 @@ namespace Engine {
 			ProgressBarTheme progressBar;
 			TextAreaTheme textArea;
 			ListTheme list;
-
+			StatusBarTheme statusBar;
+			TabViewTheme tabView;
 		};
 	}
 }

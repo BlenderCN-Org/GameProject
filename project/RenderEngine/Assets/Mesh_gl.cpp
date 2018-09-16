@@ -2,7 +2,6 @@
 
 #include <glm/glm.hpp>
 
-#include "../Utils/MemoryManager.hpp"
 #include <memory>
 #include "../ReGlobal.hpp"
 
@@ -141,6 +140,8 @@ void Mesh_gl::setMeshData(void * data, size_t size, MeshDataLayout layout) {
 		meshPrimitive = GL_TRIANGLES;
 	else if (primitiveType == MeshPrimitiveType::TRIANGLE_STRIP)
 		meshPrimitive = GL_TRIANGLE_STRIP;
+	else if (primitiveType == MeshPrimitiveType::TRIANGLE_FAN)
+		meshPrimitive = GL_TRIANGLE_FAN;
 	else if (primitiveType == MeshPrimitiveType::QUAD)
 		meshPrimitive = GL_QUADS;
 	else if (primitiveType == MeshPrimitiveType::POINT)

@@ -13,16 +13,33 @@ namespace Engine {
 
 			Label::Label(GuiInfo info) : GuiItem(info), text(info.pAssetManager) {
 				text.setText("Test");
+				icon = nullptr;
 			}
 
 			Label::~Label() {}
 
 			int Label::calcTextWidth() const {
-				return text.getTextWidth();
+				uint32_t s = 0;
+				uint32_t t = 0;
+				if (icon != nullptr) {
+					icon->getSize(s, t);
+				}
+				s += text.getTextWidth();
+				return s;
 			}
 
 			int Label::calcTextHeight() const {
-				return text.getTextHeight();
+				uint32_t s = 0;
+				uint32_t t = 0;
+				if (icon != nullptr) {
+					icon->getSize(t, s);
+				}
+				s += text.getTextHeight();
+				return s;
+			}
+
+			void Label::setIcon(Engine::Graphics::Texture::Texture2D* ico) {
+				icon = ico;
 			}
 
 			void Label::setText(const Engine::Core::FormattedString& str) {
@@ -45,17 +62,43 @@ namespace Engine {
 
 					int textureSlot = 0;
 
+					if (icon) {
+						shaderContainer.guiElementShader->useShader();
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
+
+						glm::ivec4 posSize = positionAndSizeFromMatrix(vpMatRef);
+						icon->bind();
+
+						unsigned int iw, ih;
+
+						icon->getSize(iw, ih);
+						posSize.z = glm::min(size.y - 2, (int)iw);
+						posSize.w = glm::min(size.y - 2, (int)iw);
+						vpMatRef = genFromPosSize(posSize);
+
+						shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
+
+						shaderContainer.standardQuad->bind();
+						shaderContainer.standardQuad->render();
+
+						posSize.x += size.y;
+						posSize.z = size.y;
+						posSize.w = size.y;
+						vpMatRef = genFromPosSize(posSize);
+					}
+
 					shaderContainer.guiTextShader->useShader();
 					shaderContainer.guiTextShader->bindData(shaderContainer.textVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTransform, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTexture, UniformDataType::UNI_INT, &textureSlot);
 
-					gRenderEngine->setScissorTest(true);
-					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y, absoluteSize.x, absoluteSize.y);
+					
 					text.render(textureSlot);
 
-					gRenderEngine->setScissorTest(false);
+					gRenderEngine->popScissorRegion(scinfo);
 
 				}
 			}

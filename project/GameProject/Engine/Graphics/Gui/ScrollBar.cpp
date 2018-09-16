@@ -20,14 +20,10 @@ namespace Engine {
 				, autoScrollLastElement(false)
 				, scrollbarScreenPosition(0)
 				, scrollbarThickness(10)
-				, backgroundTexture(nullptr)
-				, scrollbarTexture(nullptr)
 				, holdingBar(false)
 				, forceUpdate(false) {}
 
 			ScrollBar::~ScrollBar() {
-				backgroundTexture = nullptr;
-				scrollbarTexture = nullptr;
 			}
 
 			void ScrollBar::setAutoScroll(bool autoScroll) {
@@ -79,8 +75,8 @@ namespace Engine {
 							scrollbarThickness = 10;
 						}
 
-						minPos = absoulutePosition.x;
-						maxPos = absoulutePosition.x + (size.x - scrollbarThickness);
+						minPos = absolutePosition.x;
+						maxPos = absolutePosition.x + (size.x - scrollbarThickness);
 
 					} else {
 
@@ -90,8 +86,8 @@ namespace Engine {
 							scrollbarThickness = 10;
 						}
 
-						minPos = absoulutePosition.y;
-						maxPos = absoulutePosition.y + (size.y - scrollbarThickness);
+						minPos = absolutePosition.y;
+						maxPos = absolutePosition.y + (size.y - scrollbarThickness);
 
 					}
 
@@ -106,14 +102,6 @@ namespace Engine {
 
 			int32_t ScrollBar::getSelectedElement() const {
 				return selectedElement;
-			}
-
-			void ScrollBar::setBackgroundTexture(Texture::Texture2D* texture) {
-				backgroundTexture = texture;
-			}
-
-			void ScrollBar::setScrollbarTexture(Texture::Texture2D* texture) {
-				scrollbarTexture = texture;
 			}
 
 			void ScrollBar::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
@@ -276,10 +264,10 @@ namespace Engine {
 						scrollbarThickness = 10;
 					}
 
-					minPos = absoulutePosition.x;
-					maxPos = absoulutePosition.x + (size.x - scrollbarThickness);
+					minPos = absolutePosition.x;
+					maxPos = absolutePosition.x + (size.x - scrollbarThickness);
 
-					mx -= (absoulutePosition.x + (scrollbarThickness / 2));
+					mx -= (absolutePosition.x + (scrollbarThickness / 2));
 
 					if (mx < 0) {
 						mx = 0;
@@ -298,10 +286,10 @@ namespace Engine {
 						scrollbarThickness = 10;
 					}
 
-					minPos = absoulutePosition.y;
-					maxPos = absoulutePosition.y + (size.y - scrollbarThickness);
+					minPos = absolutePosition.y;
+					maxPos = absolutePosition.y + (size.y - scrollbarThickness);
 
-					my -= (absoulutePosition.y + (scrollbarThickness / 2));
+					my -= (absolutePosition.y + (scrollbarThickness / 2));
 
 					if (my < 0) {
 						my = 0;

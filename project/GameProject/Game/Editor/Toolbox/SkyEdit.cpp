@@ -119,6 +119,7 @@ void SkyEdit::setupComponents() {
 	Engine::Core::FormattedString passiveTex = "Only numbers (0-9)";
 	passiveTex.formatString(0, -1, glm::vec4(0.5F));
 	cycleTimeEdit->setPassiveText(passiveTex);
+	cycleTimeEdit->setSize(20, 20);
 
 	okButton->setVisible(true);
 	cancelButton->setVisible(true);

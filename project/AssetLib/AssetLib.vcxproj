@@ -169,9 +169,14 @@
     <ClInclude Include="CustomMesh\MeshFormat.hpp" />
     <ClInclude Include="LoaderHelpers.hpp" />
     <ClInclude Include="ModelStucts.hpp" />
+    <ClInclude Include="Save\WriteVeresion.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BMPLoader.cpp" />
+    <ClCompile Include="Load\MeshReader.cpp" />
+    <ClCompile Include="Save\MeshWriter.cpp" />
+    <ClCompile Include="Save\WriteVersion_2_0.cpp" />
+    <ClCompile Include="Save\WriteVersion_2_1.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Collada\ColladaLoader.cpp" />
     <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="ModelLoader.cpp" />

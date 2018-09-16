@@ -24,7 +24,8 @@ namespace Engine {
 			, guiItems()
 			, shaders()
 			, visible(false)
-			, cur(nullptr) {
+			, cur(nullptr)
+			, statusBar(nullptr) {
 
 			// create resources from renderEngine
 			shaders.guiElementShader = gRenderEngine->createShaderObject();
@@ -86,6 +87,10 @@ namespace Engine {
 
 		void CGui::setCursor(Gui::Cursor* cursor) {
 			cur = cursor;
+		}
+
+		void CGui::setStatusBar(Gui::StatusBar* status) {
+			statusBar = status;
 		}
 
 		void CGui::setPosition(int x, int y) {
@@ -171,6 +176,17 @@ namespace Engine {
 				}
 			}
 
+			if (statusBar) {
+				int w = 0, h = 0;
+				Input::Input::GetInput()->getWindowSize(w, h);
+				statusBar->setSize(w, 40);
+				statusBar->setAnchorPoint(GuiAnchor::BOTTOM);
+				statusBar->setPosition(0, 0);
+				statusBar->updateAbsoultePos(pos.x, pos.y, w, h);
+				GuiHitInfo hitInfo;
+				statusBar->update(dt, hitInfo, focusedItem);
+			}
+
 			if (cur) {
 				int w = 0, h = 0;
 				Input::Input::GetInput()->getWindowSize(w, h);
@@ -209,8 +225,19 @@ namespace Engine {
 					screenSize[0].x = float(pos.x);
 					screenSize[0].y = float(pos.y);
 
-					gRenderEngine->setScissorTest(false);
+					//gRenderEngine->setScissorTest(false);
 					(*it)->render(screenSize, shaders);
+				}
+
+				if (statusBar) {
+					screenSize[2].x = float(w);
+					screenSize[2].y = float(h);
+
+					screenSize[0].x = float(pos.x);
+					screenSize[0].y = float(pos.y);
+
+					//gRenderEngine->setScissorTest(false);
+					statusBar->render(screenSize, shaders);
 				}
 
 				if (cur) {
@@ -220,7 +247,7 @@ namespace Engine {
 					screenSize[0].x = float(pos.x);
 					screenSize[0].y = float(pos.y);
 
-					gRenderEngine->setScissorTest(false);
+					//gRenderEngine->setScissorTest(false);
 					cur->render(screenSize, shaders);
 				}
 

@@ -33,9 +33,6 @@ namespace Engine {
 				void selectElement(int32_t element);
 				int32_t getSelectedElement() const;
 
-				void setBackgroundTexture(Texture::Texture2D* texture);
-				void setScrollbarTexture(Texture::Texture2D* texture);
-
 				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
@@ -54,9 +51,6 @@ namespace Engine {
 				int scrollbarScreenPosition;
 				int scrollbarLastPos;
 				int scrollbarThickness;
-
-				Texture::Texture2D* backgroundTexture;
-				Texture::Texture2D* scrollbarTexture;;
 
 				bool holdingBar;
 				bool forceUpdate;

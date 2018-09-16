@@ -50,9 +50,6 @@ Game::Game(CEngine* _engine)
 
 	engine->setCursor("Data/Textures/Gui/Cursor2.png");
 
-	panelTexture = new Engine::Graphics::Texture::Texture2D();
-	panelTexture->singleColor(0.5F, 0.5F, 0.5F, 0.5F);
-
 	guiInfo.pAssetManager = engine->getAssetManager();
 
 	metrixPanel = new Engine::Graphics::Gui::Panel(guiInfo);
@@ -61,7 +58,6 @@ Game::Game(CEngine* _engine)
 	metrixPanel->setSize(400, 200);
 	metrixPanel->setAnchorPoint(Engine::Graphics::GuiAnchor::TOP_RIGHT);
 	metrixPanel->setVisible(true);
-	metrixPanel->setTexture(panelTexture);
 
 	infoLabel = new Engine::Graphics::Gui::Label(guiInfo);
 	infoLabel->setSize(400, 200);
@@ -163,14 +159,14 @@ Game::Game(CEngine* _engine)
 
 	shadowMap = gRenderEngine->createFrameBuffer();
 
-	fbci.width = 1024 * 4;
-	fbci.height = 1024 * 4;
+	fbci.width = 1024 * 1;
+	fbci.height = 1024 * 1;
 
 	fbci.useDepth = true;
 	fbci.nrColorBuffers = 0;
 	fbci.mutlisample = 16;
 	fbci.useStencil = false;
-	fbci.useMultisample = true;
+	fbci.useMultisample = false;
 
 	shadowMap->init(&fbci);
 
@@ -221,8 +217,7 @@ Game::Game(CEngine* _engine)
 }
 
 Game::~Game() {
-
-
+	
 	testShader->release();
 
 	for (size_t i = 0; i < physParticles.size(); i++) {
@@ -251,7 +246,6 @@ Game::~Game() {
 
 	delete metrixPanel;
 	delete infoLabel;
-	delete panelTexture;
 
 	delete mapLoader;
 	delete editLoader;
@@ -345,10 +339,10 @@ void Game::update(float dt, uint64_t clocks) {
 	str += "Dt: " + std::to_string(dt) + "\n";
 
 	glm::vec3 pos = camera.getPos();
-	str += "Pos: ( X:" + std::to_string(pos.x) + ", Y:" + std::to_string(pos.y) + ", Z:" + std::to_string(pos.z) + ")\n";
+	str += "Pos: ( X:" + std::_Floating_to_string("%.2f", pos.x) + ", Y:" + std::_Floating_to_string("%.2f", pos.y) + ", Z:" + std::_Floating_to_string("%.2f", pos.z) + ")\n";
 
 	glm::vec3 dir = camInput.direction();
-	str += "Dir: ( X:" + std::to_string(dir.x) + ", Y:" + std::to_string(dir.y) + ", Z:" + std::to_string(dir.z) + ")\n";
+	str += "Dir: ( X:" + std::_Floating_to_string("%.2f", dir.x) + ", Y:" + std::_Floating_to_string("%.2f", dir.y) + ", Z:" + std::_Floating_to_string("%.2f", dir.z) + ")\n";
 
 	str += "TempUsed: " + std::to_string(tUsed) + " Bytes\n";
 

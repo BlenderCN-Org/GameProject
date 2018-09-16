@@ -14,17 +14,12 @@ namespace Engine {
 
 			Panel::Panel(GuiInfo& info)
 				: GuiItem(info)
-				, subItems()
-				, tex(nullptr) {
+				, subItems() {
 
 			}
 
 			Panel::~Panel() {
 
-			}
-
-			void Panel::setTexture(Texture::Texture2D* texture) {
-				tex = texture;
 			}
 
 			void Panel::addGuiItem(GuiItem* guiItem) {
@@ -58,7 +53,7 @@ namespace Engine {
 					std::vector<GuiItem*>::reverse_iterator eit = subItems.rend();
 
 					for (it; it != eit; it++) {
-						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+						(*it)->updateAbsoultePos(absolutePosition.x, absolutePosition.y, absoluteSize.x, absoluteSize.y);
 						(*it)->update(dt, hitInfo, currentFocus);
 					}
 
@@ -90,8 +85,6 @@ namespace Engine {
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiElementShader->bindData(shaderContainer.elementTexture, UniformDataType::UNI_INT, &textureSlot);
 					
-					//if (tex) {
-					//	tex->bind();
 					if (theme->panel.textureNormal) {
 						theme->panel.textureNormal->bind();
 						shaderContainer.standardQuad->bind();
@@ -105,10 +98,9 @@ namespace Engine {
 					// render all subitems
 					for (it; it != eit; it++) {
 						glm::mat4 cpy = vpMatRef;
-						gRenderEngine->setScissorTest(true);
-						gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
+						const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
 						(*it)->render(cpy, shaderContainer);
-						gRenderEngine->setScissorTest(false);
+						gRenderEngine->popScissorRegion(scinfo);
 					}
 				}
 			}

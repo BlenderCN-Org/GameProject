@@ -40,9 +40,6 @@ private:
 	Engine::Graphics::CGui* pGui;
 	Engine::Graphics::Gui::Panel* menuPanel;
 	Engine::Graphics::Gui::Label* menuLabel;
-	Engine::Graphics::Texture::Texture2D* panelTexture;
-	Engine::Graphics::Texture::Texture2D* buttonHoverTexture;
-	Engine::Graphics::Texture::Texture2D* buttonPressTexture;
 	Engine::Graphics::Gui::Button* newGameButton;
 	Engine::Graphics::Gui::Button* editorButton;
 	Engine::Graphics::Gui::Button* exitButton;

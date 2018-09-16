@@ -1,6 +1,9 @@
 /// Internal Includes
 #include "FileDialog.hpp"
 
+#include "Resources/file_x16.png.h"
+#include "Resources/folder_x16.png.h"
+
 /// External Includes
 #include <EngineCore/Core/System.hpp>
 #include <AssetLib/AssetLib.hpp>
@@ -161,14 +164,16 @@ void FileDialog::setupComponents() {
 	addGuiItem(searchBox);
 	addGuiItem(fileList);
 
-	std::string filePath = "E:\\GameProjectAssets\\Data\\Textures\\Gui\\file_x16.png";
+	//std::string filePath = "E:\\GameProjectAssets\\Data\\Textures\\Gui\\file_x16.png";
 	int w, h, c;
-	void* data = AssetLib::loadTexture(filePath.c_str(), w, h, c);
+	//void* data = AssetLib::loadTexture(filePath.c_str(), w, h, c);
+	void* data = AssetLib::loadTextureFromMemory((void*)fileIcon_x16, sizeof(fileIcon_x16), w, h, c);
 	fileTexture->setData(w, h, c, data);
 	AssetLib::freeImageData(data);
 
-	filePath = "E:\\GameProjectAssets\\Data\\Textures\\Gui\\folder_x16.png";
-	data = AssetLib::loadTexture(filePath.c_str(), w, h, c);
+	//filePath = "E:\\GameProjectAssets\\Data\\Textures\\Gui\\folder_x16.png";
+	//data = AssetLib::loadTexture(filePath.c_str(), w, h, c);
+	data = AssetLib::loadTextureFromMemory((void*)folderIcon_x16, sizeof(folderIcon_x16), w, h, c);
 	dirTexture->setData(w, h, c, data);
 	AssetLib::freeImageData(data);
 

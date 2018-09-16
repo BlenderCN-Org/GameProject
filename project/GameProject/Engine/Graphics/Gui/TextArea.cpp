@@ -13,21 +13,13 @@ namespace Engine {
 	namespace Graphics {
 		namespace Gui {
 
-			TextArea::TextArea(GuiInfo& info) : GuiItem(info), verticalScroll(nullptr), scrollBg(nullptr), scrollBar(nullptr), text(info.pAssetManager) {
+			TextArea::TextArea(GuiInfo& info) : GuiItem(info), verticalScroll(nullptr), text(info.pAssetManager) {
 				text.setText("Test");
-
-				scrollBg = new Texture::Texture2D();
-				scrollBar = new Texture::Texture2D();
-
-				scrollBg->singleColor(0.7F, 0.7F, 0.7F, 1.0F);
-				scrollBar->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
 
 				verticalScroll = new ScrollBar(info);
 				verticalScroll->setAnchorPoint(GuiAnchor::RIGHT);
 				verticalScroll->setScrollDirection(ScrollBarDirection::SCROLL_VERTICAL);
 				verticalScroll->setVisible(true);
-				verticalScroll->setBackgroundTexture(scrollBg);
-				verticalScroll->setScrollbarTexture(scrollBar);
 				verticalScroll->setAutoScroll(true);
 				lineNumbers = true;
 				allowEdit = false;
@@ -44,12 +36,11 @@ namespace Engine {
 				float cursorColor = 0.8F;
 				cursorTexture->singleColor(cursorColor, cursorColor, cursorColor, 1.0F);
 
+				sizeYClipp = 1;
 			}
 
 			TextArea::~TextArea() {
 				delete verticalScroll;
-				delete scrollBg;
-				delete scrollBar;
 				delete cursorTexture;
 			}
 
@@ -293,7 +284,7 @@ namespace Engine {
 
 					sizeYClipp = elementsPerScreen * fntSize;
 
-					verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+					verticalScroll->updateAbsoultePos(absolutePosition.x, absolutePosition.y, size.x, size.y);
 					verticalScroll->update(dt, hitInfo, currentFocus);
 
 					int32_t selectedIndex = verticalScroll->getSelectedElement();
@@ -377,17 +368,21 @@ namespace Engine {
 
 						shaderContainer.standardQuad->bind();
 
-						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, 1, size.y);
+						ScissorInfo scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y, 1, size.y);
 						shaderContainer.standardQuad->render();
+						gRenderEngine->popScissorRegion(scinfo);
 
-						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x, 1);
+						scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y, size.x, 1);
 						shaderContainer.standardQuad->render();
+						gRenderEngine->popScissorRegion(scinfo);
 
-						gRenderEngine->setScissorRegion(absoulutePosition.x + size.x - 1, absoulutePosition.y, 1, size.y);
+						scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x + size.x - 1, absolutePosition.y, 1, size.y);
 						shaderContainer.standardQuad->render();
+						gRenderEngine->popScissorRegion(scinfo);
 
-						gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y + size.y - 1, size.x, 1);
+						scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y + size.y - 1, size.x, 1);
 						shaderContainer.standardQuad->render();
+						gRenderEngine->popScissorRegion(scinfo);
 
 					}
 
@@ -400,15 +395,15 @@ namespace Engine {
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTransform, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
 					shaderContainer.guiTextShader->bindData(shaderContainer.textTexture, UniformDataType::UNI_INT, &textureSlot);
 
-					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x - 15, sizeYClipp);
-					gRenderEngine->setScissorTest(true);
+					ScissorInfo scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y, size.x - 15, sizeYClipp);
 					text.render(textureSlot);
+					gRenderEngine->popScissorRegion(scinfo);
 
 					if (renderCursor && isFocused) {
 
 						cursorTexture->bind();
 
-						gRenderEngine->setScissorRegion(absoulutePosition.x + cursorRenderXOffset, absoulutePosition.y + cursorRenderYOffset, 1, cursorHeight);
+						scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x + cursorRenderXOffset, absolutePosition.y + cursorRenderYOffset, 1, cursorHeight);
 						shaderContainer.guiElementShader->useShader();
 						shaderContainer.guiElementShader->bindData(shaderContainer.elementVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
 						shaderContainer.guiElementShader->bindData(shaderContainer.elementTransformMat, UniformDataType::UNI_MATRIX4X4, &vpMatRef);
@@ -416,9 +411,9 @@ namespace Engine {
 
 						shaderContainer.standardQuad->bind();
 						shaderContainer.standardQuad->render();
+						gRenderEngine->popScissorRegion(scinfo);
 					}
 
-					gRenderEngine->setScissorTest(false);
 				}
 
 			}

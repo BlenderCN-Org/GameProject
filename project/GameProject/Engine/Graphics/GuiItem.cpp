@@ -13,7 +13,7 @@ namespace Engine {
 
 		GuiItem::GuiItem(GuiInfo& info) : guiInfo(info) {
 			position = glm::ivec2(0);
-			size = glm::ivec2(0);
+			size = glm::ivec2(1);
 			anchorPoint = GuiAnchor::CENTER;
 			uvCoords = glm::vec4(0.0F, 0.0F, 1.0F, 1.0F);
 			zIndex = 0;
@@ -53,6 +53,11 @@ namespace Engine {
 			size = glm::ivec2(w, h);
 		}
 
+		void GuiItem::getSize(int &w, int &h) {
+			w = size.x;
+			h = size.y;
+		}
+
 		bool GuiItem::isVisible() const {
 			return visible;
 		}
@@ -78,6 +83,8 @@ namespace Engine {
 				size.x = xSize;
 			if (size.y > ySize)
 				size.y = ySize;
+
+			absoluteSize = size;;
 
 			int x = xSize;
 			int y = ySize;
@@ -159,8 +166,8 @@ namespace Engine {
 				aY = oy;
 			}
 
-			absoulutePosition.x = aX;
-			absoulutePosition.y = aY;
+			absolutePosition.x = aX;
+			absolutePosition.y = aY;
 
 		}
 		bool GuiItem::isFocusable() const {
@@ -202,8 +209,8 @@ namespace Engine {
 			const float uv4x = uvCoords[2];
 			const float uv4y = uvCoords[1];
 
-			const float x = float(absoulutePosition.x);
-			const float y = float(absoulutePosition.y);
+			const float x = float(absolutePosition.x);
+			const float y = float(absolutePosition.y);
 
 			glm::vec4 p0 = glm::vec4(x, y, uv1x, uv1y);
 			glm::vec4 p1 = glm::vec4(x, y + size.y, uv2x, uv2y);
@@ -266,8 +273,8 @@ namespace Engine {
 
 		bool GuiItem::posInItem(int x, int y) const {
 
-			x -= absoulutePosition.x;
-			y -= absoulutePosition.y;
+			x -= absolutePosition.x;
+			y -= absolutePosition.y;
 
 			if ((x > 0 && x < size.x) &&
 				(y > 0 && y < size.y)) {

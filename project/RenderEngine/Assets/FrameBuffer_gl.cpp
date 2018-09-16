@@ -1,5 +1,4 @@
 #include "FrameBuffer_gl.hpp"
-#include "../Utils/MemoryManager.hpp"
 #include "../ReGlobal.hpp"
 
 bool FrameBuffer_gl::init(FrameBufferCreateInfo *createInfo) {

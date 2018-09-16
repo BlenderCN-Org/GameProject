@@ -30,7 +30,7 @@ namespace Engine {
 			}
 
 			glm::ivec2 ListItem::getAbsPos() const {
-				return absoulutePosition;
+				return absolutePosition;
 			}
 
 			void ListItem::update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) {
@@ -96,11 +96,7 @@ namespace Engine {
 						vpMatRef = genFromPosSize(posSize);
 					}
 
-					//std::string str = std::to_string((int)absoulutePosition.x) + ", "+ std::to_string((int)absoulutePosition.y) + ", " + std::to_string((int)size.x) + ", " + std::to_string((int)size.y);
-					//text.setText(str.c_str());
-
-					gRenderEngine->setScissorTest(true);
-					gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
 
 					shaderContainer.guiTextShader->useShader();
 					shaderContainer.guiTextShader->bindData(shaderContainer.textVpMat, UniformDataType::UNI_MATRIX4X4, &shaderContainer.orthoMatrix);
@@ -109,7 +105,7 @@ namespace Engine {
 
 					text.render(textureSlot);
 
-					gRenderEngine->setScissorTest(false);
+					gRenderEngine->popScissorRegion(scinfo);
 
 				}
 			}
@@ -120,8 +116,6 @@ namespace Engine {
 				verticalScroll->setAnchorPoint(GuiAnchor::RIGHT);
 				verticalScroll->setScrollDirection(ScrollBarDirection::SCROLL_VERTICAL);
 				verticalScroll->setVisible(true);
-				verticalScroll->setBackgroundTexture(nullptr);
-				verticalScroll->setScrollbarTexture(nullptr);
 				verticalScroll->setAutoScroll(false);
 
 				hasSearch = false;
@@ -198,16 +192,16 @@ namespace Engine {
 					std::vector<ListItem*>::iterator it = lst.begin();
 					std::vector<ListItem*>::iterator eit = lst.end();
 
-					verticalScroll->setMinElements(size.y);
-					verticalScroll->setNumElements(LIST_ITEM_SIZE * lst.size());
+					verticalScroll->setMinElements(absoluteSize.y);
+					verticalScroll->setNumElements(LIST_ITEM_SIZE * (int32_t)lst.size());
 
-					verticalScroll->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x - 1, size.y);
-					verticalScroll->setSize(15, size.y);
+					verticalScroll->updateAbsoultePos(absolutePosition.x, absolutePosition.y, absoluteSize.x - 1, absoluteSize.y);
+					verticalScroll->setSize(15, absoluteSize.y);
 					verticalScroll->update(dt, hitInfo, currentFocus);
 
 					int c = 0;
 
-					int32_t elementsonScreen = (size.y / LIST_ITEM_SIZE);
+					int32_t elementsonScreen = (absoluteSize.y / LIST_ITEM_SIZE);
 					uint32_t firstElement = verticalScroll->getSelectedElement() / LIST_ITEM_SIZE;
 					std::advance(it, firstElement);
 
@@ -215,13 +209,13 @@ namespace Engine {
 						int py = (LIST_ITEM_SIZE * (c + firstElement));// -(verticalScroll->getSelectedElement());
 						(*it)->setPosition(0, py);
 						(*it)->setVisible((py >= 0) ? true : true);
-						(*it)->setSize(size.x, LIST_ITEM_SIZE);
-						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y - verticalScroll->getSelectedElement(), size.x - 15, (LIST_ITEM_SIZE));//size.y - verticalScroll->getSelectedElement());
+						(*it)->setSize(absoluteSize.x, LIST_ITEM_SIZE);
+						(*it)->updateAbsoultePos(absolutePosition.x, absolutePosition.y - verticalScroll->getSelectedElement(), absoluteSize.x - 15, (LIST_ITEM_SIZE));
 						(*it)->update(dt, hitInfo, currentFocus);
 						if ((*it)->isFocused) {
 							selectedItem = *it;
 						}
-						if ((*it)->getAbsPos().y > 0 && (*it)->getAbsPos().y < (size.y * 2)) {
+						if ((*it)->getAbsPos().y > 0 && (*it)->getAbsPos().y < (absoluteSize.y * 2)) {
 							dispList.push_back(*it);
 						}
 						if (c > (elementsonScreen + 1)) {
@@ -261,21 +255,21 @@ namespace Engine {
 
 
 					int c = 0;
-					gRenderEngine->setScissorTest(true);
 					for (int32_t i = 0; i < (size.y / LIST_ITEM_SIZE) + 2; i++) {
 
 						if (i % 2 == 0) {
 							int offset = -verticalScroll->getSelectedElement() % (2 * LIST_ITEM_SIZE);
-							gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y + (LIST_ITEM_SIZE * i) + offset, (int)posAndSize.z - 15, (int)LIST_ITEM_SIZE);
+							const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y + (LIST_ITEM_SIZE * i) + offset, (int)posAndSize.z - 15, (int)LIST_ITEM_SIZE);
 							if (gTheme->list.textureItem) {
 								gTheme->list.textureItem->bind();
 								shaderContainer.standardQuad->bind();
 								shaderContainer.standardQuad->render();
 							}
+							gRenderEngine->popScissorRegion(scinfo);
 						}
 					}
 
-					gRenderEngine->setScissorTest(false);
+
 
 					verticalScroll->render(vpMatRef, shaderContainer);
 
@@ -288,13 +282,12 @@ namespace Engine {
 					// render all subitems
 					for (it; it != eit; it++) {
 						glm::mat4 cpy = vpMatRef;
-						gRenderEngine->setScissorTest(true);
-						gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
+						const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
 						if (*it == selectedItem) {
 							(*it)->isFocused = true;
 						}
 						(*it)->render(cpy, shaderContainer);
-						gRenderEngine->setScissorTest(false);
+						gRenderEngine->popScissorRegion(scinfo);
 					}
 
 				}

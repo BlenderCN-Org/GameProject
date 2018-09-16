@@ -9,6 +9,9 @@ namespace Format {
 		const uint16_t INVALID_DATA_TYPE_ID = 0x0000;
 		const uint16_t MODEL_DATA_TYPE_ID = 0x0001;
 
+		const uint16_t VERSION_2_0 = 0x0100;
+		const uint16_t VERSION_2_1 = 0x0201;
+
 		struct GenericHeader {
 			char tag[4];
 			uint16_t version;
@@ -54,6 +57,37 @@ namespace Format {
 			float transform[16];
 		};
 	}
+
+	namespace version_2_1 {
+
+		const uint16_t MESH_INFO_FLAG_USE_UV = version_2_0::MESH_INFO_FLAG_USE_UV;
+		const uint16_t MESH_INFO_FLAG_USE_NORMALS = version_2_0::MESH_INFO_FLAG_USE_NORMALS;
+		const uint16_t MESH_INFO_FLAG_USE_VCOLORS = version_2_0::MESH_INFO_FLAG_USE_VCOLORS;
+
+		const uint16_t MESH_INFO_FLAG_USE_COMPRESSION = 0x0008;
+
+		const uint16_t MESH_INFO_FLAG_COMP_INDEX_REDUCE = 0x0100;
+		const uint16_t MESH_INFO_FLAG_COMP_VCOL_MAP = 0x0200;
+
+		struct MeshInfo {
+			uint16_t meshFlags;
+			uint16_t numBones;
+			uint16_t numAnimations;
+			uint32_t numVerts;
+			uint32_t numTris;
+		};
+
+		struct VertexColorMapInfo {
+			uint32_t numColors;
+		};
+
+		typedef version_2_0::Name Name;
+		typedef version_2_0::BoneInfo BoneInfo;
+		typedef version_2_0::AnimationInfo AnimationInfo;
+		typedef version_2_0::KeyFrame KeyFrame;
+
+	}
+
 }
 
 #endif

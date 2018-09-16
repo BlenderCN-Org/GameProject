@@ -1,5 +1,4 @@
 #include "Material_gl.hpp"
-#include "../Utils/MemoryManager.hpp"
 
 void Material_gl::init(unsigned int nrTextures) {
 	numberOfTextures = nrTextures;

@@ -19,7 +19,6 @@ namespace Engine {
 
 				setAnchorPoint(GuiAnchor::TOP_LEFT);
 
-				background = new Texture::Texture2D();
 				titleBar = new Texture::Texture2D();
 				closeButton = new Button(info);
 
@@ -32,9 +31,7 @@ namespace Engine {
 				itemPanel->setVisible(true);
 				itemPanel->setAnchorPoint(GuiAnchor::TOP);
 				itemPanel->setPosition(0, GUI_WINDOW_TITLEBAR_HEIGHT);
-				itemPanel->setTexture(background);
 
-				background->singleColor(0.5F, 0.5F, 0.5F, 0.25F);
 				titleBar->singleColor(0.2F, 0.2F, 0.2F, 1.0F);
 
 				buttonTexture->singleColor(0.8F, 0.8F, 0.8F, 1.0F);
@@ -47,9 +44,6 @@ namespace Engine {
 				closeButton->setSize(20, 20);
 				closeButton->setAnchorPoint(GuiAnchor::TOP_RIGHT);
 				closeButton->setText("X");
-				closeButton->setTexture(buttonTexture);
-				closeButton->setHoverTexture(buttonHover);
-				closeButton->setPressTexture(buttonPress);
 
 				subItems.push_back(closeButton);
 				subItems.push_back(itemPanel);
@@ -60,7 +54,6 @@ namespace Engine {
 			}
 
 			GuiWindow::~GuiWindow() {
-				delete background;
 				delete titleBar;
 				delete closeButton;
 
@@ -91,8 +84,8 @@ namespace Engine {
 						mx = x;
 						my = y;
 
-						x -= absoulutePosition.x;
-						y -= absoulutePosition.y;
+						x -= absolutePosition.x;
+						y -= absolutePosition.y;
 
 						bool inside = false;
 
@@ -139,7 +132,7 @@ namespace Engine {
 					std::vector<GuiItem*>::reverse_iterator eit = subItems.rend();
 
 					for (it; it != eit; it++) {
-						(*it)->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+						(*it)->updateAbsoultePos(absolutePosition.x, absolutePosition.y, absoluteSize.x, absoluteSize.y);
 						(*it)->update(dt, hitInfo, currentFocus);
 					}
 				}
@@ -161,11 +154,9 @@ namespace Engine {
 
 					shaderContainer.standardQuad->bind();
 
-					background->bind();
 					shaderContainer.standardQuad->render();
 
-					gRenderEngine->setScissorTest(true);
-					gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, GUI_WINDOW_TITLEBAR_HEIGHT);
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, GUI_WINDOW_TITLEBAR_HEIGHT);
 
 					titleBar->bind();
 					shaderContainer.standardQuad->render();
@@ -177,11 +168,9 @@ namespace Engine {
 					// render all subitems
 					for (it; it != eit; it++) {
 						glm::mat4 cpy = vpMatRef;
-						gRenderEngine->setScissorTest(true);
-						gRenderEngine->setScissorRegion((int)posAndSize.x, (int)posAndSize.y, (int)posAndSize.z, (int)posAndSize.w);
 						(*it)->render(cpy, shaderContainer);
-						gRenderEngine->setScissorTest(false);
 					}
+					gRenderEngine->popScissorRegion(scinfo);
 				}
 			}
 

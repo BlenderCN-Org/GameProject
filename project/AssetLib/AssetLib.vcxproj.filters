@@ -19,12 +19,15 @@
     <Filter Include="Source Files\Collada">
       <UniqueIdentifier>{7a59b8f8-7bb3-4420-a392-96fb23792e9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Load">
+      <UniqueIdentifier>{b0516a1f-497f-4fbc-8aee-51887a56eabf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Save">
+      <UniqueIdentifier>{932b7515-0bf6-42ee-818b-523906c01e39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BMPLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileLoader.cpp">
@@ -40,6 +43,21 @@
       <Filter>Source Files\Collada</Filter>
     </ClCompile>
     <ClCompile Include="Tinyxml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Save\MeshWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Load\MeshReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Save\WriteVersion_2_0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Save\WriteVersion_2_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Collada\ColladaLoader.hpp">
       <Filter>Source Files\Collada</Filter>
+    </ClInclude>
+    <ClInclude Include="Save\WriteVeresion.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

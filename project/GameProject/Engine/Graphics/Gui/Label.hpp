@@ -22,12 +22,17 @@ namespace Engine {
 				int calcTextWidth() const;
 				int calcTextHeight() const;
 
+				void setIcon(Engine::Graphics::Texture::Texture2D* ico);
+
 				void setText(const Engine::Core::FormattedString& str);
 
 				virtual void update(float dt, GuiHitInfo& hitInfo, GuiItem* currentFocus) override;
 				virtual void render(glm::mat4 &vpMatRef, GuiShaderContainer& shaderContainer) override;
 
 			private:
+
+				Engine::Graphics::Texture::Texture2D* icon;
+
 				Text text;
 			};
 		}

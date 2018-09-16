@@ -66,6 +66,8 @@ namespace ScanCodes {
 	const int SCAN_CODE_Å = 26;
 	const int SCAN_CODE_EXP = 27;
 
+
+	const int SCAN_CODE_TAB = 15;
 }
 
 namespace GamePad {

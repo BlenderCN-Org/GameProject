@@ -4,10 +4,14 @@
 #include "Graphics/Graphics.hpp"
 #include "Input/Input.hpp"
 #include "Graphics/GuiTheme.hpp"
+#include "Graphics/GraphicsResources/arrow_left.png.h"
+#include "Graphics/GraphicsResources/arrow_right.png.h"
 
 /// External Includes
 #include <EngineCore/Core/LibraryLoader.hpp>
 #include <EngineCore/Core/System.hpp>
+
+#include <AssetLib/AssetLib.hpp>
 
 /// Std Includes
 
@@ -353,7 +357,23 @@ inline void CEngine::initTheme() {
 	gTheme->textArea.areaScroll.textureBackground->singleColor(1.0F, 1.0F, 1.0F, 1.0F);
 	gTheme->textArea.areaScroll.textureBar->singleColor(1.0F, 1.0F, 1.0F, 1.0F);
 
+	gTheme->statusBar.textureBackground = new Engine::Graphics::Texture::Texture2D();
+	gTheme->statusBar.textureBackground->singleColor(0.0F, 0.0F, 0.0F, 0.7F);
 
+	gTheme->tabView.background = new Engine::Graphics::Texture::Texture2D();
+	gTheme->tabView.background->singleColor(0.0F, 0.0F, 0.0F, 0.7F);
+
+	int w, h, c;
+	void* data = AssetLib::loadTextureFromMemory((void*)arrow_right_x32, sizeof(arrow_right_x32), w, h, c);
+
+	gTheme->tabView.icoNext = new Engine::Graphics::Texture::Texture2D();
+	gTheme->tabView.icoNext->setData(w, h, c, data);
+	AssetLib::freeImageData(data);
+
+	data = AssetLib::loadTextureFromMemory((void*)arrow_left_x32, sizeof(arrow_left_x32), w, h, c);
+	gTheme->tabView.icoPrev = new Engine::Graphics::Texture::Texture2D();
+	gTheme->tabView.icoPrev->setData(w, h, c, data);
+	AssetLib::freeImageData(data);
 }
 
 template<typename T>
@@ -388,6 +408,13 @@ inline void CEngine::cleanupTheme() {
 		deleteAndNullify(&gTheme->textArea.textureBackground);
 		deleteAndNullify(&gTheme->textArea.areaScroll.textureBackground);
 		deleteAndNullify(&gTheme->textArea.areaScroll.textureBar);
+		
+		deleteAndNullify(&gTheme->statusBar.textureBackground);
+
+		deleteAndNullify(&gTheme->tabView.background);
+		deleteAndNullify(&gTheme->tabView.icoNext);
+		deleteAndNullify(&gTheme->tabView.icoPrev);
+
 	}
 	deleteAndNullify(&gTheme);
 }

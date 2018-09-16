@@ -1,14 +1,11 @@
 /// Internal Includes
+#include "GuiConstants.hpp"
 #include "TextureView.hpp"
 #include "../Graphics.hpp"
 #include "../../Input/Input.hpp"
 
 /// External Includes
 #include <RenderEngine/IRenderEngine.hpp>
-
-const int32_t SCROLLBAR_SIZE = 15;
-const int32_t BORDER_SIZE = 2;
-const int32_t SCROLLBAR_HALF_SIZE = SCROLLBAR_SIZE / 2;
 
 namespace Engine {
 	namespace Graphics {
@@ -21,18 +18,10 @@ namespace Engine {
 				mainText = new Texture::Texture2D();
 				mainText->singleColor(0.7F, 0.7F, 0.7F, 0.5F);
 
-				scrollBg = new Texture::Texture2D();
-				scrollBar = new Texture::Texture2D();
-
-				scrollBg->singleColor(0.7F, 0.7F, 0.7F, 1.0F);
-				scrollBar->singleColor(0.3F, 0.3F, 0.3F, 1.0F);
-
 				vertBar = new ScrollBar(info);
 				vertBar->setAnchorPoint(GuiAnchor::RIGHT);
 				vertBar->setScrollDirection(ScrollBarDirection::SCROLL_VERTICAL);
 				vertBar->setVisible(true);
-				vertBar->setBackgroundTexture(scrollBg);
-				vertBar->setScrollbarTexture(scrollBar);
 				vertBar->setAutoScroll(false);
 				vertBar->setPosition(0, -SCROLLBAR_HALF_SIZE);
 
@@ -40,8 +29,6 @@ namespace Engine {
 				horzBar->setAnchorPoint(GuiAnchor::BOTTOM);
 				horzBar->setScrollDirection(ScrollBarDirection::SCROLL_HORIZONTAL);
 				horzBar->setVisible(true);
-				horzBar->setBackgroundTexture(scrollBg);
-				horzBar->setScrollbarTexture(scrollBar);
 				horzBar->setAutoScroll(false);
 				horzBar->setPosition(-SCROLLBAR_HALF_SIZE, 0);
 
@@ -49,8 +36,6 @@ namespace Engine {
 
 			TextureView::~TextureView() {
 				delete mainText;
-				delete scrollBg;
-				delete scrollBar;
 				delete vertBar;
 				delete horzBar;
 			}
@@ -76,8 +61,8 @@ namespace Engine {
 					vertBar->setSize(SCROLLBAR_SIZE, size.y - SCROLLBAR_SIZE);
 					horzBar->setSize(size.x - SCROLLBAR_SIZE, SCROLLBAR_SIZE);
 
-					vertBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
-					horzBar->updateAbsoultePos(absoulutePosition.x, absoulutePosition.y, size.x, size.y);
+					vertBar->updateAbsoultePos(absolutePosition.x, absolutePosition.y, size.x, size.y);
+					horzBar->updateAbsoultePos(absolutePosition.x, absolutePosition.y, size.x, size.y);
 
 					vertBar->update(dt, hitInfo, currentFocus);
 					horzBar->update(dt, hitInfo, currentFocus);
@@ -144,8 +129,7 @@ namespace Engine {
 					cpy = vpMatRef;
 					horzBar->render(cpy, shaderContainer);
 
-					gRenderEngine->setScissorRegion(absoulutePosition.x, absoulutePosition.y, size.x - SCROLLBAR_SIZE, size.y - SCROLLBAR_SIZE);
-					gRenderEngine->setScissorTest(true);
+					const ScissorInfo scinfo = gRenderEngine->pushScissorRegion(absolutePosition.x, absolutePosition.y, size.x - SCROLLBAR_SIZE, size.y - SCROLLBAR_SIZE);
 
 					glm::vec4 posAndSize = positionAndSizeFromMatrix(vpMatRef);
 
@@ -185,7 +169,7 @@ namespace Engine {
 					shaderContainer.standardQuad->bind();
 					shaderContainer.standardQuad->render();
 
-					gRenderEngine->setScissorTest(false);
+					gRenderEngine->popScissorRegion(scinfo);
 
 
 				}

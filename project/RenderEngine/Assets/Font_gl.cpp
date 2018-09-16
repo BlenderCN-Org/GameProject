@@ -1,7 +1,5 @@
 #include "Font_gl.hpp"
 
-#include "../Utils/FrameAllocator_static.hpp"
-
 #include <list>
 
 #include "../Utils/ShelfPack.hpp"

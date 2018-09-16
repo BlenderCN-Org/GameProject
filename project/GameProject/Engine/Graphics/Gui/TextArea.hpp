@@ -58,8 +58,6 @@ namespace Engine {
 				std::vector<Engine::Core::FormattedString> textData;
 
 				ScrollBar* verticalScroll;
-				Texture::Texture2D* scrollBg;
-				Texture::Texture2D* scrollBar;
 				
 				int sizeYClipp;
 

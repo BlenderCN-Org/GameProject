@@ -61,7 +61,7 @@ const char* defaultTextFragmentShaderCode = ""
 "\n"
 "void main() {\n"
 "vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-"fragmentColor = TexColor * sampled;\n"
+"fragmentColor = pow(TexColor * sampled, vec4(2.2));\n"
 "red = vec4(1.0);\n"
 "}\n"
 "\n";

@@ -54,8 +54,11 @@ public:
 
 	virtual void colorMask(bool r, bool g, bool b, bool a);
 
-	virtual void setScissorTest(bool enable);
-	virtual void setScissorRegion(int x, int y, int width, int height);
+	void setScissorTest(bool enable);
+	void setScissorRegion(int x, int y, int width, int height); // @Todo: cleanup
+
+	virtual const ScissorInfo pushScissorRegion(int x, int y, int width, int height);
+	virtual void popScissorRegion(const ScissorInfo prevScissor);
 
 	virtual void clearStencil();
 
@@ -115,6 +118,7 @@ private:
 #endif
 
 	RenderEngineCreateInfo reci;
+	ScissorInfo scissorInfo;
 };
 
 #endif

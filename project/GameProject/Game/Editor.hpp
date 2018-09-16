@@ -13,9 +13,12 @@
 #include "../Engine/Graphics/Gui.hpp"
 #include "../Engine/Graphics/Gui/GuiWindow.hpp"
 
-#include "Editor/Toolbox/ObjectList.hpp"
+#include "Editor/CameraStatusInfo.hpp"
 #include "Editor/FileDialog.hpp"
+#include "Editor/Toolbox/ObjectList.hpp"
 #include "Editor/Toolbox/SkyEdit.hpp"
+#include "Editor/ToolSelector.hpp"
+#include "Editor/EnvironmentEditor.hpp"
 
 /// External Includes
 #include <EngineCore/AssetHandling/Loader/IEditLoader.hpp>
@@ -60,9 +63,15 @@ private:
 	CEngine* pEngine;
 	Engine::Graphics::GuiInfo guiInfo;
 
+
 	ObjectList* objList;
 	FileDialog* fileDialog;
 	SkyEdit* skyEdit;
+	CameraStatusInfo* cameraStatus;
+	ToolSelector* toolSelector;
+	EnvironmentEditor* envEditor;
+
+	Engine::Graphics::Gui::StatusBar* statusBar;
 
 	Engine::DataLoader::IEditLoader* pGameEditAccess;
 	IMap** ppActiveMap;

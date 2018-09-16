@@ -115,6 +115,9 @@ namespace Engine {
 			if (focus == false) {
 				//window->lockCursor(false);
 				singleton->keyMap.clear();
+				singleton->gamepadMap.clear();
+				singleton->mouseMap.clear();
+				singleton->keyboardMap.clear();
 				//printf("Clearing key mappings\n");
 			}
 		}
@@ -148,7 +151,7 @@ namespace Engine {
 
 		void Input::controllerButtonCallback(IWindow* window, unsigned int button, int action) {
 			singleton->lastInputDevice = InputDevice::E_DEVICE_GAMEPAD;
-			
+
 			int id = 0;
 
 			switch (button) {
@@ -303,7 +306,7 @@ namespace Engine {
 			return pressed & focus;
 		}
 
-		InputState Input::checkInputMapping(InputMapping &mapping) {
+		InputState Input::checkInputMapping(const InputMapping &mapping) {
 
 			InputState state;
 
@@ -315,11 +318,12 @@ namespace Engine {
 				if (mapping.gamepad != GamePad::BTN_NONE) {
 					state = gamepadMap[mapping.gamepad];
 				}
-			}  else {
+
+			} else {
 
 				if (mapping.keyboard != ScanCodes::SCAN_CODE_NONE) {
 					state = keyboardMap[mapping.keyboard];
-				} 
+				}
 				if (state.state == InputStateType::E_STATE_NONE || state.state == InputStateType::E_STATE_RELEASED) {
 					if (mapping.mouse != Mouse::MOUSE_NONE) {
 						state = mouseMap[mapping.mouse];
@@ -457,7 +461,7 @@ namespace Engine {
 			if (lastInputDevice == InputDevice::E_DEVICE_GAMEPAD) {
 				x = (-lThumb.x / 255.0F);
 				y = (lThumb.y / 255.0F);
-				
+
 			} else {
 
 				x = 0;

@@ -18,8 +18,6 @@ namespace Engine {
 				Panel(GuiInfo& info);
 				virtual ~Panel();
 				
-				void setTexture(Texture::Texture2D* texture);
-
 				void addGuiItem(GuiItem* guiItem);
 
 				virtual bool isFocusable() const override;
@@ -30,7 +28,6 @@ namespace Engine {
 			private:
 
 				std::vector<GuiItem*> subItems;
-				Texture::Texture2D* tex;
 			};
 		}
 	}

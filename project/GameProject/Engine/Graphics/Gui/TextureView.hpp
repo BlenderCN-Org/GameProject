@@ -29,9 +29,6 @@ namespace Engine {
 
 			private:
 
-				Texture::Texture2D* scrollBg;
-				Texture::Texture2D* scrollBar;
-
 				Texture::Texture2D* mainText;
 
 				ScrollBar* vertBar;
