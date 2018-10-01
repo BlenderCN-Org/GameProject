@@ -93,4 +93,5 @@ project/Gameproject.VC.db
 *.iobj
 project/.vs/
 project/build/
+project/src/build_x64/
 *.pyc
