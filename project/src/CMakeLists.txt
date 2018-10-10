@@ -24,7 +24,7 @@ elseif("${CMAKE_HOST_SYSTEM_NAME}" MATCHES "Linux")
 		set(SYS_FOUND TRUE)
 		set(SYSTEM "LINUX_X64" CACHE STRING "Linux Os" FORCE)
 		include(CMake/linux.cmake)
-	else if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7l") # probably not the most accurate
+	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7l") # probably not the most accurate
 		message("Linux arch armv7l")
 		set(SYS_FOUND TRUE)
 		set(SYSTEM "RASPBERRY_PI" CACHE STRING "Arm Os" FORCE)
