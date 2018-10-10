@@ -43,6 +43,8 @@ namespace Engine {
 		class ClientSocket : public INetSocket {
 		public:
 			ClientSocket(IpAddress addr, uint16_t port);
+			ClientSocket(OsSocket createdClient);
+
 			virtual ~ClientSocket();
 
 			virtual eSocketType getSocketType() { return eSocketType::E_SOCKET_CLIENT; };

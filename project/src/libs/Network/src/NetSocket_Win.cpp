@@ -71,18 +71,23 @@ namespace Engine {
 
 		INetSocket* ServerSocket::accept() {
 
-			SOCKET sock;
+			OsSocket osSocket;
 
-			sock = INVALID_SOCKET;
+			osSocket.socket = INVALID_SOCKET;
+
+			ClientSocket* cliSock = nullptr;
 
 			// Accept a client socket
-			sock = ::accept(listenSocket.socket, NULL, NULL);
-			if (sock == INVALID_SOCKET) {
+			osSocket.socket = ::accept(listenSocket.socket, NULL, NULL);
+			
+			if (osSocket.socket == INVALID_SOCKET) {
 				printf("accept failed: %d\n", WSAGetLastError());
 				closesocket(listenSocket.socket);
+			} else {
+				cliSock = new ClientSocket(osSocket);
 			}
 
-			return nullptr;
+			return cliSock;
 		}
 
 		uint32_t ServerSocket::read(INetMessage* msg) {
@@ -103,6 +108,13 @@ namespace Engine {
 		ClientSocket::ClientSocket(IpAddress addr, uint16_t port) {
 			addr = { 0, 0,0,0 };
 			port = 0;
+
+
+
+		}
+
+		ClientSocket::ClientSocket(OsSocket createdClient) {
+			dataSocket = createdClient;
 		}
 
 		ClientSocket::~ClientSocket() {
