@@ -13,19 +13,31 @@ namespace Engine {
 		*/
 
 		ServerSocket::ServerSocket(uint16_t port) {
-
+			port = 0;
 		}
 
 		ServerSocket::~ServerSocket() {
 
 		}
 
-		uint32_t ServerSocket::read(void* data, uint32_t dataSize) {
-
+		void ServerSocket::listen() {
+			
 		}
 
-		void ServerSocket::write(void* data, uint32_t dataSize) {
+		INetSocket* ServerSocket::accept() {
 
+			ClientSocket* cliSock = nullptr;
+
+			return cliSock;
+		}
+
+		uint32_t ServerSocket::read(INetMessage* msg) {
+			msg = 0;
+			return 0;
+		}
+
+		void ServerSocket::write(INetMessage* msg) {
+			msg = 0;
 		}
 
 		/*
@@ -35,19 +47,21 @@ namespace Engine {
 		*/
 
 		ClientSocket::ClientSocket(IpAddress addr, uint16_t port) {
-
+			addr = { 0,0,0,0 };
+			port = 0;
 		}
 
 		ClientSocket::~ClientSocket() {
 
 		}
 
-		uint32_t ServerSocket::read(void* data, uint32_t dataSize) {
-
+		uint32_t ClientSocket::read(INetMessage* msg) {
+			msg = 0;
+			return 0;
 		}
 
-		void ServerSocket::write(void* data, uint32_t dataSize) {
-
+		void ClientSocket::write(INetMessage* msg) {
+			msg = 0;
 		}
 
 	}

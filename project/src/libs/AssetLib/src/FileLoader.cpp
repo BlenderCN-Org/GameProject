@@ -1,6 +1,7 @@
 #include <AssetLib/AssetLib.hpp>
 
 #include <fstream>
+#include <cstring>
 
 namespace AssetLib {
 	void* fileToMemory(const char* fileName, uint32_t &dataSize) {

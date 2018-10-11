@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <cstring>
 
 namespace AssetLib {
 	struct Vert_t {
