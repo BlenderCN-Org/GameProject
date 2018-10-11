@@ -6,6 +6,9 @@
 
 #include <vector>
 #include <cassert>
+#include <cstring>
+#include <cmath>
+#include <cfloat>
 
 namespace AssetLib {
 

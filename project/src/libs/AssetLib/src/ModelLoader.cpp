@@ -230,8 +230,8 @@ namespace AssetLib {
 			}
 
 		}
-
-		delete[] data;
+		char* cData = (char*)data;
+		delete[] cData;
 	}
 
 	void createFromDae(Model& , const char* ) {

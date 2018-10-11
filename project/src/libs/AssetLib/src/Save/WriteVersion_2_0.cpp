@@ -5,6 +5,7 @@
 #include "../CustomMesh/MeshFormat.hpp"
 
 #include <fstream>
+#include <cstring>
 
 namespace AssetLib {
 

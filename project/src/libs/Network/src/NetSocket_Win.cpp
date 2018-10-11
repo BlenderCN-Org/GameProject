@@ -1,5 +1,4 @@
 #ifdef WIN32
-
 #include "OsSocket.hpp"
 #include <WinSock2.h>
 #include <ws2tcpip.h>

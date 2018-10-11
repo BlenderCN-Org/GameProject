@@ -1,13 +1,13 @@
 #ifndef RENDERENGINE_HPP
 #define RENDERENGINE_HPP
 
-#include "Window\Window.hpp"
-#include "Window\WindowSystem.hpp"
+#include "Window/Window.hpp"
+#include "Window/WindowSystem.hpp"
 
 #undef RGB
 
 #include "RenderEngine/IRenderEngine.hpp"
-#include "DataTypes\Colors.hpp"
+#include "DataTypes/Colors.hpp"
 
 //#include <Allocators\FrameAllocator.hpp>
 //#include <Allocators\PoolAllocator.hpp>
