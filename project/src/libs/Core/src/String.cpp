@@ -7,6 +7,7 @@
 
 /// Std Includes
 #include <memory>
+#include <cstring>
 
 namespace Engine {
 	namespace Core {

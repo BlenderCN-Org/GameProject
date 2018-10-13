@@ -1,10 +1,27 @@
 #ifndef IRENDERENGINE_HPP
 #define IRENDERENGINE_HPP
 
+#if _WIN32
+
 #ifdef renderEngine_lib_EXPORTS
 #define RENDERENGINE_API _declspec(dllexport)
 #else
 #define RENDERENGINE_API _declspec(dllimport)
+#endif
+
+#elif defined(__GNUC__)
+
+#ifdef renderEngine_lib_EXPORTS
+#define RENDERENGINE_API __attribute__((visibility("default")))
+#else
+#define RENDERENGINE_API 
+#endif
+
+#else
+
+#define RENDERENGINE_API 
+#pragma warning Unknown dynamic link import/export semantics.
+
 #endif
 
 #include "IAnimatedMesh.hpp"

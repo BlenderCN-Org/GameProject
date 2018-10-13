@@ -11,6 +11,7 @@
 #pragma warning( pop )
 
 /// Std Includes
+#include <cstdlib>
 
 namespace Engine {
 	namespace Core {
@@ -49,9 +50,9 @@ namespace Engine {
 			}
 
 			void operator=(const glm::vec4 color) {
-				r = unsigned char(color.r * 255.0F);
-				g = unsigned char(color.g * 255.0F);
-				b = unsigned char(color.b * 255.0F);
+				r = (unsigned char)(color.r * 255.0F);
+				g = (unsigned char)(color.g * 255.0F);
+				b = (unsigned char)(color.b * 255.0F);
 			}
 
 			char c;

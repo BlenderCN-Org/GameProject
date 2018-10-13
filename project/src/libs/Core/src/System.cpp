@@ -8,9 +8,8 @@
 
 #include <fstream>
 #include <thread>
-#include <strsafe.h>
-#include <atlstr.h>
 #include <algorithm>
+#include <cstring>
 
 // os-specific includes
 
@@ -20,6 +19,8 @@ namespace Engine {
 #ifdef _WIN32
 
 #include <Pdh.h>
+#include <strsafe.h>
+#include <atlstr.h>
 
 		PDH_HQUERY cpuQuery;
 		PDH_HCOUNTER cpuTotal;
@@ -31,6 +32,7 @@ namespace Engine {
 
 
 		void initSys() {
+#ifdef _WIN32
 			//Engine::Core::gConsole->print("Initializing System (Windows OS)");
 
 			srand((unsigned int)time(nullptr));
@@ -49,9 +51,11 @@ namespace Engine {
 			}
 
 			PdhCollectQueryData(cpuQuery);
+#endif
 		}
 
 		void deinitSys() {
+#ifdef _WIN32
 			PdhRemoveCounter(cpuTotal);
 			for (int i = 0; i < getLogicalProcessorCount(); i++) {
 				PdhRemoveCounter(cpuCore[i]);
@@ -59,6 +63,7 @@ namespace Engine {
 			PdhCloseQuery(cpuQuery);
 
 			delete cpuCore;
+#endif
 		}
 
 		int getLogicalProcessorCount() {

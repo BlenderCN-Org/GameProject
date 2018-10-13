@@ -41,7 +41,8 @@ namespace Engine {
 			std::map<uint32_t, AssetHandling::EntryData>::const_iterator eit = editedEntries.end();
 
 			for (it; it != eit; ++it) {
-				delete it->second.data;
+				// @TODO: Fix
+				delete (char*)it->second.data;
 			}
 
 		}

@@ -39,9 +39,9 @@ bool AABBVsAABB(const AABBShape& a1, const AABBShape& a2) {
 	glm::vec3 h1 = a1.halfSize;
 	glm::vec3 h2 = a2.halfSize;
 
-	bool x = (abs(o1.x - o2.x) <= (h1.x + h2.x));
-	bool y = (abs(o1.y - o2.y) <= (h1.y + h2.y));
-	bool z = (abs(o1.z - o2.z) <= (h1.z + h2.z));
+	bool x = (glm::abs(o1.x - o2.x) <= (h1.x + h2.x));
+	bool y = (glm::abs(o1.y - o2.y) <= (h1.y + h2.y));
+	bool z = (glm::abs(o1.z - o2.z) <= (h1.z + h2.z));
 
 	return x && y && z;
 }

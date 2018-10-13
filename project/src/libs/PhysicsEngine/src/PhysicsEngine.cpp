@@ -6,7 +6,7 @@
 #include "CollisionFuncs.hpp"
 
 #include <atomic>
-#include <time.h>
+#include <algorithm>
 
 class PhysicsUpdateTask : public IPhysicsTask {
 
@@ -118,7 +118,7 @@ void PhysicsEngine::pUpdate(const float dt) {
 
 			uint32_t offset = 0;
 
-			std::atomic<int> atInt = engineInfo.maxTasks;
+			std::atomic<int> atInt = { (int) engineInfo.maxTasks };
 
 			for (uint32_t i = 0; i < engineInfo.maxTasks; i++) {
 

@@ -64,6 +64,44 @@ namespace Engine {
 			msg = 0;
 		}
 
+		/*
+		Variables
+		*/
+		bool socketInitialized = false;
+
+		/*
+		Global Functions
+		*/
+
+		INetServerSocket* createServerSocket(uint16_t port) {
+			return new ServerSocket(port);
+		}
+
+		INetSocket* createClientSocket(IpAddress addr, uint16_t port) {
+			return new ClientSocket(addr, port);
+		}
+
+
+
+
+		bool initSocketLib() {
+			if (false == socketInitialized) {
+				int iResult;
+
+				// Initialize Winsock
+			}
+
+			return socketInitialized;
+		}
+
+		void cleanupSocketLib() {
+			if (true == socketInitialized) {
+
+				socketInitialized = false;
+			}
+
+		}
+
 	}
 }
 
