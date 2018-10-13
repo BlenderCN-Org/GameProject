@@ -5,7 +5,10 @@ set( SRC
 	src/LibraryLoader.cpp
 	src/FormattedString.cpp
 	src/String.cpp
-	src/System.cpp
+	src/System_Common.cpp
+	src/System_os.hpp
+	src/System_Win.cpp
+	src/System_Unix.cpp
 	
 	include/Core/LibraryLoader.hpp
 	include/Core/FormattedString.hpp
