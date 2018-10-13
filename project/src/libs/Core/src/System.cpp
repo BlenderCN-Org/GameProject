@@ -11,16 +11,21 @@
 #include <algorithm>
 #include <cstring>
 
-// os-specific includes
 
-namespace Engine {
-	namespace System {
+// os-specific includes
 
 #ifdef _WIN32
 
 #include <Pdh.h>
 #include <strsafe.h>
 #include <atlstr.h>
+
+#endif
+
+namespace Engine {
+	namespace System {
+
+#ifdef _WIN32
 
 		PDH_HQUERY cpuQuery;
 		PDH_HCOUNTER cpuTotal;
