@@ -17,8 +17,6 @@
 
 /// Std Includes
 
-typedef void(*fn)(ULONG);
-
 void gameLoop() {
 	float dt = 0;
 	uint64_t clocks = 0U;

@@ -15,7 +15,6 @@ namespace Engine {
 		*/
 
 		ServerSocket::ServerSocket(uint16_t port) {
-			port = 0;
 
 			listenSocket.socket = INVALID_SOCKET;
 
@@ -105,7 +104,7 @@ namespace Engine {
 		*/
 
 		ClientSocket::ClientSocket(IpAddress addr, uint16_t port) {
-			addr = { 0, 0,0,0 };
+			addr = { 0, 0, 0, 0 };
 			port = 0;
 
 
@@ -121,12 +120,11 @@ namespace Engine {
 		}
 
 		uint32_t ClientSocket::read(INetMessage* msg) {
-			msg = 0;
-			return 0;
+			return recv(dataSocket.socket, static_cast<char*>(msg->getData()), msg->getDataSize(), 0);
 		}
 
 		void ClientSocket::write(INetMessage* msg) {
-			msg = 0;
+			send(dataSocket.socket, static_cast<char*>(msg->getData()), msg->getDataSize(), 0);
 		}
 		
 		/*
